@@ -1,5 +1,6 @@
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/platform/renderer/texture.h>
+#include <mse/systems/platform/renderer/font.h>
 //#include <mse/systems/scenes/scene.h>
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/window.h>
@@ -92,6 +93,10 @@ namespace mse
 					resource->data = new Texture(path, user->GetRenderer());
 				}
 				break;
+			case ResourceType::FontBitmap:
+				{
+					resource->data = new FontBitmap(path, user->GetRenderer());
+				}
 			default:
 				{}
 				break;
@@ -299,13 +304,15 @@ namespace mse
 		m_ResourceTypeNames[ResourceType::Text_Plain] = "Plain text";
 		m_ResourceTypeNames[ResourceType::Texture] = "Texture";
 		m_ResourceTypeNames[ResourceType::Audio] = "Audio";
-		m_ResourceTypeNames[ResourceType::Font] = "Font";
+		m_ResourceTypeNames[ResourceType::FontBitmap] = "Font BMP";
+		m_ResourceTypeNames[ResourceType::FontTrueType] = "Font TTF";
 		
 		if (m_Cache.empty())
 		{
 			InitCache(ResourceType::Text_Plain);
 			InitCache(ResourceType::Texture);
 			InitCache(ResourceType::Audio);
+			InitCache(ResourceType::FontBitmap);
 		}
 	}
 	

@@ -24,6 +24,9 @@ namespace mse
 	class GUIItem;
 	class ResourceManager; // static - a system that keeps track of all media resources loaded into memory and collects garbage occasionally
 	class Resource;
+	class Font;
+	class FontBMP;
+	class FontTTF;
 	
 	// unused forward declarations
 	class Event; // unused at all - SDL_Event covers almost all needs of the engine; however, it is being kept for a future internal events management system to ease communication between the engine subsystems and architecture layers

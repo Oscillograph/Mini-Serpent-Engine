@@ -13,6 +13,18 @@ public:
 	{
 		mse::gui::Canvas* canvas = (mse::gui::Canvas*)(AddElement(new mse::gui::Canvas(this, {20, 10, 290, 220}, {32, 64, 48, 255})));
 		canvas->SetDrawColor({228, 228, 228, 255});
+
+		mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.png", this->GetWindow());
+		mse::Texture* canvasTexture = (mse::Texture*)(canvas->GetTexture()->data);
+		mse::Renderer::SurfaceDrawText(
+			canvasTexture,
+			{30, 30, 200, 80},
+			2,
+			U"Привет, мир!",
+			bmpFont,
+			{255, 255, 0, 255},
+			0);
+		canvasTexture->Update();
 		
 		mse::gui::Button* redPencil = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, "Red Pencil", {2, 10, 15, 10}, {196, 64, 64, 255}, {196, 196, 32, 255})));
 		redPencil->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&, canvas](SDL_Event* event){

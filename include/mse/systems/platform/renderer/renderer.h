@@ -63,6 +63,9 @@ namespace mse
 		static void SurfaceDrawCircleFilled_unsafe(Texture* target, SDL_Point center, int r, int pxSize, SDL_Color color = {128, 255, 255, 255});
 		static void SurfaceDrawCircleFilled(Texture* target, SDL_Point center, int r, int pxSize, SDL_Color color = {128, 255, 255, 255});
 		
+		static void SurfaceDrawText_unsafe(Texture* target, const glm::uvec4& place, int pxSize, const std::u32string& text, Resource* textFont, const glm::uvec4& color = {128, 255, 255, 255}, int interval = 2);
+		static void SurfaceDrawText(Texture* target, const glm::uvec4& place, int pxSize, const std::u32string& text, Resource* textFont, const glm::uvec4& color = {128, 255, 255, 255}, int interval = 2);
+		
 		// mid-level methods (advanced renderer commands)
 		static void NewFrame(); 
 		static void ShowFrame(); 
@@ -83,6 +86,8 @@ namespace mse
 		static glm::vec2 m_FrameSize;
 		static glm::vec2 m_FrameScale;
 		static glm::vec2 m_CameraPosition;
+		
+		static std::vector<std::vector<uint32_t>> m_symbols8bitTable; // a whole table from the 8-bit bmp-font table
 	};
 }
 

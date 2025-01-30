@@ -1,9 +1,11 @@
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
 #include <mse/systems/platform/renderer/texture.h>
+#include <mse/systems/platform/renderer/font.h>
 #include <mse/systems/application/application.h>
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/window.h>
+#include <mse/systems/resources/resource_manager.h>
 #include <mse/utils/math.h> // findNorm()
 
 namespace mse
@@ -20,6 +22,7 @@ namespace mse
 	glm::vec2 Renderer::m_FrameSize = glm::vec2(1.0f);
 	glm::vec2 Renderer::m_FrameScale = glm::vec2(1.0f);
 	glm::vec2 Renderer::m_CameraPosition = glm::vec2(1.0f);
+	std::vector<std::vector<uint32_t>> Renderer::m_symbols8bitTable = {};
 	
 	void Renderer::SetActiveRenderer(void* renderer)
 	{
@@ -535,7 +538,8 @@ namespace mse
 	
 	void Renderer::SurfaceDrawLine(Texture* target, int x1, int y1, int x2, int y2, int pxSize, SDL_Color color)
 	{
-		if (target->GetSurface() != NULL){
+		if (target->GetSurface() != NULL)
+		{
 			if (SDL_MUSTLOCK(target->GetSurface()))
 			{
 				SDL_LockSurface(target->GetSurface());
@@ -574,7 +578,8 @@ namespace mse
 	
 	void Renderer::SurfaceDrawRect(Texture* target, SDL_Rect destRect, int pxSize, SDL_Color color)
 	{
-		if (target->GetSurface() != NULL){
+		if (target->GetSurface() != NULL)
+		{
 			if (SDL_MUSTLOCK(target->GetSurface()))
 			{
 				SDL_LockSurface(target->GetSurface());
@@ -617,7 +622,8 @@ namespace mse
 	
 	void Renderer::SurfaceDrawRectFilled(Texture* target, SDL_Rect destRect, SDL_Color color)
 	{
-		if (target->GetSurface() != NULL){
+		if (target->GetSurface() != NULL)
+		{
 			if (SDL_MUSTLOCK(target->GetSurface()))
 			{
 				SDL_LockSurface(target->GetSurface());
@@ -655,7 +661,8 @@ namespace mse
 	
 	void Renderer::SurfaceDrawCircle(Texture* target, SDL_Point center, int r, int pxSize, SDL_Color color)
 	{
-		if (target->GetSurface() != NULL){
+		if (target->GetSurface() != NULL)
+		{
 			if (SDL_MUSTLOCK(target->GetSurface()))
 			{
 				SDL_LockSurface(target->GetSurface());
@@ -698,13 +705,141 @@ namespace mse
 	
 	void Renderer::SurfaceDrawCircleFilled(Texture* target, SDL_Point center, int r, int pxSize, SDL_Color color)
 	{
-		if (target->GetSurface() != NULL){
+		if (target->GetSurface() != NULL)
+		{
 			if (SDL_MUSTLOCK(target->GetSurface()))
 			{
 				SDL_LockSurface(target->GetSurface());
 			}
 			
 			SurfaceDrawCircleFilled_unsafe(target, center, r, pxSize, color);
+			
+			if (SDL_MUSTLOCK(target->GetSurface()))
+			{
+				SDL_UnlockSurface(target->GetSurface());
+			}
+		}
+	}
+	
+	void Renderer::SurfaceDrawText_unsafe(
+		Texture* target,
+		const glm::uvec4& place,	// where to draw  
+		int pxSize, 				// size of the pen
+		const std::u32string& text, 		// what to draw
+		Resource* textFont,			// how is should look like
+		const glm::uvec4& color,	// color
+		int interval)				// interval between lines
+	{	
+		// convert from float Rect to int
+		SDL_Rect tempRect = {
+			round(place.x),
+			round(place.y),
+			round(place.z),
+			round(place.w)
+		};
+		
+		FontBitmap* font = (FontBitmap*)(textFont->data);
+		
+		// text
+		// cols and rows with no respect to spaces trimming made via correctX variable
+		int cols = tempRect.w / (font->fontClip.z*pxSize); // total columns to render
+		int rows = tempRect.h / ((font->fontClip.w + interval)*pxSize); // total rows to render
+		int currentRow = 0; // the row we render right now
+		long long unsigned int symbolId = 0; // the current symbol to render, its Id should correspond to the font alphabet, and its type - to the type of std::u32string::npos
+		int correctX = 0;
+		int correctY = 0;
+		int curX;
+		int curY;
+		int alphabetId = 0;
+		bool foundSymbol = false;
+		uint32_t fontColor = SDL_MapRGBA(target->GetSurface()->format,
+			color.r, color.g, color.b, color.a);
+		
+		// for each symbol in text
+		int j = 0; // index of a symbol inside a line being typed right now
+		
+		for(int i = 0; i < text.size(); ++i)
+		{
+			// load font symbol
+			foundSymbol = false;
+			while ((!foundSymbol) && (alphabetId < font->alphabet.size()))
+			{
+				symbolId = font->alphabet[alphabetId].find(text[i]);
+				// force a new line if '\n' found
+				if (symbolId == font->alphabetSize)
+				{
+					foundSymbol = true;
+					currentRow++;
+					j = 0; // reset the index inside a line
+					correctX = 0;
+					symbolId = 0;
+					alphabetId = 0;
+				} else {
+					if (symbolId != std::u32string::npos)
+					{
+						// Correct coordinates of the "cursor"
+						if (j > cols){
+							currentRow++;
+							j = 0;
+							correctX = 0;
+						}
+						correctY = currentRow*(font->fontClip.w + interval)*pxSize;
+						
+						uint32_t blackPixelsCount = 0;
+						uint32_t symbolLeftEdge = symbolId*(font->fontClip.w * font->fontClip.z);
+						for (int k = 0; k < font->fontClip.z; ++k)
+						{
+							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w];
+							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w + 1];
+						}
+						if (blackPixelsCount == 0)
+						{
+							correctX--;
+						}
+						
+						// position the pencil according to where the cursor is
+						curX = tempRect.x + j*font->fontClip.w*pxSize + correctX*pxSize;
+						curY = tempRect.y + correctY;
+						
+						// draw the symbol in its place
+						for(int l = 0; l < font->fontClip.z; ++l)
+						{
+							for(int k = 0; k < font->fontClip.w; ++k)
+							{
+								if (font->symbols8bitTable[alphabetId][symbolLeftEdge + k + l*font->fontClip.w] == 1)
+								{
+									SurfaceDrawPixel_unsafe(target, {curX + k*pxSize, curY + l*pxSize}, pxSize, {color.x, color.y, color.z, color.w});
+								}
+							}
+						}
+						alphabetId = 0; // reset alphabet
+						symbolId = 0; // reset symbol index in that alphabet
+						j++; // we move through the line!
+						foundSymbol = true;
+					} else {
+						alphabetId++; // look in an another alphabet
+						symbolId = 0; // reset symbol index in that alphabet
+					}
+				}
+			}
+		}
+	}
+	
+	void Renderer::SurfaceDrawText(Texture* target, const glm::uvec4& place, int pxSize, const std::u32string& text, Resource* textFont, const glm::uvec4& color, int interval)
+	{
+		if (target->GetSurface() != NULL)
+		{
+			if (SDL_MUSTLOCK(target->GetSurface()))
+			{
+				SDL_LockSurface(target->GetSurface());
+			}
+			
+			if (textFont != nullptr)
+			{
+				SurfaceDrawText_unsafe(target, place, pxSize, text, textFont, color, interval);
+			} else {
+				MSE_CORE_LOG("Renderer: Could not draw text due to textFont is nullptr");
+			}
 			
 			if (SDL_MUSTLOCK(target->GetSurface()))
 			{

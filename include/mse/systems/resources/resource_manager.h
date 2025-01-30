@@ -24,7 +24,8 @@ namespace mse
 		// media
 		Audio				= 10,
 		Texture				= 11,
-		Font				= 12,
+		FontBitmap			= 12,
+		FontTrueType		= 13,
 		
 		// text data
 		Text_Plain			= 20,

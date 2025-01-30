@@ -20,6 +20,8 @@ namespace mse
 		void OnDisplay();
 		
 		virtual void Display();
+		
+		inline Resource* GetTexture() { return m_texture; }
 	
 	public:
 		Layer* parentLayer = nullptr;
