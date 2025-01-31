@@ -17,13 +17,21 @@ public:
 		mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.png", this->GetWindow());
 		mse::Texture* canvasTexture = (mse::Texture*)(canvas->GetTexture()->data);
 		mse::Renderer::SurfaceDrawText(
-			canvasTexture,
-			{30, 30, 200, 80},
-			2,
-			U"Привет, мир!",
-			bmpFont,
-			{255, 255, 0, 255},
-			0);
+			canvasTexture, 		// what element to draw on
+			{30, 30, 200, 80}, 	// where to
+			2, 					// pixel size
+			U"Привет, мир!", 	// text content
+			bmpFont, 			// font
+			{255, 255, 0, 255}, // color
+			0); 				// interval between rows
+		mse::Renderer::SurfaceDrawText(
+			canvasTexture, 		// what element to draw on
+			{10, 60, 250, 120}, // where to
+			1, 					// pixel size
+			U"У вас дислексия? Вы не выговари-ваете букву \"р\"? Новое средство!\nИммунооцелистонатриихлорогидро-\nкарбодон!\nСпрашивайте в аптеках города.", 	// text content
+			bmpFont, 			// font
+			{196, 196, 255, 255}, // color
+			2); 				// interval between rows
 		canvasTexture->Update();
 		
 		mse::gui::Button* redPencil = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, "Red Pencil", {2, 10, 15, 10}, {196, 64, 64, 255}, {196, 196, 32, 255})));

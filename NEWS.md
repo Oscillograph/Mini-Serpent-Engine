@@ -1,3 +1,6 @@
+## 0.1.1 ##
++ Bitmap font support to make it possible for renderer to draw text on provided textures
+
 ## 0.1.0 ##
 First public commit.
 
