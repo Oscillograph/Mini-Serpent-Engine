@@ -27,8 +27,28 @@ namespace mse
 		bool HandleEvent(EventTypes eventType, SDL_Event* event, int elementId = -1);
 		Window* GetWindow();
 		GUIItem* AddElement(GUIItem* element);
-		inline std::unordered_map<int, GUIItem*>& GetElements() { return m_elements; }
 		
+		inline std::unordered_map<int, GUIItem*>& GetElements() { return m_elements; }
+		inline int GetElementId(GUIItem* pointer) {
+			for (auto element : m_elements)
+			{
+				if (element.second == pointer)
+				{
+					return element.first;
+				}
+			}
+			return -1;
+		}
+		inline GUIItem* GetElementPointer(int id)
+		{
+			if (m_elements.find(id) != m_elements.end())
+			{
+				return m_elements[id];
+			}
+			return nullptr;
+		}
+		
+		int elementInFocus = -1;
 		bool enabled = true; // a layer can only be shown (thus, enabled) or hidden (disabled)
 		
 	protected:

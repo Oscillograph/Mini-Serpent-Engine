@@ -13,6 +13,8 @@ namespace mse
 		
 		virtual void Run();
 		virtual void ManualGraphics();
+		inline virtual void Stop() { m_shouldExit = true; }
+		inline virtual void SetFPS(float fps) { m_TimeDeltaLimit = fps; }
 		
 		static Application* GetApplication() { return m_singleton; }
 		

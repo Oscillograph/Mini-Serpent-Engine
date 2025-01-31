@@ -91,7 +91,7 @@ namespace mse
 		{
 			if (m_layers[i] != nullptr)
 			{
-				handled = m_layers[i]->HandleEvent(eventType, event, elementId);
+				handled = m_layers[i]->HandleEvent(eventType, event, (elementId == -1) ? m_layers[i]->elementInFocus : elementId);
 			}
 		}
 		
@@ -112,6 +112,8 @@ namespace mse
 			{
 				if (layer->enabled)
 				{
+					layer->Update();
+					
 					int winWidth = m_window->GetPrefs().width;
 					int winHeight = m_window->GetPrefs().height;
 					int x_screen, x_mask = 0;

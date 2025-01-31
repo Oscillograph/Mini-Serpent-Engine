@@ -15,7 +15,7 @@ namespace mse
 		GUIItem();
 		virtual ~GUIItem();
 		
-		bool HandleEvent(EventTypes eventType, SDL_Event* event);
+		virtual bool HandleEvent(EventTypes eventType, SDL_Event* event);
 		
 		void OnDisplay();
 		

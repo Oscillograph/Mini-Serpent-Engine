@@ -205,7 +205,7 @@ namespace mse
 		
 		bool Canvas::Clear()
 		{
-			DrawRect(0, 0, layerArea.w, layerArea.z, backgroundColor);
+			DrawRect(0, 0, layerArea.z, layerArea.w, backgroundColor);
 			return true;
 		}
 		

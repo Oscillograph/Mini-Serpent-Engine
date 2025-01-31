@@ -17,20 +17,20 @@ namespace mse
 		Button::Button()
 		: GUIItem()
 		{
-			Init(nullptr, "", {0, 0, 1, 1}, {0, 0, 0, 0}, {255, 255, 255, 255});
+			Init(nullptr, U"", {0, 0, 1, 1}, {0, 0, 0, 0}, {255, 255, 255, 255});
 		}
 		
-		Button::Button(Layer* layer,  const std::string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color)
+		Button::Button(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color)
 		: GUIItem()
 		{
 			Init(layer, text, area, bgColor, color);
 		}
 		
-		void Button::Init(Layer* layer,  const std::string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color)
+		void Button::Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color)
 		{
 			// model
 			parentLayer = layer;
-			m_elementName = "Button_" + text;
+			m_elementName = "Button_" + utf8::utf32to8(text);
 			m_text = text;
 			layerArea = area;
 			m_backgroundColor = bgColor;
@@ -54,38 +54,101 @@ namespace mse
 				m_texture = ResourceManager::CreateTexture(
 					parentLayer->GetWindow(),
 					parentLayer->GetWindow()->GetRenderer(),
-					layerArea.z,
+					layerArea.z * 4,
 					layerArea.w,
 					0,
 					32,
 					{0, 0, 0, 0});
 				MSE_CORE_LOG("Button: texture obtained");
 				
+				mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit3.bmp", parentLayer->GetWindow());
+				
+				// still button
 				Renderer::SurfaceDrawRectFilled(
 					(Texture*)(m_texture->data),
 					{0, 0, layerArea.z, layerArea.w}, 
 					{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
 					);
+				mse::Renderer::SurfaceDrawText(
+					(Texture*)(m_texture->data), 
+					{2, 2, layerArea.z, layerArea.w}, 	// where to
+					1, 					// pixel size
+					m_text, 			// text content
+					bmpFont, 			// font
+					{color.x, color.y, color.z, color.w}, // color
+					0); 				// interval between rows
+				
+				// hover button
+				Renderer::SurfaceDrawRectFilled(
+					(Texture*)(m_texture->data),
+					{layerArea.z, 0, layerArea.z, layerArea.w}, 
+					{255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+					);
+				Renderer::SurfaceDrawRectFilled(
+					(Texture*)(m_texture->data),
+					{layerArea.z + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
+					{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+					);
+				mse::Renderer::SurfaceDrawText(
+					(Texture*)(m_texture->data), 
+					{layerArea.z + 2, 2, layerArea.z, layerArea.w}, 	// where to
+					1, 					// pixel size
+					m_text, 			// text content
+					bmpFont, 			// font
+					{color.x, color.y, color.z, color.w}, // color
+					0); 				// interval between rows
+				
+				// pushed button
+				Renderer::SurfaceDrawRectFilled(
+					(Texture*)(m_texture->data),
+					{layerArea.z * 2, 0, layerArea.z, layerArea.w}, 
+					{255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+					);
+				mse::Renderer::SurfaceDrawText(
+					(Texture*)(m_texture->data), 
+					{layerArea.z * 2 + 2, 2, layerArea.z, layerArea.w}, 	// where to
+					1, 					// pixel size
+					m_text, 			// text content
+					bmpFont, 			// font
+					{255 - color.x, 255 - color.y, 255 - color.z, 255 - color.w}, // color
+					0); 				// interval between rows
+				
+				// disabled button
+				Renderer::SurfaceDrawRectFilled(
+					(Texture*)(m_texture->data),
+					{layerArea.z * 3, 0, layerArea.z, layerArea.w}, 
+					{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w / 2}
+					);
+				mse::Renderer::SurfaceDrawText(
+					(Texture*)(m_texture->data), 
+					{layerArea.z * 3 + 2, 2, layerArea.z, layerArea.w}, 	// where to
+					1, 					// pixel size
+					m_text, 			// text content
+					bmpFont, 			// font
+					{255 - color.x, 255 - color.y, 255 - color.z, color.w / 2}, // color
+					0); 				// interval between rows
+				
 				((Texture*)(m_texture->data))->Update();
+				
 				MSE_CORE_LOG("Button: texture edited");
 			}
 			
 			// controller
 			// setup interaction
 			callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-				MSE_CORE_LOG(m_elementName, ": ...");
+//				MSE_CORE_LOG(m_elementName, ": ...");
 			};
 			
 			callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-				MSE_CORE_LOG(m_elementName, ": Yay, you clicked me!");
+//				MSE_CORE_LOG(m_elementName, ": Yay, you clicked me!");
 			};
 			
 			callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
-				MSE_CORE_LOG(m_elementName, ": Hello, Mouse!");
+//				MSE_CORE_LOG(m_elementName, ": Hello, Mouse!");
 			};
 			
 			callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
-				MSE_CORE_LOG(m_elementName, ": Goodbye, Mouse!");
+//				MSE_CORE_LOG(m_elementName, ": Goodbye, Mouse!");
 			};
 		}
 		
@@ -109,9 +172,92 @@ namespace mse
 				(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
 			};
 			
-			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, NULL);
+			SDL_Rect srcRect;
+			if (isEnabled)
+			{
+				if (!isHover && !isPushed)
+				{
+					srcRect = {
+						0, 0, layerArea.z, layerArea.w
+					};
+				} else {
+					if (isHover)
+					{
+						srcRect = {
+							layerArea.z, 0, layerArea.z, layerArea.w
+						};
+					}
+					
+					if (isPushed)
+					{
+						srcRect = {
+							layerArea.z * 2, 0, layerArea.z, layerArea.w
+						};
+					}
+				}
+			} else {
+				srcRect = {
+					layerArea.z * 3, 0, layerArea.z, layerArea.w
+				};
+			}
+			
+//			Renderer::DrawTiledTexture((Texture*)(m_texture->data), &destRect, &srcRect, {0, 0});
+			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
 		}
 		
 		// unique Button interface
+		bool Button::HandleEvent(EventTypes eventType, SDL_Event* event)
+		{	
+			// only one callback per event type
+			if (callbacks.find(eventType) != callbacks.end())
+			{
+				switch (eventType)
+				{
+				case EventTypes::GUIItemMouseOver:
+					{
+						if (isEnabled)
+						{
+							isHover = true;
+							callbacks[eventType](event);
+						}
+						return true;
+					}
+				case EventTypes::GUIItemMouseButtonDown:
+					{
+						if (isEnabled)
+						{
+							isPushed = true;
+							callbacks[eventType](event);
+						}
+						return true;
+					}
+				case EventTypes::GUIItemMouseButtonUp:
+					{
+						if (isEnabled)
+						{
+							isPushed = false;
+							callbacks[eventType](event);
+						}
+						return true;
+					}
+				case EventTypes::GUIItemMouseOut:
+					{
+						if (isEnabled)
+						{
+							isPushed = false;
+							isHover = false;
+							callbacks[eventType](event);
+						}
+						return true;
+					}
+				default:
+					{
+						callbacks[eventType](event);
+						return true;
+					}
+				}
+			}
+			return false;
+		}		
 	}
 }

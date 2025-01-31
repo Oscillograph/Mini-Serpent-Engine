@@ -175,12 +175,10 @@ namespace mse
 		GeneralDrawTexture(texture, destRect, srcRect, tilingFactor, glm::vec4(1.0f));
 	}
 	
-	// Important note: if srcRect is NULL, there is a memory leak about 4 KB per second or two,
-	// 	               somehow related to SDL_RenderCopy functions in general.
 	void Renderer::GeneralDrawTexture(Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect, glm::vec2 tilingFactor, const glm::vec4& tintColor)
 	{
-		SDL_FRect* place = destRect;
-		SDL_Rect* source = srcRect;
+		SDL_FRect* place = new SDL_FRect; 
+		SDL_Rect* source = new SDL_Rect; 
 		
 		// TODO: find out why Application::Get()->GetWindows() is not allowed to be accessed from here
 		glm::vec2 windowScale = {
@@ -196,36 +194,28 @@ namespace mse
 		// correct the source rectangle
 		if (srcRect != NULL)
 		{
-			*source = { 
-				srcRect->x, 
-				srcRect->y, 
-				srcRect->w, 
-				srcRect->h 
-			};
+			source->x = srcRect->x;
+			source->y = srcRect->y;
+			source->w = srcRect->w;
+			source->h = srcRect->h;
 		} else {
+			delete source;
 			source = NULL;
 		}
 		
 		// correct the destination rectangle
 		if (destRect != NULL)
 		{
-			// CSE_CORE_LOG("Viewport (x; y): ", m_CurrentScreen.x, "; ", m_CurrentScreen.y);
-			*place = 
-			{ 
-				(int)floorf(windowScale.x * (m_CurrentScreen.x + m_CurrentScreen.z * destRect->x)), 
-				(int)floorf(windowScale.y * (m_CurrentScreen.y + m_CurrentScreen.w * destRect->y)), 
-				(int)floorf(windowScale.x * m_CurrentScreen.z * destRect->w), 
-				(int)floorf(windowScale.y * m_CurrentScreen.w * destRect->h) 
-			};
+			place->x = (int)floorf(windowScale.x * (m_CurrentScreen.x + m_CurrentScreen.z * destRect->x));
+			place->y = (int)floorf(windowScale.y * (m_CurrentScreen.y + m_CurrentScreen.w * destRect->y));
+			place->w = (int)floorf(windowScale.x * m_CurrentScreen.z * destRect->w);
+			place->h = (int)floorf(windowScale.y * m_CurrentScreen.w * destRect->h);
 		} else {
 			// not making it NULL is important for the next step - tiling
-			*place = 
-			{ 
-				windowScale.x * m_CurrentScreen.x, 
-				windowScale.y * m_CurrentScreen.y, 
-				windowScale.x * m_CurrentScreen.z, 
-				windowScale.y * m_CurrentScreen.w 
-			};
+			place->x = windowScale.x * m_CurrentScreen.x;
+			place->y = windowScale.y * m_CurrentScreen.y;
+			place->w = windowScale.x * m_CurrentScreen.z;
+			place->h = windowScale.y * m_CurrentScreen.w;
 		}
 		
 		// TODO: draw only if it's on screen
@@ -253,6 +243,8 @@ namespace mse
 					windowSize.x * (*destRect).w, 
 					windowSize.y * (*destRect).h
 				};
+//				MSE_CORE_LOG("Renderer: destRect = {", destRect->x, "; ", destRect->y, "; ", destRect->w, "; ", destRect->h, "}");
+//				MSE_CORE_LOG("Renderer: regionSize = {", regionSize.x, "; ", regionSize.y, "} ");
 				
 				if (tilingFactor.x > 0.0f) // first of all, we need to know how many times to multiply the image
 				{
@@ -282,7 +274,7 @@ namespace mse
 					yMod = 0;
 				}
 				
-				// CSE_LOG("xNum: ", xNum, "; yNum: ", yNum, "; xMod: ", xMod, "; yMod: ", yMod);
+//				MSE_CORE_LOG("xNum: ", xNum, "; yNum: ", yNum, "; xMod: ", xMod, "; yMod: ", yMod);
 				
 				SDL_FRect* newPlace = new SDL_FRect;
 				SDL_Rect* newSource = new SDL_Rect;
@@ -312,14 +304,6 @@ namespace mse
 						newSource->w = currentTileSize.x;
 						newSource->h = currentTileSize.y;
 						
-//						*newSource = 
-//						{ 
-//							(*source).x, 
-//							(*source).y, 
-//							currentTileSize.x, 
-//							currentTileSize.y 
-//						};
-						
 						if (tilingFactor.x > 0.0f)
 						{
 							currentTilePlace.x = (windowSize.x * (*destRect).x + (x * wholeTileSize.x * tilingFactor.x)) * m_CurrentScreen.z / windowSize.x;
@@ -343,17 +327,9 @@ namespace mse
 						newPlace->w = windowScale.x * currentTilePlace.z;
 						newPlace->h = windowScale.y * currentTilePlace.w;
 						
-//						*newPlace = 
-//						{
-//							windowScale.x * (m_CurrentScreen.x + currentTilePlace.x), 
-//							windowScale.y * (m_CurrentScreen.y + currentTilePlace.y),
-//							windowScale.x * currentTilePlace.z, 
-//							windowScale.y * currentTilePlace.w 
-//						};
-						
-						// CSE_LOG("Whole tile size: ( ", wholeTileSize.x, "; ", wholeTileSize.y, ") >> x = ", x, "; y = ", y);
-						// CSE_LOG("Current tile size: ", currentTileSize.x, "; height: ", currentTileSize.y);
-						// CSE_LOG("New place (SDL_Rect): (", (*newPlace).x, "; ", (*newPlace).y, "; ", (*newPlace).w, "; ", (*newPlace).h, ")");
+//						MSE_CORE_LOG("Whole tile size: ( ", wholeTileSize.x, "; ", wholeTileSize.y, ") >> x = ", x, "; y = ", y);
+//						MSE_CORE_LOG("Current tile size: ", currentTileSize.x, "; height: ", currentTileSize.y);\
+//						MSE_CORE_LOG("New place (SDL_Rect): (", (*newPlace).x, "; ", (*newPlace).y, "; ", (*newPlace).w, "; ", (*newPlace).h, ")");
 						
 						SDL_RenderCopyExF(
 							GetActiveRenderer(), 
@@ -382,8 +358,8 @@ namespace mse
 			}
 		}
 		
-//		delete place;
-//		delete source;
+		delete place;
+		delete source;
 	}
 	
 	void Renderer::DrawRect(SDL_FPoint center, SDL_FPoint size, SDL_Color color)
@@ -790,6 +766,14 @@ namespace mse
 						for (int k = 0; k < font->fontClip.z; ++k)
 						{
 							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w];
+//							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w + 1];
+						}
+						if (blackPixelsCount == 0)
+						{
+							correctX--;
+						}
+						for (int k = 0; k < font->fontClip.z; ++k)
+						{
 							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w + 1];
 						}
 						if (blackPixelsCount == 0)

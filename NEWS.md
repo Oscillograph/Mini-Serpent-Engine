@@ -1,5 +1,11 @@
 ## 0.1.1 ##
+New:
 + Bitmap font support to make it possible for renderer to draw text on provided textures
+
+Fixes:
+- Memory leak in Renderer::GeneralDrawTexture()
+- User-defined callbacks disabled default Button behaviour
+
 
 ## 0.1.0 ##
 First public commit.
