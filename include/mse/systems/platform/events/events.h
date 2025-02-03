@@ -67,6 +67,16 @@ namespace mse
 	*/
 	
 	/*
+	struct EventQueue
+	{
+		EventTypes type = EventTypes::None;
+		void* receiver = nullptr;
+		void* sender = nullptr;
+		void* data = nullptr;
+	};
+	*/
+	
+	/*
 	class Event
 	{
 	public:

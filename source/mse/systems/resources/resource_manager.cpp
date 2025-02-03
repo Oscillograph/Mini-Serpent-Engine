@@ -108,7 +108,7 @@ namespace mse
 	
 	Resource* ResourceManager::UseResource(ResourceType type, const std::string& path, const ResourceUser& user)
 	{
-		MSE_CORE_LOG("Requesting resource of type ", (int)type, " with path \"", path.c_str(), "\".");
+		MSE_CORE_LOG("Requesting resource of type ", m_ResourceTypeNames[type], " with path \"", path.c_str(), "\".");
 		auto it = m_Cache[type].find(path);
 		if (it == m_Cache[type].end())
 		{
@@ -216,7 +216,7 @@ namespace mse
 	Resource* ResourceManager::CreateTexture(const ResourceUser& user, void* renderer, int w, int h, uint32_t flags, int depth, const glm::ivec4& colorMask)
 	{
 		ResourceType type = ResourceType::Texture;
-		MSE_CORE_LOG("Resource Manager: creating resource of type ", (int)type, "\".");
+		MSE_CORE_LOG("Resource Manager: creating resource of type ", m_ResourceTypeNames[type], "\".");
 	
 //		MSE_CORE_LOG("Resource Manager: creating a blank resource container...");
 		Resource* resource = new Resource(
@@ -301,11 +301,14 @@ namespace mse
 	void ResourceManager::Init()
 	{
 		MSE_CORE_LOG("Resource Manager: Initialization.");
+		m_ResourceTypeNames[ResourceType::Unknown] = "Unknown";
 		m_ResourceTypeNames[ResourceType::Text_Plain] = "Plain text";
+		m_ResourceTypeNames[ResourceType::Text_YAML] = "YAML Text";
+		m_ResourceTypeNames[ResourceType::Text_JSON] = "JSON Text";
 		m_ResourceTypeNames[ResourceType::Texture] = "Texture";
 		m_ResourceTypeNames[ResourceType::Audio] = "Audio";
-		m_ResourceTypeNames[ResourceType::FontBitmap] = "Font BMP";
-		m_ResourceTypeNames[ResourceType::FontTrueType] = "Font TTF";
+		m_ResourceTypeNames[ResourceType::FontBitmap] = "Bitmap Font";
+		m_ResourceTypeNames[ResourceType::FontTrueType] = "TrueType Font";
 		
 		if (m_Cache.empty())
 		{

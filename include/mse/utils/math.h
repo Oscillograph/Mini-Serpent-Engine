@@ -48,37 +48,37 @@ namespace mse
 	{
 		typedef enum 
 		{
-			VECTORS_COLLINEAR,
-			VECTORS_COLLINEAR_OPPOSITE,
-			VECTORS_PERPENDICULAR,
-			VECTORS_ANGLE_SHARP,
-			VECTORS_ANGLE_BLUNT,
+			VECTORS_COLLINEAR			= 1,
+			VECTORS_COLLINEAR_OPPOSITE	= 2,
+			VECTORS_PERPENDICULAR		= 3,
+			VECTORS_ANGLE_SHARP			= 4,
+			VECTORS_ANGLE_BLUNT			= 5,
 		} VECTORS_TEST;
 		
 		// =============================================
 		// Types
 		// ---------------------------------------------
 		
-		// typedef std::pair<glm::vec2, glm::vec2> CSE_Line;
-		// typedef std::vector<glm::vec2> CSE_Line;
-		// typedef glm::vec2 CSE_Line[2];
-		struct CSE_Line
+		// typedef std::pair<glm::vec2, glm::vec2> MSE_Line;
+		// typedef std::vector<glm::vec2> MSE_Line;
+		// typedef glm::vec2 MSE_Line[2];
+		struct MSE_Line
 		{
 			glm::vec2 a, b;
 		};
 		
-		struct CSE_Complex
+		struct MSE_Complex
 		{
 			float real, imag;
 		};
 		
-		struct CSE_FPoint
+		struct MSE_FPoint
 		{
 			float x;
 			float y;
 			
 			// add vector to vector
-			CSE_FPoint& operator+(CSE_FPoint rhs)
+			MSE_FPoint& operator+(MSE_FPoint rhs)
 			{
 				x += rhs.x;
 				y += rhs.y;
@@ -86,7 +86,7 @@ namespace mse
 			}
 			
 			// multiply vector by a scalar / ver.1
-			CSE_FPoint& operator*(float lhs)
+			MSE_FPoint& operator*(float lhs)
 			{
 				x = x*lhs;
 				y = y*lhs;
@@ -94,7 +94,7 @@ namespace mse
 			}
 			
 			// multiply vector by a scalar / ver.2
-			/*CSE_FPoint& operator*(float rhs){
+			/*MSE_FPoint& operator*(float rhs){
 			x = x*rhs;
 			y = y*rhs;
 			return *this;
@@ -215,14 +215,14 @@ namespace mse
 		}
 		
 		// get a line which starts at the center of a given and aimed with the normal vector 
-		CSE_Line findNormalToCenter(glm::vec2 A, glm::vec2 B)
+		MSE_Line findNormalToCenter(glm::vec2 A, glm::vec2 B)
 		{
 			glm::vec2 normal = findNormal(A, B);
 			glm::vec2 center = findCenter(A, B);
 			normal.x += center.x;
 			normal.y += center.y;
 			
-			CSE_Line out; 
+			MSE_Line out; 
 			out.a = center;
 			out.b = normal;
 			return out;
