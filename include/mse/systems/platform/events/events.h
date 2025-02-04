@@ -12,12 +12,23 @@ namespace mse
 		// General engine events
 		None = 0,
 		
+		// Keyboard and mouse
 		KeyDown,
 		KeyUp,
 		MouseMoved,
 		MouseButtonDown,
 		MouseButtonUp,
 		MouseWheel,
+		
+		// Window
+		WindowResized,
+		WindowMoved,
+		WindowFocusGained,
+		WindowFocusLost,
+		WindowHidden,
+		WindowRestored,
+		WindowMaximized,
+		WindowMinimized,
 		
 		// GUI elements events
 		GUIItemCreate,

@@ -3,6 +3,7 @@
 
 #include <mse/core.h>
 #include <mse/systems/platform/platform.h>
+#include <mse/systems/platform/events/events.h> // EventTypes
 
 namespace mse
 {
@@ -26,6 +27,8 @@ namespace mse
 	class Window
 	{
 	public:
+		using func = std::function<bool(SDL_Event*)>;
+		
 		Window();
 		Window(const WindowPrefs& prefs);
 		Window(const std::string& title, int x, int y, int width, int height, int flags);
@@ -61,6 +64,8 @@ namespace mse
 		inline int GetFlags() { return m_flags; }
 		inline bool IsFocused() { return m_isFocused; }
 		inline LayerManager* GetLayerManager() { return m_layerManager; }
+		
+		std::unordered_map<EventTypes, func> callbacks = {};
 		
 	protected:
 		friend Renderer;

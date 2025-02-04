@@ -32,6 +32,23 @@ namespace mse
 		m_renderer = Platform::InitRenderer(m_windowNative);
 		Renderer::SetActiveRenderer(m_renderer);
 		m_layerManager = new LayerManager(this);
+		
+		callbacks[EventTypes::None] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::KeyDown] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::KeyUp] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::MouseButtonDown] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::MouseButtonUp] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::MouseMoved] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::MouseWheel] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::WindowFocusGained] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::WindowFocusLost] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::WindowResized] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::WindowMoved] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::WindowMinimized] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::WindowMaximized] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::WindowHidden] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::WindowRestored] = [&](SDL_Event* event) { return false; };
+		
 		MSE_CORE_LOG("Window: window object for \"", m_title, "\" created");
 	}
 	
@@ -109,7 +126,12 @@ namespace mse
 							if (event->motion.windowID == m_windowNativeID)
 							{
 //								MSE_CORE_LOG("Window: Mouse moved to: (", Platform::PeekEvent()->motion.x, "; ", Platform::PeekEvent()->motion.y, ")");
-								return m_layerManager->HandleEvent(EventTypes::MouseMoved, event);
+								if (m_layerManager->HandleEvent(EventTypes::MouseMoved, event))
+								{
+									return true;
+								} else {
+									return callbacks[EventTypes::MouseMoved](event);
+								}
 							} else {
 								return false;
 							}
@@ -121,7 +143,12 @@ namespace mse
 							if (event->button.windowID == m_windowNativeID)
 							{
 //								MSE_CORE_LOG("Window: Mouse ", Platform::PeekEvent()->button.button, " button is down");
-								return m_layerManager->HandleEvent(EventTypes::MouseButtonDown, event);
+								if (m_layerManager->HandleEvent(EventTypes::MouseButtonDown, event))
+								{
+									return true;
+								} else {
+									return callbacks[EventTypes::MouseButtonDown](event);
+								}
 							} else {
 								return false;
 							}
@@ -133,7 +160,12 @@ namespace mse
 							if (event->button.windowID == m_windowNativeID)
 							{
 //								MSE_CORE_LOG("Window: Mouse ", Platform::PeekEvent()->button.button, " button is up");
-								return m_layerManager->HandleEvent(EventTypes::MouseButtonUp, event);
+								if (m_layerManager->HandleEvent(EventTypes::MouseButtonUp, event))
+								{
+									return true;
+								} else {
+									return callbacks[EventTypes::MouseButtonUp](event);
+								}
 							} else {
 								return false;
 							}
@@ -145,7 +177,12 @@ namespace mse
 							if (event->wheel.windowID == m_windowNativeID)
 							{
 //								MSE_CORE_LOG("Window: Mouse wheel moved in ", Platform::PeekEvent()->wheel.y, " direction");
-								return m_layerManager->HandleEvent(EventTypes::MouseWheel, event);
+								if (m_layerManager->HandleEvent(EventTypes::MouseWheel, event))
+								{
+									return true;
+								} else {
+									return callbacks[EventTypes::MouseWheel](event);
+								}
 							} else {
 								return false;
 							}
@@ -157,7 +194,12 @@ namespace mse
 							if (event->key.windowID == m_windowNativeID)
 							{
 //								MSE_CORE_LOG("Window: Key pressed: ", event->key.keysym.sym);
-								return m_layerManager->HandleEvent(EventTypes::KeyDown, event);
+								if (m_layerManager->HandleEvent(EventTypes::KeyDown, event))
+								{
+									return true;
+								} else {
+									return callbacks[EventTypes::KeyDown](event);
+								}
 							} else {
 								return false;
 							}
@@ -169,7 +211,12 @@ namespace mse
 							if (event->key.windowID == m_windowNativeID)
 							{
 //								MSE_CORE_LOG("Window: Key released: ", event->key.keysym.sym);
-								return m_layerManager->HandleEvent(EventTypes::KeyUp, event);
+								if (m_layerManager->HandleEvent(EventTypes::KeyUp, event))
+								{
+									return true;
+								} else {
+									return callbacks[EventTypes::KeyUp](event);
+								}
 							} else {
 								return false;
 							}
