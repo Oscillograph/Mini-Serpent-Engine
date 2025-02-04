@@ -107,7 +107,8 @@ mse/common.h
 
 ## Tech Stack ##
 + **C++17** (almost everything)
++ **[UTF8-CPP](https://github.com/nemtrif/utfcpp)** (unicode strings support)
 + **[SDL2](https://github.com/libsdl-org/SDL)** (windowing, events listening, rendering, sounds)
 + **[GLM](https://github.com/g-truc/glm)** (math library)
 + **[Color Console](https://github.com/aafulei/color-console)** (Windows-only)
-- **[EnTT](https://github.com/skypjack/entt)** (entities and components management in scenes which are to be implemented yet)
++ **[EnTT](https://github.com/skypjack/entt)** (entities and components management in scenes)
