@@ -3,7 +3,7 @@
 
 #include <mse/core.h>
 #include <mse/systems/platform/platform.h>
-#include <mse/systems/renderer/texture.h>
+#include <mse/systems/platform/renderer/texture.h>
 
 #include <mse/systems/ecs/components/states.h>
 #include <mse/systems/ecs/entity.h>
@@ -155,7 +155,7 @@ namespace mse
 		bool loop;
 		
 		AnimationFrames();
-		AnimationFrames(SDL_Point beginPoint, SDL_Point endPoint, int frameWidth, int frameHeight, float fps, bool loopIt);
+		AnimationFrames(const glm::ivec2& beginPoint, const glm::ivec2& endPoint, int frameWidth, int frameHeight, float fps, bool loopIt);
 	};
 	
 	// Basically, it's a container for AnimationFrames associated with corresponding states.

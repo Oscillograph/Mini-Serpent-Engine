@@ -1,13 +1,13 @@
 #include <mse/systems/scenes/scene.h>
-#include <mse/systems/entity.h>
-#include <mse/systems/components.h>
-#include <mse/systems/physics.h>
+#include <mse/systems/ecs/entity.h>
+#include <mse/systems/ecs/components.h>
+#include <mse/systems/physics/physics_processor.h>
 
-#include <mse/systems/application.h>
-#include <mse/systems/renderer.h>
-#include <mse/systems/renderer/camera2d.h>
-#include <mse/systems/window.h>
-#include <mse/systems/layer.h>
+#include <mse/systems/application/application.h>
+#include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/renderer/camera2d.h>
+#include <mse/systems/windows/window.h>
+#include <mse/systems/windows/layers/layer.h>
 
 namespace mse
 {

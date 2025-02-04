@@ -22,7 +22,7 @@ namespace mse
 	// This is an API to use any suitable physics engine.
 	// The need for it arises from that physics engines are very complex, and their management parts
 	// are not to interfere with other game engine systems.
-	class PhysicsAPI
+	class PhysicsEngineAPI
 	{
 	public:
 		// virtual ~PhysicsAPI() = 0;
@@ -50,7 +50,7 @@ namespace mse
 		virtual void Shutdown() = 0;
 	};
 	
-	PhysicsAPI* CreatePhysicsProcessor(PhysicsSystem psID);
+	PhysicsEngineAPI* CreatePhysicsProcessor(PhysicsSystem psID);
 }
 
 #endif

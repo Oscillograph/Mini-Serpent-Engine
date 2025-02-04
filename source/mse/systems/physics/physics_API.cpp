@@ -5,7 +5,7 @@
 
 namespace mse
 {
-	PhysicsAPI* CreatePhysicsProcessor(PhysicsSystem psID)
+	PhysicsEngineAPI* CreatePhysicsProcessor(PhysicsSystem psID)
 	{	
 		switch (psID)
 		{

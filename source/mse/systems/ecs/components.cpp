@@ -197,7 +197,7 @@ namespace mse
 		loop = false;
 	}
 	
-	AnimationFrames::AnimationFrames(SDL_Point beginPoint, SDL_Point endPoint, int frameWidth, int frameHeight, float fps, bool loopIt)
+	AnimationFrames::AnimationFrames(const glm::ivec2& beginPoint, const glm::ivec2& endPoint, int frameWidth, int frameHeight, float fps, bool loopIt)
 	{
 		begin = beginPoint;
 		end = endPoint;

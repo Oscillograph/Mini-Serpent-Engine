@@ -41,7 +41,6 @@ namespace mse
 	
 	// unused forward declarations
 	class Event; // unused at all - SDL_Event covers almost all needs of the engine; however, it is being kept for a future internal events management system to ease communication between the engine subsystems and architecture layers
-	class SceneManager; // static
 	class Camera2D;
 }
 

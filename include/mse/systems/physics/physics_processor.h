@@ -53,7 +53,7 @@ namespace mse
 	private:
 		std::vector<World*> m_Worlds = {};
 		PhysicsSystem m_PhysicsSystemSelected = PhysicsSystem::None;
-		PhysicsAPI* m_API = nullptr; 
+		PhysicsEngineAPI* m_API = nullptr; 
 		
 		void Move(Entity* A);
 		void UnMove(Entity* A);
