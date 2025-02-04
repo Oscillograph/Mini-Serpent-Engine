@@ -4,4 +4,6 @@
 // what all headers, modules and utilities should be provided with
 #include <mse/common.h>
 
+#include <mse/constants.h>
+
 #endif

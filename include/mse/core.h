@@ -10,6 +10,11 @@
 
 // systems
 
+// custom types
+namespace mse
+{
+	typedef uint32_t TimeType;
+}
 
 // forward declarations
 namespace mse
@@ -25,13 +30,18 @@ namespace mse
 	class ResourceManager; // static - a system that keeps track of all media resources loaded into memory and collects garbage occasionally
 	class Resource;
 	class Font;
-	class FontBMP;
-	class FontTTF;
+	class FontBitmap;
+	class FontTrueType;
+	class SceneManager; // static - a system that keeps track of scenes and eases their management
+	class Scene;
+	class PhysicsProcessor; // a system that manages physics worlds and corresponding entities
+	class PhysicsAPI; // virtual interface to physics processor implementations
+	class World;
+	class Entity;
 	
 	// unused forward declarations
 	class Event; // unused at all - SDL_Event covers almost all needs of the engine; however, it is being kept for a future internal events management system to ease communication between the engine subsystems and architecture layers
 	class SceneManager; // static
-	class Scene;
 	class Camera2D;
 }
 
