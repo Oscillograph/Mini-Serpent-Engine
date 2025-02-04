@@ -1,10 +1,11 @@
 #include <mse/systems/ecs/components.h>
 #include <mse/systems/windows/window.h>
-#include <mse/systems/physics/physics.h>
+#include <mse/systems/physics/physics_processor.h>
 #include <mse/systems/scenes/scene.h>
 #include <mse/systems/canban.h>
+#include <mse/constants.h>
 
-#include <mse/systems/renderer/camera2d.h>
+//#include <mse/systems/renderer/camera2d.h>
 
 namespace mse
 {
@@ -16,7 +17,7 @@ namespace mse
 	
 	// UUID Component
 	UUIDComponent::UUIDComponent() 
-	: value(Utils::UUID::Generate()) 
+	: value(utils::UUID::Generate()) 
 	{
 	};
 	

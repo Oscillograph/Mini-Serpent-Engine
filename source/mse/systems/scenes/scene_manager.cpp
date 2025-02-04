@@ -3,12 +3,14 @@
 
 namespace mse
 {
-	SceneManager::SceneManager()
+	std::vector<Scene*> SceneManager::m_Scenes = {};
+	
+	void SceneManager::Init()
 	{
 		
 	}
 	
-	SceneManager::~SceneManager()
+	void SceneManager::Shutdown()
 	{
 		for (Scene* scene : m_Scenes)
 		{
@@ -18,19 +20,27 @@ namespace mse
 	
 	void SceneManager::Load(Scene* scene)
 	{
-		m_Scenes.emplace(m_Scenes.begin() + m_SceneInsertIndex, scene);
-		if (!scene->IsInitialized())
+		if (scene != nullptr)
 		{
-			scene->Init();
+			m_Scenes.push_back(scene);
+			if (!scene->IsInitialized())
+			{
+				scene->Init();
+			}
+			scene->Load();
+		} else {
+			MSE_CORE_LOG("Scene Manager: Cannot load a scene that is nullptr");
 		}
-		scene->Load();
-		
-		m_SceneInsertIndex++;
 	}
 	
 	void SceneManager::Unload(Scene* scene)
 	{
-		scene->Unload();
+		if (scene != nullptr)
+		{
+			scene->Unload();
+		} else {
+			MSE_CORE_LOG("Scene Manager: Cannot unload a scene that is nullptr");
+		}
 	}
 	
 	void SceneManager::Remove(Scene* scene)
@@ -42,7 +52,17 @@ namespace mse
 		{
 			m_Scenes.erase(it);
 			delete scene;
-			m_SceneInsertIndex--;
+		}
+	}
+	
+	void SceneManager::Update(TimeType time)
+	{
+		for (Scene* scene : m_Scenes)
+		{
+			if (scene->IsInitialized() && scene->IsRunning())
+			{
+				scene->Update(time);
+			}
 		}
 	}
 }

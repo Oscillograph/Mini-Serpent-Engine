@@ -6,6 +6,7 @@
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer_manager.h>
+#include <mse/systems/scenes/scene_manager.h>
 
 namespace mse
 {
@@ -144,6 +145,7 @@ namespace mse
 				// TODO: 4. Game Object Management System (GOMS)
 				
 				// TODO: 5. World progress system
+				SceneManager::Update(m_TimeThisFrame - m_TimeLastFrame);
 				
 				// TODO: 6. Asset management system
 				

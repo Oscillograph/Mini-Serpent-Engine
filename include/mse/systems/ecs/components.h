@@ -144,8 +144,8 @@ namespace mse
 	// Its point is to control what are the frames on a spritesheet and how to play them. 
 	struct AnimationFrames
 	{
-		SDL_Point begin; // upper left corner of the first frame
-		SDL_Point end; // upper left corner of the last frame
+		glm::ivec2 begin; // upper left corner of the first frame
+		glm::ivec2 end; // upper left corner of the last frame
 		int width; // width of a frame
 		int height; // height of a frame
 		int framesTotal; // equals (end.x - begin.x)/width;

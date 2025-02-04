@@ -13,7 +13,7 @@ namespace mse
 	
 	PhysicsProcessor::PhysicsProcessor()
 	{
-		Init(PhysicsSystem::mse);
+		Init(PhysicsSystem::MSE);
 	}
 	
 	PhysicsProcessor::PhysicsProcessor(const PhysicsSystem& physicsSystem)

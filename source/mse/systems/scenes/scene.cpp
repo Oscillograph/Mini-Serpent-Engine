@@ -5,7 +5,7 @@
 
 #include <mse/systems/application/application.h>
 #include <mse/systems/platform/renderer/renderer.h>
-#include <mse/systems/platform/renderer/camera2d.h>
+//#include <mse/systems/platform/renderer/camera2d.h>
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer.h>
 
@@ -13,14 +13,14 @@ namespace mse
 {
 	Scene::Scene()
 	{
-		m_SceneCamera = new Camera2D();
+//		m_SceneCamera = new Camera2D();
 		
 		PhysicsInit(PhysicsSystem::None);
 	}
 	
 	Scene::Scene(const PhysicsSystem& physicsSystem)
 	{
-		m_SceneCamera = new Camera2D();
+//		m_SceneCamera = new Camera2D();
 		
 		PhysicsInit(physicsSystem);
 	}
@@ -143,13 +143,13 @@ namespace mse
 			m_CurrentWorld = m_PhysicsProcessor->AccessWorld(0);
 			if (reconfigureCamera)
 			{
-				m_SceneCamera->SetWorldConstraints({m_CurrentWorld->properties.size.x, m_CurrentWorld->properties.size.y});
-				m_SceneCamera->Retarget({
-					-m_CurrentWorld->properties.size.x/10,
-					-m_CurrentWorld->properties.size.y/10,
-					m_CurrentWorld->properties.size.x/10,
-					m_CurrentWorld->properties.size.y/10
-				});
+//				m_SceneCamera->SetWorldConstraints({m_CurrentWorld->properties.size.x, m_CurrentWorld->properties.size.y});
+//				m_SceneCamera->Retarget({
+//					-m_CurrentWorld->properties.size.x/10,
+//					-m_CurrentWorld->properties.size.y/10,
+//					m_CurrentWorld->properties.size.x/10,
+//					m_CurrentWorld->properties.size.y/10
+//				});
 			}
 			PhysicsOn();
 		} else {
@@ -160,13 +160,13 @@ namespace mse
 			
 			if (reconfigureCamera)
 			{
-				m_SceneCamera->SetWorldConstraints({0.0f, 0.0f});
-				m_SceneCamera->Retarget({
-					0,
-					0,
-					0,
-					0,
-				});
+//				m_SceneCamera->SetWorldConstraints({0.0f, 0.0f});
+//				m_SceneCamera->Retarget({
+//					0,
+//					0,
+//					0,
+//					0,
+//				});
 			}
 			PhysicsOff();
 		}
@@ -219,7 +219,7 @@ namespace mse
 		Entity* entity = CreateEntity(name);
 		
 		if (uuid == 0) // assume that 0 is not a valid uuid
-			uuid = Utils::UUID::Generate();
+			uuid = utils::UUID::Generate();
 		auto& uuidComponent = entity->AddComponent<UUIDComponent>(uuid);
 		
 		return entity; 

@@ -8,21 +8,22 @@ namespace mse
 	class SceneManager
 	{
 	public:
-		SceneManager();
-		~SceneManager();
+//		SceneManager();
+//		~SceneManager();
 		
-		void Load(Scene* scene);
-		void Unload(Scene* scene);
-		void Remove(Scene* scene);
+		static void Init();
+		static void Shutdown();
 		
-		inline const std::vector<Scene*>& GetContents() const { return m_Scenes; }
+		static void Load(Scene* scene);
+		static void Unload(Scene* scene);
+		static void Remove(Scene* scene);
 		
-		std::vector<Scene*>::iterator begin() { return m_Scenes.begin(); }
-		std::vector<Scene*>::iterator end()   { return m_Scenes.end();   }
+		static void Update(TimeType time);
+		
+		inline static std::vector<Scene*>& GetScenes() { return m_Scenes; }
 		
 	protected:
-		std::vector<Scene*> m_Scenes;
-		uint32_t m_SceneInsertIndex = 0;
+		static std::vector<Scene*> m_Scenes;
 	};
 }
 
