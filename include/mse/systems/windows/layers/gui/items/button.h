@@ -27,10 +27,6 @@ namespace mse
 			virtual void Display();
 			virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
 
-			inline void Enable() { isEnabled = true; }
-			inline void Disable() { isEnabled = false; }
-			inline void ToggleEnabled() { isEnabled = !isEnabled; }
-			
 			// unique Button interface
 			ButtonStates state = ButtonStates::Released;
 		protected:
@@ -40,7 +36,6 @@ namespace mse
 			
 			bool isHover = false;
 			bool isPushed = false;
-			bool isEnabled = true;
 		};
 	}
 }

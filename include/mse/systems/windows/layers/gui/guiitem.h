@@ -21,6 +21,9 @@ namespace mse
 		
 		virtual void Display();
 		
+		inline void Enable() { isEnabled = true; }
+		inline void Disable() { isEnabled = false; }
+		inline void ToggleEnabled() { isEnabled = !isEnabled; }
 		inline Resource* GetTexture() { return m_texture; }
 	
 	public:
@@ -33,6 +36,10 @@ namespace mse
 		
 		// event callbacks
 		std::unordered_map<EventTypes, func> callbacks = {};
+		
+		// flags
+		bool isEnabled = true;
+		bool isVisible = true;
 		
 	private:
 		static int m_idNext; // all elements registered in program runtime
