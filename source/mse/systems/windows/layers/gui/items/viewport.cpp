@@ -1,6 +1,7 @@
 #include <mse/systems/windows/layers/gui/items/viewport.h>
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/scenes/scene.h>
+#include <mse/systems/cameras/camera2D.h>
 #include <mse/systems/ecs/entity.h>
 #include <mse/systems/ecs/components.h>
 #include <mse/systems/ecs/components/states.h>
@@ -48,10 +49,25 @@ namespace mse
 			{
 				glm::ivec2 sceneConstraints = {0, 0};
 				glm::ivec2 cameraConstraints = {0, 0};
+//				glm::vec2 scaling = {0.0f, 0.0f};
+				
+				glm::ivec2 cameraPosition = {0, 0};
 				
 				if (scene->GetPhysicsProcessor()->AccessWorld(0) != nullptr)
 				{
 					sceneConstraints = scene->GetPhysicsProcessor()->AccessWorld(0)->properties.size;
+					cameraConstraints = {
+						camera->properties.z, 
+						camera->properties.w
+					};
+					cameraPosition = {
+						camera->properties.x, 
+						camera->properties.y
+					};
+//					scaling = {
+//						sceneConstraints.x / cameraConstraints.x, 
+//						sceneConstraints.y / cameraConstraints.y
+//					};
 				}
 			}
 			

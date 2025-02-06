@@ -10,11 +10,12 @@ namespace mse
 	void CameraManager::Init()
 	{}
 	
-	Camera2D* CameraManager::NewCamera(Scene* scene)
+	Camera2D* CameraManager::CreateCamera2D(Scene* scene)
 	{
 		Camera2D* newCamera = new Camera2D(scene);
 		cameras[newCamera] = scene;
 		scenesWithCameras.insert({scene, newCamera});
+		return newCamera;
 	}
 	
 	std::vector<Camera2D*> CameraManager::GetCameras(Scene* scene)
@@ -34,10 +35,8 @@ namespace mse
 	
 	void CameraManager::ChangeScene(Camera2D* camera, Scene* scene)
 	{
-		Scene* oldScene = camera->scene;
-		
 		// remove old camera registry note
-		for (auto it = scenesWithCameras.find(oldScene); it != scenesWithCameras.end(); it = scenesWithCameras.find(oldScene))
+		for (auto it = scenesWithCameras.find(camera->scene); it != scenesWithCameras.end(); it = scenesWithCameras.find(camera->scene))
 		{
 			if (it->second == camera)
 			{
@@ -56,9 +55,7 @@ namespace mse
 	
 	void CameraManager::DestroyCamera(Camera2D* camera)
 	{
-		Scene* oldScene = camera->scene;
-		
-		for (auto it = scenesWithCameras.find(oldScene); it != scenesWithCameras.end(); it = scenesWithCameras.find(oldScene))
+		for (auto it = scenesWithCameras.find(camera->scene); it != scenesWithCameras.end(); it = scenesWithCameras.find(camera->scene))
 		{
 			if (it->second == camera)
 			{
@@ -71,5 +68,6 @@ namespace mse
 		cameras.erase(it);
 		
 		delete camera;
+		camera = nullptr;
 	}
 }
