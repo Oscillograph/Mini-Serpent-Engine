@@ -47,8 +47,8 @@ namespace mse
 	protected:
 		std::string m_elementName = "";
 		Resource* m_texture = nullptr;
-		Resource* m_font = nullptr;
-		Resource* m_text = nullptr;
+//		Resource* m_font = nullptr;
+//		Resource* m_text = nullptr;
 	};
 	
 	
