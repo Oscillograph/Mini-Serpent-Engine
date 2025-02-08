@@ -5,6 +5,7 @@
 #include <mse/core.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/input/input.h>
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer_manager.h>
@@ -12,6 +13,9 @@
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/windows/layers/gui/gui.h>
 #include <mse/systems/application/application.h>
+
+// load secondary modules
+#include <mse/systems/presets/units.h>
 
 // Entry point
 int main(int argv, char** argc)

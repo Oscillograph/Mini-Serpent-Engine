@@ -8,6 +8,8 @@
 #include <mse/systems/platform/input/input.h>
 #include <mse/systems/resources/resource_manager.h>
 
+// TODO: fix Resource users (Scene* -> Window*)
+
 namespace mse
 {
 	namespace Arcade
@@ -16,6 +18,7 @@ namespace mse
 		
 		Unit::Unit(
 			Scene* scene,
+			Window* window,
 			const std::string& name,
 			const std::string& spritePath,
 			const KBControls& keyboardControls,
@@ -29,6 +32,7 @@ namespace mse
 			m_Entity = scene->CreateEntity(name);
 			m_EntityID = m_Entity->GetID();
 			m_Scene = scene;
+			m_user = window;
 			
 			// physical position
 			PositionComponent& position = m_Entity->AddComponent<PositionComponent>(10, 0);
@@ -40,8 +44,8 @@ namespace mse
 			transform.position = transformPosition;
 			transform.size = transformSize;
 			transform.Normalize({
-				scene->GetLayer()->GetWindow()->GetPrefs().width,
-				scene->GetLayer()->GetWindow()->GetPrefs().height,
+				window->GetPrefs().width,
+				window->GetPrefs().height,
 			});
 			
 			// state machine setup
@@ -83,7 +87,7 @@ namespace mse
 			if (spritePath.length() > 0){
 				m_SpriteTexture = ResourceManager::UseTexture(
 					spritePath, 
-					scene,
+					window,
 					{spriteColorKey.x, spriteColorKey.y, spriteColorKey.z}
 					);
 				
@@ -113,8 +117,9 @@ namespace mse
 		
 		Unit::~Unit()
 		{
-			ResourceManager::DropResource(m_SpriteTexture, m_Entity->GetScene());
+			ResourceManager::DropResource(m_SpriteTexture, m_user);
 			m_SpriteTexture = nullptr;
+			m_user = nullptr;
 			
 			MSE_CORE_ASSERT(m_Entity, "Unit destructor: m_Entity was a null pointer.");
 			delete m_Entity;
@@ -176,6 +181,7 @@ namespace mse
 		
 		SpriteUnit::SpriteUnit(
 			Scene* scene,
+			Window* window,
 			const std::string& name,
 			const std::string& spritePath,
 			const KBControls& keyboardControls,
@@ -188,6 +194,7 @@ namespace mse
 			m_Entity = scene->CreateEntity(name);
 			m_EntityID = m_Entity->GetID();
 			m_Scene = scene;
+			m_user = window;
 			
 			// physical position
 			PositionComponent& position = m_Entity->AddComponent<PositionComponent>(10, 0);
@@ -199,8 +206,8 @@ namespace mse
 			transform.position = transformPosition;
 			transform.size = transformSize;
 			transform.Normalize({
-				scene->GetLayer()->GetWindow()->GetPrefs().width,
-				scene->GetLayer()->GetWindow()->GetPrefs().height,
+				window->GetPrefs().width,
+				window->GetPrefs().height,
 			});
 			
 			// state machine setup
@@ -242,7 +249,7 @@ namespace mse
 			if (spritePath.length() > 0){
 				m_SpriteTexture = ResourceManager::UseTexture(
 					spritePath, 
-					scene,
+					window,
 					{spriteColorKey.x, spriteColorKey.y, spriteColorKey.z}
 					);
 				
@@ -253,8 +260,9 @@ namespace mse
 		
 		SpriteUnit::~SpriteUnit()
 		{
-			ResourceManager::DropResource(m_SpriteTexture, m_Entity->GetScene());
+			ResourceManager::DropResource(m_SpriteTexture, m_user);
 			m_SpriteTexture = nullptr;
+			m_user = nullptr;
 			
 			MSE_CORE_ASSERT(m_Entity, "Unit destructor: m_Entity was a null pointer.");
 			delete m_Entity;
@@ -316,6 +324,7 @@ namespace mse
 		
 		Doodad::Doodad(
 			Scene* scene,
+			Window* window,
 			const std::string& name,
 			const std::string& spritePath,
 			const KBControls& keyboardControls,
@@ -328,6 +337,7 @@ namespace mse
 			)
 		{
 			m_Entity = scene->CreateEntity(name);
+			m_user = window;
 			
 			// physical position
 			PositionComponent& position = m_Entity->AddComponent<PositionComponent>(10, 0);
@@ -338,8 +348,8 @@ namespace mse
 			transform.position = transformPosition;
 			transform.size = transformSize;
 			transform.Normalize({
-				scene->GetLayer()->GetWindow()->GetPrefs().width,
-				scene->GetLayer()->GetWindow()->GetPrefs().height,
+				window->GetPrefs().width,
+				window->GetPrefs().height,
 			});
 			
 			// state machine setup
@@ -381,7 +391,7 @@ namespace mse
 			if (spritePath.length() > 1){
 				m_SpriteTexture = ResourceManager::UseTexture(
 					spritePath, 
-					scene, 
+					window, 
 					{spriteColorKey.x, spriteColorKey.y, spriteColorKey.z}
 					);
 				SpriteComponent& spriteComponent = m_Entity->AddComponent<SpriteComponent>((Texture*)(m_SpriteTexture->data));
@@ -413,8 +423,9 @@ namespace mse
 		
 		Doodad::~Doodad()
 		{
-			ResourceManager::DropResource(m_SpriteTexture, m_Entity->GetScene());
+			ResourceManager::DropResource(m_SpriteTexture, m_user);
 			m_SpriteTexture = nullptr;
+			m_user = nullptr;
 			
 			MSE_CORE_ASSERT(m_Entity, "Doodad destructor: m_Entity was a null pointer.");
 			delete m_Entity;
@@ -480,6 +491,7 @@ namespace mse
 		
 		Decoration::Decoration(
 			Scene* scene,
+			Window* window,
 			const std::string& name,
 			const std::string& spritePath, 
 			const glm::vec2& place,
@@ -495,14 +507,14 @@ namespace mse
 			transform.position = {place.x, place.y};
 			transform.size = {size.x, size.y};
 			transform.Normalize({
-				scene->GetLayer()->GetWindow()->GetPrefs().width,
-				scene->GetLayer()->GetWindow()->GetPrefs().height,
+				window->GetPrefs().width,
+				window->GetPrefs().height,
 			});
 			
 			// sprite control
 			m_SpriteTexture = ResourceManager::UseTexture(
 				spritePath, 
-				scene, 
+				window, 
 				{colorKey.x, colorKey.y, colorKey.z}
 				);
 			SpriteComponent& sprite = m_Entity->AddComponent<SpriteComponent>((Texture*)(m_SpriteTexture->data));
@@ -511,8 +523,9 @@ namespace mse
 		
 		Decoration::~Decoration()
 		{
-			ResourceManager::DropResource(m_SpriteTexture, m_Entity->GetScene());
+			ResourceManager::DropResource(m_SpriteTexture, m_user);
 			m_SpriteTexture = nullptr;
+			m_user = nullptr;
 			
 			MSE_CORE_ASSERT(m_Entity, "Decoration destructor: m_Entity was a null pointer.");
 			delete m_Entity;

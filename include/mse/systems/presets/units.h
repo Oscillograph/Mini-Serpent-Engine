@@ -19,6 +19,7 @@ namespace mse
 			Unit() = default;
 			Unit(
 				Scene* scene,
+				Window* window,
 				const std::string& name,
 				const std::string& spritePath,
 				const KBControls& keyboardControls,
@@ -42,6 +43,7 @@ namespace mse
 		protected:
 			Entity* m_Entity = nullptr;
 			Resource* m_SpriteTexture = nullptr;
+			Window* m_user = nullptr;
 			glm::vec2 m_SpeedMax = {25.0f, 25.0f}; // meters per second
 		};
 		
@@ -53,6 +55,7 @@ namespace mse
 			SpriteUnit() = default;
 			SpriteUnit(
 				Scene* scene,
+				Window* window,
 				const std::string& name,
 				const std::string& spritePath,
 				const KBControls& keyboardControls,
@@ -75,6 +78,7 @@ namespace mse
 		protected:
 			Entity* m_Entity = nullptr;
 			Resource* m_SpriteTexture = nullptr;
+			Window* m_user = nullptr;
 			glm::vec2 m_SpeedMax = {25.0f, 25.0f}; // meters per second
 		};
 		
@@ -86,6 +90,7 @@ namespace mse
 			Doodad() = default;
 			Doodad(
 				Scene* scene,
+				Window* window,
 				const std::string& name,
 				const std::string& spritePath,
 				const KBControls& keyboardControls,
@@ -110,6 +115,7 @@ namespace mse
 		protected:
 			Entity* m_Entity = nullptr;
 			Resource* m_SpriteTexture = nullptr;
+			Window* m_user = nullptr;
 			glm::vec2 m_SpeedMax = {25.0f, 25.0f}; // meters per second
 		};
 		
@@ -121,6 +127,7 @@ namespace mse
 			Decoration() = default;
 			Decoration(
 				Scene* scene,
+				Window* window,
 				const std::string& name,
 				const std::string& spritePath, 
 				const glm::vec2& place,
@@ -140,6 +147,7 @@ namespace mse
 		protected:
 			Entity* m_Entity = nullptr;
 			Resource* m_SpriteTexture = nullptr;
+			Window* m_user = nullptr;
 		};
 	}
 }
