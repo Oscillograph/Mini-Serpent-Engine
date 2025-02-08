@@ -2,12 +2,15 @@
 #define MSE_SYSTEMS_APPLICATION_APPLICATION_H
 
 #include <mse/core.h>
+#include <mse/systems/platform/events/events.h>
 
 namespace mse
 {
 	class Application
 	{
 	public:
+		using func = std::function<bool(SDL_Event*)>;
+		
 		Application();
 		virtual ~Application();
 		
@@ -40,6 +43,8 @@ namespace mse
 		uint64_t m_frameCounter = 0; // to know how many frames passed
 //		float m_TimeDeltaLimit = 0.0f;
 		float m_TimeDeltaLimit = MSE_FPS60;
+		
+		std::unordered_map<EventTypes, func> callbacks = {};
 	};
 	
 	Application* CreateApplication();

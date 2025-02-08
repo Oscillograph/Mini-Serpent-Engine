@@ -25,6 +25,15 @@ namespace mse
 		WindowManager::Init();
 		ResourceManager::Init();
 		
+		// general callbacks
+		callbacks[EventTypes::None] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::KeyDown] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::KeyUp] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::MouseButtonDown] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::MouseButtonUp] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::MouseMoved] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::MouseWheel] = [&](SDL_Event* event) { return false; };
+		
 		m_singleton = this;
 	}
 	
@@ -124,12 +133,51 @@ namespace mse
 						}
 					}
 					
-					// send the event to windows and corresponding layers event processors
-					for (Window* window : WindowManager::GetWindows())
+					// try to process the event
+					bool handled = false;
+					switch (Platform::PeekEvent()->type)
 					{
-						if (window->EventProcessor(Platform::PeekEvent()))
+						case SDL_KEYDOWN:
 						{
+							handled = callbacks[EventTypes::KeyDown](Platform::PeekEvent());
 							break;
+						}
+						case SDL_KEYUP:
+						{
+							handled = callbacks[EventTypes::KeyUp](Platform::PeekEvent());
+							break;
+						}
+						case SDL_MOUSEBUTTONDOWN:
+						{
+							handled = callbacks[EventTypes::MouseButtonDown](Platform::PeekEvent());
+							break;
+						}
+						case SDL_MOUSEBUTTONUP:
+						{
+							handled = callbacks[EventTypes::MouseButtonUp](Platform::PeekEvent());
+							break;
+						}
+						case SDL_MOUSEMOTION:
+						{
+							handled = callbacks[EventTypes::MouseMoved](Platform::PeekEvent());
+							break;
+						}
+						case SDL_MOUSEWHEEL:
+						{
+							handled = callbacks[EventTypes::MouseWheel](Platform::PeekEvent());
+							break;
+						}
+					}
+					
+					// send the event to windows and corresponding layers event processors
+					if (!handled)
+					{
+						for (Window* window : WindowManager::GetWindows())
+						{
+							if (window->EventProcessor(Platform::PeekEvent()))
+							{
+								break;
+							}
 						}
 					}
 				}
