@@ -4,8 +4,8 @@
 
 namespace mse
 {
-	std::unordered_map<Camera2D*, Scene*> cameras = {};
-	std::unordered_multimap<Scene*, Camera2D*> scenesWithCameras = {};
+	std::unordered_map<Camera2D*, Scene*> CameraManager::cameras = {};
+	std::unordered_multimap<Scene*, Camera2D*> CameraManager::scenesWithCameras = {};
 	
 	void CameraManager::Init()
 	{}
