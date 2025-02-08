@@ -104,6 +104,7 @@ public:
 		
 		MSE_LOG("Commanding to create a scene");
 		m_scene = new mse::Scene();
+
 		mse::Arcade::Unit* unit = new mse::Arcade::Unit(
 			m_scene,
 			m_window,
