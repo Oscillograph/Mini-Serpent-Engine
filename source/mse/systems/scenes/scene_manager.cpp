@@ -7,11 +7,12 @@ namespace mse
 	
 	void SceneManager::Init()
 	{
-		
+		MSE_CORE_LOG("Scene Manager: Initialization");
 	}
 	
 	void SceneManager::Shutdown()
 	{
+		MSE_CORE_LOG("Scene Manager: Shutdown");
 		for (Scene* scene : m_Scenes)
 		{
 			delete scene;

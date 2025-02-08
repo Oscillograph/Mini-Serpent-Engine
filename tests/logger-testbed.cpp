@@ -93,7 +93,7 @@ public:
 	App() : mse::Application()
 	{
 		MSE_LOG("Hello, world!");
-		MSE_CORE_ERROR("Joke");
+		MSE_ERROR("Joke");
 		
 		MSE_LOG("Commanding to open a window");
 		m_window = mse::WindowManager::CreateWindow(u8"Test window", 50, 50, 320, 240);
@@ -101,6 +101,44 @@ public:
 			MSE_LOG("Key pressed: ", event->key.keysym.sym);
 			return true;
 		};
+		
+		MSE_LOG("Commanding to create a scene");
+		m_scene = new mse::Scene();
+		mse::Arcade::Unit* unit = new mse::Arcade::Unit(
+			m_scene,
+			m_window,
+			"Volleyballist",
+			"./data/img/Volleyballist.png",
+			{
+				{mse::Commands::KBCommand_Left, mse::ScanCode::A}, 
+				{mse::Commands::KBCommand_Right, mse::ScanCode::D},
+				{mse::Commands::KBCommand_Jump, mse::ScanCode::W},
+				{mse::Commands::KBCommand_Down, mse::ScanCode::S}
+			},
+			{0, 0},
+			{1, 1},
+			{1.0f, 1.0f},
+			{0, 0, 0},
+			{0, 0}
+			);
+		
+		unit->SetAnimations(
+			{
+				mse::EntityStates::STAND1,
+				mse::EntityStates::STAND2,
+				mse::EntityStates::WALK1,
+				mse::EntityStates::WALK2,
+				mse::EntityStates::JUMP1,
+				mse::EntityStates::JUMP2,
+				mse::EntityStates::STAND3,
+				mse::EntityStates::STAND,
+			},
+			{20, 30},
+			15.0f,
+			true
+			);
+		
+		unit->ChangeDirection(1);
 
 		mse::Renderer::SetActiveWindow(m_window);
 		m_window->GetLayerManager()->Attach(new SimpleUILayer());
@@ -117,6 +155,7 @@ public:
 	}
 	
 private:
+	mse::Scene* m_scene = nullptr;
 	mse::Window* m_window = nullptr;
 	mse::Texture* cse_texture = nullptr;
 };

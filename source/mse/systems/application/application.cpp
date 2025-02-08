@@ -24,6 +24,7 @@ namespace mse
 			);
 		WindowManager::Init();
 		ResourceManager::Init();
+		SceneManager::Init();
 		
 		// default callbacks
 		callbacks[EventTypes::None] = [&](SDL_Event* event) { return false; };
@@ -60,6 +61,7 @@ namespace mse
 	{
 		MSE_CORE_LOG("Application: destructor called");
 		Renderer::SetActiveWindow(nullptr);
+		SceneManager::Shutdown();
 		ResourceManager::ShutDown();
 		WindowManager::Shutdown();
 		Platform::Shutdown();
