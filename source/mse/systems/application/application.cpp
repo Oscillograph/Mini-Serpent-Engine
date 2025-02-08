@@ -25,9 +25,28 @@ namespace mse
 		WindowManager::Init();
 		ResourceManager::Init();
 		
-		// general callbacks
+		// default callbacks
 		callbacks[EventTypes::None] = [&](SDL_Event* event) { return false; };
-		callbacks[EventTypes::KeyDown] = [&](SDL_Event* event) { return false; };
+		callbacks[EventTypes::KeyDown] = [&](SDL_Event* event) {
+			switch (Platform::PeekEvent()->key.keysym.sym)
+			{
+				// turn fps counter on/off
+				case SDL_KeyCode::SDLK_BACKQUOTE:
+				{
+					m_showFPS = !m_showFPS;
+					if (!m_showFPS)
+					{
+						for (Window* window : WindowManager::GetWindows())
+						{
+							window->SetTitle(window->GetPrefs().title);
+						}
+					}
+					return true;
+					break;
+				}
+			}
+			return false;
+		};
 		callbacks[EventTypes::KeyUp] = [&](SDL_Event* event) { return false; };
 		callbacks[EventTypes::MouseButtonDown] = [&](SDL_Event* event) { return false; };
 		callbacks[EventTypes::MouseButtonUp] = [&](SDL_Event* event) { return false; };
@@ -97,36 +116,6 @@ namespace mse
 											break; // this event should not go into OnEvent mechanism
 										}
 									}
-								}
-							}
-							break;
-						}
-						
-						case SDL_KEYDOWN:
-						{
-							switch (Platform::PeekEvent()->key.keysym.sym)
-							{
-								// turn fps counter on/off
-								case SDL_KeyCode::SDLK_BACKQUOTE:
-								{
-									m_showFPS = !m_showFPS;
-									if (!m_showFPS)
-									{
-										for (Window* window : WindowManager::GetWindows())
-										{
-											window->SetTitle(window->GetPrefs().title);
-										}
-									}
-									break;
-								}
-								
-								case SDL_KeyCode::SDLK_SPACE:
-								{
-									for (Window* window : WindowManager::GetWindows())
-									{
-										MSE_CORE_TRACE("Window \"", window->GetPrefs().title, "\" is ", (window == WindowManager::GetCurrentWindow())?"focused":"not focused");
-									}
-									break;
 								}
 							}
 							break;
