@@ -31,6 +31,9 @@ namespace mse
 				);
 			~Unit();
 			
+			void InitBackend();
+			void InitFrontend();
+			
 			void SetAnimations(
 				std::vector<int> animationStates, 
 				glm::uvec2 frameSize, 
@@ -43,7 +46,15 @@ namespace mse
 		protected:
 			Entity* m_Entity = nullptr;
 			Resource* m_SpriteTexture = nullptr;
-			Window* m_user = nullptr;
+			Window* m_window = nullptr;
+			std::string m_name = "";
+			std::string m_spritePath = "";
+			KBControls m_keyboardControls = {};
+			glm::vec2 m_transformPosition = {0.0f, 0.0f};
+			glm::vec2 m_transformSize = {0.0f, 0.0f};
+			glm::vec2 m_spriteTilingFactor = {0.0f, 0.0f};
+			glm::uvec3 m_spriteColorKey = {0, 0, 0};
+			glm::vec2 m_physicalPosition = {100, 100};
 			glm::vec2 m_SpeedMax = {25.0f, 25.0f}; // meters per second
 		};
 		

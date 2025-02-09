@@ -1,5 +1,8 @@
 #include <mse/mse.h>
 
+// glbals
+int mode = 0; // 0 - nothing, 1 - game, 2 - settings, 3 - scores, 4 - about, 5 - exit
+
 class SimpleUILayer : public mse::Layer
 {
 public:
@@ -46,26 +49,31 @@ public:
 			// idle
 			case 0:
 			{
+				MSE_LOG("Initial screen mode");
 				break;
 			}
 			// game
 			case 1:
 			{
+				MSE_LOG("Game mode");
 				break;
 			}
 			// settings
 			case 2:
 			{
+				MSE_LOG("Settings mode");
 				break;
 			}
 			// scores
 			case 3:
 			{
+				MSE_LOG("Scores mode");
 				break;
 			}
 			// about
 			case 4:
 			{
+				MSE_LOG("About mode");
 				break;
 			}
 			// exit
@@ -83,7 +91,6 @@ public:
 		MSE_LOG("Destroyed a simpleUI layer");
 	}
 	
-	int mode = 0; // 0 - nothing, 1 - game, 2 - settings, 3 - scores, 4 - about, 5 - exit
 	mse::gui::Canvas* gameCanvas = nullptr;
 };
 

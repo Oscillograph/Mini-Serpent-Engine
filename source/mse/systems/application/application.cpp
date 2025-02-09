@@ -7,6 +7,7 @@
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer_manager.h>
 #include <mse/systems/scenes/scene_manager.h>
+#include <mse/systems/scenes/scene.h>
 #include <mse/systems/canban.h>
 
 namespace mse

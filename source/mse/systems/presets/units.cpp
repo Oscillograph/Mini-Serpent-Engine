@@ -28,25 +28,32 @@ namespace mse
 			const glm::uvec3& spriteColorKey,
 			const glm::vec2& physicalPosition
 			)
+		: m_window(window), m_name(name), m_spritePath(spritePath), 
+		m_keyboardControls(keyboardControls), m_transformPosition(transformPosition), m_transformSize(transformSize),
+		m_spriteTilingFactor(spriteTilingFactor), m_spriteColorKey(spriteColorKey), m_physicalPosition(physicalPosition)
 		{
 			m_Entity = scene->CreateEntity(name);
 			m_EntityID = m_Entity->GetID();
 			m_Scene = scene;
-			m_user = window;
+		}
+		
+		Unit::~Unit()
+		{
+			ResourceManager::DropResource(m_SpriteTexture, m_window);
+			m_SpriteTexture = nullptr;
+			m_window = nullptr;
 			
+			MSE_CORE_ASSERT(m_Entity, "Unit destructor: m_Entity was a null pointer.");
+			delete m_Entity;
+			m_Entity = nullptr;
+		}
+		
+		void Unit::InitBackend()
+		{
 			// physical position
 			PositionComponent& position = m_Entity->AddComponent<PositionComponent>(10, 0);
 			position.direction = 1; // 1 means right, -1 means left
 			MSE_CORE_LOG("Entity ID: ", (uint32_t)(m_Entity->GetID()), "\; Position: ", m_Entity->GetComponent<PositionComponent>().x, ", ", m_Entity->GetComponent<PositionComponent>().y);
-			
-			// screen representation
-			TransformComponent& transform = m_Entity->AddComponent<TransformComponent>();
-			transform.position = transformPosition;
-			transform.size = transformSize;
-			transform.Normalize({
-				window->GetPrefs().width,
-				window->GetPrefs().height,
-			});
 			
 			// state machine setup
 			// TODO: Allow set up states manually
@@ -81,23 +88,11 @@ namespace mse
 			stateMachine.SetState(EntityStates::STAND);
 			
 			// controls setup
-			KeyBoardComponent& keyboard = m_Entity->AddComponent<KeyBoardComponent>(keyboardControls);
-			
-			// sprite control
-			if (spritePath.length() > 0){
-				m_SpriteTexture = ResourceManager::UseTexture(
-					spritePath, 
-					window,
-					{spriteColorKey.x, spriteColorKey.y, spriteColorKey.z}
-					);
-				
-				SpriteComponent& spriteComponent = m_Entity->AddComponent<SpriteComponent>((Texture*)(m_SpriteTexture->data));
-				spriteComponent.tilingFactor = {spriteTilingFactor.x, spriteTilingFactor.y};
-			}
+			KeyBoardComponent& keyboard = m_Entity->AddComponent<KeyBoardComponent>(m_keyboardControls);
 			
 			// physics setup
 			PhysicsComponent& physicsComponent = m_Entity->AddComponent<PhysicsComponent>();
-			physicsComponent.position = {physicalPosition.x, physicalPosition.y, 0};
+			physicsComponent.position = {m_physicalPosition.x, m_physicalPosition.y, 0};
 			
 			PhysicsHitBox hitbox;
 			hitbox.hitBoxType = PhysicsDefines::HitBoxType::Circle;
@@ -112,18 +107,31 @@ namespace mse
 			physicsComponent.mass = 1.0f;
 			physicsComponent.friction = 0.1f;
 			physicsComponent.bodyType = mse::PhysicsDefines::BodyType::Dynamic;
-			scene->GetPhysicsProcessor()->RegisterEntity(m_Entity);
+			m_Scene->GetPhysicsProcessor()->RegisterEntity(m_Entity);
 		}
 		
-		Unit::~Unit()
+		void Unit::InitFrontend()
 		{
-			ResourceManager::DropResource(m_SpriteTexture, m_user);
-			m_SpriteTexture = nullptr;
-			m_user = nullptr;
+			// screen representation
+			TransformComponent& transform = m_Entity->AddComponent<TransformComponent>();
+			transform.position = m_transformPosition;
+			transform.size = m_transformSize;
+			transform.Normalize({
+				m_window->GetPrefs().width,
+				m_window->GetPrefs().height,
+			});
 			
-			MSE_CORE_ASSERT(m_Entity, "Unit destructor: m_Entity was a null pointer.");
-			delete m_Entity;
-			m_Entity = nullptr;
+			// sprite control
+			if (m_spritePath.length() > 0){
+				m_SpriteTexture = ResourceManager::UseTexture(
+					m_spritePath, 
+					m_window,
+					{m_spriteColorKey.x, m_spriteColorKey.y, m_spriteColorKey.z}
+					);
+				
+				SpriteComponent& spriteComponent = m_Entity->AddComponent<SpriteComponent>((Texture*)(m_SpriteTexture->data));
+				spriteComponent.tilingFactor = {m_spriteTilingFactor.x, m_spriteTilingFactor.y};
+			}
 		}
 		
 		// animation addon to sprite control
