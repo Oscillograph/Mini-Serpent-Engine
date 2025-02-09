@@ -71,7 +71,7 @@ namespace mse
 		inline bool HasEntity(uint32_t entityID) { return m_Registry.valid((entt::entity)entityID); };
 		
 	protected:
-		Layer* m_Layer; // so that the scene knows where it is viewed
+		Layer* m_Layer = nullptr; // so that the scene knows where it is viewed
 		uint32_t m_SceneID;
 		Camera2D* m_SceneCamera = nullptr;
 		Camera2D* m_ActiveCamera = nullptr; // should be set from the client app
@@ -80,8 +80,8 @@ namespace mse
 		bool m_Initialized = false;
 		bool m_PhysicsOn = false;
 		entt::registry m_Registry;
-		PhysicsSystem m_PhysicsSystem;
-		PhysicsProcessor* m_PhysicsProcessor;
+		PhysicsSystem m_PhysicsSystem = PhysicsSystem::None;
+		PhysicsProcessor* m_PhysicsProcessor = nullptr;
 		World* m_CurrentWorld = nullptr;
 	};
 }
