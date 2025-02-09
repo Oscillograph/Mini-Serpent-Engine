@@ -49,25 +49,25 @@ public:
 			// idle
 			case 0:
 			{
-				MSE_LOG("Initial screen mode");
+//				MSE_LOG("Initial screen mode");
 				break;
 			}
 			// game
 			case 1:
 			{
-				MSE_LOG("Game mode");
+//				MSE_LOG("Game mode");
 				break;
 			}
 			// settings
 			case 2:
 			{
-				MSE_LOG("Settings mode");
+//				MSE_LOG("Settings mode");
 				break;
 			}
 			// scores
 			case 3:
 			{
-				MSE_LOG("Scores mode");
+//				MSE_LOG("Scores mode");
 				break;
 			}
 			// about
@@ -112,41 +112,41 @@ public:
 		MSE_LOG("Commanding to create a scene");
 		m_scene = new mse::Scene();
 
-		mse::Arcade::Unit* unit = new mse::Arcade::Unit(
-			m_scene,
-			m_window,
-			"Volleyballist",
-			"./data/img/Volleyballist.png",
-			{
-				{mse::Commands::KBCommand_Left, mse::ScanCode::A}, 
-				{mse::Commands::KBCommand_Right, mse::ScanCode::D},
-				{mse::Commands::KBCommand_Jump, mse::ScanCode::W},
-				{mse::Commands::KBCommand_Down, mse::ScanCode::S}
-			},
-			{0, 0},
-			{1, 1},
-			{1.0f, 1.0f},
-			{0, 0, 0},
-			{0, 0}
-			);
-		
-		unit->SetAnimations(
-			{
-				mse::EntityStates::STAND1,
-				mse::EntityStates::STAND2,
-				mse::EntityStates::WALK1,
-				mse::EntityStates::WALK2,
-				mse::EntityStates::JUMP1,
-				mse::EntityStates::JUMP2,
-				mse::EntityStates::STAND3,
-				mse::EntityStates::STAND,
-			},
-			{20, 30},
-			15.0f,
-			true
-			);
-		
-		unit->ChangeDirection(1);
+//		mse::Arcade::Unit* unit = new mse::Arcade::Unit(
+//			m_scene,
+//			m_window,
+//			"Volleyballist",
+//			"./data/img/Volleyballist.png",
+//			{
+//				{mse::Commands::KBCommand_Left, mse::ScanCode::A}, 
+//				{mse::Commands::KBCommand_Right, mse::ScanCode::D},
+//				{mse::Commands::KBCommand_Jump, mse::ScanCode::W},
+//				{mse::Commands::KBCommand_Down, mse::ScanCode::S}
+//			},
+//			{0, 0},
+//			{1, 1},
+//			{1.0f, 1.0f},
+//			{0, 0, 0},
+//			{0, 0}
+//			);
+//		
+//		unit->SetAnimations(
+//			{
+//				mse::EntityStates::STAND1,
+//				mse::EntityStates::STAND2,
+//				mse::EntityStates::WALK1,
+//				mse::EntityStates::WALK2,
+//				mse::EntityStates::JUMP1,
+//				mse::EntityStates::JUMP2,
+//				mse::EntityStates::STAND3,
+//				mse::EntityStates::STAND,
+//			},
+//			{20, 30},
+//			15.0f,
+//			true
+//			);
+//		
+//		unit->ChangeDirection(1);
 
 		mse::Renderer::SetActiveWindow(m_window);
 		m_window->GetLayerManager()->Attach(new SimpleUILayer());
