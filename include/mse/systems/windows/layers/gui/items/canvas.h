@@ -20,6 +20,7 @@ namespace mse
 
 			// general GUIItem interface
 			virtual void Display();
+			void LoadTexture(const std::string& path);
 			
 			// unique Canvas interface
 			bool SetDrawColor(const glm::uvec4& color);

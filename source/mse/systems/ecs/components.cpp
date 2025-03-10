@@ -382,7 +382,7 @@ namespace mse
 	void PhysicsComponent::ChangeType(PhysicsDefines::BodyType newType)
 	{
 		bodyType = newType;
-		Canban::PutTask(CanbanEvents::Physics_ChangeType, &entity);
+		Canban::PutTask(CanbanEvents::Physics_ChangeType, {CanbanEvents::Physics_ChangeType, CanbanReceiver::Physics, &entity});
 	}
 	
 	PhysicsComponent::~PhysicsComponent()

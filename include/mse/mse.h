@@ -3,6 +3,7 @@
 
 // load core
 #include <mse/core.h>
+#include <mse/systems/canban.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
 #include <mse/systems/platform/input/input.h>

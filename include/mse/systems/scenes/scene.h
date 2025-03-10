@@ -26,6 +26,8 @@ namespace mse
 		
 		virtual void OnInit(); // user-defined, should be called after constructor
 		virtual void Init(); 
+		void InitBackend();
+		void InitFrontend(Window* window); // should be called manually when a layer intends to draw from the scene
 		virtual void OnInitialized(); // user-defined, should be called after initialization
 		virtual void Load();
 		virtual void OnLoaded(); // user-defined
@@ -55,7 +57,7 @@ namespace mse
 		// Picks every entity it has and updates their components depending on the system involved.
 		// void Input();
 		
-		void PhysicsInit(const PhysicsSystem& physicsSystem = PhysicsSystem::None, bool reconfigureCamera = true);
+		void PhysicsInit(const PhysicsSystem& physicsSystem = PhysicsSystem::None);
 		void PhysicsOn();
 		void PhysicsOff();
 		void PhysicsShutdown();
@@ -78,6 +80,8 @@ namespace mse
 		bool m_Running = false;
 		bool m_Paused = false;
 		bool m_Initialized = false;
+		bool m_InitializedBackend = false;
+		bool m_InitializedFrontend = false;
 		bool m_PhysicsOn = false;
 		entt::registry m_Registry;
 		PhysicsSystem m_PhysicsSystem = PhysicsSystem::None;

@@ -16,6 +16,7 @@ public:
 	{
 		// Game GUI
 		gameCanvas = (mse::gui::Canvas*)(AddElement(new mse::gui::Canvas(this, {100, 10, 210, 220}, {32, 64, 48, 255})));
+		gameCanvas->LoadTexture("./data/img/CSE_logo.png");
 		
 		gameCanvas->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 		};
@@ -23,6 +24,8 @@ public:
 		mse::gui::Button* playBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Играть", {10, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
 		playBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
 			mode = 1;
+			mse::Canban::PutTask(mse::CanbanEvents::Backend_Create, {mse::CanbanEvents::Backend_Create, mse::CanbanReceiver::Backend, nullptr});
+			mse::Canban::PutTask(mse::CanbanEvents::Backend_Run, {mse::CanbanEvents::Backend_Run, mse::CanbanReceiver::Backend, nullptr});
 		};
 		mse::gui::Button* settingsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Настройки", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
 		settingsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
@@ -38,6 +41,7 @@ public:
 		};
 		mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {10, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
 		exitBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+			mse::Canban::PutTask(mse::CanbanEvents::Backend_Stop, {mse::CanbanEvents::Backend_Stop, mse::CanbanReceiver::Backend, nullptr});
 			mode = 5;
 		};
 	}
@@ -73,7 +77,7 @@ public:
 			// about
 			case 4:
 			{
-				MSE_LOG("About mode");
+//				MSE_LOG("About mode");
 				break;
 			}
 			// exit
@@ -103,11 +107,16 @@ public:
 		MSE_ERROR("Joke");
 		
 		MSE_LOG("Commanding to open a window");
-		m_window = mse::WindowManager::CreateWindow(u8"Test window", 50, 50, 320, 240);
+		m_window = mse::WindowManager::CreateWindow(u8"Горка", 50, 50, 320, 240);
 		m_window->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 			MSE_LOG("Key pressed: ", event->key.keysym.sym);
 			return true;
 		};
+//		m_window2 = mse::WindowManager::CreateWindow(u8"Морка", 450, 50, 320, 240);
+//		m_window2->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
+//			MSE_LOG("Key pressed 2: ", event->key.keysym.sym);
+//			return true;
+//		};
 		
 		MSE_LOG("Commanding to create a scene");
 		m_scene = new mse::Scene();
@@ -150,6 +159,7 @@ public:
 
 		mse::Renderer::SetActiveWindow(m_window);
 		m_window->GetLayerManager()->Attach(new SimpleUILayer());
+//		m_window2->GetLayerManager()->Attach(new SimpleUILayer());
 	}
 	
 	~App()
@@ -159,12 +169,24 @@ public:
 		cse_texture = nullptr;
 		mse::WindowManager::DestroyWindow(m_window);
 		m_window = nullptr;
+		mse::WindowManager::DestroyWindow(m_window2);
+		m_window2 = nullptr;
 		MSE_LOG("Goodbye, world!");
+	}
+	
+	virtual void BackendStep() override
+	{
+		static int i = 0;
+		MSE_LOG("Application: my BackendStep() method call.");
+		++i;
+		MSE_LOG("Application: i = ", i);
+		return;
 	}
 	
 private:
 	mse::Scene* m_scene = nullptr;
 	mse::Window* m_window = nullptr;
+	mse::Window* m_window2 = nullptr;
 	mse::Texture* cse_texture = nullptr;
 };
 

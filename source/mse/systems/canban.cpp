@@ -2,36 +2,28 @@
 
 namespace mse
 {
-	std::unordered_multimap<CanbanEvents, Entity*> Canban::board;
+	std::unordered_multimap<CanbanEvents, CanbanEvent> Canban::board;
 	// std::vector<CanbanEvent> Canban::advancedBoard;
 	
-	bool Canban::GetTask(CanbanEvents event, Entity* entity)
+	bool Canban::GetTask(CanbanEvents event, CanbanEvent& data)
 	{
 		auto it = board.find(event);
 		if (it != board.end())
 		{
-			entity = it->second;
+			data = it->second;
 			board.erase(it);
 			return true;
 		}
 		return false;
 	}
 	
-	void Canban::PutTask(CanbanEvents event, Entity* entity)
+	void Canban::PutTask(CanbanEvents event, const CanbanEvent& data)
 	{
-		board.insert({event, entity});
+		board.insert({event, data});
 	}
 	
 	void Canban::Clear()
 	{
-		auto it = board.begin();
-		
-		// first, make sure that we won't accidentally call entities destructors
-		for (; it != board.end(); it++)
-		{
-			it->second = nullptr;
-		}
-		
 		board.clear();
 	}
 }

@@ -73,10 +73,84 @@ namespace mse
 		return;
 	}
 	
+	void Application::BackendStep()
+	{
+		MSE_CORE_LOG("Application: Default BackendStep() method.");
+		return;
+	}
+	
+	void Application::BackendRaw()
+	{
+		return;
+	}
+	
+	void Application::BackendStepWrapper()
+	{
+		while (!m_backendShouldStop)
+		{
+			// backend usual cycle
+			m_BackendTimeThisFrame = Platform::GetTimeMs();
+			m_BackendTimeDelta = (float)(m_BackendTimeThisFrame - m_BackendTimeLastFrame)/1000;
+			
+			if ((m_BackendTimeDelta >= m_BackendTimeDeltaLimit) || (m_TaskToDo))
+			{
+				MSE_CORE_LOG("BackendStepWrapper: call BackendStep");
+				BackendStep();
+				m_BackendTimeLastFrame = m_BackendTimeThisFrame;
+			}
+			
+			// force exit if necessary
+			CanbanEvent canbanData;
+			
+			if (Canban::GetTask(CanbanEvents::Backend_Stop, canbanData))
+			{
+				MSE_CORE_LOG("BackendStepWrapper: received Backend_Stop");
+				return;
+			}
+		}
+		return; 
+	}
+	
+	void Application::BackendRawWrapper()
+	{
+//		CanbanEvent* canbanData = nullptr;
+//		
+//		if (Canban::GetTask(CanbanEvents::Backend_Stop, canbanData))
+//		{
+//			return;
+//		}
+		
+		BackendRaw();
+	}
+	
+	void Application::BackendProcessing()
+	{
+		CanbanEvent canbanData;
+		
+		if (Canban::GetTask(CanbanEvents::Backend_Create, canbanData))
+		{
+			m_backendThread = std::thread(BackendStepWrapper, this);
+		}
+		
+		if (Canban::GetTask(CanbanEvents::Backend_Run, canbanData))
+		{
+			m_backendThread.detach();
+		}
+		
+		if (Canban::GetTask(CanbanEvents::Backend_Pause, canbanData))
+		{}
+		
+		if (Canban::GetTask(CanbanEvents::Backend_Recreate, canbanData))
+		{}
+	}
+	
 	void Application::Run()
 	{
 		MSE_CORE_LOG("Application: run procedure called");
 		Renderer::SetBackgroundColor({0, 0, 0, 255});
+		
+//		m_backendThread = std::thread(BackendStepWrapper, this);
+		
 		while (!m_shouldExit)
 		{
 			m_TimeThisFrame = Platform::GetTimeMs();
@@ -186,6 +260,7 @@ namespace mse
 				// TODO: 4. Game Object Management System (GOMS)
 				
 				// TODO: 5. World progress system
+				BackendProcessing();
 				SceneManager::Update(m_TimeThisFrame - m_TimeLastFrame);
 				
 				// TODO: 6. Asset management system
@@ -254,6 +329,7 @@ namespace mse
 				m_shouldExit = false;
 		}
 		
+//		m_backendThread.join();
 		MSE_CORE_LOG("Application: run procedure finished");
 		return;
 	}

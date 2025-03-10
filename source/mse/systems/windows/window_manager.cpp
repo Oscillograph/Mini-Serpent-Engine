@@ -48,8 +48,8 @@ namespace mse
 			{
 				m_windows.erase(it);
 				delete window;
-				m_windowInsertIndex--;
 				SetCurrentWindow(m_windowInsertIndex-1);
+				m_windowInsertIndex--;
 				MSE_CORE_LOG("Window manager: window destroyed");
 				return 0;
 			}

@@ -120,13 +120,13 @@ namespace mse
 			auto physicsCollection = entityRegistry.view<PhysicsComponent>();
 			
 			// read canban board
-			Entity* entity;
-			if (Canban::GetTask(CanbanEvents::Physics_ChangeType, entity))
+			CanbanEvent canbanEvent;
+			if (Canban::GetTask(CanbanEvents::Physics_ChangeType, canbanEvent))
 			{
 				// The reason to transfer type change to physics implementation is that
 				// each implementation has its own way of dealing with world processing,
 				// and the general engine abstraction can't know it beforehand.
-				m_API->ChangeType(entity); 
+				m_API->ChangeType(((Entity*)(canbanEvent.data))); 
 			}
 			// MSE_CORE_LOG("Canban processed");
 			m_API->GeneralRoutine(scene, sceneTime);

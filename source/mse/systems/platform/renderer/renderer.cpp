@@ -832,6 +832,208 @@ namespace mse
 		}
 	}
 	
+	void Renderer::SurfaceDrawTexture(Texture* target, Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect)
+	{
+		SurfaceGeneralDrawTexture(target, texture, destRect, srcRect, glm::vec2(0.0f), glm::vec4(1.0f));
+	}
+	
+	void Renderer::SurfaceDrawTiledTexture(Texture* target, Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect, const glm::vec2& tilingFactor)
+	{
+		SurfaceGeneralDrawTexture(target, texture, destRect, srcRect, tilingFactor, glm::vec4(1.0f));
+	}
+	
+	void Renderer::SurfaceGeneralDrawTexture(Texture* target, Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect, glm::vec2 tilingFactor, const glm::vec4& tintColor)
+	{
+		if (SDL_MUSTLOCK(target->GetSurface()))
+		{
+			SDL_LockSurface(target->GetSurface());
+		}
+		
+		if (texture != nullptr)
+		{
+			SDL_Rect* place = new SDL_Rect; 
+			SDL_Rect* source = new SDL_Rect; 
+			
+			// correct the source rectangle
+			if (srcRect != NULL)
+			{
+				source->x = srcRect->x;
+				source->y = srcRect->y;
+				source->w = srcRect->w;
+				source->h = srcRect->h;
+			} else {
+				delete source;
+				source = NULL;
+			}
+			
+			// correct the destination rectangle
+			if (destRect != NULL)
+			{
+				place->x = destRect->x;
+				place->y = destRect->y;
+				place->w = destRect->w;
+				place->h = destRect->h;
+			} else {
+				// not making it NULL is important for the next step - tiling
+				place->x = 0;
+				place->y = 0;
+				place->w = texture->GetWidth();
+				place->h = texture->GetHeight();
+			}
+			
+			// TODO: draw only if it's on screen
+//		if(true)
+			if ((place->x + place->w > 0) &&
+				(place->y + place->h > 0) &&
+				(place->x < texture->GetWidth()) &&
+				(place->y < texture->GetHeight()))
+			{
+				// tiling texture across the place rectangle
+				// TODO: Adjust tiling to pixel size
+				if (((tilingFactor.x > 0.0f) || (tilingFactor.y > 0.0f)) && (source != NULL))
+				{
+//					// now, get subPlaces and RenderCopy there
+//					int xNum, yNum; // how many whole tiles there are?
+//					xNum = 1;
+//					yNum = 1;
+//					int xMod, yMod; // how big is the partial tile left?
+//					xMod = 0;
+//					yMod = 0;
+//					glm::uvec2 wholeTileSize = {(*source).w, (*source).h};
+//					glm::uvec2 currentTileSize = wholeTileSize;
+//					
+//					glm::vec2 regionSize = {
+//						(*destRect).w, 
+//						(*destRect).h
+//					};
+////				MSE_CORE_LOG("Renderer: destRect = {", destRect->x, "; ", destRect->y, "; ", destRect->w, "; ", destRect->h, "}");
+////				MSE_CORE_LOG("Renderer: regionSize = {", regionSize.x, "; ", regionSize.y, "} ");
+//					
+//					if (tilingFactor.x > 0.0f) // first of all, we need to know how many times to multiply the image
+//					{
+//						// how many whole tiles there are?
+//						xNum = (int)floorf((float)regionSize.x / (wholeTileSize.x * tilingFactor.x));
+//						// and we need to know how big the remainder is
+//						xMod = (int)floorf(regionSize.x - (xNum * wholeTileSize.x * tilingFactor.x));
+//						xMod = (int)(floorf)((float)xMod / tilingFactor.x);
+//						if (xMod > 0)
+//							xNum++;
+//					} else { // not only prevent division by zero, but also allow no-tiling at all
+//						xNum = 1;
+//						xMod = 0;
+//					}
+//					
+//					if (tilingFactor.y > 0.0f) // first of all, we need to know how many times to multiply the image
+//					{
+//						// how many whole tiles there are?
+//						yNum = (int)floorf((float)regionSize.y / (wholeTileSize.y * tilingFactor.y)); 
+//						// and we need to know how big the remainder is
+//						yMod = (int)floorf(regionSize.y - (yNum * wholeTileSize.y * tilingFactor.y));
+//						yMod = (int)(floorf)((float)yMod / tilingFactor.y);
+//						if (yMod > 0)
+//							yNum++;
+//					} else { // not only prevent division by zero, but also allow no-tiling at all
+//						yNum = 1;
+//						yMod = 0;
+//					}
+//					
+////				MSE_CORE_LOG("xNum: ", xNum, "; yNum: ", yNum, "; xMod: ", xMod, "; yMod: ", yMod);
+//					
+//					SDL_FRect* newPlace = new SDL_FRect;
+//					SDL_Rect* newSource = new SDL_Rect;
+//					
+//					glm::uvec4 currentTilePlace = {0, 0, 0, 0};
+//					
+//					for (int x = 0; x < xNum; x++)
+//					{
+//						if ((x == (xNum - 1)) && (xMod > 0))
+//						{
+//							currentTileSize.x = xMod; //wholeTileSize.x - xMod;
+//						} else {
+//							currentTileSize.x = wholeTileSize.x;
+//						}
+//						
+//						for (int y = 0; y < yNum; y++)
+//						{
+//							if ((y == (yNum - 1)) && (yMod > 0))
+//							{
+//								currentTileSize.y = yMod; //wholeTileSize.y - yMod;
+//							} else {
+//								currentTileSize.y = wholeTileSize.y;
+//							}
+//							
+//							newSource->x = source->x;
+//							newSource->y = source->y;
+//							newSource->w = currentTileSize.x;
+//							newSource->h = currentTileSize.y;
+//							
+//							if (tilingFactor.x > 0.0f)
+//							{
+//								currentTilePlace.x = (windowSize.x * (*destRect).x + (x * wholeTileSize.x * tilingFactor.x)) * m_CurrentScreen.z / windowSize.x;
+//								currentTilePlace.z = currentTileSize.x * tilingFactor.x * m_CurrentScreen.z / windowSize.x;
+//							} else {
+//								currentTilePlace.x = (m_CurrentScreen.z * (*destRect).x);
+//								currentTilePlace.z = m_CurrentScreen.z * (*destRect).w;
+//							}
+//							
+//							if (tilingFactor.y > 0.0f)
+//							{
+//								currentTilePlace.y = (windowSize.y * (*destRect).y + (y * wholeTileSize.y * tilingFactor.y)) * m_CurrentScreen.z / windowSize.x;
+//								currentTilePlace.w = currentTileSize.y * tilingFactor.y * m_CurrentScreen.w / windowSize.y;
+//							} else {
+//								currentTilePlace.y = (m_CurrentScreen.w * (*destRect).y);
+//								currentTilePlace.w = m_CurrentScreen.w * (*destRect).h;
+//							}
+//							
+//							newPlace->x = windowScale.x * (m_CurrentScreen.x + currentTilePlace.x);
+//							newPlace->y = windowScale.y * (m_CurrentScreen.y + currentTilePlace.y);
+//							newPlace->w = windowScale.x * currentTilePlace.z;
+//							newPlace->h = windowScale.y * currentTilePlace.w;
+//							
+////						MSE_CORE_LOG("Whole tile size: ( ", wholeTileSize.x, "; ", wholeTileSize.y, ") >> x = ", x, "; y = ", y);
+////						MSE_CORE_LOG("Current tile size: ", currentTileSize.x, "; height: ", currentTileSize.y);\
+////						MSE_CORE_LOG("New place (SDL_Rect): (", (*newPlace).x, "; ", (*newPlace).y, "; ", (*newPlace).w, "; ", (*newPlace).h, ")");
+//							
+//							SDL_UpperBlit(
+//								texture->GetSurface(),
+//								newSource,
+//								target->GetSurface(),
+//								newPlace
+//								);
+//							SDL_RenderCopyExF(
+//								GetActiveRenderer(), 
+//								texture->GetTexture(), 
+//								newSource, 
+//								newPlace,
+//								0,
+//								NULL,
+//								SDL_RendererFlip::SDL_FLIP_NONE
+//								);
+//						}
+//					}
+//					
+//					delete newPlace;
+//					delete newSource;
+				} else {
+					SDL_UpperBlit(
+						texture->GetSurface(),
+						source,
+						target->GetSurface(),
+						place
+						);
+				}
+			}
+			
+			delete place;
+			delete source;
+		}
+		
+		if (SDL_MUSTLOCK(target->GetSurface()))
+		{
+			SDL_UnlockSurface(target->GetSurface());
+		}
+	}
+	
 	// mid-level methods (advanced renderer commands)
 	void Renderer::NewFrame()
 	{

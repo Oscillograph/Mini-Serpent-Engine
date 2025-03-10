@@ -195,6 +195,17 @@ namespace mse
 			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, NULL);
 		}
 		
+		void Canvas::LoadTexture(const std::string& path)
+		{
+			Resource* texture = ResourceManager::UseTexture(path, parentLayer->GetWindow(), {0, 0, 0});
+			Renderer::SurfaceDrawTexture(
+				(Texture*)(m_texture->data), 
+				(Texture*)(texture->data), 
+				NULL,
+				NULL
+				);
+			((Texture*)(m_texture->data))->Update();
+		}
 		
 		// unique Canvas interface
 		bool Canvas::SetDrawColor(const glm::uvec4& color)

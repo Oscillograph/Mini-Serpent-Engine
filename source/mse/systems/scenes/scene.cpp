@@ -46,12 +46,24 @@ namespace mse
 		OnInit();
 		
 		// ...
+		InitBackend();
+		
 		m_Initialized = true;
 		MSE_CORE_LOG("- initialized");
 		MSE_CORE_LOG("- initialized? Answer: ", m_Initialized);
 		
 		MSE_CORE_LOG("- user-defined OnInitialized");
 		OnInitialized();
+	}
+	
+	void Scene::InitBackend()
+	{
+		m_InitializedBackend = true;
+	}
+	
+	void Scene::InitFrontend(Window* window)
+	{
+		m_InitializedFrontend = true;
 	}
 	
 	void Scene::OnInitialized()
@@ -65,7 +77,7 @@ namespace mse
 		if (m_PhysicsProcessor == nullptr)
 		{
 			MSE_CORE_LOG("- initialize physics processor and access its world");
-			PhysicsInit(m_PhysicsSystem, false);
+			PhysicsInit(m_PhysicsSystem);
 		}
 		MSE_CORE_LOG("- loaded");
 		
@@ -132,7 +144,7 @@ namespace mse
 	{
 	}
 	
-	void Scene::PhysicsInit(const PhysicsSystem& physicsSystem, bool reconfigureCamera)
+	void Scene::PhysicsInit(const PhysicsSystem& physicsSystem)
 	{
 		MSE_CORE_LOG("Scene: Initialize physics system of type ", (int)physicsSystem);
 		if (physicsSystem != PhysicsSystem::None)
@@ -141,16 +153,7 @@ namespace mse
 			m_PhysicsProcessor = new PhysicsProcessor(physicsSystem);
 			
 			m_CurrentWorld = m_PhysicsProcessor->AccessWorld(0);
-			if (reconfigureCamera)
-			{
-//				m_SceneCamera->SetWorldConstraints({m_CurrentWorld->properties.size.x, m_CurrentWorld->properties.size.y});
-//				m_SceneCamera->Retarget({
-//					-m_CurrentWorld->properties.size.x/10,
-//					-m_CurrentWorld->properties.size.y/10,
-//					m_CurrentWorld->properties.size.x/10,
-//					m_CurrentWorld->properties.size.y/10
-//				});
-			}
+
 			PhysicsOn();
 		} else {
 			m_PhysicsSystem = PhysicsSystem::None;
@@ -158,16 +161,6 @@ namespace mse
 			
 			m_CurrentWorld = nullptr;
 			
-			if (reconfigureCamera)
-			{
-//				m_SceneCamera->SetWorldConstraints({0.0f, 0.0f});
-//				m_SceneCamera->Retarget({
-//					0,
-//					0,
-//					0,
-//					0,
-//				});
-			}
 			PhysicsOff();
 		}
 	}

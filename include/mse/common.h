@@ -15,6 +15,7 @@
 #include <functional> // for std::function in Events
 #include <math.h> // sine and cosine functions in Renderer
 #include <random> // random math
+#include <thread> // multithread logic in Application
 
 // custom libraries
 
