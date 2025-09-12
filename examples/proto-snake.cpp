@@ -83,7 +83,7 @@ public:
 		
 		itemCanvas = (mse::gui::Canvas*)(AddElement(new mse::gui::Canvas(this, {100, 110, 80, 60}, {32, 64, 48, 255})));
 		
-		mse::Application::GetApplication()->SetFPS(MSE_FPS4);
+		mse::Application::GetApplication()->SetFPS(MSE_FPS60);
 	}
 	
 	virtual void OnUpdate() override

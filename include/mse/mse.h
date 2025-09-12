@@ -13,6 +13,8 @@
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/layers/gui/gui.h>
 #include <mse/systems/resources/resource_manager.h>
+#include <mse/systems/ecs/entity.h>
+#include <mse/systems/ecs/components.h>
 #include <mse/systems/scenes/scene_manager.h>
 #include <mse/systems/scenes/scene.h>
 #include <mse/systems/application/application.h>
