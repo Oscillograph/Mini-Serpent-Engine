@@ -19,13 +19,15 @@ public:
 		mse::gui::Button* playBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {10, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
 		playBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
 			mode = LAutobattler::GamePages::CharacterCreation;
+            LAutobattler::Game::gamePage = LAutobattler::GamePages::ArenaSetup;
 			mse::Canban::PutTask(mse::CanbanEvents::Backend_Create, {mse::CanbanEvents::Backend_Create, mse::CanbanReceiver::Backend, nullptr});
 			mse::Canban::PutTask(mse::CanbanEvents::Backend_Run, {mse::CanbanEvents::Backend_Run, mse::CanbanReceiver::Backend, nullptr});
             mse::Canban::PutTask(mse::CanbanEvents::Backend_Stop, {mse::CanbanEvents::Backend_Stop, mse::CanbanReceiver::Backend, nullptr});
 		};
 		mse::gui::Button* settingsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
 		settingsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-			mode = LAutobattler::GamePages::CharacterLoad;
+			mode = LAutobattler::GamePages::Intro;\
+            LAutobattler::Game::gamePage = LAutobattler::GamePages::CharacterLoad;
 		};
 		mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {10, 30, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
 		scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
@@ -44,6 +46,7 @@ public:
 	
 	virtual void OnUpdate() override
 	{
+        LAutobattler::Game::GameLogic();
 		switch (mode)
 		{
 			// idle
@@ -94,8 +97,9 @@ public:
 	mse::gui::Canvas* gameCanvas = nullptr;
 };
 
-class GameScene : mse::Scene
+class GameScene : public mse::Scene
 {
+public:
     GameScene(){};
     ~GameScene()
     {
@@ -112,6 +116,11 @@ class GameScene : mse::Scene
         
         player->AddComponent<LAutobattler::CharacterStats>();
         npc->AddComponent<LAutobattler::CharacterStats>();
+    }
+    
+    virtual void Update(mse::TimeType time)
+    {
+        LAutobattler::Game::GameLogic();
     }
     
     mse::Entity* player = nullptr;
@@ -139,7 +148,9 @@ public:
 //		};
 		
 		MSE_LOG("Commanding to create a scene");
-		m_scene = new mse::Scene();
+		m_scene = new GameScene();
+//        mse::SceneManager::Load(new GameScene());
+        mse::SceneManager::Load(m_scene);
 
 //		mse::Arcade::Unit* unit = new mse::Arcade::Unit(
 //			m_scene,

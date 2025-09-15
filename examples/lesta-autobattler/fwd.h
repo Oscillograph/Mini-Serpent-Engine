@@ -20,39 +20,40 @@ namespace LAutobattler
         ArenaSetup,
         ArenaBattle,
         ArenaAftermath,
+        GameOver,
         Highscores,
         Credits,
         Exit
     };
 
-    class GameState
-    {
-        GamePages id = GamePages::None;
-
-        GameState() {};
-        virtual ~GameState() {};
-
-        virtual void Enter() {};
-        virtual void Logic();
-        virtual void GUI() {};
-        virtual bool ExitTo(GamePages state)
-        {
-            return true;
-        };
-    };
-    
-    /*
-    Possible usage:
-        states_machine.state.logic();
-        states_machine.state.GUI();
-    
-    But seriously. Do I need a state machine here?
-    */
-    class GameStateMachine
-    {
-        std::unordered_map<GamePages, GameState> statesMap = {};
-        GameState state;
-    };
+//    struct GameState
+//    {
+//        GamePages id = GamePages::None;
+//
+//        GameState() {};
+//        virtual ~GameState() {};
+//
+//        virtual void Enter() {};
+//        virtual void Logic();
+//        virtual void GUI() {};
+//        virtual bool ExitTo(GamePages state)
+//        {
+//            return true;
+//        };
+//    };
+//    
+//    /*
+//    Possible usage:
+//        states_machine.state.logic();
+//        states_machine.state.GUI();
+//    
+//    But seriously. Do I need a state machine here?
+//    */
+//    struct GameStateMachine
+//    {
+//        std::unordered_map<GamePages, GameState> statesMap = {};
+//        GameState state;
+//    };
 
     enum class Races
     {
@@ -74,7 +75,7 @@ namespace LAutobattler
         Barbarian
     };
 
-    class Class
+    struct Class
     {
         Classes type = Classes::None;
         size_t level = 0;
@@ -148,7 +149,7 @@ namespace LAutobattler
     struct Character
     {
         size_t level = 0;
-        std::string name = "";
+        std::u32string name = U"";
         Races race = Races::None;
         CharacterStats stats_max;
         CharacterStats stats; // during battle
@@ -190,7 +191,7 @@ namespace LAutobattler
                 0,
                 {
                     1,                     // level
-                    "Гоблин",              // name
+                    U"Гоблин",              // name
                     Races::Goblin,         // race
                     {5, 1, 1, 1},          // stats_max
                     {5, 1, 1, 1},          // stats
@@ -206,7 +207,7 @@ namespace LAutobattler
                 1,
                 {
                     1,                     // level
-                    "Скелет",              // name
+                    U"Скелет",              // name
                     Races::Skeleton,         // race
                     {10, 2, 2, 1},          // stats_max
                     {10, 2, 2, 1},          // stats
@@ -222,7 +223,7 @@ namespace LAutobattler
                 2,
                 {
                     1,                     // level
-                    "Слайм",              // name
+                    U"Слайм",              // name
                     Races::Slime,         // race
                     {8, 3, 1, 2},          // stats_max
                     {8, 3, 1, 2},          // stats
@@ -238,7 +239,7 @@ namespace LAutobattler
                 3,
                 {
                     1,                     // level
-                    "Призрак",              // name
+                    U"Призрак",              // name
                     Races::Ghost,         // race
                     {6, 1, 3, 1},          // stats_max
                     {6, 1, 3, 1},          // stats
@@ -254,7 +255,7 @@ namespace LAutobattler
                 4,
                 {
                     2,                     // level
-                    "Голем",              // name
+                    U"Голем",              // name
                     Races::Golem,         // race
                     {10, 3, 1, 3},          // stats_max
                     {10, 3, 1, 3},          // stats
@@ -270,7 +271,7 @@ namespace LAutobattler
                 5,
                 {
                     3,                     // level
-                    "Дракон",              // name
+                    U"Дракон",              // name
                     Races::Dragon,         // race
                     {20, 3, 3, 3},          // stats_max
                     {20, 3, 3, 3},          // stats
@@ -289,7 +290,6 @@ namespace LAutobattler
         // do I really need to implement a game state here instead of all this? 
         
         GamePages gamePage = GamePages::None;
-        GameState gameStateMachine;
         Character playerCharacter;
         Character npcCharacter;
         
@@ -299,6 +299,8 @@ namespace LAutobattler
             {
             case GamePages::Intro:
                 {
+                    printf("~~~ Intro ~~~\n");
+                    gamePage = GamePages::MainMenu;
                     break;
                 }
             case GamePages::MainMenu:
@@ -340,17 +342,17 @@ namespace LAutobattler
                 }
             case GamePages::CharacterCreation:
                 {
-                    Class inputClass = Classes::None;
+                    Classes inputClass = Classes::None;
                     CharacterStats inputStats;
                     Traits inputTrait;
                     Races inputRace = Races::Human;
-                    Weapon inputWeapon = GameDB::weapons[0]
+                    Weapon inputWeapon = GameDB::weapons[0];
                     
                     switch (inputClass)
                     {
                     case Classes::Rogue:
                         {
-                            std::srand();
+                            std::srand(0);
                             int str = std::rand() % 3 + 1;
                             int agi = std::rand() % 3 + 1;
                             int end = std::rand() % 3 + 1;
@@ -361,7 +363,7 @@ namespace LAutobattler
                         }
                     case Classes::Warrior:
                         {
-                            std::srand();
+                            std::srand(0);
                             int str = std::rand() % 3 + 1;
                             int agi = std::rand() % 3 + 1;
                             int end = std::rand() % 3 + 1;
@@ -372,7 +374,7 @@ namespace LAutobattler
                         }
                     case Classes::Barbarian:
                         {
-                            std::srand();
+                            std::srand(0);
                             int str = std::rand() % 3 + 1;
                             int agi = std::rand() % 3 + 1;
                             int end = std::rand() % 3 + 1;
@@ -390,15 +392,15 @@ namespace LAutobattler
                     playerCharacter = 
                     {
                         1,                     // level
-                        "Игрок",              // name
+                        U"Username",              // name
                         inputRace,         // race
                         inputStats,          // stats_max
                         inputStats,          // stats
                         {inputClass, 1},    // main class
                         {Classes::None, 0},    // sub class
-                        inputTrait,                    // traits
+                        {inputTrait},                    // traits
                         {},  // drop
-                        inputWeapon,   // weapon
+                        inputWeapon   // weapon
                     };
                     
                     break;
@@ -409,6 +411,8 @@ namespace LAutobattler
                 }
             case GamePages::ArenaSetup:
                 {
+                    printf("Preparing battle...\n");
+                    
                     // calculate actual player stats
                     playerCharacter.stats = playerCharacter.stats_max;
                     playerCharacter.stats = 
@@ -417,7 +421,7 @@ namespace LAutobattler
                         playerCharacter.stats_max.strength,
                         playerCharacter.stats_max.agility,
                         playerCharacter.stats_max.endurance,
-                    }
+                    };
                     
                     // apply stats passive traits
                     for (Traits trait : playerCharacter.traits)
@@ -438,9 +442,12 @@ namespace LAutobattler
                     
                     // pick npc adversary
                     int npcCount = GameDB::characters.size();
-                    std::srand();
+                    std::srand(0);
                     int pickedCharacter = std::rand() % npcCount;
                     npcCharacter = GameDB::characters[pickedCharacter];
+                    
+                    printf("Next opponent is %s!\n", npcCharacter.name.c_str());
+                    gamePage = GamePages::ArenaBattle;
                     break;
                 }
             case GamePages::ArenaBattle:
@@ -463,6 +470,7 @@ namespace LAutobattler
                         attacker = &npcCharacter;
                         defender = &playerCharacter;
                     }
+                    printf("Opponents greet each other and start the combat.\n");
                     
                     while (!battleFinished)
                     {
@@ -479,9 +487,9 @@ namespace LAutobattler
                         
                         // start of the turn
                         // calculate attack chance
-                        std::srand();
-                        int dice = std::rand() % (attacker->stats.agility + defender->stats.agility);
-                        if (dice > defender)
+                        std::srand(0);
+                        int dice = std::rand() % static_cast<int>(roundf(attacker->stats.agility + defender->stats.agility));
+                        if (dice > defender->stats.agility)
                         {
                             // apply attacker's effects
                             for (Traits trait : attacker->traits)
@@ -553,6 +561,12 @@ namespace LAutobattler
                             
                             // clash
                             defender->stats.health -= totalDamage;
+                            printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n", 
+                                   turn, 
+                                   attacker->name.c_str(), 
+                                   totalDamage, 
+                                   defender->name.c_str(), 
+                                   defender->stats.health);
                         }
                         
                         if (defender->stats.health <= 0.0)
@@ -565,6 +579,7 @@ namespace LAutobattler
                     
                     // end of the battle
                     gamePage = GamePages::ArenaAftermath;
+                    printf("Battle is finished.\n");
                     
                     break;
                 }
@@ -573,12 +588,21 @@ namespace LAutobattler
                     if (playerCharacter.stats.health > 0.0)
                     {
                         gamePage = GamePages::CharacterUpdate;
+                    } else {
+                        gamePage = GamePages::GameOver;
                     }
                     
                     break;
                 }
             case GamePages::CharacterUpdate:
                 {
+                    printf("Character has grown!\n");
+                    break;
+                }
+            case GamePages::GameOver:
+                {
+                    printf("Game over.\n");
+                    gamePage = GamePages::Exit;
                     break;
                 }
             case GamePages::Highscores:
