@@ -184,7 +184,7 @@ namespace LAutobattler
             {13, {U"Пулемёт Максим",  100.0,    DamageType::Divine}},
         };
 
-        std::unordered_map<size_t, Character> characters =
+        std::unordered_map<int, Character> characters =
         {
             // npc
             {
@@ -342,17 +342,17 @@ namespace LAutobattler
                 }
             case GamePages::CharacterCreation:
                 {
-                    Classes inputClass = Classes::None;
+                    Classes inputClass = Classes::Barbarian;
                     CharacterStats inputStats;
                     Traits inputTrait;
                     Races inputRace = Races::Human;
                     Weapon inputWeapon = GameDB::weapons[0];
                     
+                    std::srand(0);
                     switch (inputClass)
                     {
                     case Classes::Rogue:
                         {
-                            std::srand(0);
                             int str = std::rand() % 3 + 1;
                             int agi = std::rand() % 3 + 1;
                             int end = std::rand() % 3 + 1;
@@ -363,7 +363,6 @@ namespace LAutobattler
                         }
                     case Classes::Warrior:
                         {
-                            std::srand(0);
                             int str = std::rand() % 3 + 1;
                             int agi = std::rand() % 3 + 1;
                             int end = std::rand() % 3 + 1;
@@ -374,7 +373,6 @@ namespace LAutobattler
                         }
                     case Classes::Barbarian:
                         {
-                            std::srand(0);
                             int str = std::rand() % 3 + 1;
                             int agi = std::rand() % 3 + 1;
                             int end = std::rand() % 3 + 1;
@@ -385,7 +383,7 @@ namespace LAutobattler
                         }
                     default:
                         {
-                            printf("can't create player character: undefined class");
+                            printf("can't create player character: undefined class\n");
                         }
                     }
                     
@@ -402,6 +400,14 @@ namespace LAutobattler
                         {},  // drop
                         inputWeapon   // weapon
                     };
+                    printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n", 
+                           playerCharacter.name.c_str(),
+                           playerCharacter.stats.health,
+                           playerCharacter.stats.strength,
+                           playerCharacter.stats.agility,
+                           playerCharacter.stats.endurance);
+                    
+                    gamePage = GamePages::ArenaSetup;
                     
                     break;
                 }
@@ -442,11 +448,16 @@ namespace LAutobattler
                     
                     // pick npc adversary
                     int npcCount = GameDB::characters.size();
-                    std::srand(0);
                     int pickedCharacter = std::rand() % npcCount;
                     npcCharacter = GameDB::characters[pickedCharacter];
                     
-                    printf("Next opponent is %s!\n", npcCharacter.name.c_str());
+                    printf("Next opponent (of %d) is %s! (%.2f, %.2f, %.2f, %.2f)\n",
+                           npcCount,
+                           npcCharacter.name.c_str(),
+                           npcCharacter.stats.health,
+                           npcCharacter.stats.strength,
+                           npcCharacter.stats.agility,
+                           npcCharacter.stats.endurance);
                     gamePage = GamePages::ArenaBattle;
                     break;
                 }
@@ -472,7 +483,7 @@ namespace LAutobattler
                     }
                     printf("Opponents greet each other and start the combat.\n");
                     
-                    while (!battleFinished)
+                    while ((!battleFinished) && (turn < 30))
                     {
                         turn++;
                         
@@ -485,10 +496,20 @@ namespace LAutobattler
                             defender = tmp;
                         }
                         
+                        weaponDamage = attacker->weapon.damage;
+                        skillDamage = 0.0;
+                        totalDamage = 0.0;
+                        
+                        printf("Turn %d: %s attacks.\n",
+                               turn,
+                               attacker->name.c_str());
+                        
                         // start of the turn
                         // calculate attack chance
-                        std::srand(0);
-                        int dice = std::rand() % static_cast<int>(roundf(attacker->stats.agility + defender->stats.agility));
+//                        std::srand(0);
+                        int agi_sum = attacker->stats.agility + defender->stats.agility;
+                        int dice = (std::rand() % agi_sum) + 1;
+                        printf("Rolled %d of %d\n", dice, agi_sum);
                         if (dice > defender->stats.agility)
                         {
                             // apply attacker's effects
@@ -559,6 +580,11 @@ namespace LAutobattler
                                 }
                             }
                             
+                            if (totalDamage < 0.0)
+                            {
+                                totalDamage = 0.0;
+                            }
+                            
                             // clash
                             defender->stats.health -= totalDamage;
                             printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n", 
@@ -567,6 +593,10 @@ namespace LAutobattler
                                    totalDamage, 
                                    defender->name.c_str(), 
                                    defender->stats.health);
+                        } else {
+                            printf("Turn %d: %s misses!\n", 
+                                   turn, 
+                                   attacker->name.c_str());
                         }
                         
                         if (defender->stats.health <= 0.0)
