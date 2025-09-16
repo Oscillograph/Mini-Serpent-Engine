@@ -290,11 +290,20 @@ namespace LAutobattler
         // do I really need to implement a game state here instead of all this? 
         
         GamePages gamePage = GamePages::None;
+        
+        Classes inputClass = Classes::None;
+        CharacterStats inputStats;
+        Traits inputTrait;
+        Races inputRace = Races::Human;
+        Weapon inputWeapon = GameDB::weapons[0];
+        
         Character playerCharacter;
         Character npcCharacter;
         
         void GameLogic()
         {
+            std::srand(std::clock());
+            
             switch (gamePage)
             {
             case GamePages::Intro:
@@ -342,72 +351,68 @@ namespace LAutobattler
                 }
             case GamePages::CharacterCreation:
                 {
-                    Classes inputClass = Classes::Barbarian;
-                    CharacterStats inputStats;
-                    Traits inputTrait;
-                    Races inputRace = Races::Human;
-                    Weapon inputWeapon = GameDB::weapons[0];
-                    
-                    std::srand(0);
-                    switch (inputClass)
+                    if (inputClass != Classes::None)
                     {
-                    case Classes::Rogue:
+                        switch (inputClass)
                         {
-                            int str = std::rand() % 3 + 1;
-                            int agi = std::rand() % 3 + 1;
-                            int end = std::rand() % 3 + 1;
-                            inputStats = {4, str, agi, end};
-                            inputTrait = Traits::HiddenStrike;
-                            inputWeapon = GameDB::weapons[2];
-                            break;
+                        case Classes::Rogue:
+                            {
+                                int str = std::rand() % 3 + 1;
+                                int agi = std::rand() % 3 + 1;
+                                int end = std::rand() % 3 + 1;
+                                inputStats = {4, str, agi, end};
+                                inputTrait = Traits::HiddenStrike;
+                                inputWeapon = GameDB::weapons[2];
+                                break;
+                            }
+                        case Classes::Warrior:
+                            {
+                                int str = std::rand() % 3 + 1;
+                                int agi = std::rand() % 3 + 1;
+                                int end = std::rand() % 3 + 1;
+                                inputStats = {5, str, agi, end};
+                                inputTrait = Traits::Rush;
+                                inputWeapon = GameDB::weapons[3];
+                                break;
+                            }
+                        case Classes::Barbarian:
+                            {
+                                int str = std::rand() % 3 + 1;
+                                int agi = std::rand() % 3 + 1;
+                                int end = std::rand() % 3 + 1;
+                                inputStats = {6, str, agi, end};
+                                inputTrait = Traits::Rage;
+                                inputWeapon = GameDB::weapons[4];
+                                break;
+                            }
+                        default:
+                            {
+                                printf("can't create player character: undefined class\n");
+                            }
                         }
-                    case Classes::Warrior:
+                        
+                        playerCharacter = 
                         {
-                            int str = std::rand() % 3 + 1;
-                            int agi = std::rand() % 3 + 1;
-                            int end = std::rand() % 3 + 1;
-                            inputStats = {5, str, agi, end};
-                            inputTrait = Traits::Rush;
-                            inputWeapon = GameDB::weapons[3];
-                            break;
-                        }
-                    case Classes::Barbarian:
-                        {
-                            int str = std::rand() % 3 + 1;
-                            int agi = std::rand() % 3 + 1;
-                            int end = std::rand() % 3 + 1;
-                            inputStats = {6, str, agi, end};
-                            inputTrait = Traits::Rage;
-                            inputWeapon = GameDB::weapons[4];
-                            break;
-                        }
-                    default:
-                        {
-                            printf("can't create player character: undefined class\n");
-                        }
+                            1,                     // level
+                            U"Username",              // name
+                            inputRace,         // race
+                            inputStats,          // stats_max
+                            inputStats,          // stats
+                            {inputClass, 1},    // main class
+                            {Classes::None, 0},    // sub class
+                            {inputTrait},                    // traits
+                            {},  // drop
+                            inputWeapon   // weapon
+                        };
+                        printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n", 
+                               playerCharacter.name.c_str(),
+                               playerCharacter.stats.health,
+                               playerCharacter.stats.strength,
+                               playerCharacter.stats.agility,
+                               playerCharacter.stats.endurance);
+                        
+                        inputClass = Classes::None;
                     }
-                    
-                    playerCharacter = 
-                    {
-                        1,                     // level
-                        U"Username",              // name
-                        inputRace,         // race
-                        inputStats,          // stats_max
-                        inputStats,          // stats
-                        {inputClass, 1},    // main class
-                        {Classes::None, 0},    // sub class
-                        {inputTrait},                    // traits
-                        {},  // drop
-                        inputWeapon   // weapon
-                    };
-                    printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n", 
-                           playerCharacter.name.c_str(),
-                           playerCharacter.stats.health,
-                           playerCharacter.stats.strength,
-                           playerCharacter.stats.agility,
-                           playerCharacter.stats.endurance);
-                    
-                    gamePage = GamePages::ArenaSetup;
                     
                     break;
                 }
@@ -626,7 +631,7 @@ namespace LAutobattler
                 }
             case GamePages::CharacterUpdate:
                 {
-                    printf("Character has grown!\n");
+//                    printf("Character has grown!\n");
                     break;
                 }
             case GamePages::GameOver:

@@ -4,6 +4,56 @@
 
 LAutobattler::GamePages mode = LAutobattler::GamePages::None;
 
+enum class LayerMessages
+{
+    None,
+    ClassSelectUILayer_Attach,
+    ClassSelectUILayer_Detach,
+};
+LayerMessages layerMesage = LayerMessages::None;
+
+class ClassSelectUILayer : public mse::Layer
+{
+public:
+    ClassSelectUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed ClassSelectUILayer");
+    }
+    ~ClassSelectUILayer()
+    {
+        MSE_LOG("Destroyed ClassSelectUILayer");
+    }
+    
+    virtual void OnInit() override
+    {
+        mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 10, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+        ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Rogue;
+//            layerMesage = LayerMessages::ClassSelectUILayer_Detach;
+            m_window->GetLayerManager()->Detach(this);
+        };
+        
+        mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {100, 20, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+        ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Warrior;
+//            layerMesage = LayerMessages::ClassSelectUILayer_Detach;
+            m_window->GetLayerManager()->Detach(this);
+        };
+        
+        mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {100, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
+        ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Barbarian;
+//            layerMesage = LayerMessages::ClassSelectUILayer_Detach;
+            m_window->GetLayerManager()->Detach(this);
+        };
+    }
+    
+    virtual void OnUpdate() override
+    {
+        
+    }
+};
+
 class SimpleUILayer : public mse::Layer
 {
 public:
@@ -16,16 +66,23 @@ public:
 	virtual void OnInit() override
 	{
 		// Game GUI
-		mse::gui::Button* playBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {10, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-		playBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-			mode = LAutobattler::GamePages::CharacterCreation;
+		mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {10, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+		playerCreateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
             LAutobattler::Game::gamePage = LAutobattler::GamePages::CharacterCreation;
 //			mse::Canban::PutTask(mse::CanbanEvents::Backend_Create, {mse::CanbanEvents::Backend_Create, mse::CanbanReceiver::Backend, nullptr});
 //			mse::Canban::PutTask(mse::CanbanEvents::Backend_Run, {mse::CanbanEvents::Backend_Run, mse::CanbanReceiver::Backend, nullptr});
 //            mse::Canban::PutTask(mse::CanbanEvents::Backend_Stop, {mse::CanbanEvents::Backend_Stop, mse::CanbanReceiver::Backend, nullptr});
+            layerMesage = LayerMessages::ClassSelectUILayer_Attach;
 		};
-		mse::gui::Button* settingsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-		settingsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        
+        mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Начать бой", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+        battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            mode = LAutobattler::GamePages::Intro;
+            LAutobattler::Game::gamePage = LAutobattler::GamePages::ArenaSetup;
+        };
+        
+		mse::gui::Button* playerLoadBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+		playerLoadBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
 			mode = LAutobattler::GamePages::Intro;\
             LAutobattler::Game::gamePage = LAutobattler::GamePages::CharacterLoad;
 		};
@@ -33,8 +90,8 @@ public:
 		scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
 			mode = LAutobattler::GamePages::Highscores;
 		};
-		mse::gui::Button* aboutBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {10, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-		aboutBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+		mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {10, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+		creditsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
 			mode = LAutobattler::GamePages::Credits;
 		};
 		mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {10, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
@@ -47,6 +104,26 @@ public:
 	virtual void OnUpdate() override
 	{
         LAutobattler::Game::GameLogic();
+        
+        switch (layerMesage)
+        {
+        case LayerMessages::None:
+            {
+                break;
+            }
+        case LayerMessages::ClassSelectUILayer_Attach:
+            {
+                m_window->GetLayerManager()->Attach(new ClassSelectUILayer());
+                layerMesage = LayerMessages::None;
+                break;
+            }
+        case LayerMessages::ClassSelectUILayer_Detach:
+            {
+                m_window->GetLayerManager()->Detach(this);
+                layerMesage = LayerMessages::None;
+                break;
+            }
+        }
         
 		switch (mode)
 		{

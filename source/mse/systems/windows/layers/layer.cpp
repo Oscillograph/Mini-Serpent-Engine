@@ -38,22 +38,6 @@ namespace mse
 			// fill the screen with ids of elements
 			m_screenWidth = m_window->GetPrefs().width;
 			m_screenHeight = m_window->GetPrefs().height;
-//			m_screen.resize(m_screenWidth * m_screenHeight);
-//			m_screen.assign(m_screenWidth * m_screenHeight, -1); // make a "blank" screen
-//			for (std::pair<int, GUIItem*> element : m_elements)
-//			{
-//				int xmin = element.second->x;
-//				int xmax = xmin + element.second->width;
-//				for (int x = xmin; (x < xmax) && (x < m_screenWidth); ++x)
-//				{
-//					int ymin = element.second->y;
-//					int ymax = ymin + element.second->height;
-//					for (int y = ymin; (y < ymax) && (y < m_screenHeight); ++y)
-//					{
-//						m_screen[x + y*m_screenWidth] = element.first;
-//					}
-//				}
-//			}
 			
 			MSE_CORE_LOG("Layer: attached to window ", m_window->GetPrefs().title);
 		} else {
@@ -79,6 +63,8 @@ namespace mse
 		
 		MSE_CORE_LOG("Layer: detached from window ", m_window->GetPrefs().title);
 		
+        m_window->GetLayerManager()->m_mouseOverElementID = -1;
+        
 		m_window = nullptr;
 		
 		// clear the screen
@@ -124,8 +110,12 @@ namespace mse
 					// process moving mouse away from the previous element area
 					if (m_window->GetLayerManager()->m_mouseOverElementID != -1)
 					{
-						m_elements[m_window->GetLayerManager()->m_mouseOverElementID]->HandleEvent(EventTypes::GUIItemMouseOut, event);
-						m_window->GetLayerManager()->m_mouseOverElementID = elementId;
+//                        printf("(MoElId: %d)", m_window->GetLayerManager()->m_mouseOverElementID);
+                        if(m_elements.find(m_window->GetLayerManager()->m_mouseOverElementID) != m_elements.end())
+                        {
+                            m_elements[m_window->GetLayerManager()->m_mouseOverElementID]->HandleEvent(EventTypes::GUIItemMouseOut, event);
+                            m_window->GetLayerManager()->m_mouseOverElementID = elementId;
+                        }
 					}
 					break;
 				}

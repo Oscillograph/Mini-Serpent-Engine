@@ -85,13 +85,16 @@ namespace mse
 			
 			elementId = m_screen[mouseX + mouseY * m_window->GetPrefs().width];
 		}
+        
 //		MSE_CORE_LOG("Layer manager: handling an event for elemnetId=", elementId);
 		
 		for (int i = m_layers.size() - 1; (i >= 0) && !handled; --i)
 		{
 			if (m_layers[i] != nullptr)
 			{
+//                printf("%d -- event sent...", elementId);
 				handled = m_layers[i]->HandleEvent(eventType, event, (elementId == -1) ? m_layers[i]->elementInFocus : elementId);
+//                printf("... event handled.\n");
 			}
 		}
 		
