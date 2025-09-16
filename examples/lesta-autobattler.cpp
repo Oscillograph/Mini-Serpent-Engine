@@ -226,9 +226,9 @@ public:
 //		};
 		
 		MSE_LOG("Commanding to create a scene");
-		m_scene = new GameScene();
+//		m_scene = new GameScene();
 //        mse::SceneManager::Load(new GameScene());
-        mse::SceneManager::Load(m_scene);
+//        mse::SceneManager::Load(m_scene);
 
 //		mse::Arcade::Unit* unit = new mse::Arcade::Unit(
 //			m_scene,
