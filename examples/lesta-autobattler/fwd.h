@@ -270,11 +270,16 @@ namespace LAutobattler
         Weapon inputWeapon = GameDB::weapons[0];
         bool playerCharacterUpdated = false;
         bool battleJustFinished = false;
+        bool battleFinished = false;
         
         int battleCounter = 0;
+        int turn = 0;
         
         Character playerCharacter;
         Character npcCharacter;
+        
+        Character* attacker = nullptr;
+        Character* defender = nullptr;
         
         void GameLogic()
         {
@@ -387,6 +392,8 @@ namespace LAutobattler
                                playerCharacter.stats.agility,
                                playerCharacter.stats.endurance);
                         
+                        battleCounter = 0;
+                        
                         inputClass = Classes::None;
                     }
                     
@@ -441,19 +448,6 @@ namespace LAutobattler
                            npcCharacter.stats.strength,
                            npcCharacter.stats.agility,
                            npcCharacter.stats.endurance);
-                    gamePage = GamePages::ArenaBattle;
-                    break;
-                }
-            case GamePages::ArenaBattle:
-                {
-                    bool battleFinished = false;
-                    int turn = 0;
-                    float weaponDamage = 0.0;
-                    float skillDamage = 0.0;
-                    float totalDamage = 0.0;
-                    
-                    Character* attacker = nullptr;
-                    Character* defender = nullptr;
                     
                     // start of the battle
                     if (playerCharacter.stats.agility > npcCharacter.stats.agility)
@@ -466,7 +460,19 @@ namespace LAutobattler
                     }
                     printf("Opponents greet each other and start the combat.\n");
                     
-                    while ((!battleFinished) && (turn < 30))
+                    turn = 0;
+                    battleFinished = false;
+                    
+                    gamePage = GamePages::ArenaBattle;
+                    break;
+                }
+            case GamePages::ArenaBattle:
+                {
+                    float weaponDamage = 0.0;
+                    float skillDamage = 0.0;
+                    float totalDamage = 0.0;
+                    
+                    if ((!battleFinished) && (turn < 30))
                     {
                         turn++;
                         
@@ -588,11 +594,11 @@ namespace LAutobattler
                         }
                         
                         // end of the turn
+                    } else {
+                        // end of the battle
+                        gamePage = GamePages::ArenaAftermath;
+                        printf("Battle is finished.\n");
                     }
-                    
-                    // end of the battle
-                    gamePage = GamePages::ArenaAftermath;
-                    printf("Battle is finished.\n");
                     
                     break;
                 }
@@ -604,7 +610,8 @@ namespace LAutobattler
                         {
                             battleJustFinished = true; // important for layer management
                             gamePage = GamePages::CharacterUpdate;
-                            inputWeapon = *(Weapon*)(&(npcCharacter.drop_list[0]));
+//                            inputWeapon = *(Weapon*)(&(npcCharacter.drop_list[0]));
+                            inputWeapon = playerCharacter.weapon;
                         } else {
                             gamePage = GamePages::Winner;
                         }

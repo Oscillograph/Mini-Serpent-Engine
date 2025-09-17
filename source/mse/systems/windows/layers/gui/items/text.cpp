@@ -64,11 +64,14 @@ namespace mse
 				mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit3.bmp", parentLayer->GetWindow());
 				
 				// text with border
-//				Renderer::SurfaceDrawRectFilled(
-//					(Texture*)(m_texture->data),
-//					{0, 0, layerArea.z, layerArea.w}, 
-//					{255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
-//					);
+                if (showBorder)
+                {
+                    Renderer::SurfaceDrawRectFilled(
+                        (Texture*)(m_texture->data),
+                        {0, 0, layerArea.z, layerArea.w}, 
+                        {255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+                        );
+                }
 				Renderer::SurfaceDrawRectFilled(
 					(Texture*)(m_texture->data),
 					{0 + 1, 1, layerArea.z - 2, layerArea.w - 2}, 

@@ -12,6 +12,38 @@ enum class LayerMessages
 };
 LayerMessages layerMesage = LayerMessages::None;
 
+class ArenaUILayer : public mse::Layer
+{
+public:
+    ArenaUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed ArenaUILayer");
+    }
+    ~ArenaUILayer()
+    {
+        messageLog = nullptr;
+        MSE_LOG("Destroyed ArenaUILayer");
+    }
+    
+    virtual void OnInit() override
+    {
+        messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+                       this, 
+                       U"", 
+                       {100, 10, 200, 10}, 
+                       {0, 0, 0, 255}, 
+                       {255, 255, 0, 255})));
+        messageLog->showBorder = true;
+    }
+    
+    virtual void OnUpdate() override
+    {
+        
+    }
+    
+    mse::gui::Text* messageLog = nullptr;
+};
+
 class CharacterUpdateUILayer : public mse::Layer
 {
 public:
@@ -59,7 +91,7 @@ public:
         
         // confirm changes
         mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {100, 70, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-        PickDroppedWeaponBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
             LAutobattler::Game::playerCharacterUpdated = true;
             m_window->GetLayerManager()->Detach(this);
         };
@@ -106,22 +138,14 @@ public:
         }
         
         std::stringstream strstream;
-        strstream << "Класс: " << utf8::utf32to8(main_class.c_str()) << 
+        strstream << 
+            "Класс:      " << utf8::utf32to8(main_class.c_str()) << 
             "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) <<
             "\nЗдоровье: " << LAutobattler::Game::playerCharacter.stats.health <<
-            "\nСила: " << LAutobattler::Game::playerCharacter.stats.strength <<
+            "\nСила:     " << LAutobattler::Game::playerCharacter.stats.strength <<
             "\nЛовкость: " << LAutobattler::Game::playerCharacter.stats.agility <<
             "\nВыносливость: " << LAutobattler::Game::playerCharacter.stats.endurance <<
             "\nОружие: " << utf8::utf32to8(LAutobattler::Game::playerCharacter.weapon.name.c_str());
-//        sprintf(strstream.str(),
-//                U"Класс: %s\nПодкласс: %s\nЗдоровье: %.2f\nСила: %.2f\nЛовкость: %.2f\nВыносливость: %.2f\nОружие: %s",
-//                main_class.c_str(),
-//                sub_class.c_str(),
-//                LAutobattler::Game::playerCharacter.stats.health,
-//                LAutobattler::Game::playerCharacter.stats.strength,
-//                LAutobattler::Game::playerCharacter.stats.agility,
-//                LAutobattler::Game::playerCharacter.stats.endurance,
-//                LAutobattler::Game::playerCharacter.weapon.name.c_str();
         stats = utf8::utf8to32(strstream.str());
 
         mse::gui::Text* text4 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, stats, {010, 90, 300, 100}, {0, 64, 0, 255}, {255, 255, 128, 255})));
@@ -223,9 +247,9 @@ public:
 	{
         LAutobattler::Game::GameLogic();
 
-        if (LAutobattler::Game::battleJustFinished && 
-            !LAutobattler::Game::playerCharacterUpdated && 
-            (LAutobattler::Game::gamePage == LAutobattler::GamePages::CharacterUpdate))
+        if ((LAutobattler::Game::gamePage == LAutobattler::GamePages::CharacterUpdate) &&
+            LAutobattler::Game::battleJustFinished && 
+            !LAutobattler::Game::playerCharacterUpdated)
         {
             m_window->GetLayerManager()->Attach(new CharacterUpdateUILayer());
         }
