@@ -27,35 +27,6 @@ namespace LAutobattler
         Exit
     };
 
-//    struct GameState
-//    {
-//        GamePages id = GamePages::None;
-//
-//        GameState() {};
-//        virtual ~GameState() {};
-//
-//        virtual void Enter() {};
-//        virtual void Logic();
-//        virtual void GUI() {};
-//        virtual bool ExitTo(GamePages state)
-//        {
-//            return true;
-//        };
-//    };
-//    
-//    /*
-//    Possible usage:
-//        states_machine.state.logic();
-//        states_machine.state.GUI();
-//    
-//    But seriously. Do I need a state machine here?
-//    */
-//    struct GameStateMachine
-//    {
-//        std::unordered_map<GamePages, GameState> statesMap = {};
-//        GameState state;
-//    };
-
     enum class Races
     {
         None,
@@ -297,6 +268,8 @@ namespace LAutobattler
         Traits inputTrait;
         Races inputRace = Races::Human;
         Weapon inputWeapon = GameDB::weapons[0];
+        bool playerCharacterUpdated = false;
+        bool battleJustFinished = false;
         
         int battleCounter = 0;
         
@@ -629,6 +602,7 @@ namespace LAutobattler
                     {
                         if (battleCounter < 5)
                         {
+                            battleJustFinished = true; // important for layer management
                             gamePage = GamePages::CharacterUpdate;
                             inputWeapon = *(Weapon*)(&(npcCharacter.drop_list[0]));
                         } else {
@@ -642,19 +616,23 @@ namespace LAutobattler
                 }
             case GamePages::CharacterUpdate:
                 {
-                    // change weapon
-                    playerCharacter.weapon = inputWeapon;
+                    battleJustFinished = false; // important for layer management
                     
-                    if (playerCharacter.level < 3)
+                    if (playerCharacterUpdated)
                     {
-                        playerCharacter.level++;
-                        printf("Player lvl: %d, ", playerCharacter.level);
+                        // change weapon
+                        playerCharacter.weapon = inputWeapon;
                         
-                        if ((inputClass != Classes::None))
+                        if (playerCharacter.level < 3)
                         {
-                            switch (inputClass)
+                            playerCharacter.level++;
+                            printf("Player lvl: %d, ", playerCharacter.level);
+                            
+                            if ((inputClass != Classes::None))
                             {
-                            case Classes::Rogue:
+                                switch (inputClass)
+                                {
+                                case Classes::Rogue:
                                 {
                                     playerCharacter.sub_class = {Classes::Rogue, playerCharacter.sub_class.level + 1};
                                     printf("subclass: ROGUE, ");
@@ -668,39 +646,39 @@ namespace LAutobattler
                                     }
                                     break;
                                 }
-                            case Classes::Warrior:
-                                {
-                                    playerCharacter.sub_class = {Classes::Warrior, playerCharacter.sub_class.level + 1};
-                                    printf("subclass: Warrior, ");
-                                    if (playerCharacter.sub_class.level > 1)
+                                case Classes::Warrior:
                                     {
-                                        playerCharacter.traits.push_back(Traits::Shield);
-                                        printf("+trait \"Shield\"\n");
-                                    } else {
-                                        playerCharacter.traits.push_back(Traits::Rush);
-                                        printf("+trait \"Rush\"\n");
+                                        playerCharacter.sub_class = {Classes::Warrior, playerCharacter.sub_class.level + 1};
+                                        printf("subclass: Warrior, ");
+                                        if (playerCharacter.sub_class.level > 1)
+                                        {
+                                            playerCharacter.traits.push_back(Traits::Shield);
+                                            printf("+trait \"Shield\"\n");
+                                        } else {
+                                            playerCharacter.traits.push_back(Traits::Rush);
+                                            printf("+trait \"Rush\"\n");
+                                        }
+                                        break;
                                     }
-                                    break;
-                                }
-                            case Classes::Barbarian:
-                                {
-                                    playerCharacter.sub_class = {Classes::Barbarian, playerCharacter.sub_class.level + 1};
-                                    printf("subclass: Barbarian, ");
-                                    if (playerCharacter.sub_class.level > 1)
+                                case Classes::Barbarian:
                                     {
-                                        playerCharacter.traits.push_back(Traits::StoneSkin);
-                                        printf("+trait \"Stone Skin\"\n");
-                                    } else {
-                                        playerCharacter.traits.push_back(Traits::Rage);
-                                        printf("+trait \"Rage\"\n");
+                                        playerCharacter.sub_class = {Classes::Barbarian, playerCharacter.sub_class.level + 1};
+                                        printf("subclass: Barbarian, ");
+                                        if (playerCharacter.sub_class.level > 1)
+                                        {
+                                            playerCharacter.traits.push_back(Traits::StoneSkin);
+                                            printf("+trait \"Stone Skin\"\n");
+                                        } else {
+                                            playerCharacter.traits.push_back(Traits::Rage);
+                                            printf("+trait \"Rage\"\n");
+                                        }
+                                        break;
                                     }
-                                    break;
                                 }
-                            }
-                        } else {
-                            switch (playerCharacter.main_class.type)
-                            {
-                            case Classes::Rogue:
+                            } else {
+                                switch (playerCharacter.main_class.type)
+                                {
+                                case Classes::Rogue:
                                 {
                                     playerCharacter.main_class = {Classes::Rogue, playerCharacter.main_class.level + 1};
                                     if (playerCharacter.main_class.level == 2)
@@ -715,41 +693,44 @@ namespace LAutobattler
                                     }
                                     break;
                                 }
-                            case Classes::Warrior:
-                                {
-                                    playerCharacter.main_class = {Classes::Warrior, playerCharacter.main_class.level + 1};
-                                    if (playerCharacter.main_class.level == 2)
+                                case Classes::Warrior:
                                     {
-                                        playerCharacter.traits.push_back(Traits::Shield);
-                                        printf("+trait \"Shield\"\n");
+                                        playerCharacter.main_class = {Classes::Warrior, playerCharacter.main_class.level + 1};
+                                        if (playerCharacter.main_class.level == 2)
+                                        {
+                                            playerCharacter.traits.push_back(Traits::Shield);
+                                            printf("+trait \"Shield\"\n");
+                                        }
+                                        if (playerCharacter.main_class.level == 3)
+                                        {
+                                            playerCharacter.traits.push_back(Traits::Strong);
+                                            printf("+trait \"Strong\"\n");
+                                        }
+                                        break;
                                     }
-                                    if (playerCharacter.main_class.level == 3)
+                                case Classes::Barbarian:
                                     {
-                                        playerCharacter.traits.push_back(Traits::Strong);
-                                        printf("+trait \"Strong\"\n");
+                                        playerCharacter.main_class = {Classes::Barbarian, playerCharacter.main_class.level + 1};
+                                        if (playerCharacter.main_class.level == 2)
+                                        {
+                                            playerCharacter.traits.push_back(Traits::StoneSkin);
+                                            printf("+trait \"Stone Skin\"\n");
+                                        }
+                                        if (playerCharacter.main_class.level == 3)
+                                        {
+                                            playerCharacter.traits.push_back(Traits::Survivor);
+                                            printf("+trait \"Surviror\"\n");
+                                        }
+                                        break;
                                     }
-                                    break;
-                                }
-                            case Classes::Barbarian:
-                                {
-                                    playerCharacter.main_class = {Classes::Barbarian, playerCharacter.main_class.level + 1};
-                                    if (playerCharacter.main_class.level == 2)
-                                    {
-                                        playerCharacter.traits.push_back(Traits::StoneSkin);
-                                        printf("+trait \"Stone Skin\"\n");
-                                    }
-                                    if (playerCharacter.main_class.level == 3)
-                                    {
-                                        playerCharacter.traits.push_back(Traits::Survivor);
-                                        printf("+trait \"Surviror\"\n");
-                                    }
-                                    break;
                                 }
                             }
                         }
+                        
+                        playerCharacterUpdated = false;
+                        
+                        gamePage = GamePages::ArenaSetup;
                     }
-                    
-                    gamePage = GamePages::ArenaSetup;
                     
                     break;
                 }

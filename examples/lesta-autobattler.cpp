@@ -12,6 +12,54 @@ enum class LayerMessages
 };
 LayerMessages layerMesage = LayerMessages::None;
 
+class CharacterUpdateUILayer : public mse::Layer
+{
+public:
+    CharacterUpdateUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed CharacterUpdateUILayer");
+    }
+    ~CharacterUpdateUILayer()
+    {
+        MSE_LOG("Destroyed CharacterUpdateUILayer");
+    }
+    
+    virtual void OnInit() override
+    {
+        mse::gui::Text* text1 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Победа! Выберите награду:", {100, 10, 200, 10}, {0, 0, 0, 255}, {255, 255, 0, 255})));
+        
+        // pick a subclass
+        mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 20, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+        ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Rogue;
+            m_window->GetLayerManager()->Detach(this);
+        };
+        
+        mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {100, 30, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+        ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Warrior;
+            m_window->GetLayerManager()->Detach(this);
+        };
+        
+        mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {100, 40, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
+        ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Barbarian;
+            m_window->GetLayerManager()->Detach(this);
+        };
+        
+        // pick a weapon
+        
+        // confirm changes
+        
+        // show stats
+    }
+    
+    virtual void OnUpdate() override
+    {
+        
+    }
+};
+
 class ClassSelectUILayer : public mse::Layer
 {
 public:
@@ -29,21 +77,18 @@ public:
         mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 10, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
         ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
             LAutobattler::Game::inputClass = LAutobattler::Classes::Rogue;
-//            layerMesage = LayerMessages::ClassSelectUILayer_Detach;
             m_window->GetLayerManager()->Detach(this);
         };
         
         mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {100, 20, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
         ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
             LAutobattler::Game::inputClass = LAutobattler::Classes::Warrior;
-//            layerMesage = LayerMessages::ClassSelectUILayer_Detach;
             m_window->GetLayerManager()->Detach(this);
         };
         
         mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {100, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
         ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
             LAutobattler::Game::inputClass = LAutobattler::Classes::Barbarian;
-//            layerMesage = LayerMessages::ClassSelectUILayer_Detach;
             m_window->GetLayerManager()->Detach(this);
         };
     }
@@ -72,7 +117,7 @@ public:
 //			mse::Canban::PutTask(mse::CanbanEvents::Backend_Create, {mse::CanbanEvents::Backend_Create, mse::CanbanReceiver::Backend, nullptr});
 //			mse::Canban::PutTask(mse::CanbanEvents::Backend_Run, {mse::CanbanEvents::Backend_Run, mse::CanbanReceiver::Backend, nullptr});
 //            mse::Canban::PutTask(mse::CanbanEvents::Backend_Stop, {mse::CanbanEvents::Backend_Stop, mse::CanbanReceiver::Backend, nullptr});
-            layerMesage = LayerMessages::ClassSelectUILayer_Attach;
+            m_window->GetLayerManager()->Attach(new ClassSelectUILayer());
 		};
         
         mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Начать бой", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
@@ -104,25 +149,12 @@ public:
 	virtual void OnUpdate() override
 	{
         LAutobattler::Game::GameLogic();
-        
-        switch (layerMesage)
+
+        if (LAutobattler::Game::battleJustFinished && 
+            !LAutobattler::Game::playerCharacterUpdated && 
+            (LAutobattler::Game::gamePage == LAutobattler::GamePages::CharacterUpdate))
         {
-        case LayerMessages::None:
-            {
-                break;
-            }
-        case LayerMessages::ClassSelectUILayer_Attach:
-            {
-                m_window->GetLayerManager()->Attach(new ClassSelectUILayer());
-                layerMesage = LayerMessages::None;
-                break;
-            }
-        case LayerMessages::ClassSelectUILayer_Detach:
-            {
-                m_window->GetLayerManager()->Detach(this);
-                layerMesage = LayerMessages::None;
-                break;
-            }
+            m_window->GetLayerManager()->Attach(new CharacterUpdateUILayer());
         }
         
 		switch (mode)

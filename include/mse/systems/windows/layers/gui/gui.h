@@ -9,6 +9,7 @@
 // declarations and definitions of various gui items
 #include <mse/systems/windows/layers/gui/items/canvas.h>
 #include <mse/systems/windows/layers/gui/items/button.h>
+#include <mse/systems/windows/layers/gui/items/text.h>
 
 namespace mse
 {
