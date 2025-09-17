@@ -6,6 +6,68 @@
 // globals
 namespace LAutobattler
 {
+    struct MessageLogItem
+    {
+        std::u32string text = U"";
+        MessageLogItem* next = nullptr;
+        MessageLogItem* prev = nullptr;
+    };
+    
+    struct MessageLog
+    {
+        int size_max = 10;
+        int size = 0;
+        MessageLogItem* stack = nullptr;
+        
+        ~MessageLog()
+        {
+            while(Pop) {}
+        }
+        
+        inline bool Pop()
+        {
+            if (stack != nullptr)
+            {
+                MessageLogItem* current = stack->next;
+                delete stack;
+                stack = current;
+                current = nullptr;
+                
+                if (stack != nullptr)
+                {
+                    stack->prev = nullptr;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+        inline void Push(std::u32string text)
+        {
+            MessageLogItem* current = stack;
+            for (int i = 0; i < size_max; ++i)
+            {
+                if (current->next != nullptr)
+                {
+                    current = current->next;
+                } else {
+                    current->next = new MessageLogItem();
+                    current->next->prev = current;
+                    current->next->text = text;
+                    size++;
+                    break;
+                }
+            }
+            
+            if (size < size_max)
+            {
+                Pop();
+            }
+        }
+    };
+    
+    
     const size_t level_max = 3;
 
     enum class GamePages
