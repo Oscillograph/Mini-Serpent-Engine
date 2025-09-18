@@ -22,7 +22,7 @@ namespace mse
 			virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
 
             // unique Text interface
-            void ChangeText(const std::u32string& text) { m_text = text; }
+            void ChangeText(const std::u32string& text);
             bool showBorder = false;
 		protected:
 			std::u32string m_text = U"";

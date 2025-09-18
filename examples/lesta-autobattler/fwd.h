@@ -10,7 +10,6 @@ namespace LAutobattler
     {
         std::u32string text = U"";
         MessageLogItem* next = nullptr;
-        MessageLogItem* prev = nullptr;
     };
     
     struct MessageLog
@@ -21,7 +20,16 @@ namespace LAutobattler
         
         ~MessageLog()
         {
-            while(Pop) {}
+            Clear();
+        }
+        
+        inline void Clear()
+        {
+            int i = 0;
+            while(Pop() && (i < size_max))
+            {
+                i++;
+            }
         }
         
         inline bool Pop()
@@ -33,11 +41,6 @@ namespace LAutobattler
                 stack = current;
                 current = nullptr;
                 
-                if (stack != nullptr)
-                {
-                    stack->prev = nullptr;
-                }
-                
                 return true;
             }
             return false;
@@ -45,22 +48,29 @@ namespace LAutobattler
         
         inline void Push(std::u32string text)
         {
-            MessageLogItem* current = stack;
             for (int i = 0; i < size_max; ++i)
             {
-                if (current->next != nullptr)
+                if (stack == nullptr)
                 {
-                    current = current->next;
-                } else {
-                    current->next = new MessageLogItem();
-                    current->next->prev = current;
-                    current->next->text = text;
+                    stack = new MessageLogItem();
+                    stack->text = text;
                     size++;
                     break;
+                } else {
+                    MessageLogItem* current = stack;
+                    if (current->next != nullptr)
+                    {
+                        current = current->next;
+                    } else {
+                        current->next = new MessageLogItem();
+                        current->next->text = text;
+                        size++;
+                        break;
+                    }
                 }
             }
             
-            if (size < size_max)
+            if (size > size_max)
             {
                 Pop();
             }
@@ -324,6 +334,7 @@ namespace LAutobattler
         // do I really need to implement a game state here instead of all this? 
         
         GamePages gamePage = GamePages::None;
+        MessageLog UILogger;
         
         Classes inputClass = Classes::None;
         CharacterStats inputStats;
@@ -333,6 +344,8 @@ namespace LAutobattler
         bool playerCharacterUpdated = false;
         bool battleJustFinished = false;
         bool battleFinished = false;
+        
+        bool keyPressed = false;
         
         int battleCounter = 0;
         int turn = 0;
@@ -437,7 +450,7 @@ namespace LAutobattler
                         playerCharacter = 
                         {
                             1,                     // level
-                            U"Username",              // name
+                            U"Игрок",              // name
                             inputRace,         // race
                             inputStats,          // stats_max
                             inputStats,          // stats
@@ -524,6 +537,7 @@ namespace LAutobattler
                     
                     turn = 0;
                     battleFinished = false;
+                    UILogger.Clear();
                     
                     gamePage = GamePages::ArenaBattle;
                     break;
@@ -533,6 +547,8 @@ namespace LAutobattler
                     float weaponDamage = 0.0;
                     float skillDamage = 0.0;
                     float totalDamage = 0.0;
+                    
+                    std::stringstream strForLogger;
                     
                     if ((!battleFinished) && (turn < 30))
                     {
@@ -644,10 +660,21 @@ namespace LAutobattler
                                    totalDamage, 
                                    defender->name.c_str(), 
                                    defender->stats.health);
+                            
+                            strForLogger << "Ход " << turn << ": " 
+                                << utf8::utf32to8(attacker->name.c_str()) << "(" << attacker->stats.health 
+                                << ") наносит " << totalDamage << " урона " 
+                                << utf8::utf32to8(defender->name.c_str()) << "(" << defender->stats.health << ")\n";
+                            UILogger.Push(utf8::utf8to32(strForLogger.str()));
                         } else {
                             printf("Turn %d: %s misses!\n", 
                                    turn, 
                                    attacker->name.c_str());
+                            
+                            strForLogger << "Ход " << turn << ": " 
+                                << utf8::utf32to8(attacker->name.c_str()) << "(" << attacker->stats.health 
+                                << ") промахивается! ";
+                            UILogger.Push(utf8::utf8to32(strForLogger.str()));
                         }
                         
                         if (defender->stats.health <= 0.0)

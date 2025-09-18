@@ -134,5 +134,39 @@ namespace mse
         {
             return false;
         }
+        
+        void Text::ChangeText(const std::u32string& text)
+        {
+            m_text = text;
+            
+            mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit3.bmp", parentLayer->GetWindow());
+            
+            // text with border
+            if (showBorder)
+            {
+                Renderer::SurfaceDrawRectFilled(
+                    (Texture*)(m_texture->data),
+                    {0, 0, layerArea.z, layerArea.w}, 
+                    {255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+                    );
+            }
+            Renderer::SurfaceDrawRectFilled(
+                (Texture*)(m_texture->data),
+                {0 + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
+                {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+                );
+            mse::Renderer::SurfaceDrawText(
+                (Texture*)(m_texture->data), 
+                {0 + 2, 2, layerArea.z, layerArea.w}, 	// where to
+                1, 					// pixel size
+                m_text, 			// text content
+                bmpFont, 			// font
+                {m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
+                0); 				// interval between rows
+            
+            ((Texture*)(m_texture->data))->Update();
+            
+            MSE_CORE_LOG("Text: texture edited");
+        }
 	}
 }

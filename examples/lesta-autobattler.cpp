@@ -4,14 +4,6 @@
 
 LAutobattler::GamePages mode = LAutobattler::GamePages::None;
 
-enum class LayerMessages
-{
-    None,
-    ClassSelectUILayer_Attach,
-    ClassSelectUILayer_Detach,
-};
-LayerMessages layerMesage = LayerMessages::None;
-
 class ArenaUILayer : public mse::Layer
 {
 public:
@@ -22,6 +14,10 @@ public:
     ~ArenaUILayer()
     {
         messageLog = nullptr;
+        
+        int i = 0;
+        LAutobattler::Game::UILogger.Clear();
+        
         MSE_LOG("Destroyed ArenaUILayer");
     }
     
@@ -30,15 +26,32 @@ public:
         messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                        this, 
                        U"", 
-                       {100, 10, 200, 10}, 
-                       {0, 0, 0, 255}, 
+                       {010, 90, 300, 100}, 
+                       {0, 64, 0, 255}, 
                        {255, 255, 0, 255})));
         messageLog->showBorder = true;
     }
     
     virtual void OnUpdate() override
     {
-        
+        if ((LAutobattler::Game::gamePage != LAutobattler::GamePages::ArenaSetup) &&
+            (LAutobattler::Game::gamePage != LAutobattler::GamePages::ArenaBattle) && 
+            (LAutobattler::Game::gamePage != LAutobattler::GamePages::ArenaAftermath))
+        {
+            m_window->GetLayerManager()->Detach(this);
+        } else {
+            std::u32string messages = U"";
+            LAutobattler::MessageLogItem* item = LAutobattler::Game::UILogger.stack;
+            while (item != nullptr)
+            {
+                messages += item->text;
+                item = item->next;
+            }
+            item = nullptr;
+            
+            messageLog->ChangeText(messages);
+            MSE_LOG("Message Log text changed!")
+        }
     }
     
     mse::gui::Text* messageLog = nullptr;
@@ -219,8 +232,8 @@ public:
         
         mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Начать бой", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
         battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-            mode = LAutobattler::GamePages::Intro;
             LAutobattler::Game::gamePage = LAutobattler::GamePages::ArenaSetup;
+            m_window->GetLayerManager()->Attach(new ArenaUILayer());
         };
         
 		mse::gui::Button* playerLoadBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
@@ -346,6 +359,7 @@ public:
 		m_window = mse::WindowManager::CreateWindow(u8"Горка", 50, 50, 320, 240);
 		m_window->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 			MSE_LOG("Key pressed: ", event->key.keysym.sym);
+            LAutobattler::Game::keyPressed = true;
 			return true;
 		};
 //		m_window2 = mse::WindowManager::CreateWindow(u8"Морка", 450, 50, 320, 240);
