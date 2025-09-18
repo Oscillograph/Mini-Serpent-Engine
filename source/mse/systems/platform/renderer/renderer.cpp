@@ -724,8 +724,8 @@ namespace mse
 		long long unsigned int symbolId = 0; // the current symbol to render, its Id should correspond to the font alphabet, and its type - to the type of std::u32string::npos
 		int correctX = 0;
 		int correctY = 0;
-		int curX;
-		int curY;
+		int curX = 0;
+		int curY = 0;
 		int alphabetId = 0;
 		bool foundSymbol = false;
 		uint32_t fontColor = SDL_MapRGBA(target->GetSurface()->format,
@@ -754,7 +754,7 @@ namespace mse
 					if (symbolId != std::u32string::npos)
 					{
 						// Correct coordinates of the "cursor"
-						if (j > cols){
+						if (curX > (tempRect.x + tempRect.w - font->fontClip.w*pxSize)){
 							currentRow++;
 							j = 0;
 							correctX = 0;

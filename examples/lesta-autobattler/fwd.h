@@ -677,7 +677,7 @@ namespace LAutobattler
                             
                             strForLogger << "Ход " << turn << ": " 
                                 << utf8::utf32to8(attacker->name.c_str()) << "(" << attacker->stats.health 
-                                << ") промахивается! ";
+                                << ") промахивается!\n";
                             UILogger.Push(utf8::utf8to32(strForLogger.str()));
                         }
                         
@@ -685,7 +685,8 @@ namespace LAutobattler
                         {
                             battleFinished = true;
                         }
-                        
+                 
+                        SDL_Delay(300);
                         // end of the turn
                     } else {
                         // end of the battle
