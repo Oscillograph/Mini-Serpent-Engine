@@ -267,7 +267,12 @@ public:
             m_window->GetLayerManager()->Attach(new CharacterUpdateUILayer());
         }
         
-		switch (mode)
+        if (LAutobattler::Game::battleJustStarted)
+        {
+            m_window->GetLayerManager()->Attach(new ArenaUILayer());
+        }
+        
+		switch (LAutobattler::Game::gamePage)
 		{
 			// idle
             case LAutobattler::GamePages::MainMenu:

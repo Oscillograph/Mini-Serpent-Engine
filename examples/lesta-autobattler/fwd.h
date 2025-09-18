@@ -40,6 +40,7 @@ namespace LAutobattler
                 delete stack;
                 stack = current;
                 current = nullptr;
+                size--;
                 
                 return true;
             }
@@ -48,6 +49,7 @@ namespace LAutobattler
         
         inline void Push(std::u32string text)
         {
+            MessageLogItem* current = stack;
             for (int i = 0; i < size_max; ++i)
             {
                 if (stack == nullptr)
@@ -55,9 +57,8 @@ namespace LAutobattler
                     stack = new MessageLogItem();
                     stack->text = text;
                     size++;
-                    break;
+                    i = size_max; // exit cycle
                 } else {
-                    MessageLogItem* current = stack;
                     if (current->next != nullptr)
                     {
                         current = current->next;
@@ -65,7 +66,7 @@ namespace LAutobattler
                         current->next = new MessageLogItem();
                         current->next->text = text;
                         size++;
-                        break;
+                        i = size_max; // exit cycle
                     }
                 }
             }
@@ -342,6 +343,7 @@ namespace LAutobattler
         Races inputRace = Races::Human;
         Weapon inputWeapon = GameDB::weapons[0];
         bool playerCharacterUpdated = false;
+        bool battleJustStarted = false;
         bool battleJustFinished = false;
         bool battleFinished = false;
         
@@ -536,6 +538,7 @@ namespace LAutobattler
                     printf("Opponents greet each other and start the combat.\n");
                     
                     turn = 0;
+                    battleJustStarted = true;
                     battleFinished = false;
                     UILogger.Clear();
                     
@@ -547,6 +550,7 @@ namespace LAutobattler
                     float weaponDamage = 0.0;
                     float skillDamage = 0.0;
                     float totalDamage = 0.0;
+                    battleJustStarted = false;
                     
                     std::stringstream strForLogger;
                     
