@@ -334,7 +334,12 @@ namespace LAutobattler
     {
         // do I really need to implement a game state here instead of all this? 
         
+        
         GamePages gamePage = GamePages::None;
+        bool gamePageHasToChange = false;
+        GamePages gamePageFrom = GamePages::None;
+        GamePages gamePageTo = GamePages::None;
+        
         MessageLog UILogger;
         
         Classes inputClass = Classes::None;
@@ -367,7 +372,8 @@ namespace LAutobattler
             case GamePages::Intro:
                 {
                     printf("~~~ Intro ~~~\n");
-                    gamePage = GamePages::MainMenu;
+                    gamePageHasToChange = true;
+                    gamePageTo = GamePages::MainMenu;
                     break;
                 }
             case GamePages::MainMenu:
@@ -377,27 +383,32 @@ namespace LAutobattler
                     {
                     case 1: // create character
                         {
-                            gamePage = GamePages::CharacterCreation;
+                            gamePageHasToChange = true;
+                            gamePageTo = GamePages::CharacterCreation;
                             break;
                         }
                     case 2: // load character
                         {
-                            gamePage = GamePages::CharacterLoad;
+                            gamePageHasToChange = true;
+                            gamePageTo = GamePages::CharacterLoad;
                             break;
                         }
                     case 3: // highscores
                         {
-                            gamePage = GamePages::Highscores;
+                            gamePageHasToChange = true;
+                            gamePageTo = GamePages::Highscores;
                             break;
                         }
                     case 4: // credits
                         {
-                            gamePage = GamePages::Credits;
+                            gamePageHasToChange = true;
+                            gamePageTo = GamePages::Credits;
                             break;
                         }
                     case 5: // exit
                         {
-                            gamePage = GamePages::Exit;
+                            gamePageHasToChange = true;
+                            gamePageTo = GamePages::Exit;
                             break;
                         }
                     default:
@@ -472,6 +483,9 @@ namespace LAutobattler
                         battleCounter = 0;
                         
                         inputClass = Classes::None;
+                        
+                        gamePageHasToChange = true;
+                        gamePageTo = GamePages::ArenaSetup;
                     }
                     
                     break;
@@ -542,7 +556,8 @@ namespace LAutobattler
                     battleFinished = false;
                     UILogger.Clear();
                     
-                    gamePage = GamePages::ArenaBattle;
+                    gamePageHasToChange = true;
+                    gamePageTo = GamePages::ArenaBattle;
                     break;
                 }
             case GamePages::ArenaBattle:
@@ -690,7 +705,8 @@ namespace LAutobattler
                         // end of the turn
                     } else {
                         // end of the battle
-                        gamePage = GamePages::ArenaAftermath;
+                        gamePageHasToChange = true;
+                        gamePageTo = GamePages::ArenaAftermath;
                         printf("Battle is finished.\n");
                     }
                     
@@ -707,10 +723,12 @@ namespace LAutobattler
 //                            inputWeapon = *(Weapon*)(&(npcCharacter.drop_list[0]));
                             inputWeapon = playerCharacter.weapon;
                         } else {
-                            gamePage = GamePages::Winner;
+                            gamePageHasToChange = true;
+                            gamePageTo = GamePages::Winner;
                         }
                     } else {
-                        gamePage = GamePages::GameOver;
+                        gamePageHasToChange = true;
+                        gamePageTo = GamePages::GameOver;
                     }
                     
                     break;
@@ -830,7 +848,8 @@ namespace LAutobattler
                         
                         playerCharacterUpdated = false;
                         
-                        gamePage = GamePages::ArenaSetup;
+                        gamePageHasToChange = true;
+                        gamePageTo = GamePages::ArenaSetup;
                     }
                     
                     break;
@@ -838,13 +857,15 @@ namespace LAutobattler
             case GamePages::GameOver:
                 {
                     printf("Game over.\n");
-                    gamePage = GamePages::Exit;
+                    gamePageHasToChange = true;
+                    gamePageTo = GamePages::Exit;
                     break;
                 }
             case GamePages::Winner:
                 {
                     printf("Congratulations! You are a winner.\n");
-                    gamePage = GamePages::Exit;
+                    gamePageHasToChange = true;
+                    gamePageTo = GamePages::Exit;
                     break;
                 }
             case GamePages::Highscores:

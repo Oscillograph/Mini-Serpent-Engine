@@ -4,6 +4,52 @@
 
 LAutobattler::GamePages mode = LAutobattler::GamePages::None;
 
+// crude state machine to think about
+struct GameState
+{
+    LAutobattler::GamePages page = LAutobattler::GamePages::None;
+    LAutobattler::GamePages changeTo = LAutobattler::GamePages::None;
+    
+    virtual bool OnEnter() = 0;
+    virtual bool OnExit() = 0;
+    virtual bool OnUpdate(mse::TimeType t) = 0;
+    
+    GameState(){}
+    virtual ~GameState(){}
+};
+
+struct DummyState : GameState
+{
+    virtual bool OnEnter() override
+    {}
+    virtual bool OnExit() override
+    {}
+    virtual bool OnUpdate(mse::TimeType t) override
+    {}
+};
+
+struct GameStateMachine
+{
+    std::map<LAutobattler::GamePages, GameState*> states = {};
+    GameState* current;
+    
+    void ChangeStateTo(GameState* state)
+    {
+        while (!current->OnExit()){}
+        current = state;
+        while(!current->OnEnter()){}
+    }
+    
+    void OnUpdate(mse::TimeType t)
+    {
+        current->OnUpdate(t);
+        if (current->changeTo != LAutobattler::GamePages::None)
+        {
+            ChangeStateTo(states[current->changeTo]);
+        }
+    }
+};
+
 class ArenaUILayer : public mse::Layer
 {
 public:
@@ -259,17 +305,33 @@ public:
 	virtual void OnUpdate() override
 	{
         LAutobattler::Game::GameLogic();
-
-        if ((LAutobattler::Game::gamePage == LAutobattler::GamePages::CharacterUpdate) &&
-            LAutobattler::Game::battleJustFinished && 
-            !LAutobattler::Game::playerCharacterUpdated)
-        {
-            m_window->GetLayerManager()->Attach(new CharacterUpdateUILayer());
-        }
         
-        if (LAutobattler::Game::battleJustStarted)
+        if (LAutobattler::Game::gamePageHasToChange)
         {
-            m_window->GetLayerManager()->Attach(new ArenaUILayer());
+            LAutobattler::Game::gamePageFrom = LAutobattler::Game::gamePage;
+            switch (LAutobattler::Game::gamePageTo)
+            {
+            case LAutobattler::GamePages::MainMenu:
+                {
+                    LAutobattler::Game::gamePage = LAutobattler::Game::gamePageTo;
+                    LAutobattler::Game::gamePageHasToChange = false;
+                    break;
+                }
+            case LAutobattler::GamePages::CharacterUpdate:
+                {
+                    LAutobattler::Game::gamePage = LAutobattler::Game::gamePageTo;
+                    LAutobattler::Game::gamePageHasToChange = false;
+                    m_window->GetLayerManager()->Attach(new CharacterUpdateUILayer());
+                    break;
+                }
+            case LAutobattler::GamePages::ArenaSetup:
+                {
+                    LAutobattler::Game::gamePage = LAutobattler::Game::gamePageTo;
+                    LAutobattler::Game::gamePageHasToChange = false;
+                    m_window->GetLayerManager()->Attach(new ArenaUILayer());
+                    break;
+                }
+            }
         }
         
 		switch (LAutobattler::Game::gamePage)
