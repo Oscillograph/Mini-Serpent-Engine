@@ -2,30 +2,33 @@
 
 #include <lesta-autobattler/fwd.h>
 
+// the usual
+struct GameState;
+struct GameStateMachine;
+struct MainPageState;
+// layers
+class SimleUILayer;
+
+// redundant?
 LAutobattler::GamePages mode = LAutobattler::GamePages::None;
 
 // crude state machine to think about
 struct GameState
 {
+    // so that the state knows what it is
     LAutobattler::GamePages page = LAutobattler::GamePages::None;
+    // so that the state can tell where it should move to
     LAutobattler::GamePages changeTo = LAutobattler::GamePages::None;
     
+    // layers attachment for GUI and base logic initialization
     virtual bool OnEnter() = 0;
+    // laters detachment for GUI, resetting data and cleaning memory
     virtual bool OnExit() = 0;
+    // common logic step
     virtual bool OnUpdate(mse::TimeType t) = 0;
     
     GameState(){}
     virtual ~GameState(){}
-};
-
-struct DummyState : GameState
-{
-    virtual bool OnEnter() override
-    {}
-    virtual bool OnExit() override
-    {}
-    virtual bool OnUpdate(mse::TimeType t) override
-    {}
 };
 
 struct GameStateMachine
@@ -36,7 +39,16 @@ struct GameStateMachine
     void ChangeStateTo(GameState* state)
     {
         while (!current->OnExit()){}
+        delete current;
         current = state;
+        while(!current->OnEnter()){}
+    }
+    
+    void ChangeStateTo(LAutobattler::GamePages gamePage)
+    {
+        while (!current->OnExit()){}
+        delete current;
+        current = states[gamePage];
         while(!current->OnEnter()){}
     }
     
@@ -49,6 +61,8 @@ struct GameStateMachine
         }
     }
 };
+
+GameStateMachine gsm;
 
 class ArenaUILayer : public mse::Layer
 {
@@ -384,6 +398,28 @@ public:
 	mse::gui::Canvas* gameCanvas = nullptr;
 };
 
+struct MainPageState : GameState
+{
+    virtual bool OnEnter() override
+    {
+        layer = new SimpleUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+        return true;
+    }
+    virtual bool OnExit() override
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+        layer = nullptr;
+        return true;
+    }
+    virtual bool OnUpdate(mse::TimeType t) override
+    {
+        return true;
+    }
+    
+    mse::Layer* layer = nullptr;
+};
+
 class GameScene : public mse::Scene
 {
 public:
@@ -429,55 +465,14 @@ public:
             LAutobattler::Game::keyPressed = true;
 			return true;
 		};
-//		m_window2 = mse::WindowManager::CreateWindow(u8"Морка", 450, 50, 320, 240);
-//		m_window2->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
-//			MSE_LOG("Key pressed 2: ", event->key.keysym.sym);
-//			return true;
-//		};
 		
 		MSE_LOG("Commanding to create a scene");
-//		m_scene = new GameScene();
-//        mse::SceneManager::Load(new GameScene());
-//        mse::SceneManager::Load(m_scene);
-
-//		mse::Arcade::Unit* unit = new mse::Arcade::Unit(
-//			m_scene,
-//			m_window,
-//			"Volleyballist",
-//			"./data/img/Volleyballist.png",
-//			{
-//				{mse::Commands::KBCommand_Left, mse::ScanCode::A}, 
-//				{mse::Commands::KBCommand_Right, mse::ScanCode::D},
-//				{mse::Commands::KBCommand_Jump, mse::ScanCode::W},
-//				{mse::Commands::KBCommand_Down, mse::ScanCode::S}
-//			},
-//			{0, 0},
-//			{1, 1},
-//			{1.0f, 1.0f},
-//			{0, 0, 0},
-//			{0, 0}
-//			);
-//		
-//		unit->SetAnimations(
-//			{
-//				mse::EntityStates::STAND1,
-//				mse::EntityStates::STAND2,
-//				mse::EntityStates::WALK1,
-//				mse::EntityStates::WALK2,
-//				mse::EntityStates::JUMP1,
-//				mse::EntityStates::JUMP2,
-//				mse::EntityStates::STAND3,
-//				mse::EntityStates::STAND,
-//			},
-//			{20, 30},
-//			15.0f,
-//			true
-//			);
-//		
-//		unit->ChangeDirection(1);
-
+        
+        gsm.states[LAutobattler::GamePages::MainMenu] = new MainPageState();
+        
 		mse::Renderer::SetActiveWindow(m_window);
-		m_window->GetLayerManager()->Attach(new SimpleUILayer());
+        gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
+//		m_window->GetLayerManager()->Attach(new SimpleUILayer());
 //		m_window2->GetLayerManager()->Attach(new SimpleUILayer());
 	}
 	
@@ -502,7 +497,7 @@ public:
 		return;
 	}
 	
-private:
+public:
 	mse::Scene* m_scene = nullptr;
 	mse::Window* m_window = nullptr;
 	mse::Window* m_window2 = nullptr;
