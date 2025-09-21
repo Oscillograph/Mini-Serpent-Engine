@@ -25,7 +25,7 @@ struct GameState
     // laters detachment for GUI, resetting data and cleaning memory
     virtual bool OnExit() = 0;
     // common logic step
-    virtual bool OnUpdate(mse::TimeType t) = 0;
+    virtual bool OnUpdate(mse::TimeType t = 0) = 0;
     
     GameState(){}
     virtual ~GameState(){}
@@ -52,7 +52,7 @@ struct GameStateMachine
         while(!current->OnEnter()){}
     }
     
-    void OnUpdate(mse::TimeType t)
+    void OnUpdate(mse::TimeType t = 0)
     {
         current->OnUpdate(t);
         if (current->changeTo != LAutobattler::GamePages::None)
@@ -63,6 +63,218 @@ struct GameStateMachine
 };
 
 GameStateMachine gsm;
+
+// ********************************************************************************************** //
+//                                    LAYERS (to render things)
+// ********************************************************************************************** //
+
+class IntroUILayer : public mse::Layer
+{
+public:
+    IntroUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed IntroUILayer");
+    }
+    ~IntroUILayer()
+    {
+        MSE_LOG("Destroyed IntroUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class MainMenuUILayer : public mse::Layer
+{
+public:
+    MainMenuUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed MainMenuUILayer");
+    }
+    ~MainMenuUILayer()
+    {
+        MSE_LOG("Destroyed MainMenuUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class CharacterCreateUILayer : public mse::Layer
+{
+public:
+    CharacterCreateUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed CharacterCreateUILayer");
+    }
+    ~CharacterCreateUILayer()
+    {
+        MSE_LOG("Destroyed CharacterCreateUILayer");
+    }
+    
+    virtual void OnInit() override
+    {
+        mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 10, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+        ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Rogue;
+            m_window->GetLayerManager()->Detach(this);
+        };
+        
+        mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {100, 20, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+        ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Warrior;
+            m_window->GetLayerManager()->Detach(this);
+        };
+        
+        mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {100, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
+        ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            LAutobattler::Game::inputClass = LAutobattler::Classes::Barbarian;
+            m_window->GetLayerManager()->Detach(this);
+        };
+    }
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class CharacterLoadUILayer : public mse::Layer
+{
+public:
+    CharacterLoadUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed CharacterLoadUILayer");
+    }
+    ~CharacterLoadUILayer()
+    {
+        MSE_LOG("Destroyed CharacterLoadUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class CharacterSaveUILayer : public mse::Layer
+{
+public:
+    CharacterSaveUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed CharacterSaveUILayer");
+    }
+    ~CharacterSaveUILayer()
+    {
+        MSE_LOG("Destroyed CharacterSaveUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class WinnerUILayer : public mse::Layer
+{
+public:
+    WinnerUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed WinnerUILayer");
+    }
+    ~WinnerUILayer()
+    {
+        MSE_LOG("Destroyed WinnerUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class GameOverUILayer : public mse::Layer
+{
+public:
+    GameOverUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed GameOverUILayer");
+    }
+    ~GameOverUILayer()
+    {
+        MSE_LOG("Destroyed GameOverUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class HighscoresUILayer : public mse::Layer
+{
+public:
+    HighscoresUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed HighscoresUILayer");
+    }
+    ~HighscoresUILayer()
+    {
+        MSE_LOG("Destroyed HighscoresUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class CreditsUILayer : public mse::Layer
+{
+public:
+    CreditsUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed CreditsUILayer");
+    }
+    ~CreditsUILayer()
+    {
+        MSE_LOG("Destroyed CreditsUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
+
+class ExitUILayer : public mse::Layer
+{
+public:
+    ExitUILayer() : mse::Layer()
+    {
+        MSE_LOG("Constructed ExitUILayer");
+    }
+    ~ExitUILayer()
+    {
+        MSE_LOG("Destroyed ExitUILayer");
+    }
+    
+    virtual void OnInit() override
+    {}
+    
+    virtual void OnUpdate() override
+    {}
+};
 
 class ArenaUILayer : public mse::Layer
 {
@@ -176,10 +388,10 @@ public:
         switch (LAutobattler::Game::playerCharacter.main_class.type)
         {
         case LAutobattler::Classes::Rogue:
-            {
-                main_class = U"Разбойник";
-                break;
-            }
+        {
+            main_class = U"Разбойник";
+            break;
+        }
         case LAutobattler::Classes::Warrior:
             {
                 main_class = U"Воин";
@@ -194,10 +406,10 @@ public:
         switch (LAutobattler::Game::playerCharacter.sub_class.type)
         {
         case LAutobattler::Classes::Rogue:
-            {
-                sub_class = U"Разбойник";
-                break;
-            }
+        {
+            sub_class = U"Разбойник";
+            break;
+        }
         case LAutobattler::Classes::Warrior:
             {
                 sub_class = U"Воин";
@@ -212,55 +424,16 @@ public:
         
         std::stringstream strstream;
         strstream << 
-            "Класс:      " << utf8::utf32to8(main_class.c_str()) << 
-            "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) <<
-            "\nЗдоровье: " << LAutobattler::Game::playerCharacter.stats.health <<
-            "\nСила:     " << LAutobattler::Game::playerCharacter.stats.strength <<
-            "\nЛовкость: " << LAutobattler::Game::playerCharacter.stats.agility <<
-            "\nВыносливость: " << LAutobattler::Game::playerCharacter.stats.endurance <<
-            "\nОружие: " << utf8::utf32to8(LAutobattler::Game::playerCharacter.weapon.name.c_str());
+        "Класс:      " << utf8::utf32to8(main_class.c_str()) << 
+        "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) <<
+        "\nЗдоровье: " << LAutobattler::Game::playerCharacter.stats.health <<
+        "\nСила:     " << LAutobattler::Game::playerCharacter.stats.strength <<
+        "\nЛовкость: " << LAutobattler::Game::playerCharacter.stats.agility <<
+        "\nВыносливость: " << LAutobattler::Game::playerCharacter.stats.endurance <<
+        "\nОружие: " << utf8::utf32to8(LAutobattler::Game::playerCharacter.weapon.name.c_str());
         stats = utf8::utf8to32(strstream.str());
-
+        
         mse::gui::Text* text4 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, stats, {010, 90, 300, 100}, {0, 64, 0, 255}, {255, 255, 128, 255})));
-    }
-    
-    virtual void OnUpdate() override
-    {
-        
-    }
-};
-
-class ClassSelectUILayer : public mse::Layer
-{
-public:
-    ClassSelectUILayer() : mse::Layer()
-    {
-        MSE_LOG("Constructed ClassSelectUILayer");
-    }
-    ~ClassSelectUILayer()
-    {
-        MSE_LOG("Destroyed ClassSelectUILayer");
-    }
-    
-    virtual void OnInit() override
-    {
-        mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 10, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
-        ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-            LAutobattler::Game::inputClass = LAutobattler::Classes::Rogue;
-            m_window->GetLayerManager()->Detach(this);
-        };
-        
-        mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {100, 20, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
-        ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-            LAutobattler::Game::inputClass = LAutobattler::Classes::Warrior;
-            m_window->GetLayerManager()->Detach(this);
-        };
-        
-        mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {100, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
-        ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-            LAutobattler::Game::inputClass = LAutobattler::Classes::Barbarian;
-            m_window->GetLayerManager()->Detach(this);
-        };
     }
     
     virtual void OnUpdate() override
@@ -398,6 +571,34 @@ public:
 	mse::gui::Canvas* gameCanvas = nullptr;
 };
 
+// ********************************************************************************************** //
+//                                    STATES (to control gameplay)
+// ********************************************************************************************** //
+
+struct IntroPageState : GameState
+{
+    virtual bool OnEnter() override
+    {
+        layer = new IntroUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+        return true;
+    }
+    
+    virtual bool OnExit() override
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+        layer = nullptr;
+        return true;
+    }
+    
+    virtual bool OnUpdate(mse::TimeType t = 0) override
+    {
+        return true;
+    }
+    
+    mse::Layer* layer = nullptr;
+};
+
 struct MainPageState : GameState
 {
     virtual bool OnEnter() override
@@ -412,13 +613,17 @@ struct MainPageState : GameState
         layer = nullptr;
         return true;
     }
-    virtual bool OnUpdate(mse::TimeType t) override
+    virtual bool OnUpdate(mse::TimeType t = 0) override
     {
         return true;
     }
     
     mse::Layer* layer = nullptr;
 };
+
+// ********************************************************************************************** //
+//                                    SCENES (do I need one?)
+// ********************************************************************************************** //
 
 class GameScene : public mse::Scene
 {
@@ -450,6 +655,10 @@ public:
     mse::Entity* npc = nullptr;
 };
 
+// ********************************************************************************************** //
+//                                        Application
+// ********************************************************************************************** //
+
 class App : public mse::Application
 {
 public:
@@ -465,15 +674,28 @@ public:
             LAutobattler::Game::keyPressed = true;
 			return true;
 		};
+		mse::Renderer::SetActiveWindow(m_window);
 		
 		MSE_LOG("Commanding to create a scene");
         
+        // register game states
+        gsm.states[LAutobattler::GamePages::Intro] = new IntroPageState();
         gsm.states[LAutobattler::GamePages::MainMenu] = new MainPageState();
+//        gsm.states[LAutobattler::GamePages::CharacterCreation];
+//        gsm.states[LAutobattler::GamePages::CharacterLoad];
+//        gsm.states[LAutobattler::GamePages::CharacterSave];
+//        gsm.states[LAutobattler::GamePages::CharacterUpdate];
+//        gsm.states[LAutobattler::GamePages::ArenaSetup];
+//        gsm.states[LAutobattler::GamePages::ArenaBattle];
+//        gsm.states[LAutobattler::GamePages::ArenaAftermath];
+//        gsm.states[LAutobattler::GamePages::Winner];
+//        gsm.states[LAutobattler::GamePages::GameOver];
+//        gsm.states[LAutobattler::GamePages::Highscores];
+//        gsm.states[LAutobattler::GamePages::Credits];
+//        gsm.states[LAutobattler::GamePages::Exit];
         
-		mse::Renderer::SetActiveWindow(m_window);
-        gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
-//		m_window->GetLayerManager()->Attach(new SimpleUILayer());
-//		m_window2->GetLayerManager()->Attach(new SimpleUILayer());
+        // setup initial game state
+        gsm.ChangeStateTo(LAutobattler::GamePages::Intro);
 	}
 	
 	~App()
