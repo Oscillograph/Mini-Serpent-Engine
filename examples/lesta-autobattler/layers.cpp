@@ -1,5 +1,7 @@
-#include <mse/mse.h>
+#ifndef LAYERS_CPP
+#define LAYERS_CPP
 
+#include <lesta-autobattler/game-fwd.h>
 #include <lesta-autobattler/layers.h>
 #include <lesta-autobattler/gamestates.h>
 
@@ -67,19 +69,19 @@ void CharacterCreateUILayer::OnInit()
 {
     mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 10, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::inputClass = LAutobattler::Classes::Rogue;
+        game.inputClass = LAutobattler::Classes::Rogue;
         m_window->GetLayerManager()->Detach(this);
     };
     
     mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {100, 20, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
     ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::inputClass = LAutobattler::Classes::Warrior;
+        game.inputClass = LAutobattler::Classes::Warrior;
         m_window->GetLayerManager()->Detach(this);
     };
     
     mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {100, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
     ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::inputClass = LAutobattler::Classes::Barbarian;
+        game.inputClass = LAutobattler::Classes::Barbarian;
         m_window->GetLayerManager()->Detach(this);
     };
 }
@@ -201,7 +203,7 @@ ArenaUILayer::~ArenaUILayer()
     messageLog = nullptr;
     
     int i = 0;
-    LAutobattler::Game::UILogger.Clear();
+    game.UILogger.Clear();
     
     MSE_LOG("Destroyed ArenaUILayer");
 }
@@ -219,14 +221,14 @@ void ArenaUILayer::OnInit()
 
 void ArenaUILayer::OnUpdate()
 {
-    if ((LAutobattler::Game::gamePage != LAutobattler::GamePages::ArenaSetup) &&
-        (LAutobattler::Game::gamePage != LAutobattler::GamePages::ArenaBattle) && 
-        (LAutobattler::Game::gamePage != LAutobattler::GamePages::ArenaAftermath))
+    if ((game.gamePage != LAutobattler::GamePages::ArenaSetup) &&
+        (game.gamePage != LAutobattler::GamePages::ArenaBattle) && 
+        (game.gamePage != LAutobattler::GamePages::ArenaAftermath))
     {
         m_window->GetLayerManager()->Detach(this);
     } else {
         std::u32string messages = U"";
-        LAutobattler::MessageLogItem* item = LAutobattler::Game::UILogger.stack;
+        LAutobattler::MessageLogItem* item = game.UILogger.stack;
         while (item != nullptr)
         {
             messages += item->text;
@@ -256,35 +258,35 @@ void CharacterUpdateUILayer::OnInit()
     // pick a subclass
     mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 30, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::inputClass = LAutobattler::Classes::Rogue;
+        game.inputClass = LAutobattler::Classes::Rogue;
     };
     
     mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {180, 30, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
     ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::inputClass = LAutobattler::Classes::Warrior;
+        game.inputClass = LAutobattler::Classes::Warrior;
     };
     
     mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {260, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
     ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::inputClass = LAutobattler::Classes::Barbarian;
+        game.inputClass = LAutobattler::Classes::Barbarian;
     };
     
     // pick a weapon
     mse::gui::Text* text3 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Выбрать оружие:", {100, 40, 120, 10}, {0, 0, 0, 255}, {255, 255, 255, 255})));
-    mse::gui::Button* KeepSameWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, LAutobattler::Game::playerCharacter.weapon.name, {100, 50, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* KeepSameWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, game.playerCharacter.weapon.name, {100, 50, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
     KeepSameWeaponBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::inputWeapon = LAutobattler::Game::playerCharacter.weapon;
+        game.inputWeapon = game.playerCharacter.weapon;
     };
     
-    mse::gui::Button* PickDroppedWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, (*(LAutobattler::Weapon*)(&LAutobattler::Game::npcCharacter.drop_list[0])).name, {180, 50, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* PickDroppedWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, (*(LAutobattler::Weapon*)(&game.npcCharacter.drop_list[0])).name, {180, 50, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
     PickDroppedWeaponBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::inputWeapon = *(LAutobattler::Weapon*)(&LAutobattler::Game::npcCharacter.drop_list[0]);
+        game.inputWeapon = *(LAutobattler::Weapon*)(&game.npcCharacter.drop_list[0]);
     };
     
     // confirm changes
     mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {100, 70, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::playerCharacterUpdated = true;
+        game.playerCharacterUpdated = true;
         m_window->GetLayerManager()->Detach(this);
     };
     
@@ -292,7 +294,7 @@ void CharacterUpdateUILayer::OnInit()
     std::u32string stats = U"";
     std::u32string main_class = U"";
     std::u32string sub_class = U"";
-    switch (LAutobattler::Game::playerCharacter.main_class.type)
+    switch (game.playerCharacter.main_class.type)
     {
     case LAutobattler::Classes::Rogue:
         {
@@ -310,7 +312,7 @@ void CharacterUpdateUILayer::OnInit()
             break;
         }
     }
-    switch (LAutobattler::Game::playerCharacter.sub_class.type)
+    switch (game.playerCharacter.sub_class.type)
     {
     case LAutobattler::Classes::Rogue:
         {
@@ -333,11 +335,11 @@ void CharacterUpdateUILayer::OnInit()
     strstream << 
     "Класс:      " << utf8::utf32to8(main_class.c_str()) << 
     "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) <<
-    "\nЗдоровье: " << LAutobattler::Game::playerCharacter.stats.health <<
-    "\nСила:     " << LAutobattler::Game::playerCharacter.stats.strength <<
-    "\nЛовкость: " << LAutobattler::Game::playerCharacter.stats.agility <<
-    "\nВыносливость: " << LAutobattler::Game::playerCharacter.stats.endurance <<
-    "\nОружие: " << utf8::utf32to8(LAutobattler::Game::playerCharacter.weapon.name.c_str());
+    "\nЗдоровье: " << game.playerCharacter.stats.health <<
+    "\nСила:     " << game.playerCharacter.stats.strength <<
+    "\nЛовкость: " << game.playerCharacter.stats.agility <<
+    "\nВыносливость: " << game.playerCharacter.stats.endurance <<
+    "\nОружие: " << utf8::utf32to8(game.playerCharacter.weapon.name.c_str());
     stats = utf8::utf8to32(strstream.str());
     
     mse::gui::Text* text4 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, stats, {010, 90, 300, 100}, {0, 64, 0, 255}, {255, 255, 128, 255})));
@@ -361,7 +363,7 @@ void SimpleUILayer::OnInit()
     // Game GUI
     mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {10, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     playerCreateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::gamePage = LAutobattler::GamePages::CharacterCreation;
+        game.gamePage = LAutobattler::GamePages::CharacterCreation;
 //			mse::Canban::PutTask(mse::CanbanEvents::Backend_Create, {mse::CanbanEvents::Backend_Create, mse::CanbanReceiver::Backend, nullptr});
 //			mse::Canban::PutTask(mse::CanbanEvents::Backend_Run, {mse::CanbanEvents::Backend_Run, mse::CanbanReceiver::Backend, nullptr});
 //            mse::Canban::PutTask(mse::CanbanEvents::Backend_Stop, {mse::CanbanEvents::Backend_Stop, mse::CanbanReceiver::Backend, nullptr});
@@ -370,13 +372,13 @@ void SimpleUILayer::OnInit()
     
     mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Начать бой", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::gamePage = LAutobattler::GamePages::ArenaSetup;
+        game.gamePage = LAutobattler::GamePages::ArenaSetup;
         m_window->GetLayerManager()->Attach(new ArenaUILayer());
     };
     
     mse::gui::Button* playerLoadBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     playerLoadBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        LAutobattler::Game::gamePage = LAutobattler::GamePages::CharacterLoad;
+        game.gamePage = LAutobattler::GamePages::CharacterLoad;
     };
     mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {10, 30, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
@@ -392,37 +394,35 @@ void SimpleUILayer::OnInit()
 
 void SimpleUILayer::OnUpdate()
 {
-    LAutobattler::Game::GameLogic();
-    
-    if (LAutobattler::Game::gamePageHasToChange)
+    if (game.gamePageHasToChange)
     {
-        LAutobattler::Game::gamePageFrom = LAutobattler::Game::gamePage;
-        switch (LAutobattler::Game::gamePageTo)
+        game.gamePageFrom = game.gamePage;
+        switch (game.gamePageTo)
         {
         case LAutobattler::GamePages::MainMenu:
             {
-                LAutobattler::Game::gamePage = LAutobattler::Game::gamePageTo;
-                LAutobattler::Game::gamePageHasToChange = false;
+                game.gamePage = game.gamePageTo;
+                game.gamePageHasToChange = false;
                 break;
             }
         case LAutobattler::GamePages::CharacterUpdate:
             {
-                LAutobattler::Game::gamePage = LAutobattler::Game::gamePageTo;
-                LAutobattler::Game::gamePageHasToChange = false;
+                game.gamePage = game.gamePageTo;
+                game.gamePageHasToChange = false;
                 m_window->GetLayerManager()->Attach(new CharacterUpdateUILayer());
                 break;
             }
         case LAutobattler::GamePages::ArenaSetup:
             {
-                LAutobattler::Game::gamePage = LAutobattler::Game::gamePageTo;
-                LAutobattler::Game::gamePageHasToChange = false;
+                game.gamePage = game.gamePageTo;
+                game.gamePageHasToChange = false;
                 m_window->GetLayerManager()->Attach(new ArenaUILayer());
                 break;
             }
         }
     }
     
-    switch (LAutobattler::Game::gamePage)
+    switch (game.gamePage)
     {
         // idle
     case LAutobattler::GamePages::MainMenu:
@@ -463,3 +463,5 @@ void SimpleUILayer::OnUpdate()
         }
     }
 }
+
+#endif

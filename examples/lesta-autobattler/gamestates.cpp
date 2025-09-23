@@ -1,7 +1,9 @@
-#include <mse/mse.h>
-
 #include <lesta-autobattler/gamestates.h>
 #include <lesta-autobattler/layers.h>
+//#include <mse/mse.h>
+#include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/windows/window.h>
+#include <mse/systems/windows/layers/layer.h>
 
 GameState::GameState()
 {}

@@ -1,13 +1,28 @@
 #ifndef LESTA_AUTOBATTLER_LAYERS_H
 #define LESTA_AUTOBATTLER_LAYERS_H
 
-#include <mse/mse.h>
+#include <lesta-autobattler/game-fwd.h>
 
-#include <lesta-autobattler/fwd.h>
+#include <mse/systems/windows/layers/layer.h>
+#include <mse/systems/windows/layers/layer_manager.h>
+#include <mse/systems/windows/layers/gui/gui.h>
+#include <mse/systems/canban.h>
+#include <mse/systems/application/application.h>
 
 // ********************************************************************************************** //
 //                                    LAYERS (to render things)
 // ********************************************************************************************** //
+
+namespace LAutobattler
+{
+    struct GameDB;
+    struct Game;
+}
+extern LAutobattler::GameDB gameDB;
+extern LAutobattler::Game game;
+
+struct GameStateMachine;
+extern GameStateMachine gsm;
 
 class IntroUILayer : public mse::Layer
 {

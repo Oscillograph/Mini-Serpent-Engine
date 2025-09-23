@@ -1,4 +1,6 @@
 #include <mse/mse.h>
+#include <lesta-autobattler/game-fwd.h>
+#include <lesta-autobattler/game-data.h>
 
 #include <lesta-autobattler/gamestates.h>
 #include <lesta-autobattler/layers.h>
@@ -6,6 +8,10 @@
 // ********************************************************************************************** //
 //                                    SCENES (do I need one?)
 // ********************************************************************************************** //
+
+LAutobattler::GameDB gameDB = LAutobattler::InitGameData();
+LAutobattler::Game game;
+GameStateMachine gsm;
 
 class GameScene : public mse::Scene
 {
@@ -75,7 +81,7 @@ public:
 		m_window = mse::WindowManager::CreateWindow(u8"Горка", 50, 50, 320, 240);
 		m_window->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 			MSE_LOG("Key pressed: ", event->key.keysym.sym);
-            LAutobattler::Game::keyPressed = true;
+            game.keyPressed = true;
 			return true;
 		};
 		mse::Renderer::SetActiveWindow(m_window);

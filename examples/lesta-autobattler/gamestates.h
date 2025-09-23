@@ -1,8 +1,9 @@
 #ifndef LESTA_AUTOBATTLER_GAMESTATES_H
 #define LESTA_AUTOBATTLER_GAMESTATES_H
 
-#include <mse/mse.h>
-#include <lesta-autobattler/fwd.h>
+#include <lesta-autobattler/game-fwd.h>
+
+#include <mse/systems/windows/window.h>
 
 // crude state machine to think about
 struct GameState
@@ -33,7 +34,7 @@ struct GameStateMachine
     GameState* current;
 };
 
-GameStateMachine gsm;
+//GameStateMachine gsm;
 
 // ********************************************************************************************** //
 //                                    STATES (to control gameplay)
