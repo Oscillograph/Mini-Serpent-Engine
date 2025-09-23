@@ -59,5 +59,112 @@ struct MainPageState : GameState
     mse::Layer* layer = nullptr;
 };
 
+struct CharacterCreatePageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct CharacterLoadPageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct CharacterSavePageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct CharacterUpdatePageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct ArenaSetupPageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct ArenaBattlePageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct ArenaAftermathPageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct WinnerPageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct GameOverPageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct HighscoresPageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct CreditsPageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
+
+struct ExitPageState : GameState
+{
+    virtual bool OnEnter() override;
+    virtual bool OnExit() override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+    
+    mse::Layer* layer = nullptr;
+};
 
 #endif

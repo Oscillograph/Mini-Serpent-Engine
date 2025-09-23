@@ -20,7 +20,7 @@ void IntroUILayer::OnInit()
 {
     text = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                                                            this, 
-                                                           U"Победа! Выберите награду.", 
+                                                           U"Обратный отсчёт: ", 
                                                            {100, 10, 200, 10}, 
                                                            {0, 0, 0, 255}, 
                                                            {0, 255, 255, 255})));
@@ -51,7 +51,32 @@ MainMenuUILayer::~MainMenuUILayer()
 }
 
 void MainMenuUILayer::OnInit()
-{}
+{
+    mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {110, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    playerCreateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::CharacterCreation);
+    };
+    
+    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {110, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::CharacterLoad);
+    };
+    
+    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {110, 30, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::Highscores);
+    };
+
+    mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {110, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    creditsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::Credits);
+    };
+    
+    mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {110, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    exitBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::Exit);
+    };
+}
 
 void MainMenuUILayer::OnUpdate()
 {}

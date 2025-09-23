@@ -33,7 +33,7 @@ public:
 //        gsm.states[LAutobattler::GamePages::GameOver];
 //        gsm.states[LAutobattler::GamePages::Highscores];
 //        gsm.states[LAutobattler::GamePages::Credits];
-//        gsm.states[LAutobattler::GamePages::Exit];
+        gsm.states[LAutobattler::GamePages::Exit] = new ExitPageState();
         MSE_LOG("GameScene: gsm states initiated and stored.");
         
         // setup initial game state
@@ -47,6 +47,7 @@ public:
         player = nullptr;
         delete npc;
         npc = nullptr;
+        MSE_LOG("GameScene destructor...done");
     };
     
     virtual void OnUpdate(mse::TimeType time)

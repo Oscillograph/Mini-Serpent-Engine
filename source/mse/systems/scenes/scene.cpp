@@ -29,7 +29,7 @@ namespace mse
 	{
 		m_Layer = nullptr;
 		
-		MSE_CORE_ASSERT(m_SceneCamera, "Scene destructor: m_SceneCamera was a null pointer.");
+//		MSE_CORE_ASSERT(m_SceneCamera, "Scene destructor: m_SceneCamera was a null pointer.");
 		delete m_SceneCamera;
 		m_SceneCamera = nullptr;
 	}
