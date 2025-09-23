@@ -18,6 +18,7 @@ class GameScene : public mse::Scene
 public:
     GameScene()
     {
+        MSE_LOG("GameScene constructor...");
         // register game states
         gsm.states[LAutobattler::GamePages::Intro] = new IntroPageState();
         gsm.states[LAutobattler::GamePages::MainMenu] = new MainPageState();
@@ -33,9 +34,11 @@ public:
 //        gsm.states[LAutobattler::GamePages::Highscores];
 //        gsm.states[LAutobattler::GamePages::Credits];
 //        gsm.states[LAutobattler::GamePages::Exit];
+        MSE_LOG("GameScene: gsm states initiated and stored.");
         
         // setup initial game state
         gsm.ChangeStateTo(LAutobattler::GamePages::Intro);
+        MSE_LOG("GameScene constructor...done");
     };
     
     ~GameScene()
@@ -46,18 +49,8 @@ public:
         npc = nullptr;
     };
     
-    virtual void Start()
-    {
-        player = CreateEntity("PlayerCharacter");
-        npc = CreateEntity("NPC");
-        
-        player->AddComponent<LAutobattler::CharacterStats>();
-        npc->AddComponent<LAutobattler::CharacterStats>();
-    }
-    
     virtual void OnUpdate(mse::TimeType time)
     {
-//        LAutobattler::Game::GameLogic();
         gsm.OnUpdate(time);
     }
     
@@ -87,7 +80,9 @@ public:
 		mse::Renderer::SetActiveWindow(m_window);
 		
 		MSE_LOG("Commanding to create and load scene");
-        mse::SceneManager::Load(new GameScene());
+        m_scene = new GameScene();
+        mse::SceneManager::Load(m_scene);
+        m_scene->Start();
 	}
 	
 	~App()

@@ -130,18 +130,22 @@ namespace mse
 	
 	void Scene::Start()
 	{
+        m_Running = true;
 	}
 	
 	void Scene::Stop()
 	{
+        m_Running = false;
 	}
 	
 	void Scene::Pause()
 	{
+        m_Paused = true;
 	}
 	
 	void Scene::Resume()
 	{
+        m_Paused = true;
 	}
 	
 	void Scene::PhysicsInit(const PhysicsSystem& physicsSystem)

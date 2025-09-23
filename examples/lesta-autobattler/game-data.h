@@ -136,6 +136,8 @@ namespace LAutobattler
                 }
             },
         };
+        
+        return gameDB;
     }
 }
 

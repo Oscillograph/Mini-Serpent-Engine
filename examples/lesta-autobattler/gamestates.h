@@ -26,7 +26,6 @@ struct GameState
 
 struct GameStateMachine
 {
-    void ChangeStateTo(GameState* state);
     void ChangeStateTo(LAutobattler::GamePages gamePage);
     void OnUpdate(mse::TimeType t = 0);
     
