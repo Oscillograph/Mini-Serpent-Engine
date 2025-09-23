@@ -28,16 +28,20 @@ void IntroUILayer::OnInit()
 
 void IntroUILayer::OnUpdate()
 {
-    std::stringstream strstream;
-    int m = ((IntroPageState*)gsm.current)->counter;
-    strstream << "Обратный отсчёт: " << m;
-    std::u32string newText = utf8::utf8to32(strstream.str());
-    
-    text->ChangeText(newText);
-    
-    if (m < 0)
+    if (counterBackup != ((IntroPageState*)gsm.current)->counter)
     {
-        gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
+        int counterBackup = ((IntroPageState*)gsm.current)->counter;
+        
+        std::stringstream strstream;
+        strstream << "Обратный отсчёт: " << counterBackup;
+        std::u32string newText = utf8::utf8to32(strstream.str());
+        
+        text->ChangeText(newText);
+        
+        if (counterBackup < 0)
+        {
+            gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
+        }
     }
 }
 
@@ -52,27 +56,27 @@ MainMenuUILayer::~MainMenuUILayer()
 
 void MainMenuUILayer::OnInit()
 {
-    mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {110, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {120, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     playerCreateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::CharacterCreation);
     };
     
-    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {110, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {120, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::CharacterLoad);
     };
     
-    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {110, 30, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {120, 30, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Highscores);
     };
 
-    mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {110, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {120, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     creditsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Credits);
     };
     
-    mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {110, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {120, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     exitBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Exit);
     };

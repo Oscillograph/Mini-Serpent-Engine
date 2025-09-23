@@ -34,6 +34,7 @@ public:
     virtual void OnUpdate() override;
     
     mse::gui::Text* text = nullptr;
+    int counterBackup = 0;
 };
 
 class MainMenuUILayer : public mse::Layer
