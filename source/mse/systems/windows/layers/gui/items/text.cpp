@@ -17,16 +17,16 @@ namespace mse
 		Text::Text()
 		: GUIItem()
 		{
-			Init(nullptr, U"", {0, 0, 1, 1}, {0, 0, 0, 0}, {255, 255, 255, 255});
+			Init(nullptr, U"", {0, 0, 1, 1}, {0, 0, 0, 0}, {255, 255, 255, 255}, 1);
 		}
 		
-		Text::Text(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color)
+		Text::Text(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color, int pxSize)
 		: GUIItem()
 		{
-			Init(layer, text, area, bgColor, color);
+			Init(layer, text, area, bgColor, color, pxSize);
 		}
 		
-		void Text::Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color)
+		void Text::Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color, int pxSize)
 		{
 			// model
 			parentLayer = layer;
@@ -80,7 +80,7 @@ namespace mse
 				mse::Renderer::SurfaceDrawText(
 					(Texture*)(m_texture->data), 
 					{0 + 2, 2, layerArea.z, layerArea.w}, 	// where to
-					1, 					// pixel size
+					pxSize,             // pixel size
 					m_text, 			// text content
 					bmpFont, 			// font
 					{color.x, color.y, color.z, color.w}, // color

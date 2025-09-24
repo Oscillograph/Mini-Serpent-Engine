@@ -157,8 +157,6 @@ public:
     
     virtual void OnInit() override;
     virtual void OnUpdate() override;
-    
-    mse::gui::Canvas* gameCanvas = nullptr;
 };
 
 #endif

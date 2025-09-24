@@ -25,14 +25,14 @@ public:
         gsm.states[LAutobattler::GamePages::CharacterCreation] = new CharacterCreatePageState();
 //        gsm.states[LAutobattler::GamePages::CharacterLoad];
 //        gsm.states[LAutobattler::GamePages::CharacterSave];
-//        gsm.states[LAutobattler::GamePages::CharacterUpdate];
-//        gsm.states[LAutobattler::GamePages::ArenaSetup];
-//        gsm.states[LAutobattler::GamePages::ArenaBattle];
-//        gsm.states[LAutobattler::GamePages::ArenaAftermath];
-//        gsm.states[LAutobattler::GamePages::Winner];
-//        gsm.states[LAutobattler::GamePages::GameOver];
+        gsm.states[LAutobattler::GamePages::CharacterUpdate] = new CharacterUpdatePageState();
+        gsm.states[LAutobattler::GamePages::ArenaSetup] = new ArenaSetupPageState();
+        gsm.states[LAutobattler::GamePages::ArenaBattle] = new ArenaBattlePageState();
+        gsm.states[LAutobattler::GamePages::ArenaAftermath] = new ArenaAftermathPageState;
+        gsm.states[LAutobattler::GamePages::Winner] = new WinnerPageState();
+        gsm.states[LAutobattler::GamePages::GameOver] = new GameOverPageState();
 //        gsm.states[LAutobattler::GamePages::Highscores];
-//        gsm.states[LAutobattler::GamePages::Credits];
+        gsm.states[LAutobattler::GamePages::Credits] = new CreditsPageState();
         gsm.states[LAutobattler::GamePages::Exit] = new ExitPageState();
         MSE_LOG("GameScene: gsm states initiated and stored.");
         
@@ -79,6 +79,7 @@ public:
 			return true;
 		};
 		mse::Renderer::SetActiveWindow(m_window);
+        m_window->GetLayerManager()->Attach(new SimpleUILayer);
 		
 		MSE_LOG("Commanding to create and load scene");
         m_scene = new GameScene();

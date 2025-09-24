@@ -13,8 +13,8 @@ namespace mse
 		public:
 			// general initialization
 			Text();
-			Text(Layer* layer, const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color);
-			void Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color);
+			Text(Layer* layer, const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color, int pxSize = 1);
+			void Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color, int pxSize = 1);
 			virtual ~Text();
 			
 			// general GUIItem interface

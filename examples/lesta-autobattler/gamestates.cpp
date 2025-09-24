@@ -6,13 +6,17 @@
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer.h>
 
+//extern LAutobattler::GameDB gameDB;
+//extern LAutobattler::Game game;
+//extern GameStateMachine gsm;
+
 GameState::GameState()
 {}
 
 GameState::~GameState()
 {}
 
-void GameStateMachine::ChangeStateTo(LAutobattler::GamePages gamePage)
+void GameStateMachine::ChangeStateTo(LAutobattler::GamePages gamePage, mse::Layer* pass_layer)
 {
     MSE_LOG("GameStateMachine: change state to ", (int)gamePage);
     if (states.find(gamePage) != states.end())
@@ -22,11 +26,11 @@ void GameStateMachine::ChangeStateTo(LAutobattler::GamePages gamePage)
         {
             if (gamePage != current->page)
             {
-                while (!current->OnExit()){}
+                while (!current->OnExit((pass_layer != nullptr))){}
                 MSE_LOG("GameStateMachine: state ", (int)(current->page), " exited");
                 
                 current = states[gamePage];
-                while(!current->OnEnter()){}
+                while(!current->OnEnter(pass_layer)){}
                 MSE_LOG("GameStateMachine: state ", (int)(current->page), " entered");
                 
                 return;
@@ -37,7 +41,7 @@ void GameStateMachine::ChangeStateTo(LAutobattler::GamePages gamePage)
         } else {
             // the program just started - there are no previous stages yet
             current = states[gamePage];
-            while(!current->OnEnter()){}
+            while(!current->OnEnter(pass_layer)){}
             MSE_LOG("GameStateMachine: state ", (int)(current->page), " entered");
         }
     } else {
@@ -66,20 +70,31 @@ IntroPageState::IntroPageState()
 IntroPageState::~IntroPageState()
 {}
 
-bool IntroPageState::OnEnter()
+bool IntroPageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("IntroPageState OnEnter...");
-    layer = new IntroUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new IntroUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
     MSE_LOG("IntroPageState OnEnter...done");
     return true;
 }
 
-bool IntroPageState::OnExit()
+bool IntroPageState::OnExit(bool pass_layer)
 {
     MSE_LOG("IntroPageState OnExit...");
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
     MSE_LOG("IntroPageState OnExit...done");
     return true;
 }
@@ -113,7 +128,7 @@ MainPageState::MainPageState()
 MainPageState::~MainPageState()
 {}
 
-bool MainPageState::OnEnter()
+bool MainPageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("MainPageState OnEnter...");
     layer = new MainMenuUILayer();
@@ -122,7 +137,7 @@ bool MainPageState::OnEnter()
     return true;
 }
 
-bool MainPageState::OnExit()
+bool MainPageState::OnExit(bool pass_layer)
 {
     MSE_LOG("MainPageState OnExit...");
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
@@ -146,7 +161,7 @@ CharacterCreatePageState::CharacterCreatePageState()
 CharacterCreatePageState::~CharacterCreatePageState()
 {}
 
-bool CharacterCreatePageState::OnEnter()
+bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("CharacterCreatePageState OnEnter...");
     layer = new CharacterCreateUILayer();
@@ -155,7 +170,7 @@ bool CharacterCreatePageState::OnEnter()
     return true;
 }
 
-bool CharacterCreatePageState::OnExit()
+bool CharacterCreatePageState::OnExit(bool pass_layer)
 {
     MSE_LOG("CharacterCreatePageState OnExit..");
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
@@ -166,6 +181,73 @@ bool CharacterCreatePageState::OnExit()
 
 bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
 {
+    if (game.inputClass != LAutobattler::Classes::None)
+    {
+        switch (game.inputClass)
+        {
+        case LAutobattler::Classes::Rogue:
+        {
+            int str = std::rand() % 3 + 1;
+            int agi = std::rand() % 3 + 1;
+            int end = std::rand() % 3 + 1;
+            game.inputStats = {4, str, agi, end};
+            game.inputTrait = LAutobattler::Traits::HiddenStrike;
+            game.inputWeapon = gameDB.weapons[2];
+            break;
+        }
+        case LAutobattler::Classes::Warrior:
+            {
+                int str = std::rand() % 3 + 1;
+                int agi = std::rand() % 3 + 1;
+                int end = std::rand() % 3 + 1;
+                game.inputStats = {5, str, agi, end};
+                game.inputTrait = LAutobattler::Traits::Rush;
+                game.inputWeapon = gameDB.weapons[3];
+                break;
+            }
+        case LAutobattler::Classes::Barbarian:
+            {
+                int str = std::rand() % 3 + 1;
+                int agi = std::rand() % 3 + 1;
+                int end = std::rand() % 3 + 1;
+                game.inputStats = {6, str, agi, end};
+                game.inputTrait = LAutobattler::Traits::Rage;
+                game.inputWeapon = gameDB.weapons[4];
+                break;
+            }
+        default:
+            {
+                printf("can't create player character: undefined class\n");
+            }
+        }
+        
+        game.playerCharacter = 
+        {
+            1,                     // level
+            U"Игрок",              // name
+            game.inputRace,         // race
+            game.inputStats,          // stats_max
+            game.inputStats,          // stats
+            {game.inputClass, 1},    // main class
+            {LAutobattler::Classes::None, 0},    // sub class
+            {game.inputTrait},                    // traits
+            {},  // drop
+            game.inputWeapon   // weapon
+        };
+        printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n", 
+               game.playerCharacter.name.c_str(),
+               game.playerCharacter.stats.health,
+               game.playerCharacter.stats.strength,
+               game.playerCharacter.stats.agility,
+               game.playerCharacter.stats.endurance);
+        
+        game.battleCounter = 0;
+        
+        game.inputClass = LAutobattler::Classes::None;
+        
+        gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
+    }
+    
     return true;
 }
 
@@ -177,17 +259,21 @@ CharacterLoadPageState::CharacterLoadPageState()
 CharacterLoadPageState::~CharacterLoadPageState()
 {}
 
-bool CharacterLoadPageState::OnEnter()
+bool CharacterLoadPageState::OnEnter(mse::Layer* pass_layer)
 {
+    MSE_LOG("CharacterLoadPageState OnEnter...");
     layer = new CharacterLoadUILayer();
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("CharacterLoadPageState OnEnter...done");
     return true;
 }
 
-bool CharacterLoadPageState::OnExit()
+bool CharacterLoadPageState::OnExit(bool pass_layer)
 {
+    MSE_LOG("CharacterLoadPageState OnExit...");
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
     layer = nullptr;
+    MSE_LOG("CharacterLoadPageState OnExit...done");
     return true;
 }
 
@@ -204,17 +290,21 @@ CharacterSavePageState::CharacterSavePageState()
 CharacterSavePageState::~CharacterSavePageState()
 {}
 
-bool CharacterSavePageState::OnEnter()
+bool CharacterSavePageState::OnEnter(mse::Layer* pass_layer)
 {
+    MSE_LOG("CharacterSavePageState OnEnter...");
     layer = new CharacterSaveUILayer();
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("CharacterSavePageState OnEnter...done");
     return true;
 }
 
-bool CharacterSavePageState::OnExit()
+bool CharacterSavePageState::OnExit(bool pass_layer)
 {
+    MSE_LOG("CharacterSavePageState OnExit...");
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
     layer = nullptr;
+    MSE_LOG("CharacterSavePageState OnExit...done");
     return true;
 }
 
@@ -231,17 +321,21 @@ CharacterUpdatePageState::CharacterUpdatePageState()
 CharacterUpdatePageState::~CharacterUpdatePageState()
 {}
 
-bool CharacterUpdatePageState::OnEnter()
+bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
 {
+    MSE_LOG("CharacterUpdatePageState OnEnter...");
     layer = new CharacterUpdateUILayer();
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("CharacterUpdatePageState OnEnter...done");
     return true;
 }
 
-bool CharacterUpdatePageState::OnExit()
+bool CharacterUpdatePageState::OnExit(bool pass_layer)
 {
+    MSE_LOG("CharacterUpdatePageState OnExit...");
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
     layer = nullptr;
+    MSE_LOG("CharacterUpdatePageState OnExit...done");
     return true;
 }
 
@@ -258,22 +352,99 @@ ArenaSetupPageState::ArenaSetupPageState()
 ArenaSetupPageState::~ArenaSetupPageState()
 {}
 
-bool ArenaSetupPageState::OnEnter()
+bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
 {
-    layer = new ArenaUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("ArenaSetupPageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new ArenaUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("ArenaSetupPageState OnEnter...done");
     return true;
 }
 
-bool ArenaSetupPageState::OnExit()
+bool ArenaSetupPageState::OnExit(bool pass_layer)
 {
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    MSE_LOG("ArenaSetupPageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("ArenaSetupPageState OnExit...done");
     return true;
 }
 
 bool ArenaSetupPageState::OnUpdate(mse::TimeType t)
 {
+    printf("Preparing battle...\n");
+    game.battleCounter++;
+    
+    // calculate actual player stats
+    game.playerCharacter.stats = game.playerCharacter.stats_max;
+    game.playerCharacter.stats = 
+    {
+        game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats_max.endurance),
+        game.playerCharacter.stats_max.strength,
+        game.playerCharacter.stats_max.agility,
+        game.playerCharacter.stats_max.endurance,
+    };
+    
+    // apply stats passive traits
+    for (LAutobattler::Traits trait : game.playerCharacter.traits)
+    {
+        if (trait == LAutobattler::Traits::Strong)
+        {
+            game.playerCharacter.stats.strength++;
+        }
+        if (trait == LAutobattler::Traits::Agile)
+        {
+            game.playerCharacter.stats.agility++;
+        }
+        if (trait == LAutobattler::Traits::Survivor)
+        {
+            game.playerCharacter.stats.endurance++;
+            game.playerCharacter.stats.health = game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats.endurance);
+        }
+    }
+    
+    // pick npc adversary
+    int npcCount = gameDB.characters.size();
+    int pickedCharacter = std::rand() % npcCount;
+    game.npcCharacter = gameDB.characters[pickedCharacter];
+    
+    printf("Next opponent (of %d) is %s! (%.2f, %.2f, %.2f, %.2f)\n",
+           npcCount,
+           game.npcCharacter.name.c_str(),
+           game.npcCharacter.stats.health,
+           game.npcCharacter.stats.strength,
+           game.npcCharacter.stats.agility,
+           game.npcCharacter.stats.endurance);
+    
+    // start of the battle
+    if (game.playerCharacter.stats.agility > game.npcCharacter.stats.agility)
+    {
+        game.attacker = &(game.playerCharacter);
+        game.defender = &(game.npcCharacter);
+    } else {
+        game.attacker = &(game.npcCharacter);
+        game.defender = &(game.playerCharacter);
+    }
+    printf("Opponents greet each other and start the combat.\n");
+    
+    game.turn = 0;
+    game.battleJustStarted = true;
+    game.battleFinished = false;
+    game.UILogger.Clear();
+    
+    gsm.ChangeStateTo(LAutobattler::GamePages::ArenaBattle, layer);
+    
     return true;
 }
 
@@ -285,22 +456,190 @@ ArenaBattlePageState::ArenaBattlePageState()
 ArenaBattlePageState::~ArenaBattlePageState()
 {}
 
-bool ArenaBattlePageState::OnEnter()
+bool ArenaBattlePageState::OnEnter(mse::Layer* pass_layer)
 {
-    layer = new ArenaUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("ArenaBattlePageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new ArenaUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("ArenaBattlePageState OnEnter...done");
     return true;
 }
 
-bool ArenaBattlePageState::OnExit()
+bool ArenaBattlePageState::OnExit(bool pass_layer)
 {
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    MSE_LOG("ArenaBattlePageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("ArenaBattlePageState OnExit...done");
     return true;
 }
 
 bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
 {
+    float weaponDamage = 0.0;
+    float skillDamage = 0.0;
+    float totalDamage = 0.0;
+    game.battleJustStarted = false;
+    static mse::TimeType localTime = 0;
+    std::stringstream strForLogger;
+    
+    if ((!game.battleFinished) && (game.turn < 30))
+    {
+        if (localTime > 300)
+        {
+            game.turn++;
+            
+            // swap roles
+            if (game.turn > 1)
+            {
+                LAutobattler::Character* tmp = nullptr;
+                tmp = game.attacker;
+                game.attacker = game.defender;
+                game.defender = tmp;
+            }
+            
+            weaponDamage = game.attacker->weapon.damage;
+            skillDamage = 0.0;
+            totalDamage = 0.0;
+            
+            printf("Turn %d: %s attacks.\n",
+                   game.turn,
+                   game.attacker->name.c_str());
+            
+            // start of the turn
+            // calculate attack chance
+//                        std::srand(0);
+            int agi_sum = game.attacker->stats.agility + game.defender->stats.agility;
+            int dice = (std::rand() % agi_sum) + 1;
+//                        printf("Rolled %d of %d\n", dice, agi_sum);
+            if (dice > game.defender->stats.agility)
+            {
+                // apply attacker's effects
+                for (LAutobattler::Traits trait : game.attacker->traits)
+                {   
+                    if (game.turn == 1)
+                    {
+                        if (trait == LAutobattler::Traits::Rush)
+                        {
+                            weaponDamage = game.attacker->weapon.damage * 2;
+                            skillDamage = game.attacker->stats.strength * 2;
+                        }
+                    }
+                    
+                    if ((trait == LAutobattler::Traits::HiddenStrike) &&
+                        (game.attacker->stats.agility > game.defender->stats.agility))
+                    {
+                        skillDamage += 1;
+                    }
+                    
+                    if ((trait == LAutobattler::Traits::Poison))
+                    {
+                        skillDamage += game.turn;
+                    }
+                    
+                    if (trait == LAutobattler::Traits::Rage)
+                    {
+                        skillDamage = (game.turn < 4) ? (skillDamage + 2) : (skillDamage - 1);
+                    }
+                    
+                    if (trait == LAutobattler::Traits::FireBreather)
+                    {
+                        skillDamage = ((game.turn % 3) == 0) ? skillDamage + 3 : skillDamage;
+                    }
+                }
+                
+                // apply defender's effects
+                for (LAutobattler::Traits trait : game.defender->traits)
+                {
+                    if ((trait == LAutobattler::Traits::CuttingImmune) &&
+                        (game.attacker->weapon.type == LAutobattler::DamageType::Cutting))
+                    {
+                        weaponDamage = 0.0;
+                    }
+                    
+                    if ((trait == LAutobattler::Traits::CrushingWeakness) &&
+                        (game.attacker->weapon.type == LAutobattler::DamageType::Crushing))
+                    {
+                        weaponDamage = weaponDamage * 2;
+                    }
+                }
+                
+                // pre-calculate total damage
+                totalDamage = weaponDamage + skillDamage;
+                
+                // apply defender's effects that affect total damage
+                for (LAutobattler::Traits trait : game.defender->traits)
+                {
+                    if (trait == LAutobattler::Traits::StoneSkin)
+                    {
+                        totalDamage -= game.defender->stats.endurance;
+                    }
+                    
+                    if ((trait == LAutobattler::Traits::Shield) &&
+                        (game.defender->stats.strength > game.attacker->stats.strength))
+                    {
+                        totalDamage -= 3;
+                    }
+                }
+                
+                if (totalDamage < 0.0)
+                {
+                    totalDamage = 0.0;
+                }
+                
+                // clash
+                game.defender->stats.health -= totalDamage;
+                printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n", 
+                       game.turn, 
+                       game.attacker->name.c_str(), 
+                       totalDamage, 
+                       game.defender->name.c_str(), 
+                       game.defender->stats.health);
+                
+                strForLogger << "Ход " << game.turn << ": " 
+                << utf8::utf32to8(game.attacker->name.c_str()) << "(" << game.attacker->stats.health 
+                << ") наносит " << totalDamage << " урона " 
+                << utf8::utf32to8(game.defender->name.c_str()) << "(" << game.defender->stats.health << ")\n";
+                game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
+            } else {
+                printf("Turn %d: %s misses!\n", 
+                       game.turn, 
+                       game.attacker->name.c_str());
+                
+                strForLogger << "Ход " << game.turn << ": " 
+                << utf8::utf32to8(game.attacker->name.c_str()) << "(" << game.attacker->stats.health 
+                << ") промахивается!\n";
+                game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
+            }
+            
+            if (game.defender->stats.health <= 0.0)
+            {
+                game.battleFinished = true;
+            }
+            
+            // end of the turn
+            localTime = 0;
+        }
+    } else {
+        // end of the battle
+        gsm.ChangeStateTo(LAutobattler::GamePages::ArenaAftermath, layer);
+        localTime = 0;
+        printf("Battle is finished.\n");
+    }
+    
+    localTime += t;
+    
     return true;
 }
 
@@ -312,22 +651,59 @@ ArenaAftermathPageState::ArenaAftermathPageState()
 ArenaAftermathPageState::~ArenaAftermathPageState()
 {}
 
-bool ArenaAftermathPageState::OnEnter()
+bool ArenaAftermathPageState::OnEnter(mse::Layer* pass_layer)
 {
-    layer = new ArenaUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("ArenaAftermathPageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new ArenaUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("ArenaAftermathPageState OnEnter...done");
     return true;
 }
 
-bool ArenaAftermathPageState::OnExit()
+bool ArenaAftermathPageState::OnExit(bool pass_layer)
 {
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    MSE_LOG("ArenaAftermathPageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("ArenaAftermathPageState OnExit...done");
     return true;
 }
 
 bool ArenaAftermathPageState::OnUpdate(mse::TimeType t)
 {
+    static mse::TimeType localTime = 0;
+    if (localTime > 300)
+    {
+        if (game.playerCharacter.stats.health > 0.0)
+        {
+            if (game.battleCounter < 5)
+            {
+                game.battleJustFinished = true; // important for layer management
+                gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
+//                            inputWeapon = *(Weapon*)(&(npcCharacter.drop_list[0]));
+                game.inputWeapon = game.playerCharacter.weapon;
+            } else {
+                gsm.ChangeStateTo(LAutobattler::GamePages::Winner);
+            }
+        } else {
+            gsm.ChangeStateTo(LAutobattler::GamePages::GameOver);
+        }
+        
+        localTime = 0;
+    }
+    localTime += t;
+    
     return true;
 }
 
@@ -339,17 +715,32 @@ WinnerPageState::WinnerPageState()
 WinnerPageState::~WinnerPageState()
 {}
 
-bool WinnerPageState::OnEnter()
+bool WinnerPageState::OnEnter(mse::Layer* pass_layer)
 {
-    layer = new WinnerUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("WinnerPageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new WinnerUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("WinnerPageState OnEnter...done");
     return true;
 }
 
-bool WinnerPageState::OnExit()
+bool WinnerPageState::OnExit(bool pass_layer)
 {
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    MSE_LOG("WinnerPageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("WinnerPageState OnExit...done");
     return true;
 }
 
@@ -366,17 +757,32 @@ GameOverPageState::GameOverPageState()
 GameOverPageState::~GameOverPageState()
 {}
 
-bool GameOverPageState::OnEnter()
+bool GameOverPageState::OnEnter(mse::Layer* pass_layer)
 {
-    layer = new GameOverUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("GameOverPageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new GameOverUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("GameOverPageState OnEnter...done");
     return true;
 }
 
-bool GameOverPageState::OnExit()
+bool GameOverPageState::OnExit(bool pass_layer)
 {
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    MSE_LOG("GameOverPageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("GameOverPageState OnExit...done");
     return true;
 }
 
@@ -393,17 +799,32 @@ HighscoresPageState::HighscoresPageState()
 HighscoresPageState::~HighscoresPageState()
 {}
 
-bool HighscoresPageState::OnEnter()
+bool HighscoresPageState::OnEnter(mse::Layer* pass_layer)
 {
-    layer = new HighscoresUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("HighscoresPageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new HighscoresUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("HighscoresPageState OnEnter...done");
     return true;
 }
 
-bool HighscoresPageState::OnExit()
+bool HighscoresPageState::OnExit(bool pass_layer)
 {
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    MSE_LOG("HighscoresPageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("HighscoresPageState OnExit...done");
     return true;
 }
 
@@ -420,17 +841,32 @@ CreditsPageState::CreditsPageState()
 CreditsPageState::~CreditsPageState()
 {}
 
-bool CreditsPageState::OnEnter()
+bool CreditsPageState::OnEnter(mse::Layer* pass_layer)
 {
-    layer = new CreditsUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("CreditsPageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new CreditsUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("CreditsPageState OnEnter...done");
     return true;
 }
 
-bool CreditsPageState::OnExit()
+bool CreditsPageState::OnExit(bool pass_layer)
 {
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    MSE_LOG("CreditsPageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("CreditsPageState OnExit...done");
     return true;
 }
 
@@ -447,17 +883,32 @@ ExitPageState::ExitPageState()
 ExitPageState::~ExitPageState()
 {}
 
-bool ExitPageState::OnEnter()
+bool ExitPageState::OnEnter(mse::Layer* pass_layer)
 {
-    layer = new ExitUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("ExitPageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new ExitUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("ExitPageState OnEnter...done");
     return true;
 }
 
-bool ExitPageState::OnExit()
+bool ExitPageState::OnExit(bool pass_layer)
 {
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    MSE_LOG("ExitPageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("ExitPageState OnExit...done");
     return true;
 }
 

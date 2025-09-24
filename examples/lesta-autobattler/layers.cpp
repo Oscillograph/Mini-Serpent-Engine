@@ -18,10 +18,26 @@ IntroUILayer::~IntroUILayer()
 
 void IntroUILayer::OnInit()
 {
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"LESTA АВТОБАТЛЕР", 
+                                  {40, 10, 225, 20}, 
+                                  {64, 0, 0, 255}, 
+                                  {0, 255, 255, 255},
+                                  2));
+    
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"by Broscillograph", 
+                                  {40, 30, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    
     text = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                                                            this, 
-                                                           U"Обратный отсчёт: ", 
-                                                           {100, 10, 200, 10}, 
+                                                           U"Загрузится через: ", 
+                                                           {120, 50, 200, 10}, 
                                                            {0, 0, 0, 255}, 
                                                            {0, 255, 255, 255})));
 }
@@ -33,7 +49,7 @@ void IntroUILayer::OnUpdate()
         int counterBackup = ((IntroPageState*)gsm.current)->counter;
         
         std::stringstream strstream;
-        strstream << "Обратный отсчёт: " << counterBackup;
+        strstream << "Загрузится через: " << counterBackup;
         std::u32string newText = utf8::utf8to32(strstream.str());
         
         text->ChangeText(newText);
@@ -56,27 +72,35 @@ MainMenuUILayer::~MainMenuUILayer()
 
 void MainMenuUILayer::OnInit()
 {
-    mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {120, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"LESTA АВТОБАТЛЕР", 
+                                  {40, 10, 225, 20}, 
+                                  {64, 0, 0, 255}, 
+                                  {0, 255, 255, 255},
+                                  2));
+    
+    mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {120, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     playerCreateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::CharacterCreation);
     };
     
-    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {120, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {120, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::CharacterLoad);
     };
     
-    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {120, 30, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {120, 60, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Highscores);
     };
 
-    mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {120, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {120, 70, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     creditsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Credits);
     };
     
-    mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {120, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {120, 80, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     exitBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Exit);
     };
@@ -96,25 +120,41 @@ CharacterCreateUILayer::~CharacterCreateUILayer()
 
 void CharacterCreateUILayer::OnInit()
 {
-    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {120, 10, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"LESTA АВТОБАТЛЕР", 
+                                  {40, 10, 225, 20}, 
+                                  {64, 0, 0, 255}, 
+                                  {0, 255, 255, 255},
+                                  2));
+    
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Выбор класса персонажа", 
+                                  {80, 30, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 0, 255},
+                                  1));
+    
+    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {120, 40, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Rogue;
         gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
     };
     
-    mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {120, 20, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {120, 50, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
     ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Warrior;
         gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
     };
     
-    mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {120, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {120, 60, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
     ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Barbarian;
         gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
     };
     
-    mse::gui::Button* BackToMainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {120, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* BackToMainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {120, 80, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     BackToMainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
     };
@@ -208,7 +248,147 @@ CreditsUILayer::~CreditsUILayer()
 }
 
 void CreditsUILayer::OnInit()
-{}
+{
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"LESTA АВТОБАТЛЕР", 
+                                  {40, 10, 225, 20}, 
+                                  {64, 0, 0, 255}, 
+                                  {0, 255, 255, 255},
+                                  2));
+    
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Программирование:", 
+                                  {40, 30, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Broscillograph", 
+                                  {80, 40, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Графика:", 
+                                  {40, 50, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Broscillograph", 
+                                  {80, 60, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Компилятор:", 
+                                  {40, 70, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"TDM-GCC", 
+                                  {80, 80, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Библиотеки:", 
+                                  {40, 90, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"SDL2, utf-cpp, Color Console", 
+                                  {80, 100, 240, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Среда разработки:", 
+                                  {40, 110, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Red Panda C++", 
+                                  {80, 120, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Музыка:", 
+                                  {40, 130, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Трио из Удио", 
+                                  {80, 140, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Место для вашей рекламы:", 
+                                  {40, 150, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"", 
+                                  {80, 160, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Юля, я люблю тебя:", 
+                                  {40, 170, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Broscillograph", 
+                                  {80, 180, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Оригинальный диздок:", 
+                                  {40, 190, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Lesta Игры", 
+                                  {80, 200, 220, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    
+    mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {120, 220, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
+    };
+}
 
 void CreditsUILayer::OnUpdate()
 {}
@@ -247,7 +427,7 @@ void ArenaUILayer::OnInit()
     messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                                                                  this, 
                                                                  U"", 
-                                                                 {010, 90, 300, 100}, 
+                                                                 {10, 90, 300, 100}, 
                                                                  {0, 64, 0, 255}, 
                                                                  {255, 255, 0, 255})));
     messageLog->showBorder = true;
@@ -255,21 +435,18 @@ void ArenaUILayer::OnInit()
 
 void ArenaUILayer::OnUpdate()
 {
-    if ((game.gamePage != LAutobattler::GamePages::ArenaSetup) &&
-        (game.gamePage != LAutobattler::GamePages::ArenaBattle) && 
-        (game.gamePage != LAutobattler::GamePages::ArenaAftermath))
+    std::u32string messages = U"";
+    LAutobattler::MessageLogItem* item = game.UILogger.stack;
+    static bool needToUpdateText = false;
+    while (item != nullptr)
     {
-        m_window->GetLayerManager()->Detach(this);
-    } else {
-        std::u32string messages = U"";
-        LAutobattler::MessageLogItem* item = game.UILogger.stack;
-        while (item != nullptr)
-        {
-            messages += item->text;
-            item = item->next;
-        }
-        item = nullptr;
-        
+        needToUpdateText = true;
+        messages += item->text;
+        item = item->next;
+    }
+    item = nullptr;
+    if (needToUpdateText)
+    {
         messageLog->ChangeText(messages);
         MSE_LOG("Message Log text changed!")
     }
@@ -394,108 +571,9 @@ SimpleUILayer::~SimpleUILayer()
 
 void SimpleUILayer::OnInit()
 {
-    // Game GUI
-    mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {10, 10, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-    playerCreateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        game.gamePage = LAutobattler::GamePages::CharacterCreation;
-//			mse::Canban::PutTask(mse::CanbanEvents::Backend_Create, {mse::CanbanEvents::Backend_Create, mse::CanbanReceiver::Backend, nullptr});
-//			mse::Canban::PutTask(mse::CanbanEvents::Backend_Run, {mse::CanbanEvents::Backend_Run, mse::CanbanReceiver::Backend, nullptr});
-//            mse::Canban::PutTask(mse::CanbanEvents::Backend_Stop, {mse::CanbanEvents::Backend_Stop, mse::CanbanReceiver::Backend, nullptr});
-        m_window->GetLayerManager()->Attach(new CharacterCreateUILayer());
-    };
-    
-    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Начать бой", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-    battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        game.gamePage = LAutobattler::GamePages::ArenaSetup;
-        m_window->GetLayerManager()->Attach(new ArenaUILayer());
-    };
-    
-    mse::gui::Button* playerLoadBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {10, 20, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-    playerLoadBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        game.gamePage = LAutobattler::GamePages::CharacterLoad;
-    };
-    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {10, 30, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-    scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-    };
-    mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {10, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-    creditsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-    };
-    mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {10, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-    exitBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        mse::Canban::PutTask(mse::CanbanEvents::Backend_Stop, {mse::CanbanEvents::Backend_Stop, mse::CanbanReceiver::Backend, nullptr});
-    };
 }
 
 void SimpleUILayer::OnUpdate()
-{
-    if (game.gamePageHasToChange)
-    {
-        game.gamePageFrom = game.gamePage;
-        switch (game.gamePageTo)
-        {
-        case LAutobattler::GamePages::MainMenu:
-            {
-                game.gamePage = game.gamePageTo;
-                game.gamePageHasToChange = false;
-                break;
-            }
-        case LAutobattler::GamePages::CharacterUpdate:
-            {
-                game.gamePage = game.gamePageTo;
-                game.gamePageHasToChange = false;
-                m_window->GetLayerManager()->Attach(new CharacterUpdateUILayer());
-                break;
-            }
-        case LAutobattler::GamePages::ArenaSetup:
-            {
-                game.gamePage = game.gamePageTo;
-                game.gamePageHasToChange = false;
-                m_window->GetLayerManager()->Attach(new ArenaUILayer());
-                break;
-            }
-        }
-    }
-    
-    switch (game.gamePage)
-    {
-        // idle
-    case LAutobattler::GamePages::MainMenu:
-        {
-//			MSE_LOG("Initial screen mode");
-            break;
-        }
-        // game
-    case LAutobattler::GamePages::CharacterCreation:
-        {
-//				MSE_LOG("Game mode");
-            break;
-        }
-        // settings
-    case LAutobattler::GamePages::CharacterLoad:
-        {
-//				MSE_LOG("Settings mode");
-            break;
-        }
-        // scores
-    case LAutobattler::GamePages::Highscores:
-        {
-//				MSE_LOG("Scores mode");
-            break;
-        }
-        // about
-    case LAutobattler::GamePages::Credits:
-        {
-//				MSE_LOG("About mode");
-            break;
-        }
-        // exit
-    case LAutobattler::GamePages::Exit:
-        {
-            MSE_LOG("Commanding to stop the application");
-            mse::Application::GetApplication()->Stop();
-            break;
-        }
-    }
-}
+{}
 
 #endif
