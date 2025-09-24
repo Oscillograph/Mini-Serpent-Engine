@@ -41,6 +41,8 @@ struct GameStateMachine
 
 struct IntroPageState : GameState
 {
+    IntroPageState();
+    ~IntroPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -52,6 +54,8 @@ struct IntroPageState : GameState
 
 struct MainPageState : GameState
 {
+    MainPageState();
+    ~MainPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -61,6 +65,8 @@ struct MainPageState : GameState
 
 struct CharacterCreatePageState : GameState
 {
+    CharacterCreatePageState();
+    ~CharacterCreatePageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -70,6 +76,8 @@ struct CharacterCreatePageState : GameState
 
 struct CharacterLoadPageState : GameState
 {
+    CharacterLoadPageState();
+    ~CharacterLoadPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -79,6 +87,8 @@ struct CharacterLoadPageState : GameState
 
 struct CharacterSavePageState : GameState
 {
+    CharacterSavePageState();
+    ~CharacterSavePageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -88,6 +98,8 @@ struct CharacterSavePageState : GameState
 
 struct CharacterUpdatePageState : GameState
 {
+    CharacterUpdatePageState();
+    ~CharacterUpdatePageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -97,6 +109,8 @@ struct CharacterUpdatePageState : GameState
 
 struct ArenaSetupPageState : GameState
 {
+    ArenaSetupPageState();
+    ~ArenaSetupPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -106,6 +120,8 @@ struct ArenaSetupPageState : GameState
 
 struct ArenaBattlePageState : GameState
 {
+    ArenaBattlePageState();
+    ~ArenaBattlePageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -115,6 +131,8 @@ struct ArenaBattlePageState : GameState
 
 struct ArenaAftermathPageState : GameState
 {
+    ArenaAftermathPageState();
+    ~ArenaAftermathPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -124,6 +142,8 @@ struct ArenaAftermathPageState : GameState
 
 struct WinnerPageState : GameState
 {
+    WinnerPageState();
+    ~WinnerPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -133,6 +153,8 @@ struct WinnerPageState : GameState
 
 struct GameOverPageState : GameState
 {
+    GameOverPageState();
+    ~GameOverPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -142,6 +164,8 @@ struct GameOverPageState : GameState
 
 struct HighscoresPageState : GameState
 {
+    HighscoresPageState();
+    ~HighscoresPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -151,6 +175,8 @@ struct HighscoresPageState : GameState
 
 struct CreditsPageState : GameState
 {
+    CreditsPageState();
+    ~CreditsPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
@@ -160,6 +186,8 @@ struct CreditsPageState : GameState
 
 struct ExitPageState : GameState
 {
+    ExitPageState();
+    ~ExitPageState();
     virtual bool OnEnter() override;
     virtual bool OnExit() override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;

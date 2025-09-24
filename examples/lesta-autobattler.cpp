@@ -22,7 +22,7 @@ public:
         // register game states
         gsm.states[LAutobattler::GamePages::Intro] = new IntroPageState();
         gsm.states[LAutobattler::GamePages::MainMenu] = new MainPageState();
-//        gsm.states[LAutobattler::GamePages::CharacterCreation];
+        gsm.states[LAutobattler::GamePages::CharacterCreation] = new CharacterCreatePageState();
 //        gsm.states[LAutobattler::GamePages::CharacterLoad];
 //        gsm.states[LAutobattler::GamePages::CharacterSave];
 //        gsm.states[LAutobattler::GamePages::CharacterUpdate];

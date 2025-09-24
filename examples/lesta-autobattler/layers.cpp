@@ -96,22 +96,27 @@ CharacterCreateUILayer::~CharacterCreateUILayer()
 
 void CharacterCreateUILayer::OnInit()
 {
-    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 10, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {120, 10, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Rogue;
-        m_window->GetLayerManager()->Detach(this);
+        gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
     };
     
-    mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {100, 20, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {120, 20, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
     ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Warrior;
-        m_window->GetLayerManager()->Detach(this);
+        gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
     };
     
-    mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {100, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {120, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
     ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Barbarian;
-        m_window->GetLayerManager()->Detach(this);
+        gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
+    };
+    
+    mse::gui::Button* BackToMainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {120, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    BackToMainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
     };
 }
 

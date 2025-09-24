@@ -20,13 +20,26 @@ void GameStateMachine::ChangeStateTo(LAutobattler::GamePages gamePage)
         MSE_LOG("GameStateMachine: state ", (int)gamePage, " found");
         if (current != nullptr)
         {
-            while (!current->OnExit()){}
-            MSE_LOG("GameStateMachine: state ", (int)(current->page), " exited");
-            delete current;
+            if (gamePage != current->page)
+            {
+                while (!current->OnExit()){}
+                MSE_LOG("GameStateMachine: state ", (int)(current->page), " exited");
+                
+                current = states[gamePage];
+                while(!current->OnEnter()){}
+                MSE_LOG("GameStateMachine: state ", (int)(current->page), " entered");
+                
+                return;
+            } else {
+                MSE_LOG("GameStateMachine: no change - current state is already ", (int)gamePage);
+                return;
+            }
+        } else {
+            // the program just started - there are no previous stages yet
+            current = states[gamePage];
+            while(!current->OnEnter()){}
+            MSE_LOG("GameStateMachine: state ", (int)(current->page), " entered");
         }
-        current = states[gamePage];
-        while(!current->OnEnter()){}
-        MSE_LOG("GameStateMachine: state ", (int)(current->page), " entered");
     } else {
         MSE_LOG("GameStateMachine: cannot change to state ", (int)gamePage, " - none found");
     }
@@ -44,6 +57,14 @@ void GameStateMachine::OnUpdate(mse::TimeType t)
 // ********************************************************************************************** //
 //                                    STATES (to control gameplay)
 // ********************************************************************************************** //
+
+IntroPageState::IntroPageState()
+{
+    page = LAutobattler::GamePages::Intro;
+}
+
+IntroPageState::~IntroPageState()
+{}
 
 bool IntroPageState::OnEnter()
 {
@@ -65,9 +86,9 @@ bool IntroPageState::OnExit()
 
 bool IntroPageState::OnUpdate(mse::TimeType t)
 {
-    MSE_LOG("IntroPageState OnUpdate...");
-    MSE_LOG((int)(t));
-    MSE_LOG((int)(1.0/MSE_FPS60));
+//    MSE_LOG("IntroPageState OnUpdate...");
+//    MSE_LOG((int)(t));
+//    MSE_LOG((int)(1.0/MSE_FPS60));
     if ((timeLast - t) > 10*(int)(1.0/MSE_FPS60))
     {
         timeLast = 0;
@@ -80,9 +101,17 @@ bool IntroPageState::OnUpdate(mse::TimeType t)
         gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
     }
     
-    MSE_LOG("IntroPageState OnUpdate...done");
+//    MSE_LOG("IntroPageState OnUpdate...done");
     return true;
 }
+
+MainPageState::MainPageState()
+{
+    page = LAutobattler::GamePages::MainMenu;
+}
+
+MainPageState::~MainPageState()
+{}
 
 bool MainPageState::OnEnter()
 {
@@ -104,22 +133,34 @@ bool MainPageState::OnExit()
 
 bool MainPageState::OnUpdate(mse::TimeType t)
 {
-    MSE_LOG("MainPageState OnUpdate...");
-    MSE_LOG("MainPageState OnUpdate...done");
+//    MSE_LOG("MainPageState OnUpdate...");
+//    MSE_LOG("MainPageState OnUpdate...done");
     return true;
 }
 
+CharacterCreatePageState::CharacterCreatePageState()
+{
+    page = LAutobattler::GamePages::CharacterCreation;
+}
+
+CharacterCreatePageState::~CharacterCreatePageState()
+{}
+
 bool CharacterCreatePageState::OnEnter()
 {
+    MSE_LOG("CharacterCreatePageState OnEnter...");
     layer = new CharacterCreateUILayer();
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("CharacterCreatePageState OnEnter...done");
     return true;
 }
 
 bool CharacterCreatePageState::OnExit()
 {
+    MSE_LOG("CharacterCreatePageState OnExit..");
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
     layer = nullptr;
+    MSE_LOG("CharacterCreatePageState OnExit..done");
     return true;
 }
 
@@ -127,6 +168,14 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
 {
     return true;
 }
+
+CharacterLoadPageState::CharacterLoadPageState()
+{
+    page = LAutobattler::GamePages::CharacterLoad;
+}
+
+CharacterLoadPageState::~CharacterLoadPageState()
+{}
 
 bool CharacterLoadPageState::OnEnter()
 {
@@ -147,6 +196,14 @@ bool CharacterLoadPageState::OnUpdate(mse::TimeType t)
     return true;
 }
 
+CharacterSavePageState::CharacterSavePageState()
+{
+    page = LAutobattler::GamePages::CharacterSave;
+}
+
+CharacterSavePageState::~CharacterSavePageState()
+{}
+
 bool CharacterSavePageState::OnEnter()
 {
     layer = new CharacterSaveUILayer();
@@ -165,6 +222,14 @@ bool CharacterSavePageState::OnUpdate(mse::TimeType t)
 {
     return true;
 }
+
+CharacterUpdatePageState::CharacterUpdatePageState()
+{
+    page = LAutobattler::GamePages::CharacterUpdate;
+}
+
+CharacterUpdatePageState::~CharacterUpdatePageState()
+{}
 
 bool CharacterUpdatePageState::OnEnter()
 {
@@ -185,6 +250,14 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
     return true;
 }
 
+ArenaSetupPageState::ArenaSetupPageState()
+{
+    page = LAutobattler::GamePages::ArenaSetup;
+}
+
+ArenaSetupPageState::~ArenaSetupPageState()
+{}
+
 bool ArenaSetupPageState::OnEnter()
 {
     layer = new ArenaUILayer();
@@ -203,6 +276,14 @@ bool ArenaSetupPageState::OnUpdate(mse::TimeType t)
 {
     return true;
 }
+
+ArenaBattlePageState::ArenaBattlePageState()
+{
+    page = LAutobattler::GamePages::ArenaBattle;
+}
+
+ArenaBattlePageState::~ArenaBattlePageState()
+{}
 
 bool ArenaBattlePageState::OnEnter()
 {
@@ -223,6 +304,14 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     return true;
 }
 
+ArenaAftermathPageState::ArenaAftermathPageState()
+{
+    page = LAutobattler::GamePages::ArenaAftermath;
+}
+
+ArenaAftermathPageState::~ArenaAftermathPageState()
+{}
+
 bool ArenaAftermathPageState::OnEnter()
 {
     layer = new ArenaUILayer();
@@ -241,6 +330,14 @@ bool ArenaAftermathPageState::OnUpdate(mse::TimeType t)
 {
     return true;
 }
+
+WinnerPageState::WinnerPageState()
+{
+    page = LAutobattler::GamePages::Winner;
+}
+
+WinnerPageState::~WinnerPageState()
+{}
 
 bool WinnerPageState::OnEnter()
 {
@@ -261,6 +358,14 @@ bool WinnerPageState::OnUpdate(mse::TimeType t)
     return true;
 }
 
+GameOverPageState::GameOverPageState()
+{
+    page = LAutobattler::GamePages::GameOver;
+}
+
+GameOverPageState::~GameOverPageState()
+{}
+
 bool GameOverPageState::OnEnter()
 {
     layer = new GameOverUILayer();
@@ -279,6 +384,14 @@ bool GameOverPageState::OnUpdate(mse::TimeType t)
 {
     return true;
 }
+
+HighscoresPageState::HighscoresPageState()
+{
+    page = LAutobattler::GamePages::Highscores;
+}
+
+HighscoresPageState::~HighscoresPageState()
+{}
 
 bool HighscoresPageState::OnEnter()
 {
@@ -299,6 +412,14 @@ bool HighscoresPageState::OnUpdate(mse::TimeType t)
     return true;
 }
 
+CreditsPageState::CreditsPageState()
+{
+    page = LAutobattler::GamePages::Credits;
+}
+
+CreditsPageState::~CreditsPageState()
+{}
+
 bool CreditsPageState::OnEnter()
 {
     layer = new CreditsUILayer();
@@ -317,6 +438,14 @@ bool CreditsPageState::OnUpdate(mse::TimeType t)
 {
     return true;
 }
+
+ExitPageState::ExitPageState()
+{
+    page = LAutobattler::GamePages::Exit;
+}
+
+ExitPageState::~ExitPageState()
+{}
 
 bool ExitPageState::OnEnter()
 {
