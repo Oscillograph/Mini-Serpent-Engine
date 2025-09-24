@@ -754,7 +754,7 @@ namespace mse
 					if (symbolId != std::u32string::npos)
 					{
 						// Correct coordinates of the "cursor"
-						if (curX > (tempRect.x + tempRect.w - font->fontClip.w*pxSize)){
+						if (curX >= (tempRect.x + tempRect.w - 2*font->fontClip.w*pxSize)){
 							currentRow++;
 							j = 0;
 							correctX = 0;
@@ -782,7 +782,7 @@ namespace mse
 						}
 						
 						// position the pencil according to where the cursor is
-						curX = tempRect.x + j*font->fontClip.w*pxSize + correctX*pxSize;
+						curX = tempRect.x + (j*font->fontClip.w + correctX)*pxSize;
 						curY = tempRect.y + correctY;
 						
 						// draw the symbol in its place

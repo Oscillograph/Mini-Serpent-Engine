@@ -13,16 +13,16 @@
 //                                    LAYERS (to render things)
 // ********************************************************************************************** //
 
-namespace LAutobattler
-{
-    struct GameDB;
-    struct Game;
-}
-extern LAutobattler::GameDB gameDB;
-extern LAutobattler::Game game;
-
-struct GameStateMachine;
-extern GameStateMachine gsm;
+//namespace LAutobattler
+//{
+//    struct GameDB;
+//    struct Game;
+//}
+//extern LAutobattler::GameDB gameDB;
+//extern LAutobattler::Game game;
+//
+//struct GameStateMachine;
+//extern GameStateMachine gsm;
 
 class IntroUILayer : public mse::Layer
 {

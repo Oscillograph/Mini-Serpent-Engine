@@ -6,9 +6,9 @@
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer.h>
 
-//extern LAutobattler::GameDB gameDB;
-//extern LAutobattler::Game game;
-//extern GameStateMachine gsm;
+extern LAutobattler::GameDB gameDB;
+extern LAutobattler::Game game;
+extern GameStateMachine gsm;
 
 GameState::GameState()
 {}
@@ -415,6 +415,7 @@ bool ArenaSetupPageState::OnUpdate(mse::TimeType t)
     }
     
     // pick npc adversary
+    std::srand(0);
     int npcCount = gameDB.characters.size();
     int pickedCharacter = std::rand() % npcCount;
     game.npcCharacter = gameDB.characters[pickedCharacter];
@@ -493,6 +494,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     game.battleJustStarted = false;
     static mse::TimeType localTime = 0;
     std::stringstream strForLogger;
+    std::srand(0);
     
     if ((!game.battleFinished) && (game.turn < 30))
     {
