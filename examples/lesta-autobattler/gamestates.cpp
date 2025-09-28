@@ -360,7 +360,10 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
     if (game.playerCharacterUpdated)
     {
         // change weapon
-        game.playerCharacter.weapon = game.inputWeapon;
+//        game.playerCharacter.weapon = game.inputWeapon;
+        game.playerCharacter.weapon.name = game.inputWeapon.name;
+        game.playerCharacter.weapon.type = game.inputWeapon.type;
+        game.playerCharacter.weapon.damage = game.inputWeapon.damage;
         if (game.playerCharacter.weapon.damage < 1.0)
         {
             MSE_ERROR("game.playerCharacter.weapon.damage < 1.0");
@@ -791,12 +794,20 @@ bool ArenaAftermathPageState::OnEnter(mse::Layer* pass_layer)
         layer = new ArenaUILayer();
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     }
+    
+    if (game.playerCharacter.stats.health > 0.0)
+    {
+        game.UILogger.Push(U"Победа!");
+    } else {
+        game.UILogger.Push(U"Поражение.");
+    }
+    
     MSE_LOG("ArenaAftermathPageState OnEnter...done");
     return true;
 }
 
 bool ArenaAftermathPageState::OnExit(bool pass_layer)
-{
+{    
     MSE_LOG("ArenaAftermathPageState OnExit...");
     if (!pass_layer)
     {
@@ -809,12 +820,11 @@ bool ArenaAftermathPageState::OnExit(bool pass_layer)
 
 bool ArenaAftermathPageState::OnUpdate(mse::TimeType t)
 {
-    static mse::TimeType localTime = 0;
-    if (localTime > 300)
+    localTime += t;
+    if (localTime > 1000)
     {
         if (game.playerCharacter.stats.health > 0.0)
         {
-            game.inputWeapon = game.playerCharacter.weapon;
             gsm.ChangeStateTo(LAutobattler::GamePages::Winner);
         } else {
             gsm.ChangeStateTo(LAutobattler::GamePages::GameOver);
@@ -822,7 +832,6 @@ bool ArenaAftermathPageState::OnUpdate(mse::TimeType t)
         
         localTime = 0;
     }
-    localTime += t;
     
     return true;
 }

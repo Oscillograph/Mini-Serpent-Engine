@@ -77,9 +77,13 @@ public:
 		m_window = mse::WindowManager::CreateWindow(u8"Леста Автобатлер", 50, 50, 320, 240);
 		m_window->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 			MSE_LOG("Key pressed: ", event->key.keysym.sym);
-            if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
+//            if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
+//            {
+//                m_window->ToggleFullscreen();
+//            }
+            if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
             {
-                m_window->ToggleFullscreen();
+                this->Stop();
             }
             game.keyPressed = true;
 			return true;

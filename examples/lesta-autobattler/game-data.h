@@ -31,7 +31,7 @@ namespace LAutobattler
             { 9, {U"Шип",               1.0,    DamageType::None}},
             {10, {U"Сгнивший меч",      2.0,    DamageType::None}},
             {11, {U"Кадило",            3.0,    DamageType::None}},
-            {12, {U"Коготь и клык",     4.0,    DamageType::None}},
+            {12, {U"Клык и коготь",     4.0,    DamageType::None}},
             
             // easter eggs
             {13, {U"Пулемёт Максим",  100.0,    DamageType::Divine}},
