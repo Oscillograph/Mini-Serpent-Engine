@@ -221,18 +221,35 @@ void WinnerUILayer::OnInit()
                                   {0, 0, 0, 255}, 
                                   {64, 255, 64, 255},
                                   2));
-    AddElement(new mse::gui::Text(
-                                  this, 
-                                  U"В битве было нелегко, но герой справился и одолел противника.\nВпереди новое испытание!", 
-                                  {10, 160, 220, 40}, 
-                                  {0, 0, 0, 255}, 
-                                  {196, 196, 196, 255},
-                                  1));
+    if (game.battleCounter < 5)
+    {
+        AddElement(new mse::gui::Text(
+                                      this, 
+                                      U"В битве было нелегко, но герой справился и одолел противника.\nВпереди новое испытание!", 
+                                      {10, 160, 220, 40}, 
+                                      {0, 0, 0, 255}, 
+                                      {196, 196, 196, 255},
+                                      1));
+        
+        mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"К наградам", {120, 220, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+        mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
+        };
+    } else {
+        AddElement(new mse::gui::Text(
+                                      this, 
+                                      U"Герой покорил арену, одолев \nвсе трудности и опасности. \nЕго удали нет равных, и теперь, по праву чемпиона, он войдёт \nв Зал Славы как живая легенда.\nЭто было великолепно!", 
+                                      {10, 140, 220, 60}, 
+                                      {0, 0, 0, 255}, 
+                                      {196, 196, 196, 255},
+                                      1));
+        
+        mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"В Зал Славы", {120, 220, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+        mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            gsm.ChangeStateTo(LAutobattler::GamePages::Highscores);
+        };
+    }
     
-    mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"К наградам", {120, 220, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
-    mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
-    };
 }
 
 void WinnerUILayer::OnUpdate()
@@ -522,101 +539,153 @@ CharacterUpdateUILayer::~CharacterUpdateUILayer()
 
 void CharacterUpdateUILayer::OnInit()
 {
-    mse::gui::Text* text1 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Победа! Выберите награду.", {100, 10, 200, 10}, {0, 0, 0, 255}, {255, 255, 0, 255})));
-    mse::gui::Text* text2 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Развить класс:", {100, 20, 120, 10}, {0, 0, 0, 255}, {255, 255, 255, 255})));
+    mse::gui::Text* text1 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Победа! Выберите награду.", {60, 10, 200, 10}, {0, 0, 0, 255}, {255, 255, 0, 255})));
+    mse::gui::Text* text2 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Развить класс:", {60, 20, 120, 10}, {0, 0, 0, 255}, {255, 255, 255, 255})));
     
     // pick a subclass
-    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {100, 30, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {60, 30, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Rogue;
+        changeMade = true;
     };
     
-    mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {180, 30, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {150, 30, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
     ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Warrior;
+        changeMade = true;
     };
     
-    mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {260, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {240, 30, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
     ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Barbarian;
+        changeMade = true;
     };
     
     // pick a weapon
     mse::gui::Text* text3 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Выбрать оружие:", {100, 40, 120, 10}, {0, 0, 0, 255}, {255, 255, 255, 255})));
-    mse::gui::Button* KeepSameWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, game.playerCharacter.weapon.name, {100, 50, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* KeepSameWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, game.playerCharacter.weapon.name, {60, 50, 120, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
     KeepSameWeaponBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputWeapon = game.playerCharacter.weapon;
+        changeMade = true;
     };
     
-    mse::gui::Button* PickDroppedWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, (*(LAutobattler::Weapon*)(&game.npcCharacter.drop_list[0])).name, {180, 50, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* PickDroppedWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, (*(LAutobattler::Weapon*)(&game.npcCharacter.drop_list[0])).name, {180, 50, 120, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
     PickDroppedWeaponBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        game.inputWeapon = *(LAutobattler::Weapon*)(&game.npcCharacter.drop_list[0]);
+        LAutobattler::Weapon* weapon = &(game.npcCharacter.drop_list[0]);
+        game.inputWeapon.name = weapon->name;
+        game.inputWeapon.type = weapon->type;
+        game.inputWeapon.damage = weapon->damage;
+        changeMade = true;
     };
     
     // confirm changes
-    mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {100, 70, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {160, 70, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.playerCharacterUpdated = true;
         gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
     };
     
+    // defaults
+    game.inputClass = game.playerCharacter.main_class.type;
+    game.inputWeapon = game.playerCharacter.weapon;
+    
     // show stats
-    std::u32string stats = U"";
-    std::u32string main_class = U"";
-    std::u32string sub_class = U"";
-    switch (game.playerCharacter.main_class.type)
-    {
-    case LAutobattler::Classes::Rogue:
-        {
-            main_class = U"Разбойник";
-            break;
-        }
-    case LAutobattler::Classes::Warrior:
-        {
-            main_class = U"Воин";
-            break;
-        }
-    case LAutobattler::Classes::Barbarian:
-        {
-            main_class = U"Варвар";
-            break;
-        }
-    }
-    switch (game.playerCharacter.sub_class.type)
-    {
-    case LAutobattler::Classes::Rogue:
-        {
-            sub_class = U"Разбойник";
-            break;
-        }
-    case LAutobattler::Classes::Warrior:
-        {
-            sub_class = U"Воин";
-            break;
-        }
-    case LAutobattler::Classes::Barbarian:
-        {
-            sub_class = U"Варвар";
-            break;
-        }
-    }
-    
-    std::stringstream strstream;
-    strstream << 
-    "Класс:      " << utf8::utf32to8(main_class.c_str()) << 
-    "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) <<
-    "\nЗдоровье: " << game.playerCharacter.stats.health <<
-    "\nСила:     " << game.playerCharacter.stats.strength <<
-    "\nЛовкость: " << game.playerCharacter.stats.agility <<
-    "\nВыносливость: " << game.playerCharacter.stats.endurance <<
-    "\nОружие: " << utf8::utf32to8(game.playerCharacter.weapon.name.c_str());
-    stats = utf8::utf8to32(strstream.str());
-    
-    mse::gui::Text* text4 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, stats, {010, 90, 300, 100}, {0, 64, 0, 255}, {255, 255, 128, 255})));
+    statsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"", {010, 90, 300, 100}, {0, 64, 0, 255}, {255, 255, 128, 255})));
+    changeMade = true;
 }
 
 void CharacterUpdateUILayer::OnUpdate()
-{}
+{
+    if (changeMade)
+    {
+        std::u32string stats = U"";
+        std::u32string main_class = U"";
+        std::u32string sub_class = U"";
+        
+        switch (game.playerCharacter.main_class.type)
+        {
+        case LAutobattler::Classes::Rogue:
+            {
+                main_class = U"Разбойник";
+                break;
+            }
+        case LAutobattler::Classes::Warrior:
+            {
+                main_class = U"Воин";
+                break;
+            }
+        case LAutobattler::Classes::Barbarian:
+            {
+                main_class = U"Варвар";
+                break;
+            }
+        }
+        
+        if (game.inputClass != game.playerCharacter.main_class.type)
+        {
+            switch (game.inputClass)
+            {
+            case LAutobattler::Classes::Rogue:
+                {
+                    sub_class = U"Разбойник";
+                    break;
+                }
+            case LAutobattler::Classes::Warrior:
+                {
+                    sub_class = U"Воин";
+                    break;
+                }
+            case LAutobattler::Classes::Barbarian:
+                {
+                    sub_class = U"Варвар";
+                    break;
+                }
+            }
+        }
+        
+        // calculate stats for display
+        game.playerCharacter.stats = 
+        {
+            game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats_max.endurance),
+            game.playerCharacter.stats_max.strength,
+            game.playerCharacter.stats_max.agility,
+            game.playerCharacter.stats_max.endurance,
+        };
+        
+        for (LAutobattler::Traits trait : game.playerCharacter.traits)
+        {
+            if (trait == LAutobattler::Traits::Strong)
+            {
+                game.playerCharacter.stats.strength++;
+            }
+            if (trait == LAutobattler::Traits::Agile)
+            {
+                game.playerCharacter.stats.agility++;
+            }
+            if (trait == LAutobattler::Traits::Survivor)
+            {
+                game.playerCharacter.stats.endurance++;
+                game.playerCharacter.stats.health = game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats.endurance);
+            }
+        }
+        
+        std::stringstream strstream;
+        strstream << 
+        "Уровень:    " << game.playerCharacter.level <<
+        "\nКласс:      " << utf8::utf32to8(main_class.c_str()) << 
+        "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) <<
+        "\nЗдоровье: " << game.playerCharacter.stats.health <<
+        "\nСила:     " << game.playerCharacter.stats.strength <<
+        "\nЛовкость: " << game.playerCharacter.stats.agility <<
+        "\nВыносливость: " << game.playerCharacter.stats.endurance <<
+        "\nОружие: " << utf8::utf32to8(game.inputWeapon.name.c_str()) << 
+                   " (" << (int)(roundf(game.inputWeapon.damage)) << ")";
+        stats = utf8::utf8to32(strstream.str());
+        statsBox->ChangeText(stats);
+        
+        changeMade = false;
+    }
+}
 
 SimpleUILayer::SimpleUILayer() : mse::Layer()
 {

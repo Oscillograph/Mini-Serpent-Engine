@@ -37,6 +37,7 @@ namespace mse
 		// utility
 		void NewWindow();
 		void Rescale(int w, int h);
+        void ToggleFullscreen(int mode = 0);
 		
 		// reactions
 		void OnResize();
@@ -63,6 +64,7 @@ namespace mse
 		inline int GetHeight() { return m_height; }
 		inline int GetFlags() { return m_flags; }
 		inline bool IsFocused() { return m_isFocused; }
+        inline bool IsFullscreen() { return m_isFullscreen; }
 		inline LayerManager* GetLayerManager() { return m_layerManager; }
 		
 		std::unordered_map<EventTypes, func> callbacks = {};
@@ -85,6 +87,7 @@ namespace mse
 		int m_flags = 0;
 		
 		bool m_isFocused = false;
+        bool m_isFullscreen = false;
 		char m_newTitle[512];
 		
 		LayerManager* m_layerManager = nullptr;

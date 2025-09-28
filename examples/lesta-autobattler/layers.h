@@ -147,6 +147,9 @@ public:
     
     virtual void OnInit() override;
     virtual void OnUpdate() override;
+    
+    mse::gui::Text* statsBox = nullptr;
+    bool changeMade = false;
 };
 
 class SimpleUILayer : public mse::Layer

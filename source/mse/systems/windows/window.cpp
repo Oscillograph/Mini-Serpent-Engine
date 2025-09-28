@@ -59,6 +59,21 @@ namespace mse
 		m_scale.x = (float)m_width / m_basePrefs.width;
 		m_scale.y = (float)m_height / m_basePrefs.height;
 	}
+    
+    void Window::ToggleFullscreen(int mode)
+    {
+        if (!m_isFullscreen)
+        {
+            Platform::ToggleWindowFullScreen(m_windowNative, 2);
+            m_isFullscreen = true;
+        } else {
+            Platform::ToggleWindowFullScreen(m_windowNative, 0);
+            m_isFullscreen = false;
+        }
+        glm::ivec2 windowSize = Platform::GetWindowSize(m_windowNative);
+        MSE_CORE_LOG("Window: ToggleFullscreen() event handler (w=", windowSize.x, "; h=", windowSize.y, ")");
+        Rescale(windowSize.x, windowSize.y);
+    }
 	
 	void Window::OnResize()
 	{

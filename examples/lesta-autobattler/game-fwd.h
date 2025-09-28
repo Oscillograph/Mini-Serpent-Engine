@@ -155,7 +155,7 @@ namespace LAutobattler
         Class main_class = {Classes::None, 0};
         Class sub_class = {Classes::None, 0};
         std::vector<Traits> traits;
-        std::vector<Item> drop_list;
+        std::vector<Weapon> drop_list;
         Weapon weapon;
     };
 
@@ -197,7 +197,7 @@ namespace LAutobattler
         Character* attacker = nullptr;
         Character* defender = nullptr;
         
-        void GameLogic(GameDB& gameDB);
+//        void GameLogic(GameDB& gameDB);
     };
     
     GameDB InitGameData();

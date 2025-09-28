@@ -167,6 +167,13 @@ bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
     layer = new CharacterCreateUILayer();
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     MSE_LOG("CharacterCreatePageState OnEnter...done");
+    
+    // reset game
+    game.battleCounter = 0;
+    game.battleFinished = false;
+    game.battleJustStarted = false;
+    game.battleJustFinished = false;
+    
     return true;
 }
 
@@ -186,15 +193,15 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
         switch (game.inputClass)
         {
         case LAutobattler::Classes::Rogue:
-        {
-            int str = std::rand() % 3 + 1;
-            int agi = std::rand() % 3 + 1;
-            int end = std::rand() % 3 + 1;
-            game.inputStats = {4, str, agi, end};
-            game.inputTrait = LAutobattler::Traits::HiddenStrike;
-            game.inputWeapon = gameDB.weapons[2];
-            break;
-        }
+            {
+                int str = std::rand() % 3 + 1;
+                int agi = std::rand() % 3 + 1;
+                int end = std::rand() % 3 + 1;
+                game.inputStats = {4, str, agi, end};
+                game.inputTrait = LAutobattler::Traits::HiddenStrike;
+                game.inputWeapon = gameDB.weapons[2];
+                break;
+            }
         case LAutobattler::Classes::Warrior:
             {
                 int str = std::rand() % 3 + 1;
@@ -324,6 +331,13 @@ CharacterUpdatePageState::~CharacterUpdatePageState()
 bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("CharacterUpdatePageState OnEnter...");
+    
+    if (game.playerCharacter.level < 3)
+    {
+        game.playerCharacter.level++;
+        printf("Player lvl: %d, ", game.playerCharacter.level);
+    }
+    
     layer = new CharacterUpdateUILayer();
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     MSE_LOG("CharacterUpdatePageState OnEnter...done");
@@ -341,6 +355,120 @@ bool CharacterUpdatePageState::OnExit(bool pass_layer)
 
 bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
 {
+    game.battleJustFinished = false; // important for layer management
+    
+    if (game.playerCharacterUpdated)
+    {
+        // change weapon
+        game.playerCharacter.weapon = game.inputWeapon;
+        if (game.playerCharacter.weapon.damage < 1.0)
+        {
+            MSE_ERROR("game.playerCharacter.weapon.damage < 1.0");
+        }
+        
+        if (game.playerCharacter.level < 4)
+        {
+            if ((game.inputClass != LAutobattler::Classes::None))
+            {
+                switch (game.inputClass)
+                {
+                case LAutobattler::Classes::Rogue:
+                    {
+                        game.playerCharacter.sub_class = {LAutobattler::Classes::Rogue, game.playerCharacter.sub_class.level + 1};
+                        printf("subclass: ROGUE, ");
+                        if (game.playerCharacter.sub_class.level > 1)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Agile);
+                            printf("+trait \"Agile\"\n");
+                        } else {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::HiddenStrike);
+                            printf("+trait \"Hidden Strike\"\n");
+                        }
+                        break;
+                    }
+                case LAutobattler::Classes::Warrior:
+                    {
+                        game.playerCharacter.sub_class = {LAutobattler::Classes::Warrior, game.playerCharacter.sub_class.level + 1};
+                        printf("subclass: Warrior, ");
+                        if (game.playerCharacter.sub_class.level > 1)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Shield);
+                            printf("+trait \"Shield\"\n");
+                        } else {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Rush);
+                            printf("+trait \"Rush\"\n");
+                        }
+                        break;
+                    }
+                case LAutobattler::Classes::Barbarian:
+                    {
+                        game.playerCharacter.sub_class = {LAutobattler::Classes::Barbarian, game.playerCharacter.sub_class.level + 1};
+                        printf("subclass: Barbarian, ");
+                        if (game.playerCharacter.sub_class.level > 1)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::StoneSkin);
+                            printf("+trait \"Stone Skin\"\n");
+                        } else {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Rage);
+                            printf("+trait \"Rage\"\n");
+                        }
+                        break;
+                    }
+                }
+            } else {
+                switch (game.playerCharacter.main_class.type)
+                {
+                case LAutobattler::Classes::Rogue:
+                    {
+                        game.playerCharacter.main_class = {LAutobattler::Classes::Rogue, game.playerCharacter.main_class.level + 1};
+                        if (game.playerCharacter.main_class.level == 2)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Agile);
+                            printf("+trait \"Agile\"\n");
+                        }
+                        if (game.playerCharacter.main_class.level == 3)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Poison);
+                            printf("+trait \"Poison\"\n");
+                        }
+                        break;
+                    }
+                case LAutobattler::Classes::Warrior:
+                    {
+                        game.playerCharacter.main_class = {LAutobattler::Classes::Warrior, game.playerCharacter.main_class.level + 1};
+                        if (game.playerCharacter.main_class.level == 2)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Shield);
+                            printf("+trait \"Shield\"\n");
+                        }
+                        if (game.playerCharacter.main_class.level == 3)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Strong);
+                            printf("+trait \"Strong\"\n");
+                        }
+                        break;
+                    }
+                case LAutobattler::Classes::Barbarian:
+                    {
+                        game.playerCharacter.main_class = {LAutobattler::Classes::Barbarian, game.playerCharacter.main_class.level + 1};
+                        if (game.playerCharacter.main_class.level == 2)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::StoneSkin);
+                            printf("+trait \"Stone Skin\"\n");
+                        }
+                        if (game.playerCharacter.main_class.level == 3)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Survivor);
+                            printf("+trait \"Surviror\"\n");
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        
+        game.playerCharacterUpdated = false;
+    }
     return true;
 }
 
@@ -415,7 +543,6 @@ bool ArenaSetupPageState::OnUpdate(mse::TimeType t)
     }
     
     // pick npc adversary
-    std::srand(0);
     int npcCount = gameDB.characters.size();
     int pickedCharacter = std::rand() % npcCount;
     game.npcCharacter = gameDB.characters[pickedCharacter];
@@ -494,7 +621,6 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     game.battleJustStarted = false;
     static mse::TimeType localTime = 0;
     std::stringstream strForLogger;
-    std::srand(0);
     
     if ((!game.battleFinished) && (game.turn < 30))
     {
@@ -521,7 +647,6 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             
             // start of the turn
             // calculate attack chance
-//                        std::srand(0);
             int agi_sum = game.attacker->stats.agility + game.defender->stats.agility;
             int dice = (std::rand() % agi_sum) + 1;
 //                        printf("Rolled %d of %d\n", dice, agi_sum);
@@ -689,15 +814,8 @@ bool ArenaAftermathPageState::OnUpdate(mse::TimeType t)
     {
         if (game.playerCharacter.stats.health > 0.0)
         {
-            if (game.battleCounter < 5)
-            {
-                game.battleJustFinished = true; // important for layer management
-                gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
-//                            inputWeapon = *(Weapon*)(&(npcCharacter.drop_list[0]));
-                game.inputWeapon = game.playerCharacter.weapon;
-            } else {
-                gsm.ChangeStateTo(LAutobattler::GamePages::Winner);
-            }
+            game.inputWeapon = game.playerCharacter.weapon;
+            gsm.ChangeStateTo(LAutobattler::GamePages::Winner);
         } else {
             gsm.ChangeStateTo(LAutobattler::GamePages::GameOver);
         }
@@ -737,6 +855,7 @@ bool WinnerPageState::OnEnter(mse::Layer* pass_layer)
 bool WinnerPageState::OnExit(bool pass_layer)
 {
     MSE_LOG("WinnerPageState OnExit...");
+    current_time = 0;
     if (!pass_layer)
     {
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
@@ -748,6 +867,18 @@ bool WinnerPageState::OnExit(bool pass_layer)
 
 bool WinnerPageState::OnUpdate(mse::TimeType t)
 {
+    if (current_time < 2000)
+    {
+        current_time += t;
+    } else {
+        current_time = 0;
+        if (game.battleCounter < 5)
+        {
+            game.battleJustFinished = true; // important for layer management
+            gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
+        }
+    }
+    
     return true;
 }
 

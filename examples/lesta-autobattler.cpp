@@ -23,15 +23,15 @@ public:
         gsm.states[LAutobattler::GamePages::Intro] = new IntroPageState();
         gsm.states[LAutobattler::GamePages::MainMenu] = new MainPageState();
         gsm.states[LAutobattler::GamePages::CharacterCreation] = new CharacterCreatePageState();
-//        gsm.states[LAutobattler::GamePages::CharacterLoad];
-//        gsm.states[LAutobattler::GamePages::CharacterSave];
+//        gsm.states[LAutobattler::GamePages::CharacterLoad] = new CharacterLoadPageState();
+//        gsm.states[LAutobattler::GamePages::CharacterSave] = new CharacterSavePageState();
         gsm.states[LAutobattler::GamePages::CharacterUpdate] = new CharacterUpdatePageState();
         gsm.states[LAutobattler::GamePages::ArenaSetup] = new ArenaSetupPageState();
         gsm.states[LAutobattler::GamePages::ArenaBattle] = new ArenaBattlePageState();
         gsm.states[LAutobattler::GamePages::ArenaAftermath] = new ArenaAftermathPageState;
         gsm.states[LAutobattler::GamePages::Winner] = new WinnerPageState();
         gsm.states[LAutobattler::GamePages::GameOver] = new GameOverPageState();
-//        gsm.states[LAutobattler::GamePages::Highscores];
+//        gsm.states[LAutobattler::GamePages::Highscores] = new HighscoresPageState();
         gsm.states[LAutobattler::GamePages::Credits] = new CreditsPageState();
         gsm.states[LAutobattler::GamePages::Exit] = new ExitPageState();
         MSE_LOG("GameScene: gsm states initiated and stored.");
@@ -70,14 +70,21 @@ public:
 	{
 		MSE_LOG("Hello, world!");
 		MSE_ERROR("Joke");
+        
+        std::srand((unsigned int)(time(NULL)));
 		
 		MSE_LOG("Commanding to open a window");
-		m_window = mse::WindowManager::CreateWindow(u8"Горка", 50, 50, 320, 240);
+		m_window = mse::WindowManager::CreateWindow(u8"Леста Автобатлер", 50, 50, 320, 240);
 		m_window->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 			MSE_LOG("Key pressed: ", event->key.keysym.sym);
+            if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
+            {
+                m_window->ToggleFullscreen();
+            }
             game.keyPressed = true;
 			return true;
 		};
+
 		mse::Renderer::SetActiveWindow(m_window);
         m_window->GetLayerManager()->Attach(new SimpleUILayer);
 		
@@ -85,6 +92,8 @@ public:
         m_scene = new GameScene();
         mse::SceneManager::Load(m_scene);
         m_scene->Start();
+        
+        m_window->ToggleFullscreen();
 	}
 	
 	~App()

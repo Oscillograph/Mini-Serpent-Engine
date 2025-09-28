@@ -135,6 +135,42 @@ namespace mse
 		}
 		return 0;
 	}
+    
+    void Platform::ToggleWindowFullScreen(void* window, int mode)
+    {
+        if (window != nullptr)
+        {
+            switch (mode)
+            {
+            case 1:
+                {
+                    if (SDL_SetWindowFullscreen((SDL_Window*)window, SDL_WINDOW_FULLSCREEN))
+                    {
+                        MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
+                    }
+                    break;
+                }
+            case 2:
+                {
+                    if (SDL_SetWindowFullscreen((SDL_Window*)window, SDL_WINDOW_FULLSCREEN_DESKTOP))
+                    {
+                        MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
+                    }
+                    break;
+                }
+            default:
+                {
+                    if (SDL_SetWindowFullscreen((SDL_Window*)window, 0))
+                    {
+                        MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
+                    }
+                    break;
+                }
+            }
+        } else {
+            MSE_CORE_LOG("Platform: cannot set window fullscreen if the pointer is nullptr");
+        }
+    }
 	
 	glm::ivec2 Platform::GetWindowSize(void* window)
 	{

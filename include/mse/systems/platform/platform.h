@@ -24,6 +24,7 @@ namespace mse
 		static Uint32 GetWindowID(void* window) { return SDL_GetWindowID((SDL_Window*)window); }
 		static int DestroyWindow(void* window);
 		static int SetWindowTitle(void* window, std::string& title);
+        static void ToggleWindowFullScreen(void* window, int mode = 0); // 0 - fullscreen, 1 - window mode fullscreen, 2 - just window mode
 		static glm::ivec2 GetWindowSize(void* window);
 		
 		// Events
