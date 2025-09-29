@@ -173,6 +173,7 @@ bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
     game.battleFinished = false;
     game.battleJustStarted = false;
     game.battleJustFinished = false;
+    game.inputClass = LAutobattler::Classes::None;
     
     return true;
 }
@@ -887,6 +888,7 @@ bool WinnerPageState::OnUpdate(mse::TimeType t)
             gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
         } else {
             gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
+            game.battleCounter = 0;
         }
     }
     
