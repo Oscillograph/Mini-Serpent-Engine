@@ -332,6 +332,8 @@ bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("CharacterUpdatePageState OnEnter...");
     
+    game.battleJustFinished = false; // important for layer management
+    
     if (game.playerCharacter.level < 3)
     {
         game.playerCharacter.level++;
@@ -355,20 +357,15 @@ bool CharacterUpdatePageState::OnExit(bool pass_layer)
 
 bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
 {
-    game.battleJustFinished = false; // important for layer management
     
     if (game.playerCharacterUpdated)
     {
         // change weapon
-//        game.playerCharacter.weapon = game.inputWeapon;
         game.playerCharacter.weapon.name = game.inputWeapon.name;
         game.playerCharacter.weapon.type = game.inputWeapon.type;
         game.playerCharacter.weapon.damage = game.inputWeapon.damage;
-        if (game.playerCharacter.weapon.damage < 1.0)
-        {
-            MSE_ERROR("game.playerCharacter.weapon.damage < 1.0");
-        }
         
+        // update traits
         if (game.playerCharacter.level < 4)
         {
             if ((game.inputClass != LAutobattler::Classes::None))
@@ -471,6 +468,9 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
         }
         
         game.playerCharacterUpdated = false;
+        
+        // proceed to the next battle
+        gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
     }
     return true;
 }
@@ -885,6 +885,8 @@ bool WinnerPageState::OnUpdate(mse::TimeType t)
         {
             game.battleJustFinished = true; // important for layer management
             gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
+        } else {
+            gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
         }
     }
     

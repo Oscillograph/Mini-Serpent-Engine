@@ -582,7 +582,6 @@ void CharacterUpdateUILayer::OnInit()
     mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {160, 70, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
     PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.playerCharacterUpdated = true;
-        gsm.ChangeStateTo(LAutobattler::GamePages::ArenaSetup);
     };
     
     // defaults
