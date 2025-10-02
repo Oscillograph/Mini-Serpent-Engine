@@ -1,6 +1,6 @@
 #include <lesta-autobattler/data-loader.h>
 
-#include <yaml_cpp/include/yaml-cpp/yaml.h>
+#include <yaml-cpp/yaml.h>
 
 namespace LAutobattler
 {

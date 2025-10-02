@@ -61,7 +61,7 @@ namespace mse
 					{0, 0, 0, 0});
 				MSE_CORE_LOG("Text: texture obtained");
 				
-				mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit3.bmp", parentLayer->GetWindow());
+				mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
 				
 				// text with border
                 if (showBorder)
