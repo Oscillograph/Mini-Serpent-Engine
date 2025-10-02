@@ -877,16 +877,16 @@ namespace mse
 				// not making it NULL is important for the next step - tiling
 				place->x = 0;
 				place->y = 0;
-				place->w = texture->GetWidth();
-				place->h = texture->GetHeight();
+				place->w = target->GetWidth();
+				place->h = target->GetHeight();
 			}
 			
 			// TODO: draw only if it's on screen
 //		if(true)
 			if ((place->x + place->w > 0) &&
 				(place->y + place->h > 0) &&
-				(place->x < texture->GetWidth()) &&
-				(place->y < texture->GetHeight()))
+				(place->x < target->GetWidth()) &&
+				(place->y < target->GetHeight()))
 			{
 				// tiling texture across the place rectangle
 				// TODO: Adjust tiling to pixel size

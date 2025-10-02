@@ -85,27 +85,73 @@ void MainMenuUILayer::OnInit()
                                   {0, 255, 255, 255},
                                   2));
     
-    mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Новая игра", {120, 40, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* playerCreateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
+                                                                                            this,
+                                                                                            U" Новая  игра",
+                                                                                            {0, 0, 0, 255},
+                                                                                            {120, 40, 100, 13},
+                                                                                            "./data/img/screen-images.png",
+                                                                                            {122, 101, 4, 13},
+                                                                                            {138, 101, 4, 13},
+                                                                                            {154, 101, 4, 13}
+                                                                                            )));
     playerCreateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::CharacterCreation);
     };
     
-    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Загрузить", {120, 50, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
+                                                                                      this,
+                                                                                      U"  Загрузить",
+                                                                                      {0, 0, 0, 255},
+                                                                                      {120, 54, 100, 13},
+                                                                                      "./data/img/screen-images.png",
+                                                                                      {122, 101, 4, 13},
+                                                                                      {138, 101, 4, 13},
+                                                                                      {154, 101, 4, 13}
+                                                                                      )));
     battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::CharacterLoad);
     };
     
-    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Рекорды", {120, 60, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
+                                                                                      this,
+                                                                                      U"   Рекорды",
+                                                                                      {0, 0, 0, 255},
+                                                                                      {120, 68, 100, 13},
+                                                                                      "./data/img/screen-images.png",
+                                                                                      {122, 101, 4, 13},
+                                                                                      {138, 101, 4, 13},
+                                                                                      {154, 101, 4, 13}
+                                                                                      )));
     scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Highscores);
     };
 
-    mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Титры", {120, 70, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
+                                                                                       this,
+                                                                                       U"    Титры",
+                                                                                       {0, 0, 0, 255},
+                                                                                       {120, 82, 100, 13},
+                                                                                       "./data/img/screen-images.png",
+                                                                                       {122, 101, 4, 13},
+                                                                                       {138, 101, 4, 13},
+                                                                                       {154, 101, 4, 13}
+                                                                                       )));
     creditsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Credits);
     };
     
-    mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Выйти", {120, 80, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* exitBtn = (mse::gui::Button*)(AddElement(
+                                                               new mse::gui::Button(
+                                                                                    this,
+                                                                                    U"    Выход",
+                                                                                    {0, 0, 0, 255},
+                                                                                    {120, 96, 100, 13},
+                                                                                    "./data/img/screen-images.png",
+                                                                                    {122, 101, 4, 13},
+                                                                                    {138, 101, 4, 13},
+                                                                                    {154, 101, 4, 13}
+                                                                                    )));
     exitBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Exit);
     };
@@ -149,22 +195,22 @@ void CharacterCreateUILayer::OnInit()
                                   {196, 196, 0, 255},
                                   1));
     
-    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {20, 60, 80, 10}, {196, 100, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U" Разбойник", {32, 32, 32, 255}, {20, 60, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Rogue;
     };
     
-    mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {120, 60, 80, 10}, {100, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"   Воин", {32, 32, 32, 255}, {120, 60, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Warrior;
     };
     
-    mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {220, 60, 80, 10}, {196, 196, 100, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"  Варвар", {32, 32, 32, 255}, {220, 60, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Barbarian;
     };
     
-    mse::gui::Button* BackToMainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {120, 80, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* BackToMainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {32, 32, 32, 255}, {120, 80, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     BackToMainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
     };
@@ -467,7 +513,7 @@ void CreditsUILayer::OnInit()
                                   {196, 196, 196, 255},
                                   1));
     
-    mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {120, 220, 80, 10}, {196, 196, 196, 255}, {32, 32, 32, 255})));
+    mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {32, 32, 32, 255}, {120, 220, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
     };

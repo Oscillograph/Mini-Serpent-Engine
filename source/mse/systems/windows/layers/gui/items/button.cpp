@@ -25,7 +25,14 @@ namespace mse
 		{
 			Init(layer, text, area, bgColor, color);
 		}
+        
+        Button::Button(Layer* layer,  const std::u32string& text, const glm::uvec4& color, const glm::uvec4& area, const std::string& spritelist, const glm::uvec4& leftSource, const glm::uvec4& midSource, const glm::uvec4& rightSource)
+        : GUIItem()
+        {
+            Init(layer, text, color, area, spritelist, leftSource, midSource, rightSource);
+        }
 		
+        // generic button
 		void Button::Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color)
 		{
 			// model
@@ -61,7 +68,7 @@ namespace mse
 					{0, 0, 0, 0});
 				MSE_CORE_LOG("Button: texture obtained");
 				
-				mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit3.bmp", parentLayer->GetWindow());
+				mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
 				
 				// still button
 				Renderer::SurfaceDrawRectFilled(
@@ -152,6 +159,214 @@ namespace mse
 			};
 		}
 		
+        // sprite-based button
+        void Button::Init(Layer* layer,  const std::u32string& text, const glm::uvec4& color, const glm::uvec4& area, const std::string& spritelist, const glm::uvec4& leftSource, const glm::uvec4& midSource, const glm::uvec4& rightSource)
+        {
+            // model
+            parentLayer = layer;
+            m_elementName = "Button_" + utf8::utf32to8(text);
+            m_text = text;
+            layerArea = area;
+            m_spriteList = ResourceManager::UseTexture(spritelist, parentLayer->GetWindow(), {0, 0, 0});
+            m_leftSource = leftSource;
+            m_midSource = midSource;
+            m_rightSource = rightSource;
+            
+            layerMask.resize(area.z * area.w);
+            for (int x = 0; x < area.z; ++x)
+            {
+                for (int y = 0; y < area.w; ++y)
+                {
+                    layerMask[x + y*area.z] = id;
+                }
+            }
+            
+            // view
+            if ((layer != nullptr) && (m_spriteList != nullptr))
+            {
+                // setup texture to draw on
+                MSE_CORE_LOG("Button: requesting to create a texture");
+                MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
+                m_texture = ResourceManager::CreateTexture(
+                                                           parentLayer->GetWindow(),
+                                                           parentLayer->GetWindow()->GetRenderer(),
+                                                           layerArea.z * 4,
+                                                           layerArea.w,
+                                                           0,
+                                                           32,
+                                                           {0, 0, 0, 0});
+                MSE_CORE_LOG("Button: texture obtained");
+                Renderer::SurfaceDrawRectFilled(
+                                                (Texture*)(m_texture->data),
+                                                {0, 0, layerArea.z * 4, layerArea.w}, 
+//                                                {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+                                                {0, 0, 0, 255}
+                                                );
+                
+                Resource* bmpFont = ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
+                
+                // number of middle pixels
+                int middles = layerArea.z - leftSource.z - rightSource.z;
+                
+                // from where and where to draw
+                SDL_Rect sourceRect;
+                SDL_FRect destRect;
+                
+                // still button
+                destRect = {0, 0, leftSource.z, leftSource.w};
+                sourceRect = {leftSource.x, leftSource.y, leftSource.z, leftSource.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                sourceRect = {midSource.x, midSource.y, 1, midSource.w};
+                for (int i = 0; i < middles; i++)
+                {
+                    destRect = {leftSource.z + i, 0, 1, midSource.w};
+                    Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                                 (Texture*)(m_spriteList->data),
+                                                 &destRect,
+                                                 &sourceRect);
+                }
+                sourceRect = {rightSource.x, rightSource.y, rightSource.z, rightSource.w};
+                destRect = {leftSource.z + middles, 0, rightSource.z, rightSource.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                
+                Renderer::SurfaceDrawText(
+                                               (Texture*)(m_texture->data), 
+                                               {leftSource.z + 2, 3, layerArea.z, layerArea.w}, 	// where to
+                                               1, 					// pixel size
+                                               m_text, 			// text content
+                                               bmpFont, 			// font
+                                               {color.x, color.y, color.z, color.w}, // color
+                                               0); 				// interval between rows
+                
+                // hover button
+                destRect = {layerArea.z, 0, leftSource.z, leftSource.w};
+                sourceRect = {leftSource.x + leftSource.z, leftSource.y, leftSource.z, leftSource.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                sourceRect = {midSource.x + midSource.z, midSource.y, 1, midSource.w};
+                for (int i = 0; i < middles; i++)
+                {
+                    destRect = {layerArea.z + leftSource.z + i, 0, 1, midSource.w};
+                    Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                                 (Texture*)(m_spriteList->data),
+                                                 &destRect,
+                                                 &sourceRect);
+                }
+                sourceRect = {rightSource.x + rightSource.z, rightSource.y, rightSource.z, rightSource.w};
+                destRect = {layerArea.z + leftSource.z + middles, 0, rightSource.z, rightSource.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                
+                Renderer::SurfaceDrawText(
+                                          (Texture*)(m_texture->data), 
+                                          {layerArea.z + leftSource.z + 2, 3, layerArea.z, layerArea.w}, 	// where to
+                                          1, 					// pixel size
+                                          m_text, 			// text content
+                                          bmpFont, 			// font
+                                          {color.x, color.y, color.z, color.w}, // color
+                                          0); 				// interval between rows
+                
+                // pushed button
+                destRect = {layerArea.z * 2, 0, leftSource.z, leftSource.w};
+                sourceRect = {leftSource.x + leftSource.z * 2, leftSource.y, leftSource.z, leftSource.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                sourceRect = {midSource.x + midSource.z * 2, midSource.y, 1, midSource.w};
+                for (int i = 0; i < middles; i++)
+                {
+                    destRect.x = layerArea.z * 2 + leftSource.z + i;
+                    destRect.y = 0;
+                    destRect.w = 1;
+                    destRect.h = midSource.w;
+                    Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                                 (Texture*)(m_spriteList->data),
+                                                 &destRect,
+                                                 &sourceRect);
+                }
+                sourceRect = {rightSource.x + rightSource.z * 2, rightSource.y, rightSource.z, rightSource.w};
+                destRect = {layerArea.z * 2 + leftSource.z + middles, 0, rightSource.z, rightSource.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                
+                Renderer::SurfaceDrawText(
+                                          (Texture*)(m_texture->data), 
+                                          {layerArea.z * 2 + leftSource.z + 2, 3, layerArea.z, layerArea.w}, 	// where to
+                                          1, 					// pixel size
+                                          m_text, 			// text content
+                                          bmpFont, 			// font
+                                          {color.x, color.y, color.z, color.w}, // color
+                                          0); 				// interval between rows
+                
+                // disabled button
+                destRect = {layerArea.z * 3, 0, leftSource.z, leftSource.w};
+                sourceRect = {leftSource.x + leftSource.z * 3, leftSource.y, leftSource.z, leftSource.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                sourceRect = {midSource.x + midSource.z * 3, midSource.y, 1, midSource.w};
+                for (int i = 0; i < middles; i++)
+                {
+                    destRect = {layerArea.z * 3 + leftSource.z + i, 0, 1, midSource.w};
+                    Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                                 (Texture*)(m_spriteList->data),
+                                                 &destRect,
+                                                 &sourceRect);
+                }
+                sourceRect = {rightSource.x + rightSource.z * 3, rightSource.y, rightSource.z, rightSource.w};
+                destRect = {layerArea.z * 3 + leftSource.z + middles, 0, rightSource.z, rightSource.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                      (Texture*)(m_spriteList->data),
+                                      &destRect,
+                                      &sourceRect);
+                
+                Renderer::SurfaceDrawText(
+                                          (Texture*)(m_texture->data), 
+                                          {layerArea.z * 3 + leftSource.z + 2, 3, layerArea.z, layerArea.w}, 	// where to
+                                          1, 					// pixel size
+                                          m_text, 			// text content
+                                          bmpFont, 			// font
+                                          {color.x, color.y, color.z, color.w}, // color
+                                          0); 				// interval between rows
+                
+                ((Texture*)(m_texture->data))->Update();
+                
+                MSE_CORE_LOG("Button: texture edited");
+            }
+            
+            // controller
+            // setup interaction
+            callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+//				MSE_CORE_LOG(m_elementName, ": ...");
+            };
+            
+            callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+//				MSE_CORE_LOG(m_elementName, ": Yay, you clicked me!");
+            };
+            
+            callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
+//				MSE_CORE_LOG(m_elementName, ": Hello, Mouse!");
+            };
+            
+            callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
+//				MSE_CORE_LOG(m_elementName, ": Goodbye, Mouse!");
+            };
+        }
+        
 		Button::~Button()
 		{}
 		
