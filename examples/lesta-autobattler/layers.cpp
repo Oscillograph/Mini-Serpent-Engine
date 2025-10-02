@@ -306,6 +306,7 @@ void WinnerUILayer::OnInit()
         };
     }
     
+    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void WinnerUILayer::OnUpdate()
@@ -349,6 +350,8 @@ void GameOverUILayer::OnInit()
     mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
     };
+    
+    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void GameOverUILayer::OnUpdate()
@@ -564,6 +567,8 @@ void ArenaUILayer::OnInit()
                                                                  {0, 64, 0, 255}, 
                                                                  {255, 255, 0, 255})));
     messageLog->showBorder = true;
+    
+    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void ArenaUILayer::OnUpdate()
@@ -649,6 +654,8 @@ void CharacterUpdateUILayer::OnInit()
     // show stats
     statsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"", {010, 90, 300, 100}, {0, 64, 0, 255}, {255, 255, 128, 255})));
     changeMade = true;
+    
+    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void CharacterUpdateUILayer::OnUpdate()
