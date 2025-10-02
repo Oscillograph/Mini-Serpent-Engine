@@ -487,6 +487,20 @@ ArenaSetupPageState::~ArenaSetupPageState()
 bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("ArenaSetupPageState OnEnter...");
+    
+    // pick npc adversary
+    int npcCount = gameDB.characters.size();
+    int pickedCharacter = std::rand() % npcCount;
+    game.npcCharacter = gameDB.characters[pickedCharacter];
+    
+    printf("Next opponent (of %d) is %s! (%.2f, %.2f, %.2f, %.2f)\n",
+           npcCount,
+           game.npcCharacter.name.c_str(),
+           game.npcCharacter.stats.health,
+           game.npcCharacter.stats.strength,
+           game.npcCharacter.stats.agility,
+           game.npcCharacter.stats.endurance);
+    
     if (pass_layer != nullptr)
     {
         if (layer != pass_layer)
@@ -545,19 +559,6 @@ bool ArenaSetupPageState::OnUpdate(mse::TimeType t)
             game.playerCharacter.stats.health = game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats.endurance);
         }
     }
-    
-    // pick npc adversary
-    int npcCount = gameDB.characters.size();
-    int pickedCharacter = std::rand() % npcCount;
-    game.npcCharacter = gameDB.characters[pickedCharacter];
-    
-    printf("Next opponent (of %d) is %s! (%.2f, %.2f, %.2f, %.2f)\n",
-           npcCount,
-           game.npcCharacter.name.c_str(),
-           game.npcCharacter.stats.health,
-           game.npcCharacter.stats.strength,
-           game.npcCharacter.stats.agility,
-           game.npcCharacter.stats.endurance);
     
     // start of the battle
     if (game.playerCharacter.stats.agility > game.npcCharacter.stats.agility)

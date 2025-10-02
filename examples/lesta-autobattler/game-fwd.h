@@ -104,7 +104,7 @@ namespace LAutobattler
 
     struct Weapon : Item
     {
-        float damage = 0.0;
+        int damage = 0;
         DamageType type = DamageType::None;
     };
 

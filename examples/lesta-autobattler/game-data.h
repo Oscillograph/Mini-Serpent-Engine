@@ -18,23 +18,23 @@ namespace LAutobattler
         gameDB.weapons =
         {
             // player collectible
-            { 0, {U"Кулак",             0.0,    DamageType::None}},
-            { 1, {U"Кастет",            1.0,    DamageType::None}},
-            { 2, {U"Кинжал",            2.0,    DamageType::Piercing}},
-            { 3, {U"Меч",               3.0,    DamageType::Cutting}},
-            { 4, {U"Дубина",            3.0,    DamageType::Crushing}},
-            { 5, {U"Копьё",             3.0,    DamageType::Piercing}},
-            { 6, {U"Топор",             4.0,    DamageType::Cutting}},
-            { 7, {U"Легендарный Меч",  10.0,    DamageType::Cutting}},
+            { 0, {U"Кулак",             0,    DamageType::None}},
+            { 1, {U"Кастет",            1,    DamageType::None}},
+            { 2, {U"Кинжал",            2,    DamageType::Piercing}},
+            { 3, {U"Меч",               3,    DamageType::Cutting}},
+            { 4, {U"Дубина",            3,    DamageType::Crushing}},
+            { 5, {U"Копьё",             3,    DamageType::Piercing}},
+            { 6, {U"Топор",             4,    DamageType::Cutting}},
+            { 7, {U"Легендарный Меч",  10,    DamageType::Cutting}},
             
             // npc weapons
-            { 9, {U"Шип",               1.0,    DamageType::None}},
-            {10, {U"Сгнивший меч",      2.0,    DamageType::None}},
-            {11, {U"Кадило",            3.0,    DamageType::None}},
-            {12, {U"Клык и коготь",     4.0,    DamageType::None}},
+            { 9, {U"Шип",               1,    DamageType::None}},
+            {10, {U"Сгнивший меч",      2,    DamageType::None}},
+            {11, {U"Кадило",            3,    DamageType::None}},
+            {12, {U"Клык и коготь",     4,    DamageType::None}},
             
             // easter eggs
-            {13, {U"Пулемёт Максим",  100.0,    DamageType::Divine}},
+            {13, {U"Пулемёт Максим",  100,    DamageType::Divine}},
         };
         
         gameDB.characters =

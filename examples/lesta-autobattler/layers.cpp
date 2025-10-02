@@ -560,6 +560,112 @@ ArenaUILayer::~ArenaUILayer()
 
 void ArenaUILayer::OnInit()
 {
+    // npc character
+    {
+        glm::uvec4 src = {0, 0, 34, 64};
+    
+        switch (game.npcCharacter.race)
+        {
+        case LAutobattler::Races::Goblin:
+            {
+                src = {222, 95, 30, 64};
+                break;
+            }
+        case LAutobattler::Races::Skeleton:
+            {
+                src = {257, 27, 34, 64};
+                break;
+            }
+        case LAutobattler::Races::Slime:
+            {
+                src = {225, 43, 30, 48};
+                break;
+            }
+        case LAutobattler::Races::Ghost:
+            {
+                src = {252, 99, 32, 54};
+                break;
+            }
+        case LAutobattler::Races::Golem:
+            {
+                src = {200, 172, 30, 51};
+                break;
+            }
+        case LAutobattler::Races::Dragon:
+            {
+                src = {232, 164, 34, 59};
+                break;
+            }
+        }
+        AddElement(new mse::gui::Image(this, {40, 90 - src.w, src.z, src.w}, "./data/img/screen-images.png", src, {0, 0, 0, 255}));
+    }
+    
+    // player character
+    {
+        glm::uvec4 src = {0, 0, 34, 64};
+        switch (game.playerCharacter.main_class.type)
+        {
+        case LAutobattler::Classes::Rogue:
+            {
+                src.y = 0;
+                break;
+            }
+        case LAutobattler::Classes::Warrior:
+            {
+                src.y = 128;
+                break;
+            }
+        case LAutobattler::Classes::Barbarian:
+            {
+                src.y = 64;
+                break;
+            }
+        }
+        
+        switch (game.playerCharacter.weapon.damage)
+        {
+        case 2:
+            {
+                src.x = 102;
+                break;
+            }
+        case 3:
+            {
+                switch (game.playerCharacter.weapon.type) 
+                {
+                case LAutobattler::DamageType::Cutting:
+                    {
+                        src.x = 0;
+                        break;
+                    }
+                case LAutobattler::DamageType::Piercing:
+                    {
+                        src.x = 34;
+                        break;
+                    }
+                case LAutobattler::DamageType::Crushing:
+                    {
+                        src.x = 68;
+                        break;
+                    }
+                }
+                break;
+            }
+        case 4:
+            {
+                src.x = 136;
+                break;
+            }
+        case 10:
+            {
+                src.x = 170;
+                break;
+            }
+        }
+        
+        AddElement(new mse::gui::Image(this, {240, 90 - src.w, src.z, src.w}, "./data/img/heroes.png", src, {0, 0, 0, 255}));
+    }
+    
     messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                                                                  this, 
                                                                  U"", 
