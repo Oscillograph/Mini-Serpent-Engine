@@ -18,23 +18,23 @@ namespace LAutobattler
         gameDB.weapons =
         {
             // player collectible
-            { 0, {U"Кулак",             0,    DamageType::None}},
-            { 1, {U"Кастет",            1,    DamageType::None}},
-            { 2, {U"Кинжал",            2,    DamageType::Piercing}},
-            { 3, {U"Меч",               3,    DamageType::Cutting}},
-            { 4, {U"Дубина",            3,    DamageType::Crushing}},
-            { 5, {U"Копьё",             3,    DamageType::Piercing}},
-            { 6, {U"Топор",             4,    DamageType::Cutting}},
-            { 7, {U"Легендарный Меч",  10,    DamageType::Cutting}},
+            { 0, {U"Кулак",             0,    DamageType::None,        WeaponSprite::Fist}},
+            { 1, {U"Кастет",            1,    DamageType::None,        WeaponSprite::Fist}},
+            { 2, {U"Кинжал",            2,    DamageType::Piercing,    WeaponSprite::Dagger}},
+            { 3, {U"Меч",               3,    DamageType::Cutting,     WeaponSprite::Sword}},
+            { 4, {U"Дубина",            3,    DamageType::Crushing,    WeaponSprite::Club}},
+            { 5, {U"Копьё",             3,    DamageType::Piercing,    WeaponSprite::Spear}},
+            { 6, {U"Топор",             4,    DamageType::Cutting,     WeaponSprite::Axe}},
+            { 7, {U"Легендарный Меч",  10,    DamageType::Cutting,     WeaponSprite::LegendarySword}},
             
             // npc weapons
-            { 9, {U"Шип",               1,    DamageType::None}},
-            {10, {U"Сгнивший меч",      2,    DamageType::None}},
-            {11, {U"Кадило",            3,    DamageType::None}},
-            {12, {U"Клык и коготь",     4,    DamageType::None}},
+            { 9, {U"Шип",               1,    DamageType::None,        WeaponSprite::None}},
+            {10, {U"Сгнивший меч",      2,    DamageType::None,        WeaponSprite::None}},
+            {11, {U"Кадило",            3,    DamageType::None,        WeaponSprite::None}},
+            {12, {U"Клык и коготь",     4,    DamageType::None,        WeaponSprite::None}},
             
             // easter eggs
-            {13, {U"Пулемёт Максим",  100,    DamageType::Divine}},
+            {13, {U"Пулемёт Максим",  100,    DamageType::Divine,      WeaponSprite::MaximGun}},
         };
         
         gameDB.characters =

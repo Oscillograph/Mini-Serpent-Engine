@@ -210,8 +210,8 @@ void CharacterCreateUILayer::OnInit()
         game.inputClass = LAutobattler::Classes::Barbarian;
     };
     
-    mse::gui::Button* BackToMainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {32, 32, 32, 255}, {120, 190, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
-    BackToMainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+    mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {32, 32, 32, 255}, {120, 220, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
+    mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
     };
     
@@ -622,41 +622,34 @@ void ArenaUILayer::OnInit()
             }
         }
         
-        switch (game.playerCharacter.weapon.damage)
+        switch (game.playerCharacter.weapon.sprite)
         {
-        case 2:
+        case LAutobattler::WeaponSprite::Dagger:
             {
                 src.x = 102;
                 break;
             }
-        case 3:
+        case LAutobattler::WeaponSprite::Sword:
             {
-                switch (game.playerCharacter.weapon.type) 
-                {
-                case LAutobattler::DamageType::Cutting:
-                    {
-                        src.x = 0;
-                        break;
-                    }
-                case LAutobattler::DamageType::Piercing:
-                    {
-                        src.x = 34;
-                        break;
-                    }
-                case LAutobattler::DamageType::Crushing:
-                    {
-                        src.x = 68;
-                        break;
-                    }
-                }
+                src.x = 0;
                 break;
             }
-        case 4:
+        case LAutobattler::WeaponSprite::Spear:
+            {
+                src.x = 34;
+                break;
+            }
+        case LAutobattler::WeaponSprite::Club:
+            {
+                src.x = 68;
+                break;
+            }
+        case LAutobattler::WeaponSprite::Axe:
             {
                 src.x = 136;
                 break;
             }
-        case 10:
+        case LAutobattler::WeaponSprite::LegendarySword:
             {
                 src.x = 170;
                 break;
@@ -744,6 +737,7 @@ void CharacterUpdateUILayer::OnInit()
         game.inputWeapon.name = weapon->name;
         game.inputWeapon.type = weapon->type;
         game.inputWeapon.damage = weapon->damage;
+        game.inputWeapon.sprite = weapon->sprite;
         changeMade = true;
     };
     

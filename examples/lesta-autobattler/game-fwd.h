@@ -88,6 +88,19 @@ namespace LAutobattler
         Piercing,
         Divine,
     };
+    
+    enum class WeaponSprite
+    {
+        None,
+        Fist,
+        Dagger,
+        Sword,
+        Axe,
+        Club,
+        Spear,
+        LegendarySword,
+        MaximGun,
+    };
 
     struct CharacterStats
     {
@@ -106,6 +119,7 @@ namespace LAutobattler
     {
         int damage = 0;
         DamageType type = DamageType::None;
+        WeaponSprite sprite = WeaponSprite::None;
     };
 
     struct Armor : Item
