@@ -80,7 +80,7 @@ void MainMenuUILayer::OnInit()
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"LESTA АВТОБАТЛЕР", 
-                                  {40, 10, 225, 20}, 
+                                  {40, 10, 230, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
                                   2));
