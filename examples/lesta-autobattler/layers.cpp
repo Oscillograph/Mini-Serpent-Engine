@@ -208,7 +208,7 @@ void CharacterCreateUILayer::OnInit()
     rogueStatsBox->ChangeText(stats);
     strstream.str("");
     strstream.clear();
-    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U" Разбойник", {32, 32, 32, 255}, {20, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
+    mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {32, 32, 32, 255}, {20, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Rogue;
         game.inputStats = {4, str, agi, end};
@@ -311,7 +311,7 @@ void WinnerUILayer::OnInit()
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"LESTA АВТОБАТЛЕР", 
-                                  {40, 10, 225, 20}, 
+                                  {40, 10, 230, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
                                   2));
@@ -376,7 +376,7 @@ void GameOverUILayer::OnInit()
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"LESTA АВТОБАТЛЕР", 
-                                  {40, 10, 225, 20}, 
+                                  {40, 10, 230, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
                                   2));
@@ -436,7 +436,7 @@ void CreditsUILayer::OnInit()
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"LESTA АВТОБАТЛЕР", 
-                                  {40, 10, 225, 20}, 
+                                  {40, 10, 230, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
                                   2));

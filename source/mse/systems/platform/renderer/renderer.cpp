@@ -761,27 +761,27 @@ namespace mse
 						}
 						correctY = currentRow*(font->fontClip.w + interval)*pxSize;
 						
-						uint32_t blackPixelsCount = 0;
+//						uint32_t blackPixelsCount = 0;
 						uint32_t symbolLeftEdge = symbolId*(font->fontClip.w * font->fontClip.z);
-						for (int k = 0; k < font->fontClip.z; ++k)
-						{
-							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w];
+//						for (int k = 0; k < font->fontClip.z; ++k)
+//						{
+//							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w];
+////							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w + 1];
+//						}
+//						if (blackPixelsCount == 0)
+//						{
+//							correctX--;
+//						}
+//						for (int k = 0; k < font->fontClip.z; ++k)
+//						{
 //							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w + 1];
-						}
-						if (blackPixelsCount == 0)
-						{
-							correctX--;
-						}
-						for (int k = 0; k < font->fontClip.z; ++k)
-						{
-							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w + 1];
-						}
-						if (blackPixelsCount == 0)
-						{
-							correctX--;
-						}
-						
-						// position the pencil according to where the cursor is
+//						}
+//						if (blackPixelsCount == 0)
+//						{
+//							correctX--;
+//						}
+                        
+                        // position the pencil according to where the cursor is
 						curX = tempRect.x + (j*font->fontClip.w + correctX)*pxSize;
 						curY = tempRect.y + correctY;
 						
@@ -796,6 +796,26 @@ namespace mse
 								}
 							}
 						}
+                        
+                        // correct position of the next symbol
+                        uint32_t blackPixelsCount = 0;
+                        uint32_t symbolRightEdge = (symbolId + 1)*(font->fontClip.w * font->fontClip.z);
+                        bool blackPixelsFound = false;
+                        for (int s = 1; (s < font->fontClip.w) && (s < 3) && (!blackPixelsFound); ++s)
+                        {
+                            for (int k = 0; k < font->fontClip.z; ++k)
+                            {
+                                blackPixelsCount += font->symbols8bitTable[alphabetId][symbolRightEdge - k * font->fontClip.w - s];
+                            }
+                            
+                            if (blackPixelsCount == 0)
+                            {
+                                correctX--;
+                            } else {
+                                blackPixelsFound = true;
+                            }
+                        }
+                        
 						alphabetId = 0; // reset alphabet
 						symbolId = 0; // reset symbol index in that alphabet
 						j++; // we move through the line!
