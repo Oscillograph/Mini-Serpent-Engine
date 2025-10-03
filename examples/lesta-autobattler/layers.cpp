@@ -99,39 +99,39 @@ void MainMenuUILayer::OnInit()
         gsm.ChangeStateTo(LAutobattler::GamePages::CharacterCreation);
     };
     
-    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
-                                                                                      this,
-                                                                                      U"  Загрузить",
-                                                                                      {0, 0, 0, 255},
-                                                                                      {120, 54, 100, 13},
-                                                                                      "./data/img/screen-images.png",
-                                                                                      {122, 101, 4, 13},
-                                                                                      {138, 101, 4, 13},
-                                                                                      {154, 101, 4, 13}
-                                                                                      )));
-    battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        gsm.ChangeStateTo(LAutobattler::GamePages::CharacterLoad);
-    };
-    
-    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
-                                                                                      this,
-                                                                                      U"   Рекорды",
-                                                                                      {0, 0, 0, 255},
-                                                                                      {120, 68, 100, 13},
-                                                                                      "./data/img/screen-images.png",
-                                                                                      {122, 101, 4, 13},
-                                                                                      {138, 101, 4, 13},
-                                                                                      {154, 101, 4, 13}
-                                                                                      )));
-    scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-        gsm.ChangeStateTo(LAutobattler::GamePages::Highscores);
-    };
+//    mse::gui::Button* battleBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
+//                                                                                      this,
+//                                                                                      U"  Загрузить",
+//                                                                                      {0, 0, 0, 255},
+//                                                                                      {120, 54, 100, 13},
+//                                                                                      "./data/img/screen-images.png",
+//                                                                                      {122, 101, 4, 13},
+//                                                                                      {138, 101, 4, 13},
+//                                                                                      {154, 101, 4, 13}
+//                                                                                      )));
+//    battleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+//        gsm.ChangeStateTo(LAutobattler::GamePages::CharacterLoad);
+//    };
+//    
+//    mse::gui::Button* scoresBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
+//                                                                                      this,
+//                                                                                      U"   Рекорды",
+//                                                                                      {0, 0, 0, 255},
+//                                                                                      {120, 68, 100, 13},
+//                                                                                      "./data/img/screen-images.png",
+//                                                                                      {122, 101, 4, 13},
+//                                                                                      {138, 101, 4, 13},
+//                                                                                      {154, 101, 4, 13}
+//                                                                                      )));
+//    scoresBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+//        gsm.ChangeStateTo(LAutobattler::GamePages::Highscores);
+//    };
 
     mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
                                                                                        this,
                                                                                        U"    Титры",
                                                                                        {0, 0, 0, 255},
-                                                                                       {120, 82, 100, 13},
+                                                                                       {120, 54, 100, 13},
                                                                                        "./data/img/screen-images.png",
                                                                                        {122, 101, 4, 13},
                                                                                        {138, 101, 4, 13},
@@ -146,7 +146,7 @@ void MainMenuUILayer::OnInit()
                                                                                     this,
                                                                                     U"    Выход",
                                                                                     {0, 0, 0, 255},
-                                                                                    {120, 96, 100, 13},
+                                                                                    {120, 68, 100, 13},
                                                                                     "./data/img/screen-images.png",
                                                                                     {122, 101, 4, 13},
                                                                                     {138, 101, 4, 13},
@@ -155,6 +155,14 @@ void MainMenuUILayer::OnInit()
     exitBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(LAutobattler::GamePages::Exit);
     };
+    
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Перед началом игры характеристики \nперсонажей генерируются случайным образом.\n\nЕсли выпавшие не нравятся, можно вернуться в главное меню и начать игру снова.\n\nБой считается выигранным, если \nперсонаж игрока нокаутировал соперника\nили продержался 30 ходов.\n\nЧтобы выйти из игры в любое время, \nдостаточно нажать клавишу ESC.", 
+                                  {10, 120, 300, 100}, 
+                                  {0, 0, 0, 255}, 
+                                  {255, 255, 255, 255},
+                                  1));
     
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
@@ -175,19 +183,11 @@ void CharacterCreateUILayer::OnInit()
 {
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"LESTA АВТОБАТЛЕР", 
-                                  {40, 10, 225, 20}, 
+                                  U"Выбор класса:", 
+                                  {60, 10, 200, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
                                   2));
-    
-    AddElement(new mse::gui::Text(
-                                  this, 
-                                  U"Выбор класса:", 
-                                  {80, 40, 220, 10}, 
-                                  {0, 0, 0, 255}, 
-                                  {196, 196, 0, 255},
-                                  1));
     
     int str, agi, end = 0; // stats for characters
     std::u32string stats; // stats text gui content
@@ -1195,6 +1195,7 @@ void CharacterUpdateUILayer::OnUpdate()
                 }
             }
         }
+        strstream << "\n\nБитв пройдено: " << game.battleCounter << " из 5";
         stats = utf8::utf8to32(strstream.str());
         statsBox->ChangeText(stats);
         

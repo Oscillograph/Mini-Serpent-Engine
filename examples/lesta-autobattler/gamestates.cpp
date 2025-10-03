@@ -895,20 +895,20 @@ bool WinnerPageState::OnExit(bool pass_layer)
 
 bool WinnerPageState::OnUpdate(mse::TimeType t)
 {
-    if (current_time < 2000)
-    {
-        current_time += t;
-    } else {
-        current_time = 0;
-        if (game.battleCounter < 5)
-        {
-            game.battleJustFinished = true; // important for layer management
-            gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
-        } else {
-            gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
-            game.battleCounter = 0;
-        }
-    }
+//    if (current_time < 2000)
+//    {
+//        current_time += t;
+//    } else {
+//        current_time = 0;
+//        if (game.battleCounter < 5)
+//        {
+//            game.battleJustFinished = true; // important for layer management
+//            gsm.ChangeStateTo(LAutobattler::GamePages::CharacterUpdate);
+//        } else {
+//            gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
+//            game.battleCounter = 0;
+//        }
+//    }
     
     return true;
 }
