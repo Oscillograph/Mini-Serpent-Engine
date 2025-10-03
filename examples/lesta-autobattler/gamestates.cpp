@@ -195,30 +195,18 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
         {
         case LAutobattler::Classes::Rogue:
             {
-                int str = std::rand() % 3 + 1;
-                int agi = std::rand() % 3 + 1;
-                int end = std::rand() % 3 + 1;
-                game.inputStats = {4, str, agi, end};
                 game.inputTrait = LAutobattler::Traits::HiddenStrike;
                 game.inputWeapon = gameDB.weapons[2];
                 break;
             }
         case LAutobattler::Classes::Warrior:
             {
-                int str = std::rand() % 3 + 1;
-                int agi = std::rand() % 3 + 1;
-                int end = std::rand() % 3 + 1;
-                game.inputStats = {5, str, agi, end};
                 game.inputTrait = LAutobattler::Traits::Rush;
                 game.inputWeapon = gameDB.weapons[3];
                 break;
             }
         case LAutobattler::Classes::Barbarian:
             {
-                int str = std::rand() % 3 + 1;
-                int agi = std::rand() % 3 + 1;
-                int end = std::rand() % 3 + 1;
-                game.inputStats = {6, str, agi, end};
                 game.inputTrait = LAutobattler::Traits::Rage;
                 game.inputWeapon = gameDB.weapons[4];
                 break;
@@ -248,6 +236,11 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
                game.playerCharacter.stats.strength,
                game.playerCharacter.stats.agility,
                game.playerCharacter.stats.endurance);
+        printf("Attempted to create: (%.2f, %.2f, %.2f, %.2f)\n", 
+               game.inputStats.health,
+               game.inputStats.strength,
+               game.inputStats.agility,
+               game.inputStats.endurance);
         
         game.battleCounter = 0;
         
@@ -766,6 +759,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
         }
     } else {
         // end of the battle
+        game.battleFinished = true;
         gsm.ChangeStateTo(LAutobattler::GamePages::ArenaAftermath, layer);
         localTime = 0;
         printf("Battle is finished.\n");
@@ -817,6 +811,7 @@ bool ArenaAftermathPageState::OnExit(bool pass_layer)
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
         layer = nullptr;
     }
+    
     MSE_LOG("ArenaAftermathPageState OnExit...done");
     return true;
 }
@@ -824,7 +819,7 @@ bool ArenaAftermathPageState::OnExit(bool pass_layer)
 bool ArenaAftermathPageState::OnUpdate(mse::TimeType t)
 {
     localTime += t;
-    if (localTime > 1000)
+    if ((localTime > 1000) && game.gamePageHasToChange)
     {
         if (game.playerCharacter.stats.health > 0.0)
         {
@@ -832,6 +827,9 @@ bool ArenaAftermathPageState::OnUpdate(mse::TimeType t)
         } else {
             gsm.ChangeStateTo(LAutobattler::GamePages::GameOver);
         }
+        
+        game.gamePageHasToChange = false;
+        game.battleFinished = false;
         
         localTime = 0;
     }

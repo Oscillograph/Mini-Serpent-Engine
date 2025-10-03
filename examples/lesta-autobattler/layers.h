@@ -55,6 +55,10 @@ public:
     
     virtual void OnInit() override;
     virtual void OnUpdate() override;
+    
+    mse::gui::Text* rogueStatsBox = nullptr;
+    mse::gui::Text* warriorStatsBox = nullptr;
+    mse::gui::Text* barbarianStatsBox = nullptr;
 };
 
 class CharacterLoadUILayer : public mse::Layer
@@ -137,6 +141,7 @@ public:
     virtual void OnUpdate() override;
     
     mse::gui::Text* messageLog = nullptr;
+    mse::gui::Button* nextBtn = nullptr;
 };
 
 class CharacterUpdateUILayer : public mse::Layer
