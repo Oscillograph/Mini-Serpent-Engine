@@ -772,38 +772,111 @@ void CharacterUpdateUILayer::OnInit()
         game.inputClass = LAutobattler::Classes::Rogue;
         changeMade = true;
         classRogueBtn->Disable();
-        classWarriorBtn->Enable();
-        classBarbarianBtn->Enable();
+        if (game.playerCharacter.sub_class.type != LAutobattler::Classes::None)
+        {
+            if ((game.playerCharacter.main_class.type == LAutobattler::Classes::Warrior) ||
+                (game.playerCharacter.sub_class.type == LAutobattler::Classes::Warrior))
+            {
+                classWarriorBtn->Enable();
+            }
+            
+            if ((game.playerCharacter.main_class.type == LAutobattler::Classes::Barbarian) ||
+                (game.playerCharacter.sub_class.type == LAutobattler::Classes::Barbarian))
+            {
+                classBarbarianBtn->Enable();
+            }
+        } else {
+            classWarriorBtn->Enable();
+            classBarbarianBtn->Enable();
+        }
     };
+    // disable by default as the main class is levelling up by default
     if (game.playerCharacter.main_class.type == LAutobattler::Classes::Rogue)
     {
         classRogueBtn->Disable();
+    }
+    // disable if not picked as a subclass or main class
+    if (game.playerCharacter.sub_class.type != LAutobattler::Classes::None)
+    {
+        if ((game.playerCharacter.sub_class.type != LAutobattler::Classes::Rogue) &&
+            (game.playerCharacter.main_class.type != LAutobattler::Classes::Rogue))
+        {
+            classRogueBtn->Disable();
+        }
     }
     
     classWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {32, 32, 32, 255}, {20, 69, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     classWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Warrior;
         changeMade = true;
-        classRogueBtn->Enable();
         classWarriorBtn->Disable();
-        classBarbarianBtn->Enable();
+        if (game.playerCharacter.sub_class.type != LAutobattler::Classes::None)
+        {
+            if ((game.playerCharacter.main_class.type == LAutobattler::Classes::Rogue) ||
+                (game.playerCharacter.sub_class.type == LAutobattler::Classes::Rogue))
+            {
+                classRogueBtn->Enable();
+            }
+            
+            if ((game.playerCharacter.main_class.type == LAutobattler::Classes::Barbarian) ||
+                (game.playerCharacter.sub_class.type == LAutobattler::Classes::Barbarian))
+            {
+                classBarbarianBtn->Enable();
+            }
+        } else {
+            classRogueBtn->Enable();
+            classBarbarianBtn->Enable();
+        }
     };
     if (game.playerCharacter.main_class.type == LAutobattler::Classes::Warrior)
     {
         classWarriorBtn->Disable();
+    }
+    // disable if not picked as a subclass or main class
+    if (game.playerCharacter.sub_class.type != LAutobattler::Classes::None)
+    {
+        if ((game.playerCharacter.sub_class.type != LAutobattler::Classes::Warrior) &&
+            (game.playerCharacter.main_class.type != LAutobattler::Classes::Warrior))
+        {
+            classWarriorBtn->Disable();
+        }
     }
     
     classBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {32, 32, 32, 255}, {20, 83, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     classBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.inputClass = LAutobattler::Classes::Barbarian;
         changeMade = true;
-        classRogueBtn->Enable();
-        classWarriorBtn->Enable();
         classBarbarianBtn->Disable();
+        if (game.playerCharacter.sub_class.type != LAutobattler::Classes::None)
+        {
+            if ((game.playerCharacter.main_class.type == LAutobattler::Classes::Rogue) ||
+                (game.playerCharacter.sub_class.type == LAutobattler::Classes::Rogue))
+            {
+                classRogueBtn->Enable();
+            }
+            
+            if ((game.playerCharacter.main_class.type == LAutobattler::Classes::Warrior) ||
+                (game.playerCharacter.sub_class.type == LAutobattler::Classes::Warrior))
+            {
+                classWarriorBtn->Enable();
+            }
+        } else {
+            classRogueBtn->Enable();
+            classWarriorBtn->Enable();
+        }
     };
     if (game.playerCharacter.main_class.type == LAutobattler::Classes::Barbarian)
     {
         classBarbarianBtn->Disable();
+    }
+    // disable if not picked as a subclass or main class
+    if (game.playerCharacter.sub_class.type != LAutobattler::Classes::None)
+    {
+        if ((game.playerCharacter.sub_class.type != LAutobattler::Classes::Barbarian) &&
+            (game.playerCharacter.main_class.type != LAutobattler::Classes::Barbarian))
+        {
+            classBarbarianBtn->Disable();
+        }
     }
     
     // pick a weapon
@@ -969,11 +1042,11 @@ void CharacterUpdateUILayer::OnUpdate()
             }
         }
         
-        if (game.inputClass != game.playerCharacter.main_class.type)
+        if (game.playerCharacter.sub_class.type != LAutobattler::Classes::None)
         {
-            switch (game.inputClass)
+            switch (game.playerCharacter.sub_class.type)
             {
-            case LAutobattler::Classes::Rogue:
+                case LAutobattler::Classes::Rogue:
                 {
                     sub_class = U"Разбойник";
                     break;
@@ -987,6 +1060,28 @@ void CharacterUpdateUILayer::OnUpdate()
                 {
                     sub_class = U"Варвар";
                     break;
+                }
+            }
+        } else {
+            if (game.inputClass != game.playerCharacter.main_class.type)
+            {
+                switch (game.inputClass)
+                {
+                case LAutobattler::Classes::Rogue:
+                    {
+                        sub_class = U"Разбойник";
+                        break;
+                    }
+                case LAutobattler::Classes::Warrior:
+                    {
+                        sub_class = U"Воин";
+                        break;
+                    }
+                case LAutobattler::Classes::Barbarian:
+                    {
+                        sub_class = U"Варвар";
+                        break;
+                    }
                 }
             }
         }
@@ -1020,8 +1115,8 @@ void CharacterUpdateUILayer::OnUpdate()
         std::stringstream strstream;
         strstream << 
         "Уровень:    " << game.playerCharacter.level <<
-        "\nКласс:      " << utf8::utf32to8(main_class.c_str()) << 
-        "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) <<
+        "\nКласс:      " << utf8::utf32to8(main_class.c_str()) << " (" << game.playerCharacter.main_class.level << ")" << 
+        "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) << " (" << game.playerCharacter.sub_class.level << ")" <<
         "\nЗдоровье: " << game.playerCharacter.stats.health <<
         "\nСила:     " << game.playerCharacter.stats.strength <<
         "\nЛовкость: " << game.playerCharacter.stats.agility <<

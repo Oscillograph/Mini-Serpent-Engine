@@ -361,38 +361,49 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
         game.playerCharacter.weapon.sprite = game.inputWeapon.sprite;
         
         // update traits
-        if (game.playerCharacter.level < 4)
+        if ((game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level) < 3)
         {
             if ((game.inputClass != LAutobattler::Classes::None) &&
                 (game.inputClass != game.playerCharacter.main_class.type))
             {
+                // update subclass level
+                if (game.playerCharacter.sub_class.type == LAutobattler::Classes::None)
+                {
+                    game.playerCharacter.sub_class = {game.inputClass, 1};
+                } else {
+                    game.playerCharacter.sub_class.level++;
+                }
+                
+                // update traits
                 switch (game.inputClass)
                 {
                 case LAutobattler::Classes::Rogue:
                     {
-                        game.playerCharacter.sub_class = {LAutobattler::Classes::Rogue, game.playerCharacter.sub_class.level + 1};
                         printf("subclass: ROGUE, ");
-                        if (game.playerCharacter.sub_class.level > 1)
+                        if (game.playerCharacter.sub_class.level == 1)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::HiddenStrike);
+                            printf("+trait \"Hidden Strike\"\n");
+                        }
+                        if (game.playerCharacter.sub_class.level == 2)
                         {
                             game.playerCharacter.traits.push_back(LAutobattler::Traits::Agile);
                             printf("+trait \"Agile\"\n");
-                        } else {
-                            game.playerCharacter.traits.push_back(LAutobattler::Traits::HiddenStrike);
-                            printf("+trait \"Hidden Strike\"\n");
                         }
                         break;
                     }
                 case LAutobattler::Classes::Warrior:
                     {
-                        game.playerCharacter.sub_class = {LAutobattler::Classes::Warrior, game.playerCharacter.sub_class.level + 1};
                         printf("subclass: Warrior, ");
-                        if (game.playerCharacter.sub_class.level > 1)
+                        if (game.playerCharacter.sub_class.level == 1)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Rush);
+                            printf("+trait \"Rush\"\n");
+                        }
+                        if (game.playerCharacter.sub_class.level == 2)
                         {
                             game.playerCharacter.traits.push_back(LAutobattler::Traits::Shield);
                             printf("+trait \"Shield\"\n");
-                        } else {
-                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Rush);
-                            printf("+trait \"Rush\"\n");
                         }
                         break;
                     }
@@ -400,23 +411,28 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                     {
                         game.playerCharacter.sub_class = {LAutobattler::Classes::Barbarian, game.playerCharacter.sub_class.level + 1};
                         printf("subclass: Barbarian, ");
-                        if (game.playerCharacter.sub_class.level > 1)
+                        if (game.playerCharacter.sub_class.level == 1)
+                        {
+                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Rage);
+                            printf("+trait \"Rage\"\n");
+                        }
+                        if (game.playerCharacter.sub_class.level == 2)
                         {
                             game.playerCharacter.traits.push_back(LAutobattler::Traits::StoneSkin);
                             printf("+trait \"Stone Skin\"\n");
-                        } else {
-                            game.playerCharacter.traits.push_back(LAutobattler::Traits::Rage);
-                            printf("+trait \"Rage\"\n");
                         }
                         break;
                     }
                 }
             } else {
+                // update main class level
+                game.playerCharacter.main_class.level++;
+                
+                // update traits
                 switch (game.playerCharacter.main_class.type)
                 {
                 case LAutobattler::Classes::Rogue:
                     {
-                        game.playerCharacter.main_class = {LAutobattler::Classes::Rogue, game.playerCharacter.main_class.level + 1};
                         if (game.playerCharacter.main_class.level == 2)
                         {
                             game.playerCharacter.traits.push_back(LAutobattler::Traits::Agile);
@@ -431,7 +447,6 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                     }
                 case LAutobattler::Classes::Warrior:
                     {
-                        game.playerCharacter.main_class = {LAutobattler::Classes::Warrior, game.playerCharacter.main_class.level + 1};
                         if (game.playerCharacter.main_class.level == 2)
                         {
                             game.playerCharacter.traits.push_back(LAutobattler::Traits::Shield);
@@ -446,7 +461,6 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                     }
                 case LAutobattler::Classes::Barbarian:
                     {
-                        game.playerCharacter.main_class = {LAutobattler::Classes::Barbarian, game.playerCharacter.main_class.level + 1};
                         if (game.playerCharacter.main_class.level == 2)
                         {
                             game.playerCharacter.traits.push_back(LAutobattler::Traits::StoneSkin);
@@ -462,6 +476,9 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                 }
             }
         }
+        
+        // confirm overall player level
+        game.playerCharacter.level = game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level;
         
         game.playerCharacterUpdated = false;
         
