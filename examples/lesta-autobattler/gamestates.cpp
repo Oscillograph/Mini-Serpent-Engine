@@ -363,7 +363,8 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
         // update traits
         if (game.playerCharacter.level < 4)
         {
-            if ((game.inputClass != LAutobattler::Classes::None))
+            if ((game.inputClass != LAutobattler::Classes::None) &&
+                (game.inputClass != game.playerCharacter.main_class.type))
             {
                 switch (game.inputClass)
                 {

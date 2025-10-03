@@ -153,6 +153,12 @@ public:
     virtual void OnInit() override;
     virtual void OnUpdate() override;
     
+    mse::gui::Button* classRogueBtn = nullptr;
+    mse::gui::Button* classWarriorBtn = nullptr;
+    mse::gui::Button* classBarbarianBtn = nullptr;
+    mse::gui::Button* keepSameWeaponBtn = nullptr;
+    mse::gui::Button* pickDroppedWeaponBtn = nullptr;
+    
     mse::gui::Text* statsBox = nullptr;
     bool changeMade = false;
 };
