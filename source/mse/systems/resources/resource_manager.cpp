@@ -1,6 +1,7 @@
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/platform/renderer/texture.h>
 #include <mse/systems/platform/renderer/font.h>
+#include <mse/systems/platform/renderer/cursor.h>
 //#include <mse/systems/scenes/scene.h>
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/window.h>
@@ -57,6 +58,11 @@ namespace mse
         case ResourceType::FontTrueType:
             {
                 delete (FontTrueType*)data;
+                break;
+            }
+        case ResourceType::Cursor:
+            {
+                delete (Cursor*)data;
                 break;
             }
         }
@@ -128,6 +134,7 @@ namespace mse
 			case ResourceType::FontBitmap:
 				{
 					resource->data = new FontBitmap(path, user->GetRenderer());
+                    break;
 				}
 			default:
 				{}
@@ -330,6 +337,45 @@ namespace mse
 		return (*it).second;
 	}
 	
+    Resource* ResourceManager::CreateCursor(const ResourceUser& user, int hotX, int hotY, Resource* sourceTexture, const glm::uvec4& clip, const glm::vec3& colorKey)
+    {
+        ResourceType type = ResourceType::Cursor;
+        
+        MSE_CORE_LOG("Resource Manager: creating resource of type ", m_ResourceTypeNames[type], "\".");
+        Resource* resource = new Resource(
+                                          "",
+                                          type,
+                                          nullptr, 
+                                          true);
+        
+        if (m_Cache.find(type) == m_Cache.end())
+        {
+            MSE_CORE_ERROR("Resource Manager: no cache registered for cursors");
+            return nullptr; // no such resource type cache registered
+        } else {
+//			MSE_CORE_LOG("Resource Manager: creating a new cursor...");
+            mse::Resource* cursorTexture = mse::ResourceManager::CreateTexture(
+                                                                        user,
+                                                                        user->GetRenderer(),
+                                                                        32, 32,
+                                                                        0,
+                                                                        32,
+                                                                        {0, 0, 0, 0});
+            SDL_FRect cursorDestRect = {0, 0, 32, 32};
+            SDL_Rect cursorSrcRect = {clip.x, clip.y, clip.z, clip.w};
+            mse::Renderer::SurfaceDrawTexture((mse::Texture*)(cursorTexture->data), (mse::Texture*)(sourceTexture->data), &cursorDestRect, &cursorSrcRect);
+            resource->data = new Cursor(cursorTexture, user, hotX, hotY);
+//			MSE_CORE_LOG("Resource Manager: registering a user...");
+            resource->users.push_back(user);
+//			MSE_CORE_LOG("Resource Manager: registering resource in cache...");
+            m_Cache[type][resource->path] = resource;
+//			MSE_CORE_LOG("Resource Manager: Done. Returning resource to the client");
+            return resource;
+        }
+        
+        return nullptr;
+    }
+    
 	void ResourceManager::Init()
 	{
 		MSE_CORE_LOG("Resource Manager: Initialization.");
@@ -341,6 +387,7 @@ namespace mse
 		m_ResourceTypeNames[ResourceType::Audio] = "Audio";
 		m_ResourceTypeNames[ResourceType::FontBitmap] = "Bitmap Font";
 		m_ResourceTypeNames[ResourceType::FontTrueType] = "TrueType Font";
+        m_ResourceTypeNames[ResourceType::Cursor] = "Cursor";
 		
 		if (m_Cache.empty())
 		{
@@ -348,6 +395,7 @@ namespace mse
 			InitCache(ResourceType::Texture);
 			InitCache(ResourceType::Audio);
 			InitCache(ResourceType::FontBitmap);
+            InitCache(ResourceType::Cursor);
 		}
 	}
 	
@@ -365,7 +413,7 @@ namespace mse
 		for (auto typeIterator = m_Cache.begin(); typeIterator != m_Cache.end(); typeIterator++)
 		{
 			type = (*typeIterator).first;
-			// MSE_CORE_LOG("- choosing resource category ", (int)type, "...");
+			 MSE_CORE_LOG("- choosing resource category \"", m_ResourceTypeNames[type], "\"...");
 			if (m_Cache.find(type) != m_Cache.end())
 			{
 				// MSE_CORE_LOG("- walking through resource category ", (int)type, "...");

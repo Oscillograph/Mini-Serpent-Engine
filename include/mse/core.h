@@ -22,6 +22,7 @@ namespace mse
 	class Platform; // static - a system to abstract away various platform calls from window management and event listening to renderer and audio system calls
 	class Renderer; // static - a platform subsystem specifically for rendering routines
 	class Texture;
+    class Cursor;
 	class WindowManager; // static - a system to command windows
 	class Window;
 	class LayerManager; // static - a window subsystem which keeps track of all layers attached and allows to command them

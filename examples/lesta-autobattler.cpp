@@ -89,7 +89,7 @@ public:
 			return true;
 		};
         
-//        SDL_ShowCursor(SDL_DISABLE);
+        // create a custom cursor
         mse::Resource* cursor = mse::ResourceManager::CreateTexture(
                                                                     m_window,
                                                                     m_window->GetRenderer(),
@@ -98,20 +98,10 @@ public:
                                                                     32,
                                                                     {0, 0, 0, 0});
         mse::Resource* spriteList = mse::ResourceManager::UseTexture("data/img/screen-images.png", m_window, {0, 0, 0});
-        SDL_FRect cursorRect = {0, 0, 32, 32};
-        SDL_Rect spriteListRect = {109, 22, 32, 32};
-        mse::Renderer::SurfaceDrawTexture((mse::Texture*)(cursor->data), (mse::Texture*)(spriteList->data), &cursorRect, &spriteListRect);
-        mse::Texture* cursorTextureObj = (mse::Texture*)(cursor->data);
-        SDL_Cursor* SDLCursor = SDL_CreateColorCursor(cursorTextureObj->GetSurface(), 0, 0);
-        SDL_SetCursor(SDLCursor);
-//        m_window->callbacks[mse::EventTypes::MouseMoved] = [&](SDL_Event* event){
-//            SDL_FRect destRect = {event->motion.x, event->motion.y, 8, 8};
-//            SDL_Rect srcRect = {109, 22, 8, 8};
-//            mse::Renderer::DrawTexture((mse::Texture*)(cursor->data), 
-//                                       &destRect,
-//                                       &srcRect);
-//            return false;
-//        };
+        glm::uvec4 spriteListRect = {109, 22, 32, 32};
+        m_Cursor = mse::ResourceManager::CreateCursor(m_window, 0, 0, spriteList, spriteListRect, {0, 0, 0});
+        mse::Cursor* cursorObj = (mse::Cursor*)(m_Cursor->data);
+        SDL_SetCursor(cursorObj->GetNativeCursor());
 
 		mse::Renderer::SetActiveWindow(m_window);
 //        m_window->GetLayerManager()->Attach(new SimpleUILayer);
@@ -127,6 +117,9 @@ public:
 	~App()
 	{
 		MSE_LOG("Commanding to destroy a window");
+        mse::ResourceManager::DropResource(m_Cursor, m_window);
+        m_Cursor = nullptr;
+        SDL_SetCursor(NULL);
 		delete cse_texture;
 		cse_texture = nullptr;
 		mse::WindowManager::DestroyWindow(m_window);
@@ -150,6 +143,7 @@ public:
 	mse::Window* m_window = nullptr;
 	mse::Window* m_window2 = nullptr;
 	mse::Texture* cse_texture = nullptr;
+    mse::Resource* m_Cursor = nullptr;
 };
 
 mse::Application* mse::CreateApplication()

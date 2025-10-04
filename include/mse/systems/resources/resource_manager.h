@@ -26,6 +26,7 @@ namespace mse
 		Texture				= 11,
 		FontBitmap			= 12,
 		FontTrueType		= 13,
+        Cursor              = 14, 
 		
 		// text data
 		Text_Plain			= 20,
@@ -97,6 +98,8 @@ namespace mse
 		static Resource* CreateTexture(const ResourceUser& user, void* renderer, int w, int h, uint32_t flags=0, int depth=32, const glm::ivec4& colorMask = {0, 0, 0, 0});
 		static int LoadTexture(const std::string& path, const ResourceUser& user, const glm::vec3& colorKey);
 		static Resource* UseTexture(const std::string& path, const ResourceUser& user, const glm::vec3& colorKey);
+        
+        static Resource* CreateCursor(const ResourceUser& user, int hotX, int hotY, Resource* sourceTexture, const glm::uvec4& clip, const glm::vec3& colorKey);
 		
 		static void Init();
 		static void InitCache(ResourceType type);
