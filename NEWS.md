@@ -1,3 +1,19 @@
+## 0.1.2 ##
+New:
++ New GUI items: text, image
++ GUI: button can now be initialized with a spritelist
++ Fullscreen mode for an app window
+
+Fixes:
+- Memory leak in Garbage collector due to it did not properly delete resources data
+- Bitmap fonts did not fit the defined text area properly
+- Bitmap fonts used left-edge x coordinate correction before typing a symbol -> now they do right-edge correction after typing a symbol
+- Event handlers crashed the app if more than one layer present
+
+Examples:
++ Lesta Autobattler: originally made as a test task for Lesta Academy
+
+
 ## 0.1.1 ##
 New:
 + Bitmap font support to make it possible for renderer to draw text on provided textures
