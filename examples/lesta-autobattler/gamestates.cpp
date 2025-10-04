@@ -361,7 +361,7 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
         game.playerCharacter.weapon.sprite = game.inputWeapon.sprite;
         
         // update traits
-        if ((game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level) < 3)
+        if ((game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level) < gameDB.level_max)
         {
             if ((game.inputClass != LAutobattler::Classes::None) &&
                 (game.inputClass != game.playerCharacter.main_class.type))
@@ -409,7 +409,6 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                     }
                 case LAutobattler::Classes::Barbarian:
                     {
-                        game.playerCharacter.sub_class = {LAutobattler::Classes::Barbarian, game.playerCharacter.sub_class.level + 1};
                         printf("subclass: Barbarian, ");
                         if (game.playerCharacter.sub_class.level == 1)
                         {

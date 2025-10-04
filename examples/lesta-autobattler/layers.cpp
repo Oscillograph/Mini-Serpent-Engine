@@ -804,6 +804,11 @@ void CharacterUpdateUILayer::OnInit()
             classRogueBtn->Disable();
         }
     }
+    // disable if level limit reached
+    if ((game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level) == gameDB.level_max)
+    {
+        classRogueBtn->Disable();
+    }
     
     classWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Воин", {32, 32, 32, 255}, {20, 69, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     classWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
@@ -828,6 +833,7 @@ void CharacterUpdateUILayer::OnInit()
             classBarbarianBtn->Enable();
         }
     };
+    // disable by default as the main class is levelling up by default
     if (game.playerCharacter.main_class.type == LAutobattler::Classes::Warrior)
     {
         classWarriorBtn->Disable();
@@ -840,6 +846,11 @@ void CharacterUpdateUILayer::OnInit()
         {
             classWarriorBtn->Disable();
         }
+    }
+    // disable if level limit reached
+    if ((game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level) == gameDB.level_max)
+    {
+        classWarriorBtn->Disable();
     }
     
     classBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Варвар", {32, 32, 32, 255}, {20, 83, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
@@ -865,6 +876,7 @@ void CharacterUpdateUILayer::OnInit()
             classWarriorBtn->Enable();
         }
     };
+    // disable by default as the main class is levelling up by default
     if (game.playerCharacter.main_class.type == LAutobattler::Classes::Barbarian)
     {
         classBarbarianBtn->Disable();
@@ -877,6 +889,11 @@ void CharacterUpdateUILayer::OnInit()
         {
             classBarbarianBtn->Disable();
         }
+    }
+    // disable if level limit reached
+    if ((game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level) == gameDB.level_max)
+    {
+        classBarbarianBtn->Disable();
     }
     
     // pick a weapon
