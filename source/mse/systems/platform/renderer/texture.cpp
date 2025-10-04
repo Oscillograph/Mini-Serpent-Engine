@@ -50,6 +50,7 @@ namespace mse
 	Texture::~Texture()
 	{
 		Free();
+//        MSE_CORE_LOG("SDL_Texture space freed along with SDL_Surface");
 	}
 	
 	void Texture::Load(const std::string& path)

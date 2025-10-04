@@ -30,6 +30,7 @@ namespace mse
 		{
 			// model
 			parentLayer = layer;
+            windowUser = layer->GetWindow();
 			m_elementName = "Text_" + utf8::utf32to8(text);
 			m_text = text;
 			layerArea = area;
@@ -52,8 +53,8 @@ namespace mse
 				MSE_CORE_LOG("Text: requesting to create a texture");
 				MSE_CORE_TRACE("Text_parentLayer = ", parentLayer);
 				m_texture = ResourceManager::CreateTexture(
-					parentLayer->GetWindow(),
-					parentLayer->GetWindow()->GetRenderer(),
+					windowUser,
+					windowUser->GetRenderer(),
 					layerArea.z,
 					layerArea.w,
 					0,
@@ -111,7 +112,13 @@ namespace mse
 		}
 		
 		Text::~Text()
-		{}
+		{
+            if (m_texture != nullptr)
+            {
+                ResourceManager::DropResource(m_texture, windowUser);
+                MSE_CORE_LOG("Text: texture dropped");
+            }
+        }
 		
 		// general GUIItem interface
 		void Text::Display()

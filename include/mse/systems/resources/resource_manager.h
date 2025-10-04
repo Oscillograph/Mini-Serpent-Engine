@@ -43,6 +43,7 @@ namespace mse
 			void* _data,
 			bool dynamic = false // true - generated in runtime; false - stored on disk before
 			);
+        ~Resource();
 		
 		std::string path = "";
 		ResourceType type = ResourceType::Unknown;

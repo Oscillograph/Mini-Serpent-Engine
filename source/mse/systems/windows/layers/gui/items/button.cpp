@@ -37,6 +37,7 @@ namespace mse
 		{
 			// model
 			parentLayer = layer;
+            windowUser = layer->GetWindow();
 			m_elementName = "Button_" + utf8::utf32to8(text);
 			m_text = text;
 			layerArea = area;
@@ -59,8 +60,8 @@ namespace mse
 				MSE_CORE_LOG("Button: requesting to create a texture");
 				MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
 				m_texture = ResourceManager::CreateTexture(
-					parentLayer->GetWindow(),
-					parentLayer->GetWindow()->GetRenderer(),
+					windowUser,
+					windowUser->GetRenderer(),
 					layerArea.z * 4,
 					layerArea.w,
 					0,
@@ -164,10 +165,11 @@ namespace mse
         {
             // model
             parentLayer = layer;
+            windowUser = layer->GetWindow();
             m_elementName = "Button_" + utf8::utf32to8(text);
             m_text = text;
             layerArea = area;
-            m_spriteList = ResourceManager::UseTexture(spritelist, parentLayer->GetWindow(), {0, 0, 0});
+            m_spriteList = ResourceManager::UseTexture(spritelist, windowUser, {0, 0, 0});
             m_leftSource = leftSource;
             m_midSource = midSource;
             m_rightSource = rightSource;
@@ -188,8 +190,8 @@ namespace mse
                 MSE_CORE_LOG("Button: requesting to create a texture");
                 MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
                 m_texture = ResourceManager::CreateTexture(
-                                                           parentLayer->GetWindow(),
-                                                           parentLayer->GetWindow()->GetRenderer(),
+                                                           windowUser,
+                                                           windowUser->GetRenderer(),
                                                            layerArea.z * 4,
                                                            layerArea.w,
                                                            0,
@@ -368,7 +370,13 @@ namespace mse
         }
         
 		Button::~Button()
-		{}
+		{
+            if (m_texture != nullptr)
+            {
+                ResourceManager::DropResource(m_texture, windowUser);
+                MSE_CORE_LOG("Button: texture dropped");
+            }
+        }
 		
 		// general GUIItem interface
 		void Button::Display()

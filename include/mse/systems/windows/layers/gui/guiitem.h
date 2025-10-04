@@ -28,6 +28,7 @@ namespace mse
 	
 	public:
 		Layer* parentLayer = nullptr;
+        Window* windowUser = nullptr;
 		int id = -1; // should be generated in respect to the overall number of indexed elements
 		
 		// display data for layers; all numbers respect to pixels bound to Window::basePrefs

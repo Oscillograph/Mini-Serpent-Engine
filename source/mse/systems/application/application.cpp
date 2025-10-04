@@ -323,6 +323,7 @@ namespace mse
 				m_TimeLastFrame = m_TimeThisFrame;
 				
 				// 13. Systems cleanups
+                ResourceManager::GarbageCollector();
 			}
 			
 			if (WindowManager::GetWindows().size() == 0)

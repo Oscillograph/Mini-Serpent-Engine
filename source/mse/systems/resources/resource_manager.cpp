@@ -23,12 +23,44 @@ namespace mse
 	{
 		if (dynamic)
 		{
-			path = dynamicResourceId;
+//			path = dynamicResourceId;
+            std::stringstream stream;
+            stream << dynamicResourceId;
+            path = stream.str();
+            stream.str("");
+            stream.clear();
 			dynamicResourceId++;
 		} else {
 			path = _path;
 		}
 	}
+    
+    Resource::~Resource()
+    {
+        switch (type)
+        {
+        case ResourceType::Texture:
+            {
+                delete (Texture*)data;
+                break;
+            }
+        case ResourceType::Text_Plain:
+            {
+                delete (Data::Text*)data;
+                break;
+            }
+        case ResourceType::FontBitmap:
+            {
+                delete (FontBitmap*)data;
+                break;
+            }
+        case ResourceType::FontTrueType:
+            {
+                delete (FontTrueType*)data;
+                break;
+            }
+        }
+    }
 	
 	int ResourceManager::LoadResource(ResourceType type, const std::string& path, const ResourceUser& user)
 	{
@@ -328,7 +360,7 @@ namespace mse
 	void ResourceManager::GarbageCollector()
 	{
 		// select all types of resources
-		MSE_CORE_LOG("Resource Manager: Garbage collector starts...");
+//		MSE_CORE_LOG("Resource Manager: Garbage collector starts...");
 		ResourceType type;
 		for (auto typeIterator = m_Cache.begin(); typeIterator != m_Cache.end(); typeIterator++)
 		{
@@ -360,16 +392,11 @@ namespace mse
 							}
 							// MSE_CORE_LOG("- - users list cleared...");
 							
-							// delete the resource data
-							if ((*cacheIterator).second->data != nullptr)
-								delete (*cacheIterator).second->data;
-							(*cacheIterator).second->data = nullptr;
-							
 							// delete the resource itself
 							delete (*cacheIterator).second;
 							(*cacheIterator).second = nullptr;
 							cacheIterator = m_Cache[type].erase(cacheIterator);
-							// MSE_CORE_LOG("- - resource deleted...");
+							 MSE_CORE_LOG("- - resource deleted...");
 						} else {
 							cacheIterator++;
 						}
@@ -377,7 +404,7 @@ namespace mse
 				}
 			}
 		}
-		MSE_CORE_LOG("Resource Manager: Garbage collector stops.");
+//		MSE_CORE_LOG("Resource Manager: Garbage collector stops.");
 	}
 	
 	void ResourceManager::ShutDown()

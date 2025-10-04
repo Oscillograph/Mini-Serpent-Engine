@@ -31,9 +31,10 @@ namespace mse
 		{
 			// model
 			parentLayer = layer;
+            windowUser = layer->GetWindow();
 			m_elementName = "Image";
 			layerArea = area;
-            m_spriteList = ResourceManager::UseTexture(spritelist, parentLayer->GetWindow(), {0, 0, 0});
+            m_spriteList = ResourceManager::UseTexture(spritelist, windowUser, {0, 0, 0});
             m_sourceArea = sourceArea;
 			m_backgroundColor = bgcolor;
 			
@@ -53,8 +54,8 @@ namespace mse
 				MSE_CORE_LOG("Image: requesting to create a texture");
 				MSE_CORE_TRACE("Image_parentLayer = ", parentLayer);
 				m_texture = ResourceManager::CreateTexture(
-					parentLayer->GetWindow(),
-					parentLayer->GetWindow()->GetRenderer(),
+					windowUser,
+					windowUser->GetRenderer(),
 					layerArea.z,
 					layerArea.w,
 					0,
@@ -98,7 +99,13 @@ namespace mse
 		}
 		
 		Image::~Image()
-		{}
+		{
+            if (m_texture != nullptr)
+            {
+                ResourceManager::DropResource(m_texture, windowUser);
+                MSE_CORE_LOG("Image: texture dropped");
+            }
+        }
 		
 		// general GUIItem interface
 		void Image::Display()
