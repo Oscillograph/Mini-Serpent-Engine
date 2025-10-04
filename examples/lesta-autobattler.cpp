@@ -88,6 +88,30 @@ public:
             game.keyPressed = true;
 			return true;
 		};
+        
+//        SDL_ShowCursor(SDL_DISABLE);
+        mse::Resource* cursor = mse::ResourceManager::CreateTexture(
+                                                                    m_window,
+                                                                    m_window->GetRenderer(),
+                                                                    32, 32,
+                                                                    0,
+                                                                    32,
+                                                                    {0, 0, 0, 0});
+        mse::Resource* spriteList = mse::ResourceManager::UseTexture("data/img/screen-images.png", m_window, {0, 0, 0});
+        SDL_FRect cursorRect = {0, 0, 32, 32};
+        SDL_Rect spriteListRect = {109, 22, 32, 32};
+        mse::Renderer::SurfaceDrawTexture((mse::Texture*)(cursor->data), (mse::Texture*)(spriteList->data), &cursorRect, &spriteListRect);
+        mse::Texture* cursorTextureObj = (mse::Texture*)(cursor->data);
+        SDL_Cursor* SDLCursor = SDL_CreateColorCursor(cursorTextureObj->GetSurface(), 0, 0);
+        SDL_SetCursor(SDLCursor);
+//        m_window->callbacks[mse::EventTypes::MouseMoved] = [&](SDL_Event* event){
+//            SDL_FRect destRect = {event->motion.x, event->motion.y, 8, 8};
+//            SDL_Rect srcRect = {109, 22, 8, 8};
+//            mse::Renderer::DrawTexture((mse::Texture*)(cursor->data), 
+//                                       &destRect,
+//                                       &srcRect);
+//            return false;
+//        };
 
 		mse::Renderer::SetActiveWindow(m_window);
 //        m_window->GetLayerManager()->Attach(new SimpleUILayer);

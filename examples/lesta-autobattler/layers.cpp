@@ -24,7 +24,7 @@ void IntroUILayer::OnInit()
 {
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"LESTA АВТОБАТЛЕР", 
+                                  U"ЛЕСТА АВТОБАТЛЕР", 
                                   {40, 10, 225, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
@@ -79,7 +79,7 @@ void MainMenuUILayer::OnInit()
 {
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"LESTA АВТОБАТЛЕР", 
+                                  U"ЛЕСТА АВТОБАТЛЕР", 
                                   {40, 10, 230, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
@@ -310,7 +310,7 @@ void WinnerUILayer::OnInit()
 {
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"LESTA АВТОБАТЛЕР", 
+                                  U"ЛЕСТА АВТОБАТЛЕР", 
                                   {40, 10, 230, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
@@ -340,7 +340,7 @@ void WinnerUILayer::OnInit()
     } else {
         AddElement(new mse::gui::Text(
                                       this, 
-                                      U"Герой покорил арену, одолев \nвсе трудности и опасности. \nЕго удали нет равных, и теперь, по праву чемпиона, он войдёт \nв Зал Славы как живая легенда.\nЭто было великолепно!", 
+                                      U"Герой покорил арену, одолев \nвсе трудности и опасности. \nЕго удали нет равных, и теперь,по праву чемпиона, он войдёт \nв Зал Славы как живая легенда.\nЭто было великолепно!", 
                                       {10, 140, 220, 60}, 
                                       {0, 0, 0, 255}, 
                                       {196, 196, 196, 255},
@@ -375,7 +375,7 @@ void GameOverUILayer::OnInit()
 {
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"LESTA АВТОБАТЛЕР", 
+                                  U"ЛЕСТА АВТОБАТЛЕР", 
                                   {40, 10, 230, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
@@ -435,7 +435,7 @@ void CreditsUILayer::OnInit()
 {
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"LESTA АВТОБАТЛЕР", 
+                                  U"ЛЕСТА АВТОБАТЛЕР", 
                                   {40, 10, 230, 20}, 
                                   {64, 0, 0, 255}, 
                                   {0, 255, 255, 255},
@@ -562,7 +562,7 @@ void CreditsUILayer::OnInit()
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"Lesta Игры", 
+                                  U"Леста Игры", 
                                   {80, 200, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
@@ -610,6 +610,14 @@ ArenaUILayer::~ArenaUILayer()
 
 void ArenaUILayer::OnInit()
 {
+    // npc life
+    AddElement(new mse::gui::Image(this, {20, 15, 13, 13}, "./data/img/screen-images.png", {168, 119, 13, 13}, {0, 0, 0, 255}));
+    npcLife = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+                                                              this, 
+                                                              U"", 
+                                                              {35, 15, 20, 10}, 
+                                                              {0, 0, 0, 255}, 
+                                                              {255, 196, 0, 255})));
     // npc character
     {
         glm::uvec4 src = {0, 0, 34, 64};
@@ -650,6 +658,26 @@ void ArenaUILayer::OnInit()
         AddElement(new mse::gui::Image(this, {40, 90 - src.w, src.z, src.w}, "./data/img/screen-images.png", src, {0, 0, 0, 255}));
     }
     
+    mse::gui::Text* battleNumber = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+                                                                        this, 
+                                                                        U"", 
+                                                                        {110, 15, 100, 10}, 
+                                                                        {0, 0, 0, 255}, 
+                                                                        {255, 255, 255, 255})));
+    std::stringstream battleNumberContents;
+    battleNumberContents << "Битва " << (game.battleCounter + 1) << " из 5";
+    battleNumber->ChangeText(utf8::utf8to32(battleNumberContents.str()));
+    battleNumberContents.str("");
+    battleNumberContents.clear();
+    
+    // player life
+    AddElement(new mse::gui::Image(this, {250, 15, 13, 13}, "./data/img/screen-images.png", {168, 119, 13, 13}, {0, 0, 0, 255}));
+    playerLife = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+                                                                 this, 
+                                                                 U"", 
+                                                                 {265, 15, 20, 10}, 
+                                                                 {0, 0, 0, 255}, 
+                                                                 {255, 196, 0, 255})));
     // player character
     {
         glm::uvec4 src = {0, 0, 34, 64};
@@ -730,6 +758,19 @@ void ArenaUILayer::OnInit()
 
 void ArenaUILayer::OnUpdate()
 {
+//    std::u32string npcLifeTextContent = U"";
+    std::stringstream npcLifeTextStream;
+    npcLifeTextStream << game.npcCharacter.stats.health;
+    npcLife->ChangeText(utf8::utf8to32(npcLifeTextStream.str()));
+    npcLifeTextStream.str("");
+    npcLifeTextStream.clear();
+    
+    std::stringstream playerLifeTextStream;
+    playerLifeTextStream << game.playerCharacter.stats.health;
+    playerLife->ChangeText(utf8::utf8to32(playerLifeTextStream.str()));
+    playerLifeTextStream.str("");
+    playerLifeTextStream.clear();
+    
     std::u32string messages = U"";
     LAutobattler::MessageLogItem* item = game.UILogger.stack;
     static bool needToUpdateText = false;

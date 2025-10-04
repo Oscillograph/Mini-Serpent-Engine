@@ -142,6 +142,8 @@ public:
     
     mse::gui::Text* messageLog = nullptr;
     mse::gui::Button* nextBtn = nullptr;
+    mse::gui::Text* npcLife = nullptr;
+    mse::gui::Text* playerLife = nullptr;
 };
 
 class CharacterUpdateUILayer : public mse::Layer
