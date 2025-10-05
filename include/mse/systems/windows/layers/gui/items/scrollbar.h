@@ -37,8 +37,8 @@ namespace mse
 		public:
 			// general initialization
 			VScrollbar();
-			VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, Resource* spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown);
-			void Init(Layer* layer, const glm::uvec4& area, Text* textItem, Resource* spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown);
+			VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string&  spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown);
+			void Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown);
 			virtual ~VScrollbar();
 			
 			// general GUIItem interface

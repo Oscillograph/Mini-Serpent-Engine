@@ -751,9 +751,12 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                        game.defender->stats.health);
                 
                 strForLogger << "Ход " << game.turn << ": " 
-                << utf8::utf32to8(game.attacker->name.c_str()) << "(" << game.attacker->stats.health 
-                << ") наносит " << totalDamage << " урона " 
-                << utf8::utf32to8(game.defender->name.c_str()) << "(" << game.defender->stats.health << ")\n";
+                << utf8::utf32to8(game.attacker->name.c_str()) 
+//                << "(" << game.attacker->stats.health << ")" 
+                << " наносит " << totalDamage << " урона " 
+//                << utf8::utf32to8(game.defender->name.c_str()) 
+//                << "(" << game.defender->stats.health << ")"
+                << "\n";
                 game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
             } else {
                 printf("Turn %d: %s misses!\n", 
@@ -761,8 +764,9 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                        game.attacker->name.c_str());
                 
                 strForLogger << "Ход " << game.turn << ": " 
-                << utf8::utf32to8(game.attacker->name.c_str()) << "(" << game.attacker->stats.health 
-                << ") промахивается!\n";
+                << utf8::utf32to8(game.attacker->name.c_str()) 
+//                << "(" << game.attacker->stats.health << ")" 
+                << " промахивается!\n";
                 game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
             }
             

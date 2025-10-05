@@ -164,7 +164,7 @@ namespace mse
             uint32_t xMax = layerArea.z / (fontSize.x * m_pxSize); // max columns
             uint32_t lines = m_text.size() / xMax + 1;
             lines += std::count(m_text.begin(), m_text.end(), '\n');
-            MSE_CORE_ERROR(lines);
+//            MSE_CORE_ERROR(lines);
             
             m_scrollXY.w = lines * fontSize.y - layerArea.w;
             
@@ -183,8 +183,8 @@ namespace mse
         
         void Text::Scroll(int x, int y)
         {
-            m_scrollXY.x -= x;
-            m_scrollXY.y -= y;
+            m_scrollXY.x += x;
+            m_scrollXY.y += y;
             
             if (m_scrollXY.x < 0)
             {
@@ -196,14 +196,14 @@ namespace mse
             }
             
             // these scroll limits are calculated in UpdateTexture()
-            if (m_scrollXY.y > m_scrollXY.w)
-            {
-                m_scrollXY.y = m_scrollXY.w;
-            }
-            if (m_scrollXY.x > m_scrollXY.z)
-            {
-                m_scrollXY.x = m_scrollXY.z;
-            }
+//            if (m_scrollXY.y > m_scrollXY.w)
+//            {
+//                m_scrollXY.y = m_scrollXY.w;
+//            }
+//            if (m_scrollXY.x > m_scrollXY.z)
+//            {
+//                m_scrollXY.x = m_scrollXY.z;
+//            }
             
             UpdateTexture();
         }

@@ -77,26 +77,30 @@ namespace mse
                                              &destRect,
                                              &sourceRect);
                 // hover button
-                destRect = {layerArea.z, layerArea.w, layerArea.z, layerArea.w};
+                destRect = {layerArea.z, 0, layerArea.z, layerArea.w};
                 sourceRect = {sourceHover.x, sourceHover.y, sourceHover.z, sourceHover.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 // pressed button
-                destRect = {2*layerArea.z, 2*layerArea.w, layerArea.z, layerArea.w};
+                destRect = {2*layerArea.z, 0, layerArea.z, layerArea.w};
                 sourceRect = {sourcePressed.x, sourcePressed.y, sourcePressed.z, sourcePressed.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 // disabled button
-                destRect = {3*layerArea.z, 3*layerArea.w, layerArea.z, layerArea.w};
+                destRect = {3*layerArea.z, 0, layerArea.z, layerArea.w};
                 sourceRect = {sourceDisabled.x, sourceDisabled.y, sourceDisabled.z, sourceDisabled.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
+                
+                ((Texture*)(m_texture->data))->Update();
+                
+                MSE_CORE_LOG("Button: texture edited");
             }
             
             // controller

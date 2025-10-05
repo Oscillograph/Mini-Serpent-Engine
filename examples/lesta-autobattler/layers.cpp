@@ -810,10 +810,34 @@ void ArenaUILayer::OnInit()
     messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                                                                  this, 
                                                                  U"", 
-                                                                 {10, 90, 300, 120}, 
+                                                                 {10, 90, 280, 120}, 
                                                                  {0, 64, 0, 255}, 
-                                                                 {255, 255, 0, 255})));
-    messageLog->showBorder = true;
+                                                                 {255, 255, 0, 255},
+                                                                 1,
+                                                                 true,
+                                                                 {255, 255, 255, 255})));
+    AddElement(new mse::gui::VScrollbar(
+        this, 
+        {290, 90, 13, 120}, 
+        messageLog, 
+        "./data/img/screen-images.png", 
+        {0, 0, 0},
+        {24, 49, 52, 12},
+        {63, 49, 13, 12},
+        {24, 61, 52, 12}));
+
+//    mse::gui::Button* btnScrollUp = (mse::gui::Button*)(AddElement(new mse::gui::Button(
+//                 this, 
+//                 {310, 90, 13, 12}, 
+//                 "./data/img/screen-images.png", 
+//                 {0, 0, 0}, 
+//                 {24, 49, 13, 12},
+//                 {37, 49, 13, 12},
+//                 {50, 49, 13, 12},
+//                 {63, 49, 13, 12})));
+//    btnScrollUp->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
+//        messageLog->Scroll(0, 5);
+//    };
     
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
                   this, U"Продолжить", {32, 32, 32, 255}, {110, 215, 100, 13}, 

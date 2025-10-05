@@ -24,13 +24,13 @@ namespace mse
 			Init(nullptr, {0, 0, 0, 0}, nullptr, nullptr, {0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0});
 		}
 		
-		VScrollbar::VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, Resource* spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown)
+		VScrollbar::VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown)
 		: GUIItem()
 		{
 			Init(layer, area, textItem, spritelist, colorKey, btnUp, body, btnDown);
 		}
 		
-		void VScrollbar::Init(Layer* layer, const glm::uvec4& area, Text* textItem, Resource* spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown)
+		void VScrollbar::Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown)
 		{
 			// model
 			parentLayer = layer;
@@ -52,8 +52,8 @@ namespace mse
 			if (layer != nullptr)
 			{
 				// setup texture to draw on
-				MSE_CORE_LOG("Text: requesting to create a texture");
-				MSE_CORE_TRACE("Text_parentLayer = ", parentLayer);
+				MSE_CORE_LOG("VScrollbar: requesting to create a texture");
+				MSE_CORE_TRACE("VScrollbar_parentLayer = ", parentLayer);
 				m_texture = ResourceManager::CreateTexture(
 					windowUser,
 					windowUser->GetRenderer(),
@@ -62,81 +62,85 @@ namespace mse
 					0,
 					32,
 					{0, 0, 0, 0});
-				MSE_CORE_LOG("Text: texture obtained");
+				MSE_CORE_LOG("VScrollbar: texture obtained");
 				
                 // draw element
                 int btnUpWidth = btnUp.z / 4;
-                int btnUpHeight = btnUp.w / 4;
+                int btnUpHeight = btnUp.w;
                 m_BtnUp = (Button*)(layer->AddElement(new Button(
                              layer, 
                              {area.x, area.y, btnUpWidth, btnUpHeight}, 
-                             spritelist->path, 
+                             spritelist, 
                              colorKey, 
                              {btnUp.x, btnUp.y, btnUpWidth, btnUpHeight},
                              {btnUp.x + btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight},
                              {btnUp.x + 2*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight},
                              {btnUp.x + 3*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight})));
+                m_BtnUp->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
+                    m_textItem->Scroll(0, 5);
+                };
                 
                 int btnDownWidth = btnDown.z / 4;
-                int btnDownHeight = btnDown.w / 4;
+                int btnDownHeight = btnDown.w;
                 m_BtnDown = (Button*)(layer->AddElement(new Button(
                              layer, 
-                             {area.x, area.y + btnUpHeight + body.w, btnUpWidth, btnUpHeight}, 
-                             spritelist->path, 
+                             {area.x, area.y + area.w - btnDownHeight, btnUpWidth, btnUpHeight}, 
+                             spritelist, 
                              colorKey, 
                              {btnDown.x, btnDown.y, btnDownWidth, btnDownHeight},
                              {btnDown.x + btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight},
                              {btnDown.x + 2*btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight},
                              {btnDown.x + 3*btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight})));
+                m_BtnDown->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
+                    m_textItem->Scroll(0, -5);
+                };
                 
                 ((Texture*)(m_texture->data))->Update();
 				
-				MSE_CORE_LOG("Text: texture edited");
+				MSE_CORE_LOG("VScrollbar: items set up");
 			}
 			
 			// controller
 			// setup interaction
-			callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-//				MSE_CORE_LOG(m_elementName, ": ...");
-			};
-			
-			callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-//				MSE_CORE_LOG(m_elementName, ": Yay, you clicked me!");
-			};
-			
-			callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
-//				MSE_CORE_LOG(m_elementName, ": Hello, Mouse!");
-			};
-			
-			callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
-//				MSE_CORE_LOG(m_elementName, ": Goodbye, Mouse!");
-			};
+//			callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+////				MSE_CORE_LOG(m_elementName, ": ...");
+//			};
+//			
+//			callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+////				MSE_CORE_LOG(m_elementName, ": Yay, you clicked me!");
+//			};
+//			
+//			callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
+////				MSE_CORE_LOG(m_elementName, ": Hello, Mouse!");
+//			};
+//			
+//			callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
+////				MSE_CORE_LOG(m_elementName, ": Goodbye, Mouse!");
+//			};
 		}
 		
 		VScrollbar::~VScrollbar()
 		{
-            if (m_texture != nullptr)
-            {
-                ResourceManager::DropResource(m_texture, windowUser);
-                MSE_CORE_LOG("Text: texture dropped");
-            }
+            MSE_CORE_LOG("VScrollbar destroyed");
         }
 		
 		// general GUIItem interface
 		void VScrollbar::Display()
 		{
-			SDL_FRect destRect = {
-				(float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
-				(float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
-				(float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
-				(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
-			};
-			
-			SDL_Rect srcRect = {
-                0, 0, layerArea.z, layerArea.w
-            };
-			
-			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
+            m_BtnUp->Display();
+            m_BtnDown->Display();
+//			SDL_FRect destRect = {
+//				(float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
+//				(float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
+//				(float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
+//				(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
+//			};
+//			
+//			SDL_Rect srcRect = {
+//                0, 0, layerArea.z, layerArea.w
+//            };
+//			
+//			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
 		}
         
         bool VScrollbar::HandleEvent(EventTypes eventType, SDL_Event* event)
