@@ -65,36 +65,7 @@ namespace mse
 					{0, 0, 0, 0});
 				MSE_CORE_LOG("Text: texture obtained");
 				
-				mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
-				
-				// text with border
-                if (showBorder && (layerArea.z > 0) && (layerArea.w > 0))
-                {
-                    Renderer::SurfaceDrawRect(
-                        (Texture*)(m_texture->data),
-                        {0, 0, layerArea.z-1, layerArea.w-1},
-                        m_pxSize,
-                        {m_borderColor.x, m_borderColor.y, m_borderColor.z, m_borderColor.w}
-                        );
-                }
-                if ((m_backgroundColor.w > 0) && (layerArea.z > 2) && (layerArea.w > 2))
-                {
-                    Renderer::SurfaceDrawRectFilled(
-                                                    (Texture*)(m_texture->data),
-                                                    {0 + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
-                                                    {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
-                                                    );
-                }
-				mse::Renderer::SurfaceDrawText(
-					(Texture*)(m_texture->data), 
-					{m_scrollXY.x + 2, m_scrollXY.y + 2, layerArea.z, layerArea.w}, 	// where to
-					m_pxSize,             // pixel size
-					m_text, 			// text content
-					bmpFont, 			// font
-					{color.x, color.y, color.z, color.w}, // color
-					0); 				// interval between rows
-				
-				((Texture*)(m_texture->data))->Update();
+				UpdateTexture();
 				
 				MSE_CORE_LOG("Text: texture edited");
 			}
@@ -153,8 +124,13 @@ namespace mse
         {
             m_text = text;
             
-            mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
+            UpdateTexture();
             
+            MSE_CORE_LOG("Text: texture edited");
+        }
+        
+        void Text::UpdateTexture()
+        {
             // text with border
             if (showBorder && (layerArea.z > 0) && (layerArea.w > 0))
             {
@@ -165,6 +141,8 @@ namespace mse
                                           {m_borderColor.x, m_borderColor.y, m_borderColor.z, m_borderColor.w}
                                           );
             }
+            
+            // background
             if ((m_backgroundColor.w > 0) && (layerArea.z > 2) && (layerArea.w > 2))
             {
                 Renderer::SurfaceDrawRectFilled(
@@ -173,18 +151,19 @@ namespace mse
                                                 {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
                                                 );
             }
+            
+            // text itself
+            mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
             mse::Renderer::SurfaceDrawText(
-                (Texture*)(m_texture->data), 
-                {m_scrollXY.x + 2, m_scrollXY.y + 2, layerArea.z, layerArea.w}, 	// where to
-                m_pxSize,			// pixel size
-                m_text, 			// text content
-                bmpFont, 			// font
-                {m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
-                0); 				// interval between rows
+                                           (Texture*)(m_texture->data), 
+                                           {m_scrollXY.x + 2, m_scrollXY.y + 2, layerArea.z, layerArea.w}, 	// where to
+                                           m_pxSize,			// pixel size
+                                           m_text, 			// text content
+                                           bmpFont, 			// font
+                                           {m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
+                                           0); 				// interval between rows
             
             ((Texture*)(m_texture->data))->Update();
-            
-            MSE_CORE_LOG("Text: texture edited");
         }
         
         void Text::Scroll(int x, int y)
@@ -200,7 +179,7 @@ namespace mse
                 m_scrollXY.y = 0;
             }
             
-            ChangeText(m_text);
+            UpdateTexture();
         }
 	}
 }

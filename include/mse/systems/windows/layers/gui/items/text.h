@@ -23,6 +23,7 @@ namespace mse
 
             // unique Text interface
             void ChangeText(const std::u32string& text);
+            void UpdateTexture();
             void Scroll(int x, int y);
             bool showBorder = false;
 		protected:
