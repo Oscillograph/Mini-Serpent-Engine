@@ -17,16 +17,16 @@ namespace mse
 		Text::Text()
 		: GUIItem()
 		{
-			Init(nullptr, U"", {0, 0, 1, 1}, {0, 0, 0, 0}, {255, 255, 255, 255}, 1);
+			Init(nullptr, U"", {0, 0, 1, 1}, {0, 0, 0, 0}, {255, 255, 255, 255}, 1, false, {0, 0, 0, 0});
 		}
 		
-		Text::Text(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color, int pxSize)
+		Text::Text(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color, int pxSize, bool border, const glm::uvec4& borderColor)
 		: GUIItem()
 		{
-			Init(layer, text, area, bgColor, color, pxSize);
+			Init(layer, text, area, bgColor, color, pxSize, border, borderColor);
 		}
 		
-		void Text::Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color, int pxSize)
+		void Text::Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color, int pxSize, bool border, const glm::uvec4& borderColor)
 		{
 			// model
 			parentLayer = layer;
@@ -36,6 +36,7 @@ namespace mse
 			layerArea = area;
 			m_backgroundColor = bgColor;
 			m_textColor = color;
+            showBorder = border;
 			
 			layerMask.resize(area.z * area.w);
 			for (int x = 0; x < area.z; ++x)
@@ -65,19 +66,23 @@ namespace mse
 				mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
 				
 				// text with border
-                if (showBorder)
+                if (showBorder && (layerArea.z > 0) && (layerArea.w > 0))
                 {
-                    Renderer::SurfaceDrawRectFilled(
+                    Renderer::SurfaceDrawRect(
                         (Texture*)(m_texture->data),
-                        {0, 0, layerArea.z, layerArea.w}, 
-                        {255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+                        {0, 0, layerArea.z-1, layerArea.w-1},
+                        pxSize,
+                        {borderColor.x, borderColor.y, borderColor.z, borderColor.w}
                         );
                 }
-				Renderer::SurfaceDrawRectFilled(
-					(Texture*)(m_texture->data),
-					{0 + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
-					{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
-					);
+                if ((m_backgroundColor.w > 0) && (layerArea.z > 2) && (layerArea.w > 2))
+                {
+                    Renderer::SurfaceDrawRectFilled(
+                                                    (Texture*)(m_texture->data),
+                                                    {0 + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
+                                                    {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+                                                    );
+                }
 				mse::Renderer::SurfaceDrawText(
 					(Texture*)(m_texture->data), 
 					{0 + 2, 2, layerArea.z, layerArea.w}, 	// where to

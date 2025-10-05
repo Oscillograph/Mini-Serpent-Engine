@@ -1,5 +1,6 @@
 ## 0.1.2 ##
 New:
++ Custom cursors set up via special resource type management
 + New GUI items: text, image
 + GUI: button can now be initialized with a spritelist
 + Fullscreen mode for an app window

@@ -90,13 +90,6 @@ public:
 		};
         
         // create a custom cursor
-        mse::Resource* cursor = mse::ResourceManager::CreateTexture(
-                                                                    m_window,
-                                                                    m_window->GetRenderer(),
-                                                                    32, 32,
-                                                                    0,
-                                                                    32,
-                                                                    {0, 0, 0, 0});
         mse::Resource* spriteList = mse::ResourceManager::UseTexture("data/img/screen-images.png", m_window, {0, 0, 0});
         glm::uvec4 spriteListRect = {109, 22, 32, 32};
         m_Cursor = mse::ResourceManager::CreateCursor(m_window, 0, 0, spriteList, spriteListRect, {0, 0, 0});

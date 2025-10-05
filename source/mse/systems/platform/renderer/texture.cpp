@@ -45,6 +45,8 @@ namespace mse
 			w,
 			h
 			);
+
+        SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
 	}
 	
 	Texture::~Texture()
