@@ -470,7 +470,8 @@ namespace mse
 			for (int l = 0; l < pxSize; l++)
 			{
 				yn = center.y + l;
-				if ((xn < target->GetSurface()->w) && (yn < target->GetSurface()->h))
+				if ((xn >= 0) && (yn >= 0) && 
+                    (xn < target->GetSurface()->w) && (yn < target->GetSurface()->h))
 				{
 					pxBuffer = (uint32_t*)target->GetSurface()->pixels + yn*target->GetSurface()->pitch/4 + xn;
 					*pxBuffer = pxColor;

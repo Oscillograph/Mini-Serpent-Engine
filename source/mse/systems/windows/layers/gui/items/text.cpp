@@ -33,8 +33,10 @@ namespace mse
             windowUser = layer->GetWindow();
 			m_elementName = "Text_" + utf8::utf32to8(text);
 			m_text = text;
+            m_pxSize = pxSize;
 			layerArea = area;
 			m_backgroundColor = bgColor;
+            m_borderColor = borderColor;
 			m_textColor = color;
             showBorder = border;
 			
@@ -71,8 +73,8 @@ namespace mse
                     Renderer::SurfaceDrawRect(
                         (Texture*)(m_texture->data),
                         {0, 0, layerArea.z-1, layerArea.w-1},
-                        pxSize,
-                        {borderColor.x, borderColor.y, borderColor.z, borderColor.w}
+                        m_pxSize,
+                        {m_borderColor.x, m_borderColor.y, m_borderColor.z, m_borderColor.w}
                         );
                 }
                 if ((m_backgroundColor.w > 0) && (layerArea.z > 2) && (layerArea.w > 2))
@@ -85,8 +87,8 @@ namespace mse
                 }
 				mse::Renderer::SurfaceDrawText(
 					(Texture*)(m_texture->data), 
-					{0 + 2, 2, layerArea.z, layerArea.w}, 	// where to
-					pxSize,             // pixel size
+					{m_scrollXY.x + 2, m_scrollXY.y + 2, layerArea.z, layerArea.w}, 	// where to
+					m_pxSize,             // pixel size
 					m_text, 			// text content
 					bmpFont, 			// font
 					{color.x, color.y, color.z, color.w}, // color
@@ -154,23 +156,27 @@ namespace mse
             mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
             
             // text with border
-            if (showBorder)
+            if (showBorder && (layerArea.z > 0) && (layerArea.w > 0))
+            {
+                Renderer::SurfaceDrawRect(
+                                          (Texture*)(m_texture->data),
+                                          {0, 0, layerArea.z-1, layerArea.w-1},
+                                          m_pxSize,
+                                          {m_borderColor.x, m_borderColor.y, m_borderColor.z, m_borderColor.w}
+                                          );
+            }
+            if ((m_backgroundColor.w > 0) && (layerArea.z > 2) && (layerArea.w > 2))
             {
                 Renderer::SurfaceDrawRectFilled(
-                    (Texture*)(m_texture->data),
-                    {0, 0, layerArea.z, layerArea.w}, 
-                    {255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
-                    );
+                                                (Texture*)(m_texture->data),
+                                                {0 + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
+                                                {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+                                                );
             }
-            Renderer::SurfaceDrawRectFilled(
-                (Texture*)(m_texture->data),
-                {0 + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
-                {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
-                );
             mse::Renderer::SurfaceDrawText(
                 (Texture*)(m_texture->data), 
-                {0 + 2, 2, layerArea.z, layerArea.w}, 	// where to
-                1, 					// pixel size
+                {m_scrollXY.x + 2, m_scrollXY.y + 2, layerArea.z, layerArea.w}, 	// where to
+                m_pxSize,			// pixel size
                 m_text, 			// text content
                 bmpFont, 			// font
                 {m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
@@ -179,6 +185,22 @@ namespace mse
             ((Texture*)(m_texture->data))->Update();
             
             MSE_CORE_LOG("Text: texture edited");
+        }
+        
+        void Text::Scroll(int x, int y)
+        {
+            m_scrollXY.x -= x;
+            if (m_scrollXY.x < 0)
+            {
+                m_scrollXY.x = 0;
+            }
+            m_scrollXY.y -= y;
+            if (m_scrollXY.y < 0)
+            {
+                m_scrollXY.y = 0;
+            }
+            
+            ChangeText(m_text);
         }
 	}
 }

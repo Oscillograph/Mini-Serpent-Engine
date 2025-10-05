@@ -23,11 +23,15 @@ namespace mse
 
             // unique Text interface
             void ChangeText(const std::u32string& text);
+            void Scroll(int x, int y);
             bool showBorder = false;
 		protected:
 			std::u32string m_text = U"";
+            int m_pxSize = 1;
 			glm::uvec4 m_backgroundColor = {0, 0, 0, 0};
+            glm::uvec4 m_borderColor = {0, 0, 0, 0};
 			glm::uvec4 m_textColor = {223, 223, 223, 255};
+            glm::uvec2 m_scrollXY = {0, 0};
 		};
 	}
 }
