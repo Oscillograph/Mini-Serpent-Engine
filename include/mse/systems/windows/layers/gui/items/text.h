@@ -29,6 +29,7 @@ namespace mse
             bool showBorder = false;
             bool scrollableY = false;
             bool scrollableX = false;
+            glm::ivec4 m_scrollXY = {0, 0, 0, 0};
             
 		protected:
 			std::u32string m_text = U"";
@@ -36,7 +37,6 @@ namespace mse
 			glm::uvec4 m_backgroundColor = {0, 0, 0, 0};
             glm::uvec4 m_borderColor = {0, 0, 0, 0};
 			glm::uvec4 m_textColor = {223, 223, 223, 255};
-            glm::ivec4 m_scrollXY = {0, 0, 0, 0};
 		};
 	}
 }

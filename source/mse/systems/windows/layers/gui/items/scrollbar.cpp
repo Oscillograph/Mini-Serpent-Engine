@@ -30,7 +30,7 @@ namespace mse
 			Init(layer, area, textItem, spritelist, colorKey, btnUp, body, btnDown);
 		}
 		
-		void VScrollbar::Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown)
+		void VScrollbar::Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown)
 		{
 			// model
 			parentLayer = layer;
@@ -77,7 +77,51 @@ namespace mse
                              {btnUp.x + 2*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight},
                              {btnUp.x + 3*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight})));
                 m_BtnUp->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
-                    m_textItem->Scroll(0, 10);
+                    m_textItem->Scroll(0, stepY);
+                };
+                
+                int btnBallWidth = btnBall.z / 4;
+                int btnBallHeight = btnBall.w;
+                m_BtnBall = (Button*)(layer->AddElement(new Button(
+                               layer,
+                               {area.x + 1, area.y + btnUpHeight, btnBallWidth, btnBallHeight},
+                               spritelist,
+                               colorKey,
+                               {btnBall.x, btnBall.y, btnBallWidth, btnBallHeight},
+                               {btnBall.x + btnBallWidth, btnBall.y, btnBallWidth, btnBallHeight},
+                               {btnBall.x + 2*btnBallWidth, btnBall.y, btnBallWidth, btnBallHeight},
+                               {btnBall.x + 3*btnBallWidth, btnBall.y, btnBallWidth, btnBallHeight}
+                               )));
+                m_BtnBall->callbacks[EventTypes::GUIItemMouseMove] = [=](SDL_Event* event){
+                    if (m_BtnBall->isPushed)
+                    {
+                        int yrel = event->motion.yrel;
+                        int yrelPixels = (int)roundf((float)yrel / windowUser->GetScale().y);
+//                        float linesPercentage = (float)yrelPixels / m_textItem->m_scrollXY.w;
+                        float areaPercentage = (float)yrelPixels / (area.w - btnUp.w - btnDown.w);
+                        int linesToScroll = (int)roundf(m_textItem->m_scrollXY.w * areaPercentage);
+                        
+                        if (yrel < 0)
+                        {
+                            textItem->Scroll(0, linesToScroll);
+                        } else {
+                            if (yrel > 0)
+                            {
+                                textItem->Scroll(0, linesToScroll);
+                            }
+                        }
+                        
+                        m_BtnBall->layerArea.y += yrelPixels;
+                        
+                        if (m_BtnBall->layerArea.y < (area.y + btnUp.w))
+                        {
+                            m_BtnBall->layerArea.y = area.y + btnUp.w;
+                        }
+                        if (m_BtnBall->layerArea.y > (area.y + area.w - btnDown.w - btnUp.w))
+                        {
+                            m_BtnBall->layerArea.y = area.y + area.w - btnDown.w - btnUp.w;
+                        }
+                    }
                 };
                 
                 int btnDownWidth = btnDown.z / 4;
@@ -92,7 +136,7 @@ namespace mse
                              {btnDown.x + 2*btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight},
                              {btnDown.x + 3*btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight})));
                 m_BtnDown->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
-                    m_textItem->Scroll(0, -10);
+                    m_textItem->Scroll(0, -stepY);
                 };
                 
                 ((Texture*)(m_texture->data))->Update();

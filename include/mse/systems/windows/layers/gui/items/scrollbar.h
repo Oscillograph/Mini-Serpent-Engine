@@ -37,16 +37,17 @@ namespace mse
 		public:
 			// general initialization
 			VScrollbar();
-			VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string&  spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown);
-			void Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown);
+			VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string&  spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown);
+			void Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown);
 			virtual ~VScrollbar();
 			
 			// general GUIItem interface
 			virtual void Display();
 			virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
 
-            int stepX = 5;
-            int stepY = 5;
+            int stepX = 10;
+            int stepY = 10;
+            int scrollMax = 0;
             
             // unique Text interface
             void StateProcessor();

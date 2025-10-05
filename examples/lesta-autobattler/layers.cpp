@@ -823,7 +823,7 @@ void ArenaUILayer::OnInit()
         "./data/img/screen-images.png", 
         {0, 0, 0},
         {24, 49, 52, 12},
-        {63, 49, 13, 12},
+        {24, 74, 44, 10},
         {24, 61, 52, 12}));
     
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
@@ -1160,7 +1160,7 @@ void CharacterUpdateUILayer::OnInit()
                     "./data/img/screen-images.png", 
                     {0, 0, 0},
                     {24, 49, 52, 12},
-                    {63, 49, 13, 12},
+                    {24, 74, 44, 10},
                     {24, 61, 52, 12}));
     
     // confirm changes

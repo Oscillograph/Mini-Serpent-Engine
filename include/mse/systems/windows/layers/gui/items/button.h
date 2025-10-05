@@ -32,6 +32,8 @@ namespace mse
 
 			// unique Button interface
 			ButtonStates state = ButtonStates::Released;
+			bool isHover = false;
+			bool isPushed = false;
 		protected:
 			std::u32string m_text = U"";
             
@@ -45,8 +47,6 @@ namespace mse
             glm::uvec4 m_midSource = {0, 0, 0, 0};
             glm::uvec4 m_rightSource = {0, 0, 0, 0};
 			
-			bool isHover = false;
-			bool isPushed = false;
 		};
 	}
 }
