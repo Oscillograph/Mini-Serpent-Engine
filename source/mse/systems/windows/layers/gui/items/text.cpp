@@ -132,17 +132,6 @@ namespace mse
         
         void Text::UpdateTexture()
         {
-            // text with border
-            if (showBorder && (layerArea.z > 0) && (layerArea.w > 0))
-            {
-                Renderer::SurfaceDrawRect(
-                                          (Texture*)(m_texture->data),
-                                          {0, 0, layerArea.z-1, layerArea.w-1},
-                                          m_pxSize,
-                                          {m_borderColor.x, m_borderColor.y, m_borderColor.z, m_borderColor.w}
-                                          );
-            }
-            
             // background
             if ((m_backgroundColor.w > 0) && (layerArea.z > 2) && (layerArea.w > 2))
             {
@@ -163,10 +152,11 @@ namespace mse
             };
             uint32_t xMax = layerArea.z / (fontSize.x * m_pxSize); // max columns
             uint32_t lines = m_text.size() / xMax + 1;
-            lines += std::count(m_text.begin(), m_text.end(), '\n');
+//            lines += std::count(m_text.begin(), m_text.end(), '\n');
+            lines = std::count(m_text.begin(), m_text.end(), '\n') + 2;
 //            MSE_CORE_ERROR(lines);
             
-            m_scrollXY.w = lines * fontSize.y - layerArea.w;
+            m_scrollXY.w = layerArea.w - lines * fontSize.y;
             
             // draw text itself
             mse::Renderer::SurfaceDrawText(
@@ -178,6 +168,17 @@ namespace mse
                                            {m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
                                            0); 				// interval between rows
             
+            // border
+            if (showBorder && (layerArea.z > 0) && (layerArea.w > 0))
+            {
+                Renderer::SurfaceDrawRect(
+                                          (Texture*)(m_texture->data),
+                                          {0, 0, layerArea.z-1, layerArea.w-1},
+                                          m_pxSize,
+                                          {m_borderColor.x, m_borderColor.y, m_borderColor.z, m_borderColor.w}
+                                          );
+            }
+            
             ((Texture*)(m_texture->data))->Update();
         }
         
@@ -186,24 +187,24 @@ namespace mse
             m_scrollXY.x += x;
             m_scrollXY.y += y;
             
-            if (m_scrollXY.x < 0)
+            // these scroll limits are calculated in UpdateTexture()
+            if (m_scrollXY.y < m_scrollXY.w)
+            {
+                m_scrollXY.y = m_scrollXY.w;
+            }
+            if (m_scrollXY.x < m_scrollXY.z)
+            {
+                m_scrollXY.x = m_scrollXY.z;
+            }
+            
+            if (m_scrollXY.x > 0)
             {
                 m_scrollXY.x = 0;
             }
-            if (m_scrollXY.y < 0)
+            if (m_scrollXY.y > 0)
             {
                 m_scrollXY.y = 0;
             }
-            
-            // these scroll limits are calculated in UpdateTexture()
-//            if (m_scrollXY.y > m_scrollXY.w)
-//            {
-//                m_scrollXY.y = m_scrollXY.w;
-//            }
-//            if (m_scrollXY.x > m_scrollXY.z)
-//            {
-//                m_scrollXY.x = m_scrollXY.z;
-//            }
             
             UpdateTexture();
         }

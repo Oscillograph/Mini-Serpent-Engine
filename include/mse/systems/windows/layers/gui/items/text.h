@@ -36,7 +36,7 @@ namespace mse
 			glm::uvec4 m_backgroundColor = {0, 0, 0, 0};
             glm::uvec4 m_borderColor = {0, 0, 0, 0};
 			glm::uvec4 m_textColor = {223, 223, 223, 255};
-            glm::uvec4 m_scrollXY = {0, 0, 0, 0};
+            glm::ivec4 m_scrollXY = {0, 0, 0, 0};
 		};
 	}
 }

@@ -825,19 +825,6 @@ void ArenaUILayer::OnInit()
         {24, 49, 52, 12},
         {63, 49, 13, 12},
         {24, 61, 52, 12}));
-
-//    mse::gui::Button* btnScrollUp = (mse::gui::Button*)(AddElement(new mse::gui::Button(
-//                 this, 
-//                 {310, 90, 13, 12}, 
-//                 "./data/img/screen-images.png", 
-//                 {0, 0, 0}, 
-//                 {24, 49, 13, 12},
-//                 {37, 49, 13, 12},
-//                 {50, 49, 13, 12},
-//                 {63, 49, 13, 12})));
-//    btnScrollUp->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
-//        messageLog->Scroll(0, 5);
-//    };
     
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
                   this, U"Продолжить", {32, 32, 32, 255}, {110, 215, 100, 13}, 
@@ -1155,8 +1142,26 @@ void CharacterUpdateUILayer::OnInit()
     game.inputWeapon = game.playerCharacter.weapon;
     
     // show stats
-    statsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"", {010, 109, 305, 100}, {0, 64, 0, 255}, {255, 255, 128, 255})));
+    statsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+                   this, 
+                   U"", 
+                   {10, 109, 287, 100}, 
+                   {0, 64, 0, 255}, 
+                   {255, 255, 128, 255},
+                   1,
+                   true,
+                   {255, 255, 0, 255})));
     changeMade = true;
+    
+    AddElement(new mse::gui::VScrollbar(
+                    this, 
+                    {297, 109, 13, 100}, 
+                    statsBox, 
+                    "./data/img/screen-images.png", 
+                    {0, 0, 0},
+                    {24, 49, 52, 12},
+                    {63, 49, 13, 12},
+                    {24, 61, 52, 12}));
     
     // confirm changes
     mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {32, 32, 32, 255}, {110, 215, 100, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
@@ -1282,6 +1287,8 @@ void CharacterUpdateUILayer::OnUpdate()
             {
                 strstream << ", ";
             }
+            
+            strstream << "\n    ";
             
             switch (game.playerCharacter.traits[i])
             {

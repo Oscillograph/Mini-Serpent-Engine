@@ -77,7 +77,7 @@ namespace mse
                              {btnUp.x + 2*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight},
                              {btnUp.x + 3*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight})));
                 m_BtnUp->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
-                    m_textItem->Scroll(0, 5);
+                    m_textItem->Scroll(0, 10);
                 };
                 
                 int btnDownWidth = btnDown.z / 4;
@@ -92,7 +92,7 @@ namespace mse
                              {btnDown.x + 2*btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight},
                              {btnDown.x + 3*btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight})));
                 m_BtnDown->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
-                    m_textItem->Scroll(0, -5);
+                    m_textItem->Scroll(0, -10);
                 };
                 
                 ((Texture*)(m_texture->data))->Update();
