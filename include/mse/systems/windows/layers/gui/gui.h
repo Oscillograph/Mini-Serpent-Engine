@@ -10,6 +10,7 @@
 #include <mse/systems/windows/layers/gui/items/canvas.h>
 #include <mse/systems/windows/layers/gui/items/button.h>
 #include <mse/systems/windows/layers/gui/items/text.h>
+#include <mse/systems/windows/layers/gui/items/scrollbar.h>
 #include <mse/systems/windows/layers/gui/items/image.h>
 
 namespace mse

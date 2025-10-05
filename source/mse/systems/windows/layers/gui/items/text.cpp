@@ -2,6 +2,7 @@
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
 #include <mse/systems/platform/renderer/texture.h>
+#include <mse/systems/platform/renderer/font.h>
 #include <mse/systems/platform/events/events.h>
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/window.h>
@@ -152,8 +153,22 @@ namespace mse
                                                 );
             }
             
-            // text itself
+            // bitmap font
             mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
+            
+            // vertical scroll adjustment in respect to bitmap font
+            glm::uvec2 fontSize = {
+                ((mse::FontBitmap*)(bmpFont->data))->fontClip.z,
+                ((mse::FontBitmap*)(bmpFont->data))->fontClip.w
+            };
+            uint32_t xMax = layerArea.z / (fontSize.x * m_pxSize); // max columns
+            uint32_t lines = m_text.size() / xMax + 1;
+            lines += std::count(m_text.begin(), m_text.end(), '\n');
+            MSE_CORE_ERROR(lines);
+            
+            m_scrollXY.w = lines * fontSize.y - layerArea.w;
+            
+            // draw text itself
             mse::Renderer::SurfaceDrawText(
                                            (Texture*)(m_texture->data), 
                                            {m_scrollXY.x + 2, m_scrollXY.y + 2, layerArea.z, layerArea.w}, 	// where to
@@ -169,14 +184,25 @@ namespace mse
         void Text::Scroll(int x, int y)
         {
             m_scrollXY.x -= x;
+            m_scrollXY.y -= y;
+            
             if (m_scrollXY.x < 0)
             {
                 m_scrollXY.x = 0;
             }
-            m_scrollXY.y -= y;
             if (m_scrollXY.y < 0)
             {
                 m_scrollXY.y = 0;
+            }
+            
+            // these scroll limits are calculated in UpdateTexture()
+            if (m_scrollXY.y > m_scrollXY.w)
+            {
+                m_scrollXY.y = m_scrollXY.w;
+            }
+            if (m_scrollXY.x > m_scrollXY.z)
+            {
+                m_scrollXY.x = m_scrollXY.z;
             }
             
             UpdateTexture();

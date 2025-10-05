@@ -21,6 +21,7 @@ namespace mse
 			Button();
 			Button(Layer* layer, const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color);
             Button(Layer* layer,  const std::u32string& text, const glm::uvec4& color, const glm::uvec4& area, const std::string& spritelist, const glm::uvec4& leftSource, const glm::uvec4& midSource, const glm::uvec4& rightSource);
+            Button(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceStill, const glm::uvec4& sourceHover, const glm::uvec4& sourcePressed, const glm::uvec4& sourceDisabled); // image button
 			void Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color);
             void Init(Layer* layer,  const std::u32string& text, const glm::uvec4& color, const glm::uvec4& area, const std::string& spritelist, const glm::uvec4& leftSource, const glm::uvec4& midSource, const glm::uvec4& rightSource);
 			virtual ~Button();

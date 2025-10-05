@@ -31,6 +31,87 @@ namespace mse
         {
             Init(layer, text, color, area, spritelist, leftSource, midSource, rightSource);
         }
+        
+        Button::Button(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceStill, const glm::uvec4& sourceHover, const glm::uvec4& sourcePressed, const glm::uvec4& sourceDisabled)
+        : GUIItem()
+        {
+            parentLayer = layer;
+            windowUser = layer->GetWindow();
+            layerArea = area;
+            m_elementName = "Button (image)";
+            
+            // view
+            if (layer != nullptr)
+            {
+                layerMask.resize(area.z * area.w);
+                for (int x = 0; x < area.z; ++x)
+                {
+                    for (int y = 0; y < area.w; ++y)
+                    {
+                        layerMask[x + y*area.z] = id;
+                    }
+                }
+                
+                m_spriteList = ResourceManager::UseTexture(spritelist, windowUser, colorKey);
+                int textureWidth = layerArea.z * 4;
+                int textureHeight = layerArea.w;
+                
+                // setup texture to draw on
+                MSE_CORE_LOG("Button: requesting to create a texture");
+                MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
+                m_texture = ResourceManager::CreateTexture(
+                   windowUser,
+                   windowUser->GetRenderer(),
+                   textureWidth,
+                   textureHeight,
+                   0,
+                   32,
+                   {0, 0, 0, 0});
+                MSE_CORE_LOG("Button: texture obtained");
+                
+                // still button
+                SDL_FRect destRect = {0, 0, layerArea.z, layerArea.w};
+                SDL_Rect sourceRect = {sourceStill.x, sourceStill.y, sourceStill.z, sourceStill.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                // hover button
+                destRect = {layerArea.z, layerArea.w, layerArea.z, layerArea.w};
+                sourceRect = {sourceHover.x, sourceHover.y, sourceHover.z, sourceHover.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                // pressed button
+                destRect = {2*layerArea.z, 2*layerArea.w, layerArea.z, layerArea.w};
+                sourceRect = {sourcePressed.x, sourcePressed.y, sourcePressed.z, sourcePressed.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                // disabled button
+                destRect = {3*layerArea.z, 3*layerArea.w, layerArea.z, layerArea.w};
+                sourceRect = {sourceDisabled.x, sourceDisabled.y, sourceDisabled.z, sourceDisabled.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+            }
+            
+            // controller
+            callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+            };
+            
+            callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            };
+            
+            callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
+            };
+            
+            callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
+            };
+        }
 		
         // generic button
 		void Button::Init(Layer* layer,  const std::u32string& text, const glm::uvec4& area, const glm::uvec4& bgColor, const glm::uvec4& color)

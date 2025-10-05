@@ -413,7 +413,7 @@ namespace mse
 		for (auto typeIterator = m_Cache.begin(); typeIterator != m_Cache.end(); typeIterator++)
 		{
 			type = (*typeIterator).first;
-			 MSE_CORE_LOG("- choosing resource category \"", m_ResourceTypeNames[type], "\"...");
+//			 MSE_CORE_LOG("- choosing resource category \"", m_ResourceTypeNames[type], "\"...");
 			if (m_Cache.find(type) != m_Cache.end())
 			{
 				// MSE_CORE_LOG("- walking through resource category ", (int)type, "...");
