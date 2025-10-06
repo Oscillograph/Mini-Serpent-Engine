@@ -37,8 +37,8 @@ namespace mse
 		public:
 			// general initialization
 			VScrollbar();
-			VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string&  spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown);
-			void Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown);
+			VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string&  spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown, const glm::uvec4& sliderImgTop, const glm::uvec4& sliderImgMid, const glm::uvec4& sliderImgBottom);
+			void Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown, const glm::uvec4& sliderImgTop, const glm::uvec4& sliderImgMid, const glm::uvec4& sliderImgBottom);
 			virtual ~VScrollbar();
 			
 			// general GUIItem interface
@@ -54,13 +54,13 @@ namespace mse
             VScrollbarStates state = VScrollbarStates::BallPanelReleased;
             glm::uvec2 ballCoordinates = {0, 0};
             glm::uvec4 ballPanelArea = {0, 0, 0, 0};
-            
+            bool correctingMousePosition = false;
         protected:
             Text* m_textItem = nullptr;
             Button* m_BtnUp = nullptr;
             Button* m_BtnDown = nullptr;
             Button* m_BtnBall = nullptr;
-            Image* m_Panel = nullptr;
+            VImageTemplate* m_sliderPanel = nullptr;
 		};
 	}
 }

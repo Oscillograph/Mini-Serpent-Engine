@@ -534,6 +534,7 @@ namespace mse
 					{
 						if (isEnabled)
 						{
+                            state = ButtonStates::Pressed;
 							isPushed = true;
 							callbacks[eventType](event);
 						}
@@ -543,6 +544,7 @@ namespace mse
 					{
 						if (isEnabled)
 						{
+                            state = ButtonStates::Released;
 							isPushed = false;
 							callbacks[eventType](event);
 						}

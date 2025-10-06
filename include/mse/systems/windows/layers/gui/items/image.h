@@ -28,6 +28,30 @@ namespace mse
             Resource* m_spriteList = nullptr;
             glm::uvec4 m_sourceArea = {0, 0, 0, 0};
 		};
+        
+        
+        class VImageTemplate : public GUIItem
+        {
+        public:
+            // general initialization
+            VImageTemplate();
+            VImageTemplate(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceTop, const glm::uvec4& sourceMid, const glm::uvec4& sourceBottom);
+            void Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceTop, const glm::uvec4& sourceMid, const glm::uvec4& sourceBottom);
+            virtual ~VImageTemplate();
+            
+            // general GUIItem interface
+            virtual void Display();
+            
+        protected:
+            // generic
+            glm::uvec4 m_backgroundColor = {0, 0, 0, 0};
+            
+            // sprite-based
+            Resource* m_spriteList = nullptr;
+            glm::uvec4 m_sourceTop = {0, 0, 0, 0};
+            glm::uvec4 m_sourceMid = {0, 0, 0, 0};
+            glm::uvec4 m_sourceBottom = {0, 0, 0, 0};
+        };
 	}
 }
 

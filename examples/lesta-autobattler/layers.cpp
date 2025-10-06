@@ -812,10 +812,10 @@ void ArenaUILayer::OnInit()
                                                                  U"", 
                                                                  {10, 90, 280, 120}, 
                                                                  {0, 64, 0, 255}, 
-                                                                 {255, 255, 0, 255},
+                                                                 {255, 255, 128, 255},
                                                                  1,
                                                                  true,
-                                                                 {255, 255, 255, 255})));
+                                                                 {255, 196, 0, 255})));
     AddElement(new mse::gui::VScrollbar(
         this, 
         {290, 90, 13, 120}, 
@@ -824,7 +824,10 @@ void ArenaUILayer::OnInit()
         {0, 0, 0},
         {24, 49, 52, 12},
         {24, 74, 44, 10},
-        {24, 61, 52, 12}));
+        {24, 61, 52, 12},
+        {63, 61, 13, 4},
+        {63, 65, 13, 4},
+        {63, 69, 13, 4}));
     
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
                   this, U"Продолжить", {32, 32, 32, 255}, {110, 215, 100, 13}, 
@@ -1150,7 +1153,7 @@ void CharacterUpdateUILayer::OnInit()
                    {255, 255, 128, 255},
                    1,
                    true,
-                   {255, 255, 0, 255})));
+                   {255, 196, 0, 255})));
     changeMade = true;
     
     AddElement(new mse::gui::VScrollbar(
@@ -1161,7 +1164,10 @@ void CharacterUpdateUILayer::OnInit()
                     {0, 0, 0},
                     {24, 49, 52, 12},
                     {24, 74, 44, 10},
-                    {24, 61, 52, 12}));
+                    {24, 61, 52, 12},
+                    {63, 61, 13, 4},
+                    {63, 65, 13, 4},
+                    {63, 69, 13, 4}));
     
     // confirm changes
     mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {32, 32, 32, 255}, {110, 215, 100, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));

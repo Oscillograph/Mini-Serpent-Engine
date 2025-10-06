@@ -21,16 +21,16 @@ namespace mse
 		VScrollbar::VScrollbar()
 		: GUIItem()
 		{
-			Init(nullptr, {0, 0, 0, 0}, nullptr, nullptr, {0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0});
+			Init(nullptr, {0, 0, 0, 0}, nullptr, nullptr, {0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0});
 		}
 		
-		VScrollbar::VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown)
+		VScrollbar::VScrollbar(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& body, const glm::uvec4& btnDown, const glm::uvec4& sliderImgTop, const glm::uvec4& sliderImgMid, const glm::uvec4& sliderImgBottom)
 		: GUIItem()
 		{
-			Init(layer, area, textItem, spritelist, colorKey, btnUp, body, btnDown);
+			Init(layer, area, textItem, spritelist, colorKey, btnUp, body, btnDown, sliderImgTop, sliderImgMid, sliderImgBottom);
 		}
 		
-		void VScrollbar::Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown)
+		void VScrollbar::Init(Layer* layer, const glm::uvec4& area, Text* textItem, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown, const glm::uvec4& sliderImgTop, const glm::uvec4& sliderImgMid, const glm::uvec4& sliderImgBottom)
 		{
 			// model
 			parentLayer = layer;
@@ -64,7 +64,7 @@ namespace mse
 					{0, 0, 0, 0});
 				MSE_CORE_LOG("VScrollbar: texture obtained");
 				
-                // draw element
+                // draw btn to scroll up
                 int btnUpWidth = btnUp.z / 4;
                 int btnUpHeight = btnUp.w;
                 m_BtnUp = (Button*)(layer->AddElement(new Button(
@@ -79,7 +79,9 @@ namespace mse
                 m_BtnUp->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
                     m_textItem->Scroll(0, stepY);
                 };
+         
                 
+                // draw ball btn
                 int btnBallWidth = btnBall.z / 4;
                 int btnBallHeight = btnBall.w;
                 m_BtnBall = (Button*)(layer->AddElement(new Button(
@@ -93,37 +95,70 @@ namespace mse
                                {btnBall.x + 3*btnBallWidth, btnBall.y, btnBallWidth, btnBallHeight}
                                )));
                 m_BtnBall->callbacks[EventTypes::GUIItemMouseMove] = [=](SDL_Event* event){
-                    if (m_BtnBall->isPushed)
+                    if (!correctingMousePosition)
                     {
-                        int yrel = event->motion.yrel;
-                        int yrelPixels = (int)roundf((float)yrel / windowUser->GetScale().y);
-//                        float linesPercentage = (float)yrelPixels / m_textItem->m_scrollXY.w;
-                        float areaPercentage = (float)yrelPixels / (area.w - btnUp.w - btnDown.w);
-                        int linesToScroll = (int)roundf(m_textItem->m_scrollXY.w * areaPercentage);
-                        
-                        if (yrel < 0)
+                        if (m_BtnBall->isPushed)
                         {
-                            textItem->Scroll(0, linesToScroll);
-                        } else {
-                            if (yrel > 0)
+                            int yrel = event->motion.yrel;
+                            int yrelPixels = (int)roundf((float)yrel / windowUser->GetScale().y);
+//                        float linesPercentage = (float)yrelPixels / m_textItem->m_scrollXY.w;
+                            float areaPercentage = (float)yrelPixels / (area.w - btnUp.w - btnDown.w + 1);
+                            int linesToScroll = (int)roundf(m_textItem->m_scrollXY.w * areaPercentage);
+                            
+                            if (yrel < 0)
                             {
                                 textItem->Scroll(0, linesToScroll);
+                            } else {
+                                if (yrel > 0)
+                                {
+                                    textItem->Scroll(0, linesToScroll);
+                                }
                             }
+                            
+                            m_BtnBall->layerArea.y += yrelPixels;
+                            
+                            if (m_BtnBall->layerArea.y < (area.y + btnUp.w + 1))
+                            {
+                                m_BtnBall->layerArea.y = area.y + btnUp.w + 1;
+                            }
+                            if (m_BtnBall->layerArea.y > (area.y + area.w - btnDown.w - btnUp.w + 1))
+                            {
+                                m_BtnBall->layerArea.y = area.y + area.w - btnDown.w - btnUp.w + 1;
+                            }
+                            
+                            correctingMousePosition = true;
+                            SDL_WarpMouseInWindow((SDL_Window*)(windowUser->GetNativeWindow()), 
+                                                  windowUser->GetScale().x * (2*m_BtnBall->layerArea.x + m_BtnBall->layerArea.z)/2,
+                                                  windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
                         }
-                        
-                        m_BtnBall->layerArea.y += yrelPixels;
-                        
-                        if (m_BtnBall->layerArea.y < (area.y + btnUp.w))
-                        {
-                            m_BtnBall->layerArea.y = area.y + btnUp.w;
-                        }
-                        if (m_BtnBall->layerArea.y > (area.y + area.w - btnDown.w - btnUp.w))
-                        {
-                            m_BtnBall->layerArea.y = area.y + area.w - btnDown.w - btnUp.w;
-                        }
+                    } else {
+                        correctingMousePosition = false;
                     }
                 };
                 
+                m_BtnBall->callbacks[EventTypes::GUIItemMouseOut] = [=](SDL_Event* event){
+                    if (m_BtnBall->state == ButtonStates::Pressed)
+                    {
+                        m_BtnBall->isPushed = true;
+                        correctingMousePosition = true;
+                        SDL_WarpMouseInWindow((SDL_Window*)(windowUser->GetNativeWindow()), 
+                                              windowUser->GetScale().x * (2*m_BtnBall->layerArea.x + m_BtnBall->layerArea.z)/2,
+                                              windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
+                    }
+                };
+                
+                // draw slider panel
+                m_sliderPanel = (VImageTemplate*)(layer->AddElement(new VImageTemplate(
+                               layer,
+                               {area.x, area.y + btnUpHeight, area.z, area.w - btnUp.w - btnDown.w},
+                               spritelist,
+                               colorKey,
+                               sliderImgTop,
+                               sliderImgMid,
+                               sliderImgBottom
+                               )));
+                
+                // draw btn to scroll down
                 int btnDownWidth = btnDown.z / 4;
                 int btnDownHeight = btnDown.w;
                 m_BtnDown = (Button*)(layer->AddElement(new Button(
