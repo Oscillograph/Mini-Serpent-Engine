@@ -817,17 +817,17 @@ void ArenaUILayer::OnInit()
                                                                  true,
                                                                  {255, 196, 0, 255})));
     AddElement(new mse::gui::VScrollbar(
-        this, 
-        {290, 90, 13, 120}, 
-        messageLog, 
-        "./data/img/screen-images.png", 
-        {0, 0, 0},
-        {24, 49, 52, 12},
-        {24, 74, 44, 10},
-        {24, 61, 52, 12},
-        {63, 61, 13, 4},
-        {63, 65, 13, 4},
-        {63, 69, 13, 4}));
+                                        this, 
+                                        {290, 90, 13, 120}, 
+                                        messageLog, 
+                                        "./data/img/screen-images.png", 
+                                        {0, 0, 0},
+                                        {24, 49, 52, 12},
+                                        {24, 74, 44, 10},
+                                        {24, 61, 52, 12},
+                                        {63, 61, 13, 4},
+                                        {63, 65, 13, 4},
+                                        {63, 69, 13, 4}));
     
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
                   this, U"Продолжить", {32, 32, 32, 255}, {110, 215, 100, 13}, 
@@ -1285,7 +1285,31 @@ void CharacterUpdateUILayer::OnUpdate()
         "\nЛовкость: " << game.playerCharacter.stats.agility <<
         "\nВыносливость: " << game.playerCharacter.stats.endurance <<
         "\nОружие: " << utf8::utf32to8(game.inputWeapon.name.c_str()) << 
-                   " (" << (int)(roundf(game.inputWeapon.damage)) << ")" <<
+                   "\n          (урон " << (int)(roundf(game.inputWeapon.damage));
+        switch (game.inputWeapon.type)
+        {
+        case LAutobattler::DamageType::Cutting:
+            {
+                strstream << ", режущий";
+                break;
+            }
+        case LAutobattler::DamageType::Piercing:
+            {
+                strstream << ", колющий";
+                break;
+            }
+        case LAutobattler::DamageType::Crushing:
+            {
+                strstream << ", дробящий";
+                break;
+            }
+        case LAutobattler::DamageType::Divine:
+            {
+                strstream << ", божественный";
+                break;
+            }
+        }
+        strstream << ")" <<
         "\nСпособности: ";
         for (int i = 0; i < game.playerCharacter.traits.size(); ++i)
         {
@@ -1294,68 +1318,80 @@ void CharacterUpdateUILayer::OnUpdate()
                 strstream << ", ";
             }
             
-            strstream << "\n    ";
+            strstream << "\n  ";
             
             switch (game.playerCharacter.traits[i])
             {
             case LAutobattler::Traits::HiddenStrike:
                 {
                     strstream << "Скрытый удар";
+                    strstream << "\n    (+1 к урону, если ловчее цели)";
                     break;
                 }
             case LAutobattler::Traits::Rush:
                 {
                     strstream << "Рвение";
+                    strstream << "\n    (удвоенный урон в первый ход)";
                     break;
                 }
             case LAutobattler::Traits::Rage:
                 {
                     strstream << "Ярость";
+                    strstream << "\n    (+2 к урону первые три хода,\n    -1 к урону во все остальные)";
                     break;
                 }
             case LAutobattler::Traits::StoneSkin:
                 {
                     strstream << "Каменная кожа";
+                    strstream << "\n    (ущерб снижается на выносливость)";
                     break;
                 }
             case LAutobattler::Traits::Strong:
                 {
                     strstream << "Силач";
+                    strstream << "\n    (+1 к силе)";
                     break;
                 }
             case LAutobattler::Traits::Agile:
                 {
                     strstream << "Ловкач";
+                    strstream << "\n    (+1 к ловкости)";
                     break;
                 }
             case LAutobattler::Traits::Survivor:
                 {
                     strstream << "Выживальщик";
+                    strstream << "\n    (+1 к выносливости)";
                     break;
                 }
             case LAutobattler::Traits::Shield:
                 {
                     strstream << "Щит";
+                    strstream << "\n    (-3 к ущербу, если сильнее цели)";
                     break;
                 }
             case LAutobattler::Traits::Poison:
                 {
                     strstream << "Яд";
+                    strstream << "\n    (+N к урону, где N - номер хода)";
                     break;
                 }
             case LAutobattler::Traits::CuttingImmune:
                 {
                     strstream << "Не режется";
+                    strstream << "\n    (иммунитет к режущему оружию)";
                     break;
                 }
             case LAutobattler::Traits::CrushingWeakness:
                 {
                     strstream << "Страх дубин";
+                    strstream << "\n    (двойной ущерб от дробящего оружия)";
                     break;
                 }
             case LAutobattler::Traits::FireBreather:
                 {
                     strstream << "Огненное дыхание";
+                    strstream << "\n    (+3 к урону каждый третий ход)";
                     break;
                 }
             }

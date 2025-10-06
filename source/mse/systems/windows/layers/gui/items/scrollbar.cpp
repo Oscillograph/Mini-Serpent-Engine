@@ -78,6 +78,19 @@ namespace mse
                              {btnUp.x + 3*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight})));
                 m_BtnUp->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
                     m_textItem->Scroll(0, stepY);
+                    
+                    float areaPercentage = (float)stepY / (m_textItem->m_scrollXY.w);
+                    int yrelPixels = (int)roundf((float)areaPercentage * m_sliderPanel->layerArea.w);
+                    
+                    m_BtnBall->layerArea.y += yrelPixels;
+                    if (m_BtnBall->layerArea.y < (area.y + btnUp.w + 1))
+                    {
+                        m_BtnBall->layerArea.y = area.y + btnUp.w + 1;
+                    }
+                    if (m_BtnBall->layerArea.y > (area.y + area.w - btnDown.w - btnUp.w + 1))
+                    {
+                        m_BtnBall->layerArea.y = area.y + area.w - btnDown.w - btnUp.w + 1;
+                    }
                 };
          
                 
@@ -102,7 +115,7 @@ namespace mse
                             int yrel = event->motion.yrel;
                             int yrelPixels = (int)roundf((float)yrel / windowUser->GetScale().y);
 //                        float linesPercentage = (float)yrelPixels / m_textItem->m_scrollXY.w;
-                            float areaPercentage = (float)yrelPixels / (area.w - btnUp.w - btnDown.w + 1);
+                            float areaPercentage = (float)yrelPixels / (area.w - btnUp.w - btnDown.w - btnBall.w + 1);
                             int linesToScroll = (int)roundf(m_textItem->m_scrollXY.w * areaPercentage);
                             
                             if (yrel < 0)
@@ -172,6 +185,19 @@ namespace mse
                              {btnDown.x + 3*btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight})));
                 m_BtnDown->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
                     m_textItem->Scroll(0, -stepY);
+                        
+                    float areaPercentage = -(float)stepY / (m_textItem->m_scrollXY.w);
+                    int yrelPixels = (int)roundf((float)areaPercentage * m_sliderPanel->layerArea.w);
+                    
+                    m_BtnBall->layerArea.y += yrelPixels;
+                    if (m_BtnBall->layerArea.y < (area.y + btnUp.w + 1))
+                    {
+                        m_BtnBall->layerArea.y = area.y + btnUp.w + 1;
+                    }
+                    if (m_BtnBall->layerArea.y > (area.y + area.w - btnDown.w - btnUp.w + 1))
+                    {
+                        m_BtnBall->layerArea.y = area.y + area.w - btnDown.w - btnUp.w + 1;
+                    }
                 };
                 
                 ((Texture*)(m_texture->data))->Update();
