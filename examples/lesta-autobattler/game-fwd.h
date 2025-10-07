@@ -172,14 +172,36 @@ namespace LAutobattler
         std::vector<Weapon> drop_list;
         Weapon weapon;
     };
+    
+    struct Trait
+    {
+        Traits type;
+        std::u32string name = U"";
+        std::u32string description = U"";
+    };
+    
+    struct CharacterClass
+    {
+        Classes type;
+        std::u32string name = U"";
+    };
+    
+    struct DamageTypeName
+    {
+        DamageType type;
+        std::u32string name = U"";
+    };
 
     struct GameDB
     {
         std::unordered_map<size_t, Weapon> weapons;
+        std::unordered_map<DamageType, DamageTypeName> damageTypes;
+        std::unordered_map<Traits, Trait> traits;
+        std::unordered_map<Classes, CharacterClass> classes;
         std::unordered_map<int, Character> characters;
         int level_max;
     };
-
+    
     // various game data for everything
     struct Game
     {
@@ -214,7 +236,7 @@ namespace LAutobattler
 //        void GameLogic(GameDB& gameDB);
     };
     
-    GameDB InitGameData();
+    GameDB& InitGameData();
 }
 
 #endif

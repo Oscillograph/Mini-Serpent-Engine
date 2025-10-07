@@ -231,7 +231,7 @@ void CharacterCreateUILayer::OnInit()
     "\nСила:     " << str <<
     "\nЛовкость: " << agi <<
     "\nВыносл-ть: " << end <<
-    "\nСкрытый удар";
+    "\n" << utf8::utf32to8(gameDB.traits[LAutobattler::Traits::HiddenStrike].name);
     stats = utf8::utf8to32(strstream.str());
     rogueStatsBox->ChangeText(stats);
     strstream.str("");
@@ -252,7 +252,7 @@ void CharacterCreateUILayer::OnInit()
     "\nСила:     " << str <<
     "\nЛовкость: " << agi <<
     "\nВыносл-ть: " << end <<
-    "\nРвение";
+    "\n" << utf8::utf32to8(gameDB.traits[LAutobattler::Traits::Rush].name);
     stats = utf8::utf8to32(strstream.str());
     warriorStatsBox->ChangeText(stats);
     strstream.str("");
@@ -273,7 +273,7 @@ void CharacterCreateUILayer::OnInit()
     "\nСила:     " << str <<
     "\nЛовкость: " << agi <<
     "\nВыносл-ть: " << end <<
-    "\nЯрость";
+    "\n" << utf8::utf32to8(gameDB.traits[LAutobattler::Traits::Rage].name);
     stats = utf8::utf8to32(strstream.str());
     barbarianStatsBox->ChangeText(stats);
     strstream.str("");
@@ -369,7 +369,7 @@ void WinnerUILayer::OnInit()
     {
         AddElement(new mse::gui::Text(
                                       this, 
-                                      U"В битве было нелегко, но герой справился и одолел противника.\nВпереди новое испытание!", 
+                                      U"В битве было нелегко, но герой\nсправился и одолел противника.\nВпереди новое испытание!", 
                                       {50, 160, 220, 40}, 
                                       {0, 0, 0, 255}, 
                                       {196, 196, 196, 255},
@@ -1186,66 +1186,15 @@ void CharacterUpdateUILayer::OnUpdate()
         std::u32string main_class = U"";
         std::u32string sub_class = U"";
         
-        switch (game.playerCharacter.main_class.type)
-        {
-        case LAutobattler::Classes::Rogue:
-            {
-                main_class = U"Разбойник";
-                break;
-            }
-        case LAutobattler::Classes::Warrior:
-            {
-                main_class = U"Воин";
-                break;
-            }
-        case LAutobattler::Classes::Barbarian:
-            {
-                main_class = U"Варвар";
-                break;
-            }
-        }
+        main_class = gameDB.classes[game.playerCharacter.main_class.type].name;
         
         if (game.playerCharacter.sub_class.type != LAutobattler::Classes::None)
         {
-            switch (game.playerCharacter.sub_class.type)
-            {
-                case LAutobattler::Classes::Rogue:
-                {
-                    sub_class = U"Разбойник";
-                    break;
-                }
-            case LAutobattler::Classes::Warrior:
-                {
-                    sub_class = U"Воин";
-                    break;
-                }
-            case LAutobattler::Classes::Barbarian:
-                {
-                    sub_class = U"Варвар";
-                    break;
-                }
-            }
+            sub_class = gameDB.classes[game.playerCharacter.sub_class.type].name;
         } else {
             if (game.inputClass != game.playerCharacter.main_class.type)
             {
-                switch (game.inputClass)
-                {
-                case LAutobattler::Classes::Rogue:
-                    {
-                        sub_class = U"Разбойник";
-                        break;
-                    }
-                case LAutobattler::Classes::Warrior:
-                    {
-                        sub_class = U"Воин";
-                        break;
-                    }
-                case LAutobattler::Classes::Barbarian:
-                    {
-                        sub_class = U"Варвар";
-                        break;
-                    }
-                }
+                sub_class = gameDB.classes[game.inputClass].name;
             }
         }
         
@@ -1286,29 +1235,7 @@ void CharacterUpdateUILayer::OnUpdate()
         "\nВыносливость: " << game.playerCharacter.stats.endurance <<
         "\nОружие: " << utf8::utf32to8(game.inputWeapon.name.c_str()) << 
                    "\n          (урон " << (int)(roundf(game.inputWeapon.damage));
-        switch (game.inputWeapon.type)
-        {
-        case LAutobattler::DamageType::Cutting:
-            {
-                strstream << ", режущий";
-                break;
-            }
-        case LAutobattler::DamageType::Piercing:
-            {
-                strstream << ", колющий";
-                break;
-            }
-        case LAutobattler::DamageType::Crushing:
-            {
-                strstream << ", дробящий";
-                break;
-            }
-        case LAutobattler::DamageType::Divine:
-            {
-                strstream << ", божественный";
-                break;
-            }
-        }
+        strstream << ", " << utf8::utf32to8(gameDB.damageTypes[game.inputWeapon.type].name);
         strstream << ")" <<
         "\nСпособности: ";
         for (int i = 0; i < game.playerCharacter.traits.size(); ++i)
@@ -1317,84 +1244,8 @@ void CharacterUpdateUILayer::OnUpdate()
             {
                 strstream << ", ";
             }
-            
-            strstream << "\n  ";
-            
-            switch (game.playerCharacter.traits[i])
-            {
-            case LAutobattler::Traits::HiddenStrike:
-                {
-                    strstream << "Скрытый удар";
-                    strstream << "\n    (+1 к урону, если ловчее цели)";
-                    break;
-                }
-            case LAutobattler::Traits::Rush:
-                {
-                    strstream << "Рвение";
-                    strstream << "\n    (удвоенный урон в первый ход)";
-                    break;
-                }
-            case LAutobattler::Traits::Rage:
-                {
-                    strstream << "Ярость";
-                    strstream << "\n    (+2 к урону первые три хода,\n    -1 к урону во все остальные)";
-                    break;
-                }
-            case LAutobattler::Traits::StoneSkin:
-                {
-                    strstream << "Каменная кожа";
-                    strstream << "\n    (ущерб снижается на выносливость)";
-                    break;
-                }
-            case LAutobattler::Traits::Strong:
-                {
-                    strstream << "Силач";
-                    strstream << "\n    (+1 к силе)";
-                    break;
-                }
-            case LAutobattler::Traits::Agile:
-                {
-                    strstream << "Ловкач";
-                    strstream << "\n    (+1 к ловкости)";
-                    break;
-                }
-            case LAutobattler::Traits::Survivor:
-                {
-                    strstream << "Выживальщик";
-                    strstream << "\n    (+1 к выносливости)";
-                    break;
-                }
-            case LAutobattler::Traits::Shield:
-                {
-                    strstream << "Щит";
-                    strstream << "\n    (-3 к ущербу, если сильнее цели)";
-                    break;
-                }
-            case LAutobattler::Traits::Poison:
-                {
-                    strstream << "Яд";
-                    strstream << "\n    (+N к урону, где N - номер хода)";
-                    break;
-                }
-            case LAutobattler::Traits::CuttingImmune:
-                {
-                    strstream << "Не режется";
-                    strstream << "\n    (иммунитет к режущему оружию)";
-                    break;
-                }
-            case LAutobattler::Traits::CrushingWeakness:
-                {
-                    strstream << "Страх дубин";
-                    strstream << "\n    (двойной ущерб от дробящего оружия)";
-                    break;
-                }
-            case LAutobattler::Traits::FireBreather:
-                {
-                    strstream << "Огненное дыхание";
-                    strstream << "\n    (+3 к урону каждый третий ход)";
-                    break;
-                }
-            }
+            strstream << "\n  " << utf8::utf32to8(gameDB.traits[game.playerCharacter.traits[i]].name)
+                      << "\n    " << utf8::utf32to8(gameDB.traits[game.playerCharacter.traits[i]].description);
         }
         strstream << "\n\nБитв пройдено: " << game.battleCounter << " из 5";
         stats = utf8::utf8to32(strstream.str());

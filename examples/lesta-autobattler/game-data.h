@@ -10,9 +10,9 @@ namespace LAutobattler
     //                             General Game Types and Constants
     // ****************************************************************************************** //
     
-    GameDB InitGameData()
+    GameDB& InitGameData()
     {
-        GameDB gameDB;
+        static GameDB gameDB;
         gameDB.level_max = 3;
         
         gameDB.weapons =
@@ -35,6 +35,177 @@ namespace LAutobattler
             
             // easter eggs
             {13, {U"Пулемёт Максим",  100,    DamageType::Divine,      WeaponSprite::MaximGun}},
+        };
+        
+        gameDB.traits = 
+        {
+            {
+                Traits::HiddenStrike,
+                {
+                    Traits::HiddenStrike,
+                    U"Скрытый удар",
+                    U"+1 к урону, если ловчее цели"
+                }
+            },
+            {
+                Traits::Rush,
+                {
+                    Traits::Rush,
+                    U"Рывок",
+                    U"удвоенный урон в первый ход"
+                }
+            },
+            {
+                Traits::Rage,
+                {
+                    Traits::Rage,
+                    U"Ярость",
+                    U"+2 к урону первые три хода, -1 к урону во все остальные"
+                }
+            },
+            {
+                Traits::StoneSkin,
+                {
+                    Traits::StoneSkin,
+                    U"Каменная кожа",
+                    U"ущерб снижается на значение выносливости"
+                }
+            },
+            {
+                Traits::Strong,
+                {
+                    Traits::Strong,
+                    U"Силач",
+                    U"+1 к силе"
+                }
+            },
+            {
+                Traits::Agile,
+                {
+                    Traits::Agile,
+                    U"Ловкач",
+                    U"+1 к ловкости"
+                }
+            },
+            {
+                Traits::Survivor,
+                {
+                    Traits::Survivor,
+                    U"Выживальщик",
+                    U"+1 к выносливости"
+                }
+            },
+            {
+                Traits::Shield,
+                {
+                    Traits::Shield,
+                    U"Щит",
+                    U"-3 к ущербу, если сильнее цели"
+                }
+            },
+            {
+                Traits::Poison,
+                {
+                    Traits::Poison,
+                    U"Яд",
+                    U"+N к урону, где N - номер хода"
+                }
+            },
+            {
+                Traits::CuttingImmune,
+                {
+                    Traits::CuttingImmune,
+                    U"Не режется",
+                    U"иммунитет к режущему оружию"
+                }
+            },
+            {
+                Traits::CrushingWeakness,
+                {
+                    Traits::CrushingWeakness,
+                    U"Страх дубин",
+                    U"двойной ущерб от дробящего оружия"
+                }
+            },
+            {
+                Traits::FireBreather,
+                {
+                    Traits::FireBreather,
+                    U"Огненное дыхание",
+                    U"+3 к урону каждый третий ход"
+                }
+            },
+        };
+        
+        gameDB.damageTypes = 
+        {
+            {
+                DamageType::None,
+                {
+                    DamageType::None,
+                    U"Нет"
+                }
+            },
+            {
+                DamageType::Cutting,
+                {
+                    DamageType::Cutting,
+                    U"режущий"
+                }
+            },
+            {
+                DamageType::Crushing,
+                {
+                    DamageType::Crushing,
+                    U"дробящий"
+                }
+            },
+            {
+                DamageType::Piercing,
+                {
+                    DamageType::Piercing,
+                    U"колющий"
+                }
+            },
+            {
+                DamageType::Divine,
+                {
+                    DamageType::Divine,
+                    U"божественный"
+                }
+            },
+        };
+        
+        gameDB.classes =
+        {
+            {
+                Classes::None,
+                {
+                    Classes::None,
+                    U"Нет"
+                }
+            },
+            {
+                Classes::Warrior,
+                {
+                    Classes::Warrior,
+                    U"Воин"
+                }
+            },
+            {
+                Classes::Barbarian,
+                {
+                    Classes::Barbarian,
+                    U"Варвар"
+                }
+            },
+            {
+                Classes::Rogue,
+                {
+                    Classes::Rogue,
+                    U"Разбойник"
+                }
+            },
         };
         
         gameDB.characters =
