@@ -6,6 +6,7 @@
 #include <mse/systems/canban.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/platform/input/input.h>
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/window.h>

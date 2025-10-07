@@ -23,6 +23,9 @@ namespace mse
 	class Renderer; // static - a platform subsystem specifically for rendering routines
 	class Texture;
     class Cursor;
+    class SoundMan; // static - a platform subsystem specifically for audio management routines
+    class Sound;
+    class Track;
 	class WindowManager; // static - a system to command windows
 	class Window;
 	class LayerManager; // static - a window subsystem which keeps track of all layers attached and allows to command them

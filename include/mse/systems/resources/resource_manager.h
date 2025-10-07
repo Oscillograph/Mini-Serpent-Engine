@@ -22,11 +22,13 @@ namespace mse
 		UserDefined_9		= 9,
 		
 		// media
-		Audio				= 10,
-		Texture				= 11,
-		FontBitmap			= 12,
-		FontTrueType		= 13,
-        Cursor              = 14, 
+//		Audio				= 10,
+        Sound               = 11,
+        Track               = 12,
+		Texture				= 13,
+		FontBitmap			= 14,
+		FontTrueType		= 15,
+        Cursor              = 16, 
 		
 		// text data
 		Text_Plain			= 20,

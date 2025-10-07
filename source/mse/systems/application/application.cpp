@@ -3,6 +3,7 @@
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer_manager.h>
@@ -62,6 +63,7 @@ namespace mse
 	{
 		MSE_CORE_LOG("Application: destructor called");
 		Renderer::SetActiveWindow(nullptr);
+        SoundMan::Shutdown();
 		SceneManager::Shutdown();
 		ResourceManager::ShutDown();
 		WindowManager::Shutdown();
@@ -268,7 +270,20 @@ namespace mse
 				// TODO: Inter-scene assets storage mechanism to allow moving things between windows
 				
 				// TODO: 7. Sound system
-				
+				if (m_TimeDelta >= m_TimeDeltaLimit)
+                {
+                    if (!SoundMan::paused)
+                    {
+                        // playlist of soundtracks
+                        if (SoundMan::tracks_playlist.size() > 0)
+                        {
+                            if (!SoundMan::IsPlayingTrack())
+                            {
+                                SoundMan::PlayNext();
+                            }
+                        }
+                    }
+                }
 				// TODO: 8. Show debug information as text over the screen
 				
 				// 9. Graphic system

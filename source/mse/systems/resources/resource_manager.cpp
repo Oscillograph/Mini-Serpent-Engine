@@ -2,6 +2,8 @@
 #include <mse/systems/platform/renderer/texture.h>
 #include <mse/systems/platform/renderer/font.h>
 #include <mse/systems/platform/renderer/cursor.h>
+#include <mse/systems/platform/audio/sound.h>
+#include <mse/systems/platform/audio/track.h>
 //#include <mse/systems/scenes/scene.h>
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/window.h>
@@ -40,6 +42,16 @@ namespace mse
     {
         switch (type)
         {
+        case ResourceType::Sound:
+            {
+                delete (Sound*)data;
+                break;
+            }
+        case ResourceType::Track:
+            {
+                delete (Track*)data;
+                break;
+            }
         case ResourceType::Texture:
             {
                 delete (Texture*)data;
@@ -136,6 +148,16 @@ namespace mse
 					resource->data = new FontBitmap(path, user->GetRenderer());
                     break;
 				}
+            case ResourceType::Sound:
+                {
+                    resource->data = new Sound(path);
+                    break;
+                }
+            case ResourceType::Track:
+                {
+                    resource->data = new Track(path);
+                    break;
+                }
 			default:
 				{}
 				break;
@@ -384,7 +406,9 @@ namespace mse
 		m_ResourceTypeNames[ResourceType::Text_YAML] = "YAML Text";
 		m_ResourceTypeNames[ResourceType::Text_JSON] = "JSON Text";
 		m_ResourceTypeNames[ResourceType::Texture] = "Texture";
-		m_ResourceTypeNames[ResourceType::Audio] = "Audio";
+//		m_ResourceTypeNames[ResourceType::Audio] = "Audio";
+        m_ResourceTypeNames[ResourceType::Sound] = "Sound";
+        m_ResourceTypeNames[ResourceType::Track] = "Track";
 		m_ResourceTypeNames[ResourceType::FontBitmap] = "Bitmap Font";
 		m_ResourceTypeNames[ResourceType::FontTrueType] = "TrueType Font";
         m_ResourceTypeNames[ResourceType::Cursor] = "Cursor";
@@ -393,7 +417,8 @@ namespace mse
 		{
 			InitCache(ResourceType::Text_Plain);
 			InitCache(ResourceType::Texture);
-			InitCache(ResourceType::Audio);
+			InitCache(ResourceType::Sound);
+            InitCache(ResourceType::Track);
 			InitCache(ResourceType::FontBitmap);
             InitCache(ResourceType::Cursor);
 		}

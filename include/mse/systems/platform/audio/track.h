@@ -9,9 +9,19 @@ namespace mse
 	class Track
 	{
 	public:
-		
+		Track();
+        Track(const std::string& path);
+        Track(void* data);
+        virtual ~Track();
+        
+        void Load(void* data = nullptr, const std::string& path = "");
+        
+        void Free();
+        
+        inline Mix_Music* GetAudio() { return m_audio; }
 	private:
-		
+		std::string m_path = "";
+        Mix_Music* m_audio = nullptr;
 	};
 }
 
