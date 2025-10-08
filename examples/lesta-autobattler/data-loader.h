@@ -72,6 +72,7 @@ namespace LAutobattler
         int musicVolume = 0;
         bool sounds = false;
         int soundsVolume = 0;
+        bool fullscreen = true;
     };
     
     struct HighScore

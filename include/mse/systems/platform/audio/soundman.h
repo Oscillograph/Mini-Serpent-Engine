@@ -20,7 +20,7 @@ namespace mse
 	{
 	public:
 		// system setup and utilities
-        static void SetUpChannels(int number);
+        static void SetUpChannels(int number = MIX_CHANNELS);
 		static void LoadSounds(const std::vector<std::string>& paths);
         static void LoadTracks(const std::vector<std::string>& paths);
         static void LoadPlaylist(const std::vector<std::string>& paths);

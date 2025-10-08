@@ -4,10 +4,10 @@
 
 namespace LAutobattler
 {
-    GameConfig LoadConfig(const std::string& filename)
+    GameConfig& LoadConfig(const std::string& filename)
     {
         // prepare data structure
-        GameConfig config;
+        static GameConfig gameConfig;
         
         // open file and read its data
         
@@ -16,12 +16,13 @@ namespace LAutobattler
         // edit prepared data structure
         
         // return the results
+        return gameConfig;
     }
     
-    HighScoresDB LoadHighScores(const std::string filename)
+    HighScoresDB& LoadHighScores(const std::string filename)
     {
         // prepare data structure
-        HighScoresDB db;
+        static HighScoresDB highscores;
         
         // open file and read its data
         
@@ -30,5 +31,6 @@ namespace LAutobattler
         // edit prepared data structure
         
         // return the results
+        return highscores;
     }
 }

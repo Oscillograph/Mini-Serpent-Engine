@@ -10,15 +10,32 @@ namespace mse
     std::unordered_map<std::string, Track*> SoundMan::tracks_bank = {};
     std::vector<std::string> SoundMan::tracks_playlist = {};
     int SoundMan::tracks_playlist_current = -1;
-    std::unordered_map<int, int> SoundMan::sounds_volume;
-    int SoundMan::tracks_volume;
     
     bool SoundMan::paused = false;
     int SoundMan::channels = MIX_CHANNELS;
+    // MIX_CHANNELS is 8 by default
+    std::unordered_map<int, int> SoundMan::sounds_volume {
+        {0, MIX_MAX_VOLUME},
+        {1, MIX_MAX_VOLUME},
+        {2, MIX_MAX_VOLUME},
+        {3, MIX_MAX_VOLUME},
+        {4, MIX_MAX_VOLUME},
+        {5, MIX_MAX_VOLUME},
+        {6, MIX_MAX_VOLUME},
+        {7, MIX_MAX_VOLUME},
+    };
+    int SoundMan::tracks_volume = MIX_MAX_VOLUME;
     
     void SoundMan::SetUpChannels(int number)
     {
         channels = Mix_AllocateChannels(number);
+        for (int i = 0; i < number; ++i)
+        {
+            sounds_volume[i] = MIX_MAX_VOLUME;
+            Mix_Volume(i, sounds_volume[i]);
+        }
+        
+        Mix_VolumeMusic(tracks_volume);
     }
     
     void SoundMan::LoadSounds(const std::vector<std::string>& paths)

@@ -165,6 +165,16 @@ public:
     bool changeMade = false;
 };
 
+class SettingsUILayer : public mse::Layer
+{
+public:
+    SettingsUILayer();
+    ~SettingsUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
 class SimpleUILayer : public mse::Layer
 {
 public:

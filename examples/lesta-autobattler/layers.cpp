@@ -1267,6 +1267,32 @@ void CharacterUpdateUILayer::OnUpdate()
     }
 }
 
+SettingsUILayer::SettingsUILayer() : mse::Layer()
+{
+    MSE_LOG("Constructed a SettingsUI layer");
+}
+
+SettingsUILayer::~SettingsUILayer()
+{
+    MSE_LOG("Destroyed a SettingsUI layer");
+}
+
+void SettingsUILayer::OnInit()
+{
+    // Settings to control from here:
+    // --Audio--
+    // master volume
+    // music volume
+    // sounds volume
+    // --Graphics--
+    // fullscreen toggle on/off
+    
+    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
+}
+
+void SettingsUILayer::OnUpdate()
+{}
+
 SimpleUILayer::SimpleUILayer() : mse::Layer()
 {
     MSE_LOG("Constructed a simpleUI layer");
