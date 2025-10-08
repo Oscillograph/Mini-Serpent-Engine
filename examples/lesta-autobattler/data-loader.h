@@ -94,21 +94,20 @@ namespace LAutobattler
     YAML::Emitter& operator<<(YAML::Emitter& out, const GameConfig& config)
     {
         out << YAML::Flow;
-        out << YAML::BeginSeq;
-        
-        out << config.music;
-        out << config.musicVolume;
-        out << config.sounds;
-        out << config.soundsVolume;
-        
-        out << YAML::EndSeq;
+        out << YAML::Key << "Music" << YAML::Value << config.music;
+        out << YAML::Key << "MusicVolume" << YAML::Value << config.musicVolume;
+        out << YAML::Key << "Sounds" << YAML::Value << config.sounds;
+        out << YAML::Key << "SoundsVolume" << YAML::Value << config.soundsVolume;
+        out << YAML::Key << "Fullscreen" << YAML::Value << config.fullscreen;
         return out;
     }
     
     
     
-    GameConfig LoadConfig(const std::string& filename);
-    HighScoresDB LoadHighScores(const std::string filename);
+    bool LoadConfig(GameConfig& config, const std::string& filename = "data/config.yaml");
+    void SaveConfig(const GameConfig& config, const std::string& filename = "data/config.yaml");
+    bool LoadHighScores(HighScoresDB& highscores, const std::string filename = "data/highscores.yaml");
+    void SaveHighScores(const HighScoresDB& highscores, const std::string& filename = "data/highscores.yaml");
 }
 
 #endif
