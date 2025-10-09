@@ -8,7 +8,42 @@ namespace mse
 {
 	namespace gui
 	{
-		
+        class Button;
+        class HImageTemplate;
+        
+		class HSlider : public GUIItem
+        {
+        public:
+            // general initialization
+            HSlider();
+            
+            HSlider(Layer* layer, const glm::uvec4& area, float min, float max, float step, const std::string&  spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown, const glm::uvec4& sliderImgTop, const glm::uvec4& sliderImgMid, const glm::uvec4& sliderImgBottom);
+            void Init(Layer* layer, const glm::uvec4& area, float min, float max, float step, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown, const glm::uvec4& sliderImgTop, const glm::uvec4& sliderImgMid, const glm::uvec4& sliderImgBottom);
+            
+            virtual ~HSlider();
+            
+            // general GUIItem interface
+            virtual void Display();
+            virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
+            
+            float varMin = 0;
+            float varMax = 0;
+            float varStep = 0;
+            
+            int stepX = 10;
+            int stepY = 10;
+            int scrollMax = 0;
+            
+            // unique HSlider interface
+            glm::uvec2 ballCoordinates = {0, 0};
+            glm::uvec4 ballPanelArea = {0, 0, 0, 0};
+            bool correctingMousePosition = false;
+        protected:
+            Button* m_BtnUp = nullptr;
+            Button* m_BtnDown = nullptr;
+            Button* m_BtnBall = nullptr;
+            HImageTemplate* m_sliderPanel = nullptr;
+        };
 	}
 }
 

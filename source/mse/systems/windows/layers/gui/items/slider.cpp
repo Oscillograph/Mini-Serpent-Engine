@@ -14,6 +14,30 @@ namespace mse
 {
 	namespace gui
 	{
-
+        HSlider::HSlider()
+        {
+            Init(nullptr, {0, 0, 0, 0}, 0, 0, 0, "", {0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0});
+        }
+        
+        HSlider::HSlider(Layer* layer, const glm::uvec4& area, float min, float max, float step, const std::string&  spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown, const glm::uvec4& sliderImgTop, const glm::uvec4& sliderImgMid, const glm::uvec4& sliderImgBottom)
+        {
+            
+        }
+        
+        void HSlider::Init(Layer* layer, const glm::uvec4& area, float min, float max, float step, const std::string&  spritelist, const glm::uvec3& colorKey, const glm::uvec4& btnUp, const glm::uvec4& btnBall, const glm::uvec4& btnDown, const glm::uvec4& sliderImgTop, const glm::uvec4& sliderImgMid, const glm::uvec4& sliderImgBottom)
+        {
+            
+        }
+        
+        HSlider::~HSlider()
+        {
+            
+        }
+        
+        void HSlider::Display()
+        {}
+        
+        bool HSlider::HandleEvent(EventTypes eventType, SDL_Event* event)
+        {}
 	}
 }
