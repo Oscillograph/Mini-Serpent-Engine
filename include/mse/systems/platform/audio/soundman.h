@@ -57,6 +57,9 @@ namespace mse
         static std::unordered_map<std::string, Track*> tracks_bank;
         static std::vector<std::string> tracks_playlist;
         static int tracks_playlist_current;
+        static bool music_enabled;
+        static bool sounds_enabled;
+        static bool play_in_background;
         static std::unordered_map<int, int> sounds_volume;
         static int tracks_volume;
         

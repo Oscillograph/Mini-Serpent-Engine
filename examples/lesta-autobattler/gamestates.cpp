@@ -2,6 +2,7 @@
 #include <lesta-autobattler/layers.h>
 //#include <mse/mse.h>
 #include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/application/application.h>
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer.h>
@@ -1021,6 +1022,8 @@ bool CreditsPageState::OnEnter(mse::Layer* pass_layer)
         layer = new CreditsUILayer();
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     }
+    
+    mse::SoundMan::PlayTrack("data/audio/tracks/02_our_tanya_cries_loud.mp3");
     MSE_LOG("CreditsPageState OnEnter...done");
     return true;
 }
@@ -1033,6 +1036,7 @@ bool CreditsPageState::OnExit(bool pass_layer)
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
         layer = nullptr;
     }
+    mse::SoundMan::StopTrack();
     MSE_LOG("CreditsPageState OnExit...done");
     return true;
 }

@@ -12,6 +12,9 @@ namespace mse
     int SoundMan::tracks_playlist_current = -1;
     
     bool SoundMan::paused = false;
+    bool SoundMan::music_enabled = true;
+    bool SoundMan::sounds_enabled = true;
+    bool SoundMan::play_in_background = false;
     int SoundMan::channels = MIX_CHANNELS;
     // MIX_CHANNELS is 8 by default
     std::unordered_map<int, int> SoundMan::sounds_volume {
@@ -41,6 +44,7 @@ namespace mse
     void SoundMan::LoadSounds(const std::vector<std::string>& paths)
     {
         Sound* sound = nullptr;
+        MSE_CORE_LOG("SoundMan: Load ", paths.size(), " sounds");
         for (int i = 0; i < paths.size(); ++i)
         {
             sound = new Sound(paths[i]);
@@ -127,6 +131,11 @@ namespace mse
     
     bool SoundMan::PlaySound(const std::string& path)
     {
+        if (sounds_bank.find(path) == sounds_bank.end())
+        {
+            LoadSounds({path});
+        }
+        
         if (sounds_bank.find(path) != sounds_bank.end())
         {
             Mix_PlayChannel(-1, sounds_bank[path]->GetAudio(), 0);

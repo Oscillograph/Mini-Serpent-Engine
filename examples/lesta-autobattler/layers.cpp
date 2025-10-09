@@ -46,7 +46,11 @@ void IntroUILayer::OnInit()
                                                            {0, 0, 0, 255}, 
                                                            {0, 255, 255, 255})));
     
-    mse::SoundMan::LoadPlaylist({
+    mse::SoundMan::LoadSounds({
+        "data/audio/sounds/click.wav",
+    });
+    
+    mse::SoundMan::LoadTracks({
         "data/audio/tracks/01_towards_neon_shadows.mp3",
         "data/audio/tracks/02_our_tanya_cries_loud.mp3",
         "data/audio/tracks/03_polar_star.mp3",
@@ -526,126 +530,98 @@ void CreditsUILayer::OnInit()
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Программирование:", 
-                                  {40, 30, 220, 10}, 
+                                  {20, 30, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 0, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Broscillograph", 
-                                  {80, 40, 220, 10}, 
+                                  {60, 40, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Графика:", 
-                                  {40, 50, 220, 10}, 
+                                  {20, 50, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 0, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Broscillograph", 
-                                  {80, 60, 220, 10}, 
+                                  {60, 60, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"Компилятор:", 
-                                  {40, 70, 220, 10}, 
+                                  U"Музыка:", 
+                                  {20, 70, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 0, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"TDM-GCC", 
-                                  {80, 80, 220, 10}, 
+                                  U"Трио из Удио\n\"Наша Таня громко плачет\" (2025)", 
+                                  {60, 80, 240, 20}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Библиотеки:", 
-                                  {40, 90, 220, 10}, 
+                                  {20, 100, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 0, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"SDL2, utf-cpp, Color Console", 
-                                  {80, 100, 200, 10}, 
-                                  {0, 0, 0, 255}, 
-                                  {196, 196, 196, 255},
-                                  1));
-    AddElement(new mse::gui::Text(
-                                  this, 
-                                  U"Среда разработки:", 
-                                  {40, 110, 220, 10}, 
-                                  {0, 0, 0, 255}, 
-                                  {196, 196, 0, 255},
-                                  1));
-    AddElement(new mse::gui::Text(
-                                  this, 
-                                  U"Red Panda C++", 
-                                  {80, 120, 220, 10}, 
+                                  U"SDL2, utf8-cpp, Color Console\nYAML-cpp, GLM, EnTT, SDL-Mixer", 
+                                  {60, 110, 240, 20}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Моральная поддержка:", 
-                                  {40, 130, 220, 10}, 
+                                  {20, 130, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 0, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Сообщество Nau Engine", 
-                                  {80, 140, 220, 10}, 
+                                  {60, 140, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Место для вашей рекламы:", 
-                                  {40, 150, 220, 10}, 
+                                  {20, 150, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 0, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"", 
-                                  {80, 160, 220, 10}, 
-                                  {0, 0, 0, 255}, 
-                                  {196, 196, 196, 255},
-                                  1));
-    AddElement(new mse::gui::Text(
-                                  this, 
-                                  U"Юля, я люблю тебя:", 
-                                  {40, 170, 220, 10}, 
-                                  {0, 0, 0, 255}, 
-                                  {196, 128, 196, 255},
-                                  1));
-    AddElement(new mse::gui::Text(
-                                  this, 
-                                  U"Broscillograph", 
-                                  {80, 180, 220, 10}, 
+                                  {60, 160, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Оригинальный диздок:", 
-                                  {40, 190, 220, 10}, 
+                                  {20, 170, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 0, 255},
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Леста Игры", 
-                                  {80, 200, 220, 10}, 
+                                  {60, 180, 220, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));

@@ -72,6 +72,7 @@ namespace LAutobattler
         int musicVolume = 0;
         bool sounds = false;
         int soundsVolume = 0;
+        bool playInBackground = false;
         bool fullscreen = true;
     };
     
@@ -98,6 +99,7 @@ namespace LAutobattler
         out << YAML::Key << "MusicVolume" << YAML::Value << config.musicVolume;
         out << YAML::Key << "Sounds" << YAML::Value << config.sounds;
         out << YAML::Key << "SoundsVolume" << YAML::Value << config.soundsVolume;
+        out << YAML::Key << "PlayInBackground" << YAML::Value << config.playInBackground;
         out << YAML::Key << "Fullscreen" << YAML::Value << config.fullscreen;
         return out;
     }

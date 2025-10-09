@@ -16,6 +16,7 @@ namespace LAutobattler
             !data["MusicVolume"] ||
             !data["Sounds"] ||
             !data["SoundsVolume"] ||
+            !data["PlayInBackground"] ||
             !data["Fullscreen"])
         {
             // failed structure
@@ -27,6 +28,7 @@ namespace LAutobattler
         config.musicVolume = data["MusicVolume"].as<int>();
         config.sounds = data["Sounds"].as<bool>();
         config.soundsVolume = data["SoundsVolume"].as<int>();
+        config.playInBackground = data["PlayInBackground"].as<bool>();
         config.fullscreen = data["Fullscreen"].as<bool>();
         
         // return the results

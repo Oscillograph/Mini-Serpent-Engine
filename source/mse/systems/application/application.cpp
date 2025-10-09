@@ -275,14 +275,20 @@ namespace mse
                 {
                     if (!SoundMan::paused)
                     {
-                        // playlist of soundtracks
-                        if (SoundMan::tracks_playlist.size() > 0)
+                        if (SoundMan::music_enabled)
                         {
-                            if (!SoundMan::IsPlayingTrack())
+                            // playlist of soundtracks
+                            if (SoundMan::tracks_playlist.size() > 0)
                             {
-                                SoundMan::PlayNext();
+                                if (!SoundMan::IsPlayingTrack())
+                                {
+                                    SoundMan::PlayNext();
+                                }
                             }
                         }
+                        
+                        if (SoundMan::sounds_enabled)
+                        {}
                     }
                 }
 				// TODO: 8. Show debug information as text over the screen

@@ -2,6 +2,7 @@
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
 #include <mse/systems/platform/renderer/texture.h>
+#include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/platform/events/events.h>
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/window.h>
@@ -105,6 +106,7 @@ namespace mse
             
             // controller
             callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+                SoundMan::PlaySound("data/audio/sounds/click.wav");
             };
             
             callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
@@ -230,6 +232,7 @@ namespace mse
 			// setup interaction
 			callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 //				MSE_CORE_LOG(m_elementName, ": ...");
+                SoundMan::PlaySound("data/audio/sounds/click.wav");
 			};
 			
 			callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
@@ -439,6 +442,7 @@ namespace mse
             // setup interaction
             callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 //				MSE_CORE_LOG(m_elementName, ": ...");
+                SoundMan::PlaySound("data/audio/sounds/click.wav");
             };
             
             callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
