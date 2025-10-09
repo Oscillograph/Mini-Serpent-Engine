@@ -441,20 +441,16 @@ namespace mse
             // controller
             // setup interaction
             callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-//				MSE_CORE_LOG(m_elementName, ": ...");
                 SoundMan::PlaySound("data/audio/sounds/click.wav");
             };
             
             callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-//				MSE_CORE_LOG(m_elementName, ": Yay, you clicked me!");
             };
             
             callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
-//				MSE_CORE_LOG(m_elementName, ": Hello, Mouse!");
             };
             
             callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
-//				MSE_CORE_LOG(m_elementName, ": Goodbye, Mouse!");
             };
         }
         
