@@ -12,6 +12,8 @@
 #include <mse/systems/windows/layers/gui/items/text.h>
 #include <mse/systems/windows/layers/gui/items/scrollbar.h>
 #include <mse/systems/windows/layers/gui/items/image.h>
+#include <mse/systems/windows/layers/gui/items/checkbox.h>
+#include <mse/systems/windows/layers/gui/items/slider.h>
 
 namespace mse
 {

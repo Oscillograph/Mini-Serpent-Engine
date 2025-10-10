@@ -52,6 +52,29 @@ namespace mse
             glm::uvec4 m_sourceMid = {0, 0, 0, 0};
             glm::uvec4 m_sourceBottom = {0, 0, 0, 0};
         };
+        
+        class HImageTemplate : public GUIItem
+        {
+        public:
+            // general initialization
+            HImageTemplate();
+            HImageTemplate(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceLeft, const glm::uvec4& sourceMid, const glm::uvec4& sourceRight);
+            void Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceLeft, const glm::uvec4& sourceMid, const glm::uvec4& sourceRight);
+            virtual ~HImageTemplate();
+            
+            // general GUIItem interface
+            virtual void Display();
+            
+        protected:
+            // generic
+            glm::uvec4 m_backgroundColor = {0, 0, 0, 0};
+            
+            // sprite-based
+            Resource* m_spriteList = nullptr;
+            glm::uvec4 m_sourceLeft = {0, 0, 0, 0};
+            glm::uvec4 m_sourceMid = {0, 0, 0, 0};
+            glm::uvec4 m_sourceRight = {0, 0, 0, 0};
+        };
 	}
 }
 

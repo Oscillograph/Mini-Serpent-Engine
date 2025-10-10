@@ -157,11 +157,25 @@ void MainMenuUILayer::OnInit()
 //        gsm.ChangeStateTo(LAutobattler::GamePages::Highscores);
 //    };
 
+    mse::gui::Button* settingsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
+                                                                                       this,
+                                                                                       U"  Настройки",
+                                                                                       {0, 0, 0, 255},
+                                                                                       {110, 54, 100, 13},
+                                                                                       "./data/img/screen-images.png",
+                                                                                       {122, 101, 4, 13},
+                                                                                       {138, 101, 4, 13},
+                                                                                       {154, 101, 4, 13}
+                                                                                       )));
+    settingsBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::Settings);
+    };
+    
     mse::gui::Button* creditsBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
                                                                                        this,
                                                                                        U"    Титры",
                                                                                        {0, 0, 0, 255},
-                                                                                       {110, 54, 100, 13},
+                                                                                       {110, 68, 100, 13},
                                                                                        "./data/img/screen-images.png",
                                                                                        {122, 101, 4, 13},
                                                                                        {138, 101, 4, 13},
@@ -176,7 +190,7 @@ void MainMenuUILayer::OnInit()
                                                                                     this,
                                                                                     U"    Выход",
                                                                                     {0, 0, 0, 255},
-                                                                                    {110, 68, 100, 13},
+                                                                                    {110, 82, 100, 13},
                                                                                     "./data/img/screen-images.png",
                                                                                     {122, 101, 4, 13},
                                                                                     {138, 101, 4, 13},
@@ -1255,6 +1269,28 @@ SettingsUILayer::~SettingsUILayer()
 
 void SettingsUILayer::OnInit()
 {
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"АВТОБАТЛЕР", 
+                                  {90, 12, 160, 20}, 
+                                  {0, 0, 0, 0}, 
+                                  {255, 255, 255, 255},
+                                  2));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"АВТОБАТЛЕР", 
+                                  {90, 10, 160, 20}, 
+                                  {0, 0, 0, 0}, 
+                                  {255, 196, 0, 255},
+                                  2));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"АВТОБАТЛЕР", 
+                                  {90, 9, 160, 20}, 
+                                  {0, 0, 0, 0}, 
+                                  {255, 128, 0, 255},
+                                  2));
+    
     // Settings to control from here:
     // --Audio--
     // master volume
@@ -1262,6 +1298,73 @@ void SettingsUILayer::OnInit()
     // sounds volume
     // --Graphics--
     // fullscreen toggle on/off
+    
+    
+    
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Звук:", 
+                                  {20, 40, 140, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 0, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Общая громкость", 
+                                  {60, 54, 140, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Громкость музыки", 
+                                  {60, 68, 140, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Громкость эффектов", 
+                                  {60, 82, 140, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Графика:", 
+                                  {20, 96, 140, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 0, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Окно во весь экран", 
+                                  {60, 110, 140, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1));
+    mse::gui::Checkbox* fullscreenBtn = (mse::gui::Checkbox*)(AddElement(new mse::gui::Checkbox(
+                                  this, 
+                                  {210, 110, 14, 13}, 
+                                  "data/img/screen-images.png", 
+                                  {0, 0, 0}, 
+                                  {24, 88, 14, 13}, 
+                                  {38, 88, 14, 13}, 
+                                  {52, 88, 14, 13}, 
+                                  {66, 88, 14, 13})));
+    fullscreenBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event)
+    {
+//        fullscreenBtn->state = mse::gui::CheckboxStates::Checked;
+        m_window->ToggleFullscreen();
+    };
+    
+    
+    mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {32, 32, 32, 255}, {120, 220, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
+    mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+        gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
+    };
+    
     
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }

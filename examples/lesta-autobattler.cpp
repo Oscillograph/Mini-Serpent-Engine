@@ -31,6 +31,7 @@ public:
         gsm.states[LAutobattler::GamePages::ArenaAftermath] = new ArenaAftermathPageState;
         gsm.states[LAutobattler::GamePages::Winner] = new WinnerPageState();
         gsm.states[LAutobattler::GamePages::GameOver] = new GameOverPageState();
+        gsm.states[LAutobattler::GamePages::Settings] = new SettingsPageState();
 //        gsm.states[LAutobattler::GamePages::Highscores] = new HighscoresPageState();
         gsm.states[LAutobattler::GamePages::Credits] = new CreditsPageState();
         gsm.states[LAutobattler::GamePages::Exit] = new ExitPageState();

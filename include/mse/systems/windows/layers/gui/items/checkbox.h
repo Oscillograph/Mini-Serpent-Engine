@@ -32,7 +32,6 @@ namespace mse
             bool isPushed = false;
 		protected:
             // generic
-			glm::uvec4 m_backgroundColor = {0, 0, 0, 0};
             
             // sprite-based
             Resource* m_spriteList = nullptr;

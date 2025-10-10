@@ -257,5 +257,135 @@ namespace mse
                 Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
             }
         }
+        
+        
+        /*========================================================================================*/
+        /*                                     HImageTemplate                                     */
+        /*========================================================================================*/
+        // general initialization
+        HImageTemplate::HImageTemplate()
+        {
+            Init(nullptr, {0, 0, 0, 0}, nullptr, {0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0});
+        }
+        
+        HImageTemplate::HImageTemplate(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceLeft, const glm::uvec4& sourceMid, const glm::uvec4& sourceRight)
+        {
+            Init(layer, area, spritelist, colorKey, sourceLeft, sourceMid, sourceRight);
+        }
+        
+        void HImageTemplate::Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceLeft, const glm::uvec4& sourceMid, const glm::uvec4& sourceRight)
+        {
+            // model
+            parentLayer = layer;
+            windowUser = layer->GetWindow();
+            m_elementName = "VerticalImage";
+            layerArea = area;
+            m_spriteList = ResourceManager::UseTexture(spritelist, windowUser, colorKey);
+            m_sourceLeft = sourceLeft;
+            m_sourceMid = sourceMid;
+            m_sourceRight = sourceRight;
+            
+            layerMask.resize(area.z * area.w);
+            for (int x = 0; x < area.z; ++x)
+            {
+                for (int y = 0; y < area.w; ++y)
+                {
+                    layerMask[x + y*area.z] = id;
+                }
+            }
+            
+            // view
+            if ((layer != nullptr) && (m_spriteList != nullptr))
+            {
+                // setup texture to draw on
+                MSE_CORE_LOG("VerticalImage: requesting to create a texture");
+                MSE_CORE_TRACE("VerticalImage_parentLayer = ", parentLayer);
+                m_texture = ResourceManager::CreateTexture(
+                                                           windowUser,
+                                                           windowUser->GetRenderer(),
+                                                           layerArea.z,
+                                                           layerArea.w,
+                                                           0,
+                                                           32,
+                                                           {0, 0, 0, 0});
+                
+                // from where and where to draw
+                SDL_Rect sourceRect;
+                SDL_FRect destRect;
+                
+                // left part
+                sourceRect = {sourceLeft.x, sourceLeft.y, sourceLeft.z, sourceLeft.w};
+                destRect = {0, 0, sourceLeft.z, sourceLeft.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                
+                // middle part
+                sourceRect = {sourceMid.x, sourceMid.y, sourceMid.z, 1};
+                int middleWidth = layerArea.w - sourceLeft.w - sourceRight.w;
+                for (int k = 0; k < middleWidth; ++k)
+                {
+                    destRect = {sourceLeft.z + k, 0, 1, sourceMid.w};
+                    Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                                 (Texture*)(m_spriteList->data),
+                                                 &destRect,
+                                                 &sourceRect);
+                }
+                
+                // bottom part
+                sourceRect = {sourceRight.x, sourceRight.y, sourceRight.z, sourceRight.w};
+                destRect = {0, sourceLeft.w + middleWidth, sourceRight.z, sourceRight.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+                
+                ((Texture*)(m_texture->data))->Update();
+                
+                MSE_CORE_LOG("VerticalImage: texture obtained");
+            }
+            
+            // controller
+            // setup interaction
+            callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+            };
+            
+            callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+            };
+            
+            callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
+            };
+            
+            callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
+            };
+        }
+        
+        HImageTemplate::~HImageTemplate()
+        {
+            if (m_texture != nullptr)
+            {
+                ResourceManager::DropResource(m_texture, windowUser);
+                MSE_CORE_LOG("VerticalImage: texture dropped");
+            }
+        }
+        
+        // general GUIItem interface
+        void HImageTemplate::Display()
+        {
+            if (isEnabled && isVisible)
+            {
+                SDL_FRect destRect = {
+                    (float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
+                    (float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
+                    (float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
+                    (float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
+                };
+                
+                SDL_Rect srcRect = {0, 0, layerArea.z, layerArea.w};
+                
+                Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
+            }
+        }
 	}
 }

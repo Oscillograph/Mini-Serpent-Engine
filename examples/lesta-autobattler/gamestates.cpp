@@ -1001,6 +1001,48 @@ bool HighscoresPageState::OnUpdate(mse::TimeType t)
     return true;
 }
 
+SettingsPageState::SettingsPageState()
+{
+    page = LAutobattler::GamePages::Settings;
+}
+
+SettingsPageState::~SettingsPageState()
+{}
+
+bool SettingsPageState::OnEnter(mse::Layer* pass_layer)
+{
+    MSE_LOG("SettingsPageState OnEnter...");
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new SettingsUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+    MSE_LOG("SettingsPageState OnEnter...done");
+    return true;
+}
+
+bool SettingsPageState::OnExit(bool pass_layer)
+{
+    MSE_LOG("SettingsPageState OnExit...");
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("SettingsPageState OnExit...done");
+    return true;
+}
+
+bool SettingsPageState::OnUpdate(mse::TimeType t)
+{
+    return true;
+}
+
 CreditsPageState::CreditsPageState()
 {
     page = LAutobattler::GamePages::Credits;

@@ -50,6 +50,7 @@ namespace LAutobattler
         GameOver,
         Winner,
         Highscores,
+        Settings,
         Credits,
         Exit
     };

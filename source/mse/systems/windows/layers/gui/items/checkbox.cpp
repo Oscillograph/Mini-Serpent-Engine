@@ -15,7 +15,7 @@ namespace mse
 	namespace gui
 	{
         /*========================================================================================*/
-        /*                                     Image                                              */
+        /*                                     Checkbox                                              */
         /*========================================================================================*/
         // general initialization
 		Checkbox::Checkbox()
@@ -128,7 +128,7 @@ namespace mse
 		// general GUIItem interface
 		void Checkbox::Display()
 		{
-			if (isEnabled && isVisible)
+			if (isVisible)
 			{
                 SDL_FRect destRect = {
                     (float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
@@ -137,7 +137,32 @@ namespace mse
                     (float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
                 };
                 
-                SDL_Rect srcRect = {0, 0, layerArea.z, layerArea.w};
+                SDL_Rect srcRect;
+                
+                switch (state)
+                {
+                    case CheckboxStates::Unchecked:
+                {
+                    if (isEnabled)
+                    {
+                        srcRect = {0, 0, layerArea.z, layerArea.w};
+                    } else {
+                        srcRect = {2*layerArea.z, 0, layerArea.z, layerArea.w};
+                    }
+                    break;
+                }
+                    case CheckboxStates::Checked:
+                    {
+                        if (isEnabled)
+                        {
+                            srcRect = {layerArea.z, 0, layerArea.z, layerArea.w};
+                        } else {
+                            srcRect = {3*layerArea.z, 0, layerArea.z, layerArea.w};
+                        }
+                        
+                        break;
+                    }
+                }
                 
     			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
 			}
@@ -153,6 +178,7 @@ namespace mse
                 case EventTypes::GUIItemMouseButtonDown:
                     {
                         isPushed = true;
+                        callbacks[eventType](event);
                         break;
                     }
                 case EventTypes::GUIItemMouseButtonUp:
