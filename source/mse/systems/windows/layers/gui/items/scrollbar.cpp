@@ -252,56 +252,5 @@ namespace mse
         {
             return false;
         }
-        
-        void VScrollbar::StateProcessor()
-        {
-            switch (state)
-            {
-            case mse::gui::VScrollbarStates::BallPanelReleased:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnUpHover:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnUpPressed:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnUpReleased:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnDownHover:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnDownPressed:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnDownReleased:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnBallHover:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnBallPressed:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BtnBallReleased:
-                {
-                    break;
-                }
-            case mse::gui::VScrollbarStates::BallPanelClicked:
-                {
-                    break;
-                }
-            }
-        }
 	}
 }

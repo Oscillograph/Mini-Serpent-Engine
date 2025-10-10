@@ -11,26 +11,6 @@ namespace mse
 {
 	namespace gui
 	{
-        enum class VScrollbarStates
-        {
-            BtnUpHover,
-            BtnUpPressed,
-            BtnUpHold,
-            BtnUpReleased,
-            
-            BtnDownHover,
-            BtnDownPressed,
-            BtnDownHold,
-            BtnDownReleased,
-            
-            BtnBallHover,
-            BtnBallPressed,
-            BtnBallMoved,
-            BtnBallReleased,
-            
-            BallPanelClicked,
-            BallPanelReleased,
-        };
         
 		class VScrollbar : public GUIItem
 		{
@@ -50,8 +30,6 @@ namespace mse
             int scrollMax = 0;
             
             // unique Text interface
-            void StateProcessor();
-            VScrollbarStates state = VScrollbarStates::BallPanelReleased;
             glm::uvec2 ballCoordinates = {0, 0};
             glm::uvec4 ballPanelArea = {0, 0, 0, 0};
             bool correctingMousePosition = false;
