@@ -14,6 +14,15 @@
 namespace mse
 {
 	Application* Application::m_singleton = nullptr;
+    GameConfig Application::config = 
+    {
+        true,
+        MIX_MAX_VOLUME,
+        true,
+        MIX_MAX_VOLUME,
+        true,
+        true,
+    };
 	
 	Application::Application()
 	{

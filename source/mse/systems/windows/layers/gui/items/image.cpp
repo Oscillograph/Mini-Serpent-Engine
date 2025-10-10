@@ -275,6 +275,7 @@ namespace mse
         
         void HImageTemplate::Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceLeft, const glm::uvec4& sourceMid, const glm::uvec4& sourceRight)
         {
+            MSE_CORE_LOG("Got here");
             // model
             parentLayer = layer;
             windowUser = layer->GetWindow();
@@ -284,8 +285,11 @@ namespace mse
             m_sourceLeft = sourceLeft;
             m_sourceMid = sourceMid;
             m_sourceRight = sourceRight;
+            MSE_CORE_LOG("1");
+            MSE_CORE_LOG("Area: ", area.z, " x ", area.w);
             
             layerMask.resize(area.z * area.w);
+            MSE_CORE_LOG("2");
             for (int x = 0; x < area.z; ++x)
             {
                 for (int y = 0; y < area.w; ++y)
@@ -293,6 +297,7 @@ namespace mse
                     layerMask[x + y*area.z] = id;
                 }
             }
+            MSE_CORE_LOG("3");
             
             // view
             if ((layer != nullptr) && (m_spriteList != nullptr))
@@ -322,8 +327,8 @@ namespace mse
                                              &sourceRect);
                 
                 // middle part
-                sourceRect = {sourceMid.x, sourceMid.y, sourceMid.z, 1};
-                int middleWidth = layerArea.w - sourceLeft.w - sourceRight.w;
+                sourceRect = {sourceMid.x, sourceMid.y, 1, sourceMid.w};
+                int middleWidth = layerArea.z - sourceLeft.z - sourceRight.z;
                 for (int k = 0; k < middleWidth; ++k)
                 {
                     destRect = {sourceLeft.z + k, 0, 1, sourceMid.w};
@@ -333,9 +338,9 @@ namespace mse
                                                  &sourceRect);
                 }
                 
-                // bottom part
+                // right part
                 sourceRect = {sourceRight.x, sourceRight.y, sourceRight.z, sourceRight.w};
-                destRect = {0, sourceLeft.w + middleWidth, sourceRight.z, sourceRight.w};
+                destRect = {sourceLeft.z + middleWidth, 0, sourceRight.z, sourceRight.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,

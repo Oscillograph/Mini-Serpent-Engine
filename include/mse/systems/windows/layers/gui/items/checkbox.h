@@ -19,8 +19,8 @@ namespace mse
 		public:
 			// general initialization
 			Checkbox();
-            Checkbox(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked);
-			void Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked);
+            Checkbox(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, bool* var, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked);
+			void Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, bool* var, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked);
 			virtual ~Checkbox();
 			
 			// general GUIItem interface
@@ -32,7 +32,7 @@ namespace mse
             bool isPushed = false;
 		protected:
             // generic
-            
+            bool* m_var = nullptr;
             // sprite-based
             Resource* m_spriteList = nullptr;
 		};

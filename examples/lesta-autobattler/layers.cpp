@@ -1315,6 +1315,16 @@ void SettingsUILayer::OnInit()
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
+    AddElement(new mse::gui::Checkbox(
+                                  this, 
+                                  {210, 54, 14, 13}, 
+                                  "data/img/screen-images.png", 
+                                  {0, 0, 0}, 
+                                  &(mse::Application::GetApplication()->config.playInBackground),
+                                  {24, 88, 14, 13}, 
+                                  {38, 88, 14, 13}, 
+                                  {52, 88, 14, 13}, 
+                                  {66, 88, 14, 13}));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Громкость музыки", 
@@ -1322,6 +1332,21 @@ void SettingsUILayer::OnInit()
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
+    AddElement(new mse::gui::HSlider(
+                                  this, 
+                                  {210, 68, 80, 13}, 
+                                  &(mse::Application::config.musicVolume),
+                                  0,
+                                  MIX_MAX_VOLUME,
+                                  MIX_MAX_VOLUME / 16,
+                                  "data/img/screen-images.png", 
+                                  {0, 0, 0}, 
+                                  {24, 23, 52, 13}, 
+                                  {24, 11, 40, 11}, 
+                                  {24, 36, 52, 13}, 
+                                  {63, 36, 4, 14}, 
+                                  {67, 36, 5, 14}, 
+                                  {72, 36, 4, 14}));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Громкость эффектов", 
@@ -1329,7 +1354,21 @@ void SettingsUILayer::OnInit()
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
-    
+    AddElement(new mse::gui::HSlider(
+                                     this, 
+                                     {210, 82, 80, 13}, 
+                                     &(mse::Application::config.soundsVolume),
+                                     0,
+                                     MIX_MAX_VOLUME,
+                                     MIX_MAX_VOLUME / 16,
+                                     "data/img/screen-images.png", 
+                                     {0, 0, 0}, 
+                                     {24, 23, 52, 13}, 
+                                     {24, 11, 40, 11}, 
+                                     {24, 36, 52, 13}, 
+                                     {63, 36, 4, 14}, 
+                                     {67, 36, 5, 14}, 
+                                     {72, 36, 4, 14}));
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Графика:", 
@@ -1349,6 +1388,7 @@ void SettingsUILayer::OnInit()
                                   {210, 110, 14, 13}, 
                                   "data/img/screen-images.png", 
                                   {0, 0, 0}, 
+                                  &(mse::Application::GetApplication()->config.fullscreen),
                                   {24, 88, 14, 13}, 
                                   {38, 88, 14, 13}, 
                                   {52, 88, 14, 13}, 

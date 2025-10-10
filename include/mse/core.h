@@ -16,6 +16,20 @@ namespace mse
 	typedef uint32_t TimeType;
 }
 
+// important structs
+namespace mse
+{
+    struct GameConfig
+    {
+        bool music = false;
+        float musicVolume = 0;
+        bool sounds = false;
+        float soundsVolume = 0;
+        bool playInBackground = false;
+        bool fullscreen = true;
+    };
+}
+
 // forward declarations
 namespace mse
 {

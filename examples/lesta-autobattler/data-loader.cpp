@@ -1,3 +1,4 @@
+#include <mse/core.h>
 #include <lesta-autobattler/data-loader.h>
 
 #include <yaml-cpp/yaml.h>
@@ -5,7 +6,7 @@
 
 namespace LAutobattler
 {
-    bool LoadConfig(GameConfig& config, const std::string& filename)
+    bool LoadConfig(mse::GameConfig& config, const std::string& filename)
     {
         // open file and read its data
         std::string configRawText = mse::FileIO::GetRawText(filename);
@@ -49,7 +50,7 @@ namespace LAutobattler
         return false;
     }
     
-    void SaveConfig(const GameConfig& config, const std::string& filename)
+    void SaveConfig(const mse::GameConfig& config, const std::string& filename)
     {
         YAML::Emitter out;
         out << YAML::BeginMap;

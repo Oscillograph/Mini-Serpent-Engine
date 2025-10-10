@@ -21,22 +21,24 @@ namespace mse
 		Checkbox::Checkbox()
 		: GUIItem()
 		{
-			Init(nullptr, {0, 0, 1, 1}, "", {0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0});
+			Init(nullptr, {0, 0, 1, 1}, "", {0, 0, 0}, nullptr, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0});
 		}
 		
-		Checkbox::Checkbox(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked)
+		Checkbox::Checkbox(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, bool* var, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked)
 		: GUIItem()
 		{
-			Init(layer, area, spritelist, colorKey, sourceUnchecked, sourceChecked, sourceDisabledUnchecked, sourceDisabledChecked);
+			Init(layer, area, spritelist, colorKey, var, sourceUnchecked, sourceChecked, sourceDisabledUnchecked, sourceDisabledChecked);
 		}
 		
         // generic button
-		void Checkbox::Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked)
+		void Checkbox::Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, bool* var, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked)
         {
             parentLayer = layer;
             windowUser = layer->GetWindow();
             layerArea = area;
             m_elementName = "Checkbox";
+            m_var = var;
+            state = (*m_var) ? CheckboxStates::Checked : CheckboxStates::Unchecked;
             
             // view
             if (layer != nullptr)
@@ -185,8 +187,9 @@ namespace mse
                     {
                         if (isEnabled && isPushed)
                         {
-                            state = (state == CheckboxStates::Checked) ? CheckboxStates::Unchecked : CheckboxStates::Checked;
                             isPushed = false;
+                            *m_var = !(*m_var);
+                            state = (*m_var) ? CheckboxStates::Checked : CheckboxStates::Unchecked;
                             callbacks[eventType](event);
                         }
                         return true;

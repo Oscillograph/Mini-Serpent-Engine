@@ -1,6 +1,7 @@
 #ifndef LESTA_AUTOBATTLER_DATA_LOADER_H
 #define LESTA_AUTOBATTLER_DATA_LOADER_H
 
+#include <mse/core.h>
 #include <lesta-autobattler/game-fwd.h>
 #include <yaml-cpp/yaml.h>
 
@@ -66,16 +67,6 @@ namespace LAutobattler
     /* ========================================================================================== */
     /*                                        TYPES                                               */
     /* ========================================================================================== */
-    struct GameConfig
-    {
-        bool music = false;
-        int musicVolume = 0;
-        bool sounds = false;
-        int soundsVolume = 0;
-        bool playInBackground = false;
-        bool fullscreen = true;
-    };
-    
     struct HighScore
     {
         std::u32string nick = U"";
@@ -92,7 +83,7 @@ namespace LAutobattler
     /* ========================================================================================== */
     /*                                 YAML ENCODE/DECODE                                         */
     /* ========================================================================================== */
-    YAML::Emitter& operator<<(YAML::Emitter& out, const GameConfig& config)
+    YAML::Emitter& operator<<(YAML::Emitter& out, const mse::GameConfig& config)
     {
         out << YAML::Flow;
         out << YAML::Key << "Music" << YAML::Value << config.music;
@@ -106,8 +97,8 @@ namespace LAutobattler
     
     
     
-    bool LoadConfig(GameConfig& config, const std::string& filename = "data/config.yaml");
-    void SaveConfig(const GameConfig& config, const std::string& filename = "data/config.yaml");
+    bool LoadConfig(mse::GameConfig& config, const std::string& filename = "data/config.yaml");
+    void SaveConfig(const mse::GameConfig& config, const std::string& filename = "data/config.yaml");
     bool LoadHighScores(HighScoresDB& highscores, const std::string filename = "data/highscores.yaml");
     void SaveHighScores(const HighScoresDB& highscores, const std::string& filename = "data/highscores.yaml");
 }
