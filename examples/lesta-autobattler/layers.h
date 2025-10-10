@@ -173,6 +173,9 @@ public:
     
     virtual void OnInit() override;
     virtual void OnUpdate() override;
+    
+    mse::gui::HSlider* musicVolumeSlider = nullptr;
+    mse::gui::HSlider* soundsVolumeSlider = nullptr;
 };
 
 class SimpleUILayer : public mse::Layer

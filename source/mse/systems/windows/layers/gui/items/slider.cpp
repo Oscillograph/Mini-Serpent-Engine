@@ -84,6 +84,9 @@ namespace mse
                     {
                         *var = varMin;
                     }
+                    valueChanged = true;
+                    SDL_Event* e = new SDL_Event();
+                    SDL_PushEvent(e);
                     
                     float areaPercentage = *var / varMax;
                     float areaPixels = layerArea.z - btnLeft.z / 4 - btnRight.z / 4 - btnBall.z / 4 - 2;
@@ -130,6 +133,9 @@ namespace mse
                             {
                                 *var = varMax;
                             }
+                            valueChanged = true;
+                            SDL_Event* e = new SDL_Event();
+                            SDL_PushEvent(e);
                             MSE_CORE_LOG("lines to scroll: ", linesToScroll, "; volume = ", *var);
                             
                             m_BtnBall->layerArea.x += xrelPixels;
@@ -197,6 +203,10 @@ namespace mse
                     {
                         *var = varMax;
                     }
+                    valueChanged = true;
+                    SDL_Event* e = new SDL_Event();
+                    e->type = SDL_EventType::SDL_USEREVENT;
+                    SDL_PushEvent(e);
                     
                     float areaPercentage = *var / varMax;
                     float areaPixels = layerArea.z - btnLeftWidth - btnRightWidth - btnBall.z / 4 - 2;
@@ -224,6 +234,17 @@ namespace mse
         {}
         
         bool HSlider::HandleEvent(EventTypes eventType, SDL_Event* event)
-        {}
+        {
+            if (valueChanged)
+            {
+                valueChanged = false;
+                if (callbacks.find(EventTypes::GUIItemChangeValue) != callbacks.end())
+                {
+                    callbacks[EventTypes::GUIItemChangeValue](event);
+                    return true;
+                }
+            }
+            return false;
+        }
 	}
 }

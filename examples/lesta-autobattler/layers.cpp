@@ -60,6 +60,8 @@ void IntroUILayer::OnInit()
         "data/audio/tracks/07_caleydoscope.mp3",
         "data/audio/tracks/08_quest_for_glory.mp3",
     });
+    
+    mse::SoundMan::PlayTrack("data/audio/tracks/01_towards_neon_shadows.mp3");
 }
 
 void IntroUILayer::OnUpdate()
@@ -1310,7 +1312,7 @@ void SettingsUILayer::OnInit()
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"Общая громкость", 
+                                  U"Музыка фоном", 
                                   {60, 54, 140, 10}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
@@ -1332,7 +1334,7 @@ void SettingsUILayer::OnInit()
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
-    AddElement(new mse::gui::HSlider(
+    musicVolumeSlider = (mse::gui::HSlider*)AddElement(new mse::gui::HSlider(
                                   this, 
                                   {210, 68, 80, 13}, 
                                   &(mse::Application::config.musicVolume),
@@ -1347,6 +1349,7 @@ void SettingsUILayer::OnInit()
                                   {63, 36, 4, 14}, 
                                   {67, 36, 5, 14}, 
                                   {72, 36, 4, 14}));
+
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Громкость эффектов", 
@@ -1354,7 +1357,7 @@ void SettingsUILayer::OnInit()
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
-    AddElement(new mse::gui::HSlider(
+    soundsVolumeSlider = (mse::gui::HSlider*)AddElement(new mse::gui::HSlider(
                                      this, 
                                      {210, 82, 80, 13}, 
                                      &(mse::Application::config.soundsVolume),
@@ -1369,6 +1372,7 @@ void SettingsUILayer::OnInit()
                                      {63, 36, 4, 14}, 
                                      {67, 36, 5, 14}, 
                                      {72, 36, 4, 14}));
+    
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Графика:", 
@@ -1410,7 +1414,20 @@ void SettingsUILayer::OnInit()
 }
 
 void SettingsUILayer::OnUpdate()
-{}
+{
+    if (musicVolumeSlider->valueChanged)
+    {
+        MSE_CORE_LOG("musicVolumeSlider");
+        musicVolumeSlider->valueChanged = false;
+        mse::SoundMan::AdjustTrackVolume((int)roundf(mse::Application::config.musicVolume));
+    }
+    if (soundsVolumeSlider->valueChanged)
+    {
+        MSE_CORE_LOG("soundsVolumeSlider");
+        soundsVolumeSlider->valueChanged = false;
+        mse::SoundMan::AdjustSoundsVolume((int)roundf(mse::Application::config.soundsVolume));
+    }
+}
 
 SimpleUILayer::SimpleUILayer() : mse::Layer()
 {

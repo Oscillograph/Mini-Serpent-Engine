@@ -36,6 +36,7 @@ namespace mse
             glm::uvec2 ballCoordinates = {0, 0};
             glm::uvec4 ballPanelArea = {0, 0, 0, 0};
             bool correctingMousePosition = false;
+            bool valueChanged = false;
         protected:
             Button* m_btnLeft = nullptr;
             Button* m_btnRight = nullptr;

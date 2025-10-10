@@ -1,6 +1,7 @@
 #include <mse/mse.h>
 #include <lesta-autobattler/game-fwd.h>
 #include <lesta-autobattler/game-data.h>
+#include <lesta-autobattler/data-loader.h>
 
 #include <lesta-autobattler/gamestates.h>
 #include <lesta-autobattler/layers.h>
@@ -106,11 +107,18 @@ public:
         mse::SceneManager::Load(m_scene);
         m_scene->Start();
         
-        m_window->ToggleFullscreen();
+        LAutobattler::LoadConfig(config, "data/config.yaml");
+        if (config.fullscreen)
+        {
+            m_window->ToggleFullscreen();
+        }
 	}
 	
 	~App()
 	{
+        MSE_LOG("Saving config");
+        LAutobattler::SaveConfig(config, "data/config.yaml");
+        
 		MSE_LOG("Commanding to destroy a window");
         mse::ResourceManager::DropResource(m_Cursor, m_window);
         m_Cursor = nullptr;

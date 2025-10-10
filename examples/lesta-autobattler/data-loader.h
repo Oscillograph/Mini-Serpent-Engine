@@ -80,23 +80,6 @@ namespace LAutobattler
         std::vector<HighScore> data;
     };
     
-    /* ========================================================================================== */
-    /*                                 YAML ENCODE/DECODE                                         */
-    /* ========================================================================================== */
-    YAML::Emitter& operator<<(YAML::Emitter& out, const mse::GameConfig& config)
-    {
-        out << YAML::Flow;
-        out << YAML::Key << "Music" << YAML::Value << config.music;
-        out << YAML::Key << "MusicVolume" << YAML::Value << config.musicVolume;
-        out << YAML::Key << "Sounds" << YAML::Value << config.sounds;
-        out << YAML::Key << "SoundsVolume" << YAML::Value << config.soundsVolume;
-        out << YAML::Key << "PlayInBackground" << YAML::Value << config.playInBackground;
-        out << YAML::Key << "Fullscreen" << YAML::Value << config.fullscreen;
-        return out;
-    }
-    
-    
-    
     bool LoadConfig(mse::GameConfig& config, const std::string& filename = "data/config.yaml");
     void SaveConfig(const mse::GameConfig& config, const std::string& filename = "data/config.yaml");
     bool LoadHighScores(HighScoresDB& highscores, const std::string filename = "data/highscores.yaml");

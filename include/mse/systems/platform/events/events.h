@@ -47,6 +47,7 @@ namespace mse
 		GUIItemMoveStart,
 		GUIItemMove,
 		GUIItemMoveStop,
+        GUIItemChangeValue,
 		
 		/*
 		// General engine events

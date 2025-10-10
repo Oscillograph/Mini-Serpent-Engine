@@ -4,6 +4,25 @@
 #include <yaml-cpp/yaml.h>
 #include <mse/utils/fileio.h>
 
+/* ============================================================================================== */
+/*                                 YAML ENCODE/DECODE                                             */
+/* ============================================================================================== */
+YAML::Emitter& operator<<(YAML::Emitter& out, const mse::GameConfig& config)
+{
+    out << YAML::Flow;
+    out << YAML::Key << "Music" << YAML::Value << config.music;
+    out << YAML::Key << "MusicVolume" << YAML::Value << config.musicVolume;
+    out << YAML::Key << "Sounds" << YAML::Value << config.sounds;
+    out << YAML::Key << "SoundsVolume" << YAML::Value << config.soundsVolume;
+    out << YAML::Key << "PlayInBackground" << YAML::Value << config.playInBackground;
+    out << YAML::Key << "Fullscreen" << YAML::Value << config.fullscreen;
+    return out;
+}
+
+
+/* ============================================================================================== */
+/*                                 DATA LOADER/SAVER CODE                                         */
+/* ============================================================================================== */
 namespace LAutobattler
 {
     bool LoadConfig(mse::GameConfig& config, const std::string& filename)
@@ -26,9 +45,9 @@ namespace LAutobattler
         
         // edit prepared data structure
         config.music = data["Music"].as<bool>();
-        config.musicVolume = data["MusicVolume"].as<int>();
+        config.musicVolume = data["MusicVolume"].as<float>();
         config.sounds = data["Sounds"].as<bool>();
-        config.soundsVolume = data["SoundsVolume"].as<int>();
+        config.soundsVolume = data["SoundsVolume"].as<float>();
         config.playInBackground = data["PlayInBackground"].as<bool>();
         config.fullscreen = data["Fullscreen"].as<bool>();
         

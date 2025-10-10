@@ -3,6 +3,7 @@
 #include <mse/systems/platform/audio/sound.h>
 #include <mse/systems/platform/audio/track.h>
 #include <mse/systems/resources/resource_manager.h>
+#include <mse/systems/application/application.h>
 
 namespace mse
 {
@@ -34,7 +35,7 @@ namespace mse
         channels = Mix_AllocateChannels(number);
         for (int i = 0; i < number; ++i)
         {
-            sounds_volume[i] = MIX_MAX_VOLUME;
+            sounds_volume[i] = Application::config.soundsVolume;
             Mix_Volume(i, sounds_volume[i]);
         }
         
@@ -265,11 +266,15 @@ namespace mse
         {
             sounds_volume[i] = Mix_Volume(i, level);
         }
+        MSE_CORE_LOG("SoundMan: sounds volume changed to ", level);
     }
     
     void SoundMan::AdjustTrackVolume(int level)
     {
+        PauseTrack();
         tracks_volume = Mix_VolumeMusic(level);
+        MSE_CORE_LOG("SoundMan: music volume changed to ", tracks_volume);
+        UnPauseTrack();
     }
 }
 
