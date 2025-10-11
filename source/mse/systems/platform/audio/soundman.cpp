@@ -235,9 +235,15 @@ namespace mse
     {
         for (int i = 0; i < channels; ++i)
         {
-            Mix_Pause(i);
+            if (Mix_Playing(i))
+            {
+                Mix_Pause(i);
+            }
         }
-        Mix_PauseMusic();
+        if (Mix_PlayingMusic())
+        {
+            Mix_PauseMusic();
+        }
         paused = true;
     }
     
@@ -245,9 +251,15 @@ namespace mse
     {
         for (int i = 0; i < channels; ++i)
         {
-            Mix_Resume(i);
+            if (Mix_Paused(i))
+            {
+                Mix_Resume(i);
+            }
         }
-        Mix_ResumeMusic();
+        if (Mix_PausedMusic())
+        {
+            Mix_ResumeMusic();
+        }
         paused = false;
     }
     
@@ -255,16 +267,23 @@ namespace mse
     {
         for (int i = 0; i < channels; ++i)
         {
-            Mix_HaltChannel(i);
+            if (Mix_Playing(i))
+            {
+                Mix_HaltChannel(i);
+            }
         }
-        Mix_HaltMusic();
+        if (Mix_PlayingMusic())
+        {
+            Mix_HaltMusic();
+        }
     }
     
     void SoundMan::AdjustSoundsVolume(int level)
     {
         for (int i = 0; i < channels; ++i)
         {
-            sounds_volume[i] = Mix_Volume(i, level);
+            Mix_Volume(i, level);
+            sounds_volume[i] = level;
         }
         MSE_CORE_LOG("SoundMan: sounds volume changed to ", level);
     }
@@ -272,7 +291,8 @@ namespace mse
     void SoundMan::AdjustTrackVolume(int level)
     {
         PauseTrack();
-        tracks_volume = Mix_VolumeMusic(level);
+        Mix_VolumeMusic(level);
+        tracks_volume = level;
         MSE_CORE_LOG("SoundMan: music volume changed to ", tracks_volume);
         UnPauseTrack();
     }

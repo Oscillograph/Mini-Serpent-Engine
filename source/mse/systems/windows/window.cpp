@@ -1,7 +1,9 @@
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/window.h>
 #include <mse/systems/platform/platform.h>
+#include <mse/systems/application/application.h>
 #include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/windows/layers/layer_manager.h>
 
 namespace mse
@@ -62,7 +64,7 @@ namespace mse
     
     void Window::ToggleFullscreen(int mode)
     {
-        if (!m_isFullscreen)
+        if (!m_isFullscreen || (mode == 2))
         {
             Platform::ToggleWindowFullScreen(m_windowNative, 2);
             m_isFullscreen = true;
@@ -114,6 +116,10 @@ namespace mse
 							MSE_CORE_LOG("Window: Window \"", m_basePrefs.title, "\" gained focus");
 							WindowManager::SetCurrentWindow(this);
 							SetFocus(true);
+                            if (!Application::GetApplication()->config.playInBackground)
+                            {
+                                SoundMan::UnPauseAll();
+                            }
 							return true;
 							break;
 						}
@@ -122,6 +128,10 @@ namespace mse
 						{
 							MSE_CORE_LOG("Window: Window \"", m_basePrefs.title, "\" lost focus");
 							SetFocus(false);
+                            if (!Application::GetApplication()->config.playInBackground)
+                            {
+                                SoundMan::PauseAll();
+                            }
 							return true;
 							break;
 						}

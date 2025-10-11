@@ -65,7 +65,7 @@ namespace mse
 		callbacks[EventTypes::MouseButtonUp] = [&](SDL_Event* event) { return false; };
 		callbacks[EventTypes::MouseMoved] = [&](SDL_Event* event) { return false; };
 		callbacks[EventTypes::MouseWheel] = [&](SDL_Event* event) { return false; };
-		
+        
 		m_singleton = this;
 	}
 	

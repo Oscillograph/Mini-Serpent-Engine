@@ -108,9 +108,11 @@ public:
         m_scene->Start();
         
         LAutobattler::LoadConfig(config, "data/config.yaml");
+        mse::SoundMan::AdjustTrackVolume(config.musicVolume);
+        mse::SoundMan::AdjustSoundsVolume(config.soundsVolume);
         if (config.fullscreen)
         {
-            m_window->ToggleFullscreen();
+            m_window->ToggleFullscreen(2);
         }
 	}
 	
