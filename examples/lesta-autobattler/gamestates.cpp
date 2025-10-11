@@ -641,7 +641,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     
     if ((!game.battleFinished) && (game.turn < 30))
     {
-        if (localTime > 300)
+        if (localTime > 1000)
         {
             game.turn++;
             
@@ -758,6 +758,12 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
 //                << utf8::utf32to8(game.defender->name.c_str()) 
 //                << "(" << game.defender->stats.health << ")"
                 << "\n";
+                if (game.attacker->race == LAutobattler::Races::Human)
+                {
+                    mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-sword-cut-fx.wav");
+                } else {
+                    mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav");
+                }
                 game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
             } else {
                 printf("Turn %d: %s misses!\n", 
@@ -768,6 +774,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                 << utf8::utf32to8(game.attacker->name.c_str()) 
 //                << "(" << game.attacker->stats.health << ")" 
                 << " промахивается!\n";
+                mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav");
                 game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
             }
             

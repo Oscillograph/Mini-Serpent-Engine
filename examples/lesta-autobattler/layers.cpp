@@ -48,6 +48,9 @@ void IntroUILayer::OnInit()
     
     mse::SoundMan::LoadSounds({
         "data/audio/sounds/click.wav",
+        "data/audio/sounds/samplefocus.com-sword-cut-fx.wav",
+        "data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav",
+        "data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav",
     });
     
     mse::SoundMan::LoadTracks({
@@ -61,7 +64,7 @@ void IntroUILayer::OnInit()
         "data/audio/tracks/08_quest_for_glory.mp3",
     });
     
-    mse::SoundMan::PlayTrack("data/audio/tracks/01_towards_neon_shadows.mp3");
+//    mse::SoundMan::PlayTrack("data/audio/tracks/01_towards_neon_shadows.mp3");
 }
 
 void IntroUILayer::OnUpdate()
