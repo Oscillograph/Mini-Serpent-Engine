@@ -698,7 +698,7 @@ namespace mse
 		}
 	}
 	
-	void Renderer::SurfaceDrawText_unsafe(
+	std::pair<int, int> Renderer::SurfaceDrawText_unsafe(
 		Texture* target,
 		const glm::uvec4& place,	// where to draw  
 		int pxSize, 				// size of the pen
@@ -707,6 +707,8 @@ namespace mse
 		const glm::uvec4& color,	// color
 		int interval)				// interval between lines
 	{	
+        std::pair<int, int> result = {0, 0};
+        
 		// convert from float Rect to int
 		SDL_Rect tempRect = {
 			round(place.x),
@@ -714,6 +716,7 @@ namespace mse
 			round(place.z),
 			round(place.w)
 		};
+        result.first = tempRect.w;
 		
 		FontBitmap* font = (FontBitmap*)(textFont->data);
 		
@@ -762,25 +765,7 @@ namespace mse
 						}
 						correctY = currentRow*(font->fontClip.w + interval)*pxSize;
 						
-//						uint32_t blackPixelsCount = 0;
 						uint32_t symbolLeftEdge = symbolId*(font->fontClip.w * font->fontClip.z);
-//						for (int k = 0; k < font->fontClip.z; ++k)
-//						{
-//							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w];
-////							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w + 1];
-//						}
-//						if (blackPixelsCount == 0)
-//						{
-//							correctX--;
-//						}
-//						for (int k = 0; k < font->fontClip.z; ++k)
-//						{
-//							blackPixelsCount += font->symbols8bitTable[alphabetId][symbolLeftEdge + k * font->fontClip.w + 1];
-//						}
-//						if (blackPixelsCount == 0)
-//						{
-//							correctX--;
-//						}
                         
                         // position the pencil according to where the cursor is
 						curX = tempRect.x + (j*font->fontClip.w + correctX)*pxSize;
@@ -828,10 +813,14 @@ namespace mse
 				}
 			}
 		}
+//        result.second = correctY;
+        result.second = -(currentRow + 1)*(font->fontClip.w + interval)*pxSize;;
+        return result;
 	}
 	
-	void Renderer::SurfaceDrawText(Texture* target, const glm::uvec4& place, int pxSize, const std::u32string& text, Resource* textFont, const glm::uvec4& color, int interval)
+	std::pair<int, int> Renderer::SurfaceDrawText(Texture* target, const glm::uvec4& place, int pxSize, const std::u32string& text, Resource* textFont, const glm::uvec4& color, int interval)
 	{
+        std::pair<int, int> result = {0, 0};
 		if (target->GetSurface() != NULL)
 		{
 			if (SDL_MUSTLOCK(target->GetSurface()))
@@ -841,7 +830,7 @@ namespace mse
 			
 			if (textFont != nullptr)
 			{
-				SurfaceDrawText_unsafe(target, place, pxSize, text, textFont, color, interval);
+				result = SurfaceDrawText_unsafe(target, place, pxSize, text, textFont, color, interval);
 			} else {
 				MSE_CORE_LOG("Renderer: Could not draw text due to textFont is nullptr");
 			}
@@ -851,6 +840,7 @@ namespace mse
 				SDL_UnlockSurface(target->GetSurface());
 			}
 		}
+        return result;
 	}
 	
 	void Renderer::SurfaceDrawTexture(Texture* target, Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect)

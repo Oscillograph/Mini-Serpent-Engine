@@ -46,24 +46,6 @@ void IntroUILayer::OnInit()
                                                            {0, 0, 0, 255}, 
                                                            {0, 255, 255, 255})));
     
-    mse::SoundMan::LoadSounds({
-        "data/audio/sounds/click.wav",
-        "data/audio/sounds/samplefocus.com-sword-cut-fx.wav",
-        "data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav",
-        "data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav",
-    });
-    
-    mse::SoundMan::LoadTracks({
-        "data/audio/tracks/01_towards_neon_shadows.mp3",
-        "data/audio/tracks/02_our_tanya_cries_loud.mp3",
-        "data/audio/tracks/03_polar_star.mp3",
-        "data/audio/tracks/04_fear_of_empty_pages.mp3",
-        "data/audio/tracks/05_airplane_in_love.mp3",
-        "data/audio/tracks/06_undina.mp3",
-        "data/audio/tracks/07_caleydoscope.mp3",
-        "data/audio/tracks/08_quest_for_glory.mp3",
-    });
-    
 //    mse::SoundMan::PlayTrack("data/audio/tracks/01_towards_neon_shadows.mp3");
 }
 
@@ -1436,6 +1418,35 @@ void SettingsUILayer::OnInit()
         m_window->ToggleFullscreen();
     };
     
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Игровой процесс:", 
+                                  {20, 124, 140, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 0, 255},
+                                  1));
+    AddElement(new mse::gui::Text(
+                                  this, 
+                                  U"Быстрый бой", 
+                                  {60, 138, 140, 10}, 
+                                  {0, 0, 0, 255}, 
+                                  {196, 196, 196, 255},
+                                  1
+                                  ));
+    mse::gui::Checkbox* fastBattleBtn = (mse::gui::Checkbox*)AddElement(new mse::gui::Checkbox(
+                                  this, 
+                                  {210, 138, 14, 13}, 
+                                  "data/img/screen-images.png", 
+                                  {0, 0, 0}, 
+                                  &(game.config.fastBattle),
+                                  {24, 88, 14, 13}, 
+                                  {38, 88, 14, 13}, 
+                                  {52, 88, 14, 13}, 
+                                  {66, 88, 14, 13}));
+    fastBattleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=] (SDL_Event* event)
+    {
+        game.config.turnLength = (game.config.fastBattle) ? 0 : 500;
+    };
     
     mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {32, 32, 32, 255}, {120, 220, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){

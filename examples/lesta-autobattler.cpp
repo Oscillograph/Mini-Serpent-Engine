@@ -123,6 +123,24 @@ public:
         {
             m_window->ToggleFullscreen(2);
         }
+        
+        mse::SoundMan::LoadSounds({
+            "data/audio/sounds/click.wav",
+            "data/audio/sounds/samplefocus.com-sword-cut-fx.wav",
+            "data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav",
+            "data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav",
+        });
+        
+        mse::SoundMan::LoadTracks({
+            "data/audio/tracks/01_towards_neon_shadows.mp3",
+            "data/audio/tracks/02_our_tanya_cries_loud.mp3",
+            "data/audio/tracks/03_polar_star.mp3",
+            "data/audio/tracks/04_fear_of_empty_pages.mp3",
+            "data/audio/tracks/05_airplane_in_love.mp3",
+            "data/audio/tracks/06_undina.mp3",
+            "data/audio/tracks/07_caleydoscope.mp3",
+            "data/audio/tracks/08_quest_for_glory.mp3",
+        });
 	}
 	
 	~App()

@@ -146,20 +146,20 @@ namespace mse
             mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
             
             // vertical scroll adjustment in respect to bitmap font
-            glm::uvec2 fontSize = {
-                ((mse::FontBitmap*)(bmpFont->data))->fontClip.z,
-                ((mse::FontBitmap*)(bmpFont->data))->fontClip.w
-            };
-            uint32_t xMax = layerArea.z / (fontSize.x * m_pxSize); // max columns
-            uint32_t lines = m_text.size() / xMax + 1;
+//            glm::uvec2 fontSize = {
+//                ((mse::FontBitmap*)(bmpFont->data))->fontClip.z,
+//                ((mse::FontBitmap*)(bmpFont->data))->fontClip.w
+//            };
+//            uint32_t xMax = layerArea.z / (fontSize.x * m_pxSize); // max columns
+//            uint32_t lines = m_text.size() / xMax + 1;
 //            lines += std::count(m_text.begin(), m_text.end(), '\n');
-            lines = std::count(m_text.begin(), m_text.end(), '\n') + 2;
+//            lines = std::count(m_text.begin(), m_text.end(), '\n') + 2;
 //            MSE_CORE_ERROR(lines);
             
-            m_scrollXY.w = layerArea.w - lines * fontSize.y;
+//            m_scrollXY.w = layerArea.w - lines * fontSize.y;
             
             // draw text itself
-            mse::Renderer::SurfaceDrawText(
+            std::pair<int, int> scrollWH = mse::Renderer::SurfaceDrawText(
                                            (Texture*)(m_texture->data), 
                                            {m_scrollXY.x + 2, m_scrollXY.y + 2, layerArea.z, layerArea.w}, 	// where to
                                            m_pxSize,			// pixel size
@@ -167,6 +167,8 @@ namespace mse
                                            bmpFont, 			// font
                                            {m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
                                            0); 				// interval between rows
+            m_scrollXY.z = scrollWH.first;
+            m_scrollXY.w = scrollWH.second;
             
             // border
             if (showBorder && (layerArea.z > 0) && (layerArea.w > 0))
