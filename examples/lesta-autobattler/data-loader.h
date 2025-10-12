@@ -80,8 +80,8 @@ namespace LAutobattler
         std::vector<HighScore> data;
     };
     
-    bool LoadConfig(mse::GameConfig& config, const std::string& filename = "data/config.yaml");
-    void SaveConfig(const mse::GameConfig& config, const std::string& filename = "data/config.yaml");
+    bool LoadConfig(GameConfig& config, const std::string& filename = "data/config.yaml");
+    void SaveConfig(const GameConfig& config, const std::string& filename = "data/config.yaml");
     bool LoadHighScores(HighScoresDB& highscores, const std::string filename = "data/highscores.yaml");
     void SaveHighScores(const HighScoresDB& highscores, const std::string& filename = "data/highscores.yaml");
 }

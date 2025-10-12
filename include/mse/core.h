@@ -19,7 +19,7 @@ namespace mse
 // important structs
 namespace mse
 {
-    struct GameConfig
+    struct AppConfig
     {
         bool music = false;
         float musicVolume = 0;

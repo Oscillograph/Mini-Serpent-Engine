@@ -29,7 +29,7 @@ namespace mse
 		
 		static Application* GetApplication() { return m_singleton; }
 		
-        static GameConfig config;
+        static AppConfig config;
 	protected:
 		static Application* m_singleton;
 		

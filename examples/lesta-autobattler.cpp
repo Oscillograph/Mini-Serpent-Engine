@@ -86,7 +86,12 @@ public:
             }
             if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
             {
-                this->Stop();
+                if (gsm.current->page == LAutobattler::GamePages::MainMenu)
+                {
+                    this->Stop();
+                } else {
+                    gsm.ChangeStateTo(LAutobattler::GamePages::MainMenu);
+                }
             }
             game.keyPressed = true;
 			return true;
@@ -107,9 +112,13 @@ public:
         mse::SceneManager::Load(m_scene);
         m_scene->Start();
         
-        LAutobattler::LoadConfig(config, "data/config.yaml");
-        mse::SoundMan::AdjustTrackVolume(config.musicVolume);
-        mse::SoundMan::AdjustSoundsVolume(config.soundsVolume);
+        LAutobattler::LoadConfig(game.config, "data/config.yaml");
+        config.fullscreen = game.config.fullscreen;
+        config.musicVolume = game.config.musicVolume;
+        config.soundsVolume = game.config.soundsVolume;
+        config.playInBackground = game.config.playInBackground;
+        mse::SoundMan::AdjustTrackVolume(game.config.musicVolume);
+        mse::SoundMan::AdjustSoundsVolume(game.config.soundsVolume);
         if (config.fullscreen)
         {
             m_window->ToggleFullscreen(2);
@@ -119,7 +128,7 @@ public:
 	~App()
 	{
         MSE_LOG("Saving config");
-        LAutobattler::SaveConfig(config, "data/config.yaml");
+        LAutobattler::SaveConfig(game.config, "data/config.yaml");
         
 		MSE_LOG("Commanding to destroy a window");
         mse::ResourceManager::DropResource(m_Cursor, m_window);

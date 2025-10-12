@@ -202,10 +202,24 @@ namespace LAutobattler
         std::unordered_map<int, Character> characters;
         int level_max;
     };
+
+    // game configuration
+    struct GameConfig
+    {
+        bool music = false;
+        float musicVolume = 0;
+        bool sounds = false;
+        float soundsVolume = 0;
+        bool playInBackground = false;
+        bool fullscreen = true;
+        bool fastBattle = false;
+        int turnLength = 1000; // in milliseconds
+    };
     
     // various game data for everything
     struct Game
     {
+        GameConfig config;
         GamePages gamePage = GamePages::None;
         bool gamePageHasToChange = false;
         GamePages gamePageFrom = GamePages::None;

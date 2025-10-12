@@ -836,8 +836,32 @@ void ArenaUILayer::OnInit()
                                         {63, 65, 13, 4},
                                         {63, 69, 13, 4}));
     
+    mse::gui::Checkbox* fastBattleBtn = (mse::gui::Checkbox*)AddElement(new mse::gui::Checkbox(
+                                        this, 
+                                        {30, 215, 14, 13}, 
+                                        "data/img/screen-images.png", 
+                                        {0, 0, 0}, 
+                                        &(game.config.fastBattle),
+                                        {24, 88, 14, 13}, 
+                                        {38, 88, 14, 13}, 
+                                        {52, 88, 14, 13}, 
+                                        {66, 88, 14, 13}));
+    fastBattleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=] (SDL_Event* event)
+    {
+        game.config.turnLength = (game.config.fastBattle) ? 0 : 500;
+    };
+    
+    AddElement(new mse::gui::Text(
+                                        this, 
+                                        U"Быстрый бой", 
+                                        {45, 215, 100, 10}, 
+                                        {0, 0, 0, 255}, 
+                                        {255, 255, 255, 255},
+                                        1
+                                        ));
+
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
-                  this, U"Продолжить", {32, 32, 32, 255}, {110, 215, 100, 13}, 
+                  this, U"Продолжить", {32, 32, 32, 255}, {150, 215, 100, 13}, 
                   "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     nextBtn->Disable();
     nextBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
@@ -1320,16 +1344,21 @@ void SettingsUILayer::OnInit()
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},
                                   1));
-    AddElement(new mse::gui::Checkbox(
+    mse::gui::Button* playInBattlegroundBtn = (mse::gui::Button*)AddElement(new mse::gui::Checkbox(
                                   this, 
                                   {210, 54, 14, 13}, 
                                   "data/img/screen-images.png", 
                                   {0, 0, 0}, 
-                                  &(mse::Application::GetApplication()->config.playInBackground),
+                                  &(game.config.playInBackground),
                                   {24, 88, 14, 13}, 
                                   {38, 88, 14, 13}, 
                                   {52, 88, 14, 13}, 
                                   {66, 88, 14, 13}));
+    playInBattlegroundBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=] (SDL_Event* event)
+    {
+        mse::Application::config.playInBackground = game.config.playInBackground;
+    };
+    
     AddElement(new mse::gui::Text(
                                   this, 
                                   U"Громкость музыки", 
@@ -1340,7 +1369,7 @@ void SettingsUILayer::OnInit()
     musicVolumeSlider = (mse::gui::HSlider*)AddElement(new mse::gui::HSlider(
                                   this, 
                                   {210, 68, 80, 13}, 
-                                  &(mse::Application::config.musicVolume),
+                                  &(game.config.musicVolume),
                                   0,
                                   MIX_MAX_VOLUME,
                                   MIX_MAX_VOLUME / 16,
@@ -1363,7 +1392,7 @@ void SettingsUILayer::OnInit()
     soundsVolumeSlider = (mse::gui::HSlider*)AddElement(new mse::gui::HSlider(
                                      this, 
                                      {210, 82, 80, 13}, 
-                                     &(mse::Application::config.soundsVolume),
+                                     &(game.config.soundsVolume),
                                      0,
                                      MIX_MAX_VOLUME,
                                      MIX_MAX_VOLUME / 16,
@@ -1395,13 +1424,14 @@ void SettingsUILayer::OnInit()
                                   {210, 110, 14, 13}, 
                                   "data/img/screen-images.png", 
                                   {0, 0, 0}, 
-                                  &(mse::Application::GetApplication()->config.fullscreen),
+                                  &(game.config.fullscreen),
                                   {24, 88, 14, 13}, 
                                   {38, 88, 14, 13}, 
                                   {52, 88, 14, 13}, 
                                   {66, 88, 14, 13})));
     fullscreenBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event)
     {
+        mse::Application::config.fullscreen = game.config.fullscreen;
 //        fullscreenBtn->state = mse::gui::CheckboxStates::Checked;
         m_window->ToggleFullscreen();
     };
@@ -1422,12 +1452,14 @@ void SettingsUILayer::OnUpdate()
     {
         MSE_CORE_LOG("musicVolumeSlider");
         musicVolumeSlider->valueChanged = false;
+        mse::Application::config.musicVolume = game.config.musicVolume;
         mse::SoundMan::AdjustTrackVolume((int)roundf(mse::Application::config.musicVolume));
     }
     if (soundsVolumeSlider->valueChanged)
     {
         MSE_CORE_LOG("soundsVolumeSlider");
         soundsVolumeSlider->valueChanged = false;
+        mse::Application::config.soundsVolume = game.config.soundsVolume;
         mse::SoundMan::AdjustSoundsVolume((int)roundf(mse::Application::config.soundsVolume));
     }
 }

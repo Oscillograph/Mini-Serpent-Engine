@@ -7,7 +7,7 @@
 /* ============================================================================================== */
 /*                                 YAML ENCODE/DECODE                                             */
 /* ============================================================================================== */
-YAML::Emitter& operator<<(YAML::Emitter& out, const mse::GameConfig& config)
+YAML::Emitter& operator<<(YAML::Emitter& out, const LAutobattler::GameConfig& config)
 {
     out << YAML::Flow;
     out << YAML::Key << "Music" << YAML::Value << config.music;
@@ -16,6 +16,8 @@ YAML::Emitter& operator<<(YAML::Emitter& out, const mse::GameConfig& config)
     out << YAML::Key << "SoundsVolume" << YAML::Value << config.soundsVolume;
     out << YAML::Key << "PlayInBackground" << YAML::Value << config.playInBackground;
     out << YAML::Key << "Fullscreen" << YAML::Value << config.fullscreen;
+    out << YAML::Key << "TurnLength" << YAML::Value << config.turnLength;
+    out << YAML::Key << "FastBattle" << YAML::Value << config.fastBattle;
     return out;
 }
 
@@ -25,7 +27,7 @@ YAML::Emitter& operator<<(YAML::Emitter& out, const mse::GameConfig& config)
 /* ============================================================================================== */
 namespace LAutobattler
 {
-    bool LoadConfig(mse::GameConfig& config, const std::string& filename)
+    bool LoadConfig(GameConfig& config, const std::string& filename)
     {
         // open file and read its data
         std::string configRawText = mse::FileIO::GetRawText(filename);
@@ -37,7 +39,9 @@ namespace LAutobattler
             !data["Sounds"] ||
             !data["SoundsVolume"] ||
             !data["PlayInBackground"] ||
-            !data["Fullscreen"])
+            !data["Fullscreen"] ||
+            !data["TurnLength"] ||
+            !data["FastBattle"])
         {
             // failed structure
             return false;
@@ -50,6 +54,8 @@ namespace LAutobattler
         config.soundsVolume = data["SoundsVolume"].as<float>();
         config.playInBackground = data["PlayInBackground"].as<bool>();
         config.fullscreen = data["Fullscreen"].as<bool>();
+        config.turnLength = data["TurnLength"].as<int>();
+        config.fastBattle = data["FastBattle"].as<bool>();
         
         // return the results
         return true;
@@ -69,7 +75,7 @@ namespace LAutobattler
         return false;
     }
     
-    void SaveConfig(const mse::GameConfig& config, const std::string& filename)
+    void SaveConfig(const GameConfig& config, const std::string& filename)
     {
         YAML::Emitter out;
         out << YAML::BeginMap;
