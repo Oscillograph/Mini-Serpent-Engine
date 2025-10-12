@@ -1,0 +1,182 @@
+#ifndef DUNGEONTRIS_AUTOBATTLER_LAYERS_H
+#define DUNGEONTRIS_AUTOBATTLER_LAYERS_H
+
+#include <dungeontris/game-fwd.h>
+
+#include <mse/systems/windows/layers/layer.h>
+#include <mse/systems/windows/layers/layer_manager.h>
+#include <mse/systems/windows/layers/gui/gui.h>
+#include <mse/systems/canban.h>
+#include <mse/systems/application/application.h>
+
+// ********************************************************************************************** //
+//                                    LAYERS (to render things)
+// ********************************************************************************************** //
+
+void GameLogo(mse::Layer* layer);
+
+class IntroUILayer : public mse::Layer
+{
+public:
+    IntroUILayer();
+    ~IntroUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+    
+    mse::gui::Text* text = nullptr;
+    int counterBackup = 0;
+};
+
+class MainMenuUILayer : public mse::Layer
+{
+public:
+    MainMenuUILayer();
+    ~MainMenuUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+class CharacterCreateUILayer : public mse::Layer
+{
+public:
+    CharacterCreateUILayer();
+    ~CharacterCreateUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+    
+    mse::gui::Text* rogueStatsBox = nullptr;
+    mse::gui::Text* warriorStatsBox = nullptr;
+    mse::gui::Text* barbarianStatsBox = nullptr;
+};
+
+class CharacterLoadUILayer : public mse::Layer
+{
+public:
+    CharacterLoadUILayer();
+    ~CharacterLoadUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+class CharacterSaveUILayer : public mse::Layer
+{
+public:
+    CharacterSaveUILayer();
+    ~CharacterSaveUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+class WinnerUILayer : public mse::Layer
+{
+public:
+    WinnerUILayer();
+    ~WinnerUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+class GameOverUILayer : public mse::Layer
+{
+public:
+    GameOverUILayer();
+    ~GameOverUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+class HighscoresUILayer : public mse::Layer
+{
+public:
+    HighscoresUILayer();
+    ~HighscoresUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+class CreditsUILayer : public mse::Layer
+{
+public:
+    CreditsUILayer();
+    ~CreditsUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+class ExitUILayer : public mse::Layer
+{
+public:
+    ExitUILayer();
+    ~ExitUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+class ArenaUILayer : public mse::Layer
+{
+public:
+    ArenaUILayer();
+    ~ArenaUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+    
+    mse::gui::Text* messageLog = nullptr;
+    mse::gui::Button* nextBtn = nullptr;
+    mse::gui::Text* npcLife = nullptr;
+    mse::gui::Text* playerLife = nullptr;
+};
+
+class CharacterUpdateUILayer : public mse::Layer
+{
+public:
+    CharacterUpdateUILayer();
+    ~CharacterUpdateUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+    
+    mse::gui::Button* classRogueBtn = nullptr;
+    mse::gui::Button* classWarriorBtn = nullptr;
+    mse::gui::Button* classBarbarianBtn = nullptr;
+    mse::gui::Button* keepSameWeaponBtn = nullptr;
+    mse::gui::Button* pickDroppedWeaponBtn = nullptr;
+    
+    mse::gui::Text* statsBox = nullptr;
+    bool changeMade = false;
+};
+
+class SettingsUILayer : public mse::Layer
+{
+public:
+    SettingsUILayer();
+    ~SettingsUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+    
+    mse::gui::HSlider* musicVolumeSlider = nullptr;
+    mse::gui::HSlider* soundsVolumeSlider = nullptr;
+};
+
+class SimpleUILayer : public mse::Layer
+{
+public:
+    SimpleUILayer();
+    ~SimpleUILayer();
+    
+    virtual void OnInit() override;
+    virtual void OnUpdate() override;
+};
+
+#endif

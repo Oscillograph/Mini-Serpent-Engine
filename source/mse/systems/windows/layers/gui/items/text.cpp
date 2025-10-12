@@ -168,7 +168,7 @@ namespace mse
                                            {m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
                                            0); 				// interval between rows
             m_scrollXY.z = scrollWH.first;
-            m_scrollXY.w = scrollWH.second;
+            m_scrollXY.w = -scrollWH.second;
             
             // border
             if (showBorder && (layerArea.z > 0) && (layerArea.w > 0))

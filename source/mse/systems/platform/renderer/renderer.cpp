@@ -814,7 +814,7 @@ namespace mse
 			}
 		}
 //        result.second = correctY;
-        result.second = -(currentRow + 1)*(font->fontClip.w + interval)*pxSize;;
+        result.second = (currentRow + 1)*(font->fontClip.w + interval)*pxSize;;
         return result;
 	}
 	
