@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <glm/glm.hpp>
 
 // globals
 namespace DTetris
@@ -213,7 +214,50 @@ namespace DTetris
         bool playInBackground = false;
         bool fullscreen = true;
         bool fastBattle = false;
-        int turnLength = 1000; // in milliseconds
+        int turnLength = 500; // in milliseconds
+    };
+    
+    enum class BlockType
+    {
+        None,
+        Block,
+        Healing,
+        Treasure,
+    };
+    
+    struct Block
+    {
+        glm::uvec2 coordinates = {0, 0};
+        BlockType type = BlockType::None;
+        glm::uvec3 color = {255, 255, 0};
+    };
+    
+    struct TetriminoTemplate
+    {
+        std::vector<int> block = {
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0
+        };
+    };
+    
+    struct TetriminoTemplatesDB
+    {
+        std::vector<TetriminoTemplate> data = {};
+    };
+    
+    struct Tetrimino
+    {
+        std::vector<Block> blocks = {}; // 4x4 or 3x3 areas
+    };
+    
+    // Tetris
+    struct TetrisMap
+    {
+        int width = 15;
+        int height = 20;
+        std::vector<Block> map;
     };
     
     // various game data for everything
