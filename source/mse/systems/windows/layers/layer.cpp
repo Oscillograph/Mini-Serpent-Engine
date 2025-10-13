@@ -110,7 +110,7 @@ namespace mse
 					// process moving mouse away from the previous element area
 					if (m_window->GetLayerManager()->m_mouseOverElementID != -1)
 					{
-                        printf("(MoElId: %d)\n", m_window->GetLayerManager()->m_mouseOverElementID);
+//                        printf("(MoElId: %d)\n", m_window->GetLayerManager()->m_mouseOverElementID);
                         if(m_elements.find(m_window->GetLayerManager()->m_mouseOverElementID) != m_elements.end())
                         {
                             m_elements[m_window->GetLayerManager()->m_mouseOverElementID]->HandleEvent(EventTypes::GUIItemMouseOut, event);
@@ -151,7 +151,7 @@ namespace mse
                         int oldMouseOverId = m_window->GetLayerManager()->m_mouseOverElementID;
 						if (elementId != oldMouseOverId)
 						{
-                            printf("(old ElId: %d)\n", oldMouseOverId);
+//                            printf("(old ElId: %d)\n", oldMouseOverId);
 							// process moving mouse away from the previous element area
 							if (oldMouseOverId != -1)
 							{
@@ -164,7 +164,7 @@ namespace mse
 							}
 							
 							// handle the event of moving in
-                            printf("(new ElId: %d)\n", elementId);
+//                            printf("(new ElId: %d)\n", elementId);
 							m_window->GetLayerManager()->m_mouseOverElementID = elementId;
 							return m_elements[elementId]->HandleEvent(EventTypes::GUIItemMouseOver, event);
 						} else {

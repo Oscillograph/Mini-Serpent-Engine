@@ -185,8 +185,6 @@ void MainMenuUILayer::OnInit()
                                   {0, 0, 0, 255}, 
                                   {255, 255, 255, 255},
                                   1));
-    
-//    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void MainMenuUILayer::OnUpdate()
@@ -276,8 +274,6 @@ void CharacterCreateUILayer::OnInit()
     mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
     };
-    
-    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void CharacterCreateUILayer::OnUpdate()
@@ -365,8 +361,6 @@ void WinnerUILayer::OnInit()
 //            gsm.ChangeStateTo(DTetris::GamePages::Highscores);
 //        };
     }
-    
-    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void WinnerUILayer::OnUpdate()
@@ -404,8 +398,6 @@ void GameOverUILayer::OnInit()
     mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
     };
-    
-    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void GameOverUILayer::OnUpdate()
@@ -542,8 +534,6 @@ void CreditsUILayer::OnInit()
     mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
     };
-    
-    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void CreditsUILayer::OnUpdate()
@@ -760,8 +750,6 @@ void ArenaUILayer::OnInit()
     nextBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.gamePageHasToChange = true;
     };
-    
-    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void ArenaUILayer::OnUpdate()
@@ -1098,8 +1086,6 @@ void CharacterUpdateUILayer::OnInit()
     PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.playerCharacterUpdated = true;
     };
-    
-    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void CharacterUpdateUILayer::OnUpdate()
@@ -1343,9 +1329,6 @@ void SettingsUILayer::OnInit()
     mainMenuBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
     };
-    
-    
-    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
 void SettingsUILayer::OnUpdate()
