@@ -68,23 +68,26 @@ namespace mse
 		}
 	}
 	
-	bool LayerManager::HandleEvent(EventTypes eventType, SDL_Event* event)
+	bool LayerManager::HandleEvent(EventTypes eventType, SDL_Event* event, int elId)
 	{
 		bool handled = false;
 		
-		int elementId = -1;
+		int elementId = elId;
 		
-		if ((event->type == SDL_MOUSEMOTION) || (event->type == SDL_MOUSEBUTTONDOWN) || (event->type == SDL_MOUSEBUTTONUP) || (event->type == SDL_MOUSEWHEEL))
+        if (elementId == -1)
 		{
-			// map real mouse coordinates to window basePrefs
-			int mouseX = 0;
-			int mouseY = 0;
-			
-			mouseX = (int)floorf(event->motion.x / m_window->GetScale().x);
-			mouseY = (int)floorf(event->motion.y / m_window->GetScale().y);
-			
-			elementId = m_screen[mouseX + mouseY * m_window->GetPrefs().width];
-		}
+            if ((event->type == SDL_MOUSEMOTION) || (event->type == SDL_MOUSEBUTTONDOWN) || (event->type == SDL_MOUSEBUTTONUP) || (event->type == SDL_MOUSEWHEEL))
+            {
+                // map real mouse coordinates to window basePrefs
+                int mouseX = 0;
+                int mouseY = 0;
+                
+                mouseX = (int)floorf(event->motion.x / m_window->GetScale().x);
+                mouseY = (int)floorf(event->motion.y / m_window->GetScale().y);
+                
+                elementId = m_screen[mouseX + mouseY * m_window->GetPrefs().width];
+            }
+        }
         
 //		MSE_CORE_LOG("Layer manager: handling an event for elemnetId=", elementId);
 		

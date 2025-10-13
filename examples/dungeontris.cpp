@@ -105,7 +105,7 @@ public:
         SDL_SetCursor(cursorObj->GetNativeCursor());
 
 		mse::Renderer::SetActiveWindow(m_window);
-//        m_window->GetLayerManager()->Attach(new SimpleUILayer);
+        m_window->GetLayerManager()->Attach(new SimpleUILayer());
 		
 		MSE_LOG("Commanding to create and load scene");
         m_scene = new GameScene();

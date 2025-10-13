@@ -20,7 +20,7 @@ namespace mse
 		void Detach(Layer* layer);
 		inline std::vector<Layer*>& GetLayers() { return m_layers; }
 		
-		bool HandleEvent(EventTypes eventType, SDL_Event* event);
+		bool HandleEvent(EventTypes eventType, SDL_Event* event, int elId = -1);
 		
 		void UpdateScreen();
 		

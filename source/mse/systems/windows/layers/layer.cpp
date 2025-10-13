@@ -110,7 +110,7 @@ namespace mse
 					// process moving mouse away from the previous element area
 					if (m_window->GetLayerManager()->m_mouseOverElementID != -1)
 					{
-//                        printf("(MoElId: %d)", m_window->GetLayerManager()->m_mouseOverElementID);
+                        printf("(MoElId: %d)\n", m_window->GetLayerManager()->m_mouseOverElementID);
                         if(m_elements.find(m_window->GetLayerManager()->m_mouseOverElementID) != m_elements.end())
                         {
                             m_elements[m_window->GetLayerManager()->m_mouseOverElementID]->HandleEvent(EventTypes::GUIItemMouseOut, event);
@@ -145,18 +145,26 @@ namespace mse
 				// gui elements events
 				switch (eventType)
 				{
-					// mouse can either move to the element, move out of it or do something over it
+				// mouse can either move to the element, move out of it or do something over it
 				case EventTypes::MouseMoved:
 					{
-						if (elementId != m_window->GetLayerManager()->m_mouseOverElementID)
+                        int oldMouseOverId = m_window->GetLayerManager()->m_mouseOverElementID;
+						if (elementId != oldMouseOverId)
 						{
+                            printf("(old ElId: %d)\n", oldMouseOverId);
 							// process moving mouse away from the previous element area
-							if (m_window->GetLayerManager()->m_mouseOverElementID != -1)
+							if (oldMouseOverId != -1)
 							{
-								m_elements[m_window->GetLayerManager()->m_mouseOverElementID]->HandleEvent(EventTypes::GUIItemMouseOut, event);
+                                if (m_elements.find(oldMouseOverId) != m_elements.end())
+								{
+                                    m_elements[oldMouseOverId]->HandleEvent(EventTypes::GUIItemMouseOut, event);
+                                } else {
+                                    m_window->GetLayerManager()->HandleEvent(EventTypes::GUIItemMouseOut, event, oldMouseOverId);
+                                }
 							}
 							
 							// handle the event of moving in
+                            printf("(new ElId: %d)\n", elementId);
 							m_window->GetLayerManager()->m_mouseOverElementID = elementId;
 							return m_elements[elementId]->HandleEvent(EventTypes::GUIItemMouseOver, event);
 						} else {
@@ -190,6 +198,11 @@ namespace mse
 						return m_elements[elementId]->HandleEvent(EventTypes::KeyUp, event);
 						break;
 					}
+                case EventTypes::GUIItemMouseOut:
+                    {
+                        return m_elements[elementId]->HandleEvent(EventTypes::GUIItemMouseOut, event);
+                        break;
+                    }
 				}
 			}
 		}
