@@ -10,8 +10,10 @@
 //                                    SCENES (do I need one?)
 // ********************************************************************************************** //
 
-DTetris::GameDB gameDB = DTetris::InitGameData();
+DTetris::GameDB gameDB = DTetris::InitAutobattlerData();
 DTetris::Game game;
+DTetris::TetriminoTemplatesDB tetriminoDB = DTetris::InitTetriminoDB();
+DTetris::TetrisMap tetrisMap;
 GameStateMachine gsm;
 
 class GameScene : public mse::Scene

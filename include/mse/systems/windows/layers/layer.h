@@ -17,8 +17,8 @@ namespace mse
 		void Attach(Window* window);
 		virtual void OnInit();
 		void Init();
-		virtual void OnUpdate();
-		void Update();
+		virtual void OnUpdate(TimeType t = 0);
+		void Update(TimeType t = 0);
 		virtual void OnDisplay();
 		void Display();
 		virtual void OnDetach();

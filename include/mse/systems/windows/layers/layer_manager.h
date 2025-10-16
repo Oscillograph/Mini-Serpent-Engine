@@ -22,7 +22,7 @@ namespace mse
 		
 		bool HandleEvent(EventTypes eventType, SDL_Event* event, int elId = -1);
 		
-		void UpdateScreen();
+		void UpdateScreen(TimeType t = 0);
 		
 		void Display();
 		

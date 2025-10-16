@@ -60,7 +60,7 @@ void IntroUILayer::OnInit()
 //    mse::SoundMan::PlayTrack("data/audio/tracks/01_towards_neon_shadows.mp3");
 }
 
-void IntroUILayer::OnUpdate()
+void IntroUILayer::OnUpdate(mse::TimeType t)
 {
 //    if (counterBackup != ((IntroPageState*)gsm.current)->counter)
 //    {
@@ -187,7 +187,7 @@ void MainMenuUILayer::OnInit()
                                   1));
 }
 
-void MainMenuUILayer::OnUpdate()
+void MainMenuUILayer::OnUpdate(mse::TimeType t)
 {}
 
 CharacterCreateUILayer::CharacterCreateUILayer() : mse::Layer()
@@ -276,7 +276,7 @@ void CharacterCreateUILayer::OnInit()
     };
 }
 
-void CharacterCreateUILayer::OnUpdate()
+void CharacterCreateUILayer::OnUpdate(mse::TimeType t)
 {}
 
 CharacterLoadUILayer::CharacterLoadUILayer() : mse::Layer()
@@ -291,7 +291,7 @@ CharacterLoadUILayer::~CharacterLoadUILayer()
 void CharacterLoadUILayer::OnInit()
 {}
 
-void CharacterLoadUILayer::OnUpdate()
+void CharacterLoadUILayer::OnUpdate(mse::TimeType t)
 {}
 
 CharacterSaveUILayer::CharacterSaveUILayer() : mse::Layer()
@@ -306,7 +306,7 @@ CharacterSaveUILayer::~CharacterSaveUILayer()
 void CharacterSaveUILayer::OnInit()
 {}
 
-void CharacterSaveUILayer::OnUpdate()
+void CharacterSaveUILayer::OnUpdate(mse::TimeType t)
 {}
 
 WinnerUILayer::WinnerUILayer() : mse::Layer()
@@ -363,7 +363,7 @@ void WinnerUILayer::OnInit()
     }
 }
 
-void WinnerUILayer::OnUpdate()
+void WinnerUILayer::OnUpdate(mse::TimeType t)
 {}
 
 GameOverUILayer::GameOverUILayer() : mse::Layer()
@@ -400,7 +400,7 @@ void GameOverUILayer::OnInit()
     };
 }
 
-void GameOverUILayer::OnUpdate()
+void GameOverUILayer::OnUpdate(mse::TimeType t)
 {}
 
 HighscoresUILayer::HighscoresUILayer() : mse::Layer()
@@ -415,7 +415,7 @@ HighscoresUILayer::~HighscoresUILayer()
 void HighscoresUILayer::OnInit()
 {}
 
-void HighscoresUILayer::OnUpdate()
+void HighscoresUILayer::OnUpdate(mse::TimeType t)
 {}
 
 CreditsUILayer::CreditsUILayer() : mse::Layer()
@@ -536,7 +536,7 @@ void CreditsUILayer::OnInit()
     };
 }
 
-void CreditsUILayer::OnUpdate()
+void CreditsUILayer::OnUpdate(mse::TimeType t)
 {}
 
 ExitUILayer::ExitUILayer() : mse::Layer()
@@ -551,7 +551,7 @@ ExitUILayer::~ExitUILayer()
 void ExitUILayer::OnInit()
 {}
 
-void ExitUILayer::OnUpdate()
+void ExitUILayer::OnUpdate(mse::TimeType t)
 {}
 
 ArenaUILayer::ArenaUILayer() : mse::Layer()
@@ -752,7 +752,7 @@ void ArenaUILayer::OnInit()
     };
 }
 
-void ArenaUILayer::OnUpdate()
+void ArenaUILayer::OnUpdate(mse::TimeType t)
 {
 //    std::u32string npcLifeTextContent = U"";
     std::stringstream npcLifeTextStream;
@@ -1088,7 +1088,7 @@ void CharacterUpdateUILayer::OnInit()
     };
 }
 
-void CharacterUpdateUILayer::OnUpdate()
+void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
 {
     if (changeMade)
     {
@@ -1331,7 +1331,7 @@ void SettingsUILayer::OnInit()
     };
 }
 
-void SettingsUILayer::OnUpdate()
+void SettingsUILayer::OnUpdate(mse::TimeType t)
 {
     if (musicVolumeSlider->valueChanged)
     {
@@ -1369,7 +1369,7 @@ void SimpleUILayer::OnInit()
                      {0, 0, 0, 255})));
 }
 
-void SimpleUILayer::OnUpdate()
+void SimpleUILayer::OnUpdate(mse::TimeType t)
 {}
 
 #endif

@@ -104,7 +104,7 @@ namespace mse
 		return handled;
 	}
 	
-	void LayerManager::UpdateScreen()
+	void LayerManager::UpdateScreen(TimeType t)
 	{
 //		MSE_CORE_LOG("Layer manager: updating screen");
 		for (int i = 0; i < m_screen.size(); ++i)
@@ -118,7 +118,7 @@ namespace mse
 			{
 				if (layer->enabled)
 				{
-					layer->Update();
+					layer->Update(t);
 					
 					int winWidth = m_window->GetPrefs().width;
 					int winHeight = m_window->GetPrefs().height;

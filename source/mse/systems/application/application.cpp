@@ -265,7 +265,7 @@ namespace mse
 				{
 					for (Window* window : WindowManager::GetWindows())
 					{
-						window->GetLayerManager()->UpdateScreen();
+						window->GetLayerManager()->UpdateScreen(m_TimeThisFrame - m_TimeLastFrame);
 					}
 				}
 				

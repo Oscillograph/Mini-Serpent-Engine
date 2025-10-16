@@ -7,6 +7,7 @@
 #include <map>
 #include <unordered_map>
 #include <glm/glm.hpp>
+#include <mse/systems/platform/renderer/texture.h>
 
 // globals
 namespace DTetris
@@ -232,8 +233,16 @@ namespace DTetris
         glm::uvec3 color = {255, 255, 0};
     };
     
+    struct BlockSprite
+    {
+        mse::Texture* texture = nullptr;
+        glm::uvec4 place = {0, 0, 0, 0};
+    };
+    
     struct TetriminoTemplate
     {
+//        TetriminoTemplate();
+        TetriminoTemplate(const std::vector<int>& data);
         std::vector<int> block = {
             0, 0, 0, 0,
             0, 0, 0, 0,
@@ -255,9 +264,16 @@ namespace DTetris
     // Tetris
     struct TetrisMap
     {
+        // model
         int width = 15;
         int height = 20;
         std::vector<Block> map;
+        
+        // view
+        std::vector<std::vector<BlockSprite>> blockSprites;
+        
+        // controller
+//        Update();
     };
     
     // various game data for everything
@@ -295,7 +311,8 @@ namespace DTetris
 //        void GameLogic(GameDB& gameDB);
     };
     
-    GameDB& InitGameData();
+    GameDB& InitAutobattlerData();
+    TetriminoTemplatesDB& InitTetriminoDB();
 }
 
 #endif

@@ -73,12 +73,12 @@ namespace mse
 //		m_screen.resize(m_screenWidth * m_screenHeight);
 	}
 
-	void Layer::OnUpdate()
+	void Layer::OnUpdate(TimeType t)
 	{}
 
-	void Layer::Update()
+	void Layer::Update(TimeType t)
 	{
-		OnUpdate();
+		OnUpdate(t);
 	}
 
 	void Layer::OnDisplay()
