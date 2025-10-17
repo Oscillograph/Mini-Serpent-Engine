@@ -33,7 +33,7 @@ namespace mse
             // model
             parentLayer = layer;
             windowUser = layer->GetWindow();
-            m_elementName = "HScrollbar";
+            m_elementName = "HSlider";
             layerArea = area;
             
             varMin = min;
@@ -53,8 +53,8 @@ namespace mse
             if (layer != nullptr)
             {
                 // setup texture to draw on
-                MSE_CORE_LOG("HScrollbar: requesting to create a texture");
-                MSE_CORE_TRACE("HScrollbar_parentLayer = ", parentLayer);
+                MSE_CORE_LOG("HSlider: requesting to create a texture");
+                MSE_CORE_TRACE("HSlider_parentLayer = ", parentLayer);
                 m_texture = ResourceManager::CreateTexture(
                                                            windowUser,
                                                            windowUser->GetRenderer(),
@@ -63,7 +63,7 @@ namespace mse
                                                            0,
                                                            32,
                                                            {0, 0, 0, 0});
-                MSE_CORE_LOG("HScrollbar: texture obtained");
+                MSE_CORE_LOG("HSlider: texture obtained");
                 
                 // draw btn to scroll up
                 int btnLeftWidth = btnLeft.z / 4;
@@ -77,7 +77,7 @@ namespace mse
                                                                  {btnLeft.x + btnLeftWidth, btnLeft.y, btnLeftWidth, btnLeftHeight},
                                                                  {btnLeft.x + 2*btnLeftWidth, btnLeft.y, btnLeftWidth, btnLeftHeight},
                                                                  {btnLeft.x + 3*btnLeftWidth, btnLeft.y, btnLeftWidth, btnLeftHeight})));
-                MSE_CORE_LOG("HScrollbar: btnLeft constructed");
+                MSE_CORE_LOG("HSlider: btnLeft constructed");
                 m_btnLeft->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
                     *var -= varStep;
                     if (*var < varMin)
@@ -95,7 +95,7 @@ namespace mse
                     
                     m_BtnBall->layerArea.x = layerArea.x + btnLeftWidth + xrelPixels + 1;
                 };
-                MSE_CORE_LOG("HScrollbar: btnLeft callback set up");
+                MSE_CORE_LOG("HSlider: btnLeft callback set up");
                 
                 
                 // draw ball btn
@@ -113,7 +113,7 @@ namespace mse
                                                                    {btnBall.x + 2*btnBallWidth, btnBall.y, btnBallWidth, btnBallHeight},
                                                                    {btnBall.x + 3*btnBallWidth, btnBall.y, btnBallWidth, btnBallHeight}
                                                                    )));
-                MSE_CORE_LOG("HScrollbar: BtnBall constructed");
+                MSE_CORE_LOG("HSlider: BtnBall constructed");
                 m_BtnBall->callbacks[EventTypes::GUIItemMouseMove] = [=](SDL_Event* event){
                     if (!correctingMousePosition)
                     {
@@ -158,7 +158,7 @@ namespace mse
                         correctingMousePosition = false;
                     }
                 };
-                MSE_CORE_LOG("HScrollbar: BtnBall callback set up");
+                MSE_CORE_LOG("HSlider: BtnBall callback set up");
                 
                 m_BtnBall->callbacks[EventTypes::GUIItemMouseOut] = [=](SDL_Event* event){
                     if (m_BtnBall->state == ButtonStates::Pressed)
@@ -170,7 +170,7 @@ namespace mse
                                               windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
                     }
                 };
-                MSE_CORE_LOG("HScrollbar: BtnBall callback set up");
+                MSE_CORE_LOG("HSlider: BtnBall callback set up");
                 
                 // draw slider panel
                 m_sliderPanel = (HImageTemplate*)(layer->AddElement(new HImageTemplate(
@@ -182,7 +182,7 @@ namespace mse
                                                                                        sliderImgMid,
                                                                                        sliderImgRight
                                                                                        )));
-                MSE_CORE_LOG("HScrollbar: HImage Template");
+                MSE_CORE_LOG("HSlider: HImage Template");
                 
                 // draw btn to scroll down
                 int btnRightWidth = btnRight.z / 4;
@@ -196,7 +196,7 @@ namespace mse
                                                                    {btnRight.x + btnRightWidth, btnRight.y, btnRightWidth, btnRightHeight},
                                                                    {btnRight.x + 2*btnRightWidth, btnRight.y, btnRightWidth, btnRightHeight},
                                                                    {btnRight.x + 3*btnRightWidth, btnRight.y, btnRightWidth, btnRightHeight})));
-                MSE_CORE_LOG("HScrollbar: btnRight constructed");
+                MSE_CORE_LOG("HSlider: btnRight constructed");
                 m_btnRight->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
                     *var += varStep;
                     if (*var > varMax)
@@ -217,17 +217,24 @@ namespace mse
 //                    m_BtnBall->layerArea.x = xrelPixels;
                     m_BtnBall->layerArea.x = layerArea.x + btnLeftWidth + xrelPixels + 1;
                 };
-                MSE_CORE_LOG("HScrollbar: btnRight callback set up");
+                MSE_CORE_LOG("HSlider: btnRight callback set up");
                 
                 ((Texture*)(m_texture->data))->Update();
                 
-                MSE_CORE_LOG("HScrollbar: items set up");
+                MSE_CORE_LOG("HSlider: items set up");
             }
         }
         
         HSlider::~HSlider()
         {
-            
+            MSE_CORE_LOG("HSlider: destructor");
+            delete m_BtnUp;
+            m_BtnUp = nullptr;
+            delete m_BtnDown;
+            m_BtnDown = nullptr;
+            delete m_BtnBall;
+            m_BtnBall = nullptr;
+            MSE_CORE_LOG("HSlider destroyed");
         }
         
         void HSlider::Display()
