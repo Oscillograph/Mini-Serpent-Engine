@@ -68,4 +68,36 @@ namespace DTetris
             Pop();
         }
     }
+    
+    void TetrisMap::Resize(int w, int h)
+    {
+        width = w;
+        height = h;
+        int total = width * height;
+        
+        map.resize(0);
+        blockSprites.resize(0);
+        map.resize(total);
+        blockSprites.resize(total);
+        
+        for (int j = 0; j < height; ++j)
+        {
+            for (int i = 0; i < width; ++i)
+            {
+                int index = j*width + i;
+                map[index].coordinates.x = i;
+                map[index].coordinates.y = j;
+                map[index].type = BlockType::None;
+                map[index].color = {0, 0, 0};
+                
+                blockSprites[index].place = {
+                    map[index].coordinates.x * 10,
+                    map[index].coordinates.y * 10,
+                    10,
+                    10
+                };
+                blockSprites[index].texture = nullptr;
+            }
+        }
+    }
 }

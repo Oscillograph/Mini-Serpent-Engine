@@ -618,24 +618,12 @@ void ArenaUILayer::OnInit()
         AddElement(new mse::gui::Image(this, {40, 90 - src.w, src.z, src.w}, "./data/img/screen-images.png", src, {0, 0, 0, 255}));
     }
     
-    mse::gui::Text* battleNumber = (mse::gui::Text*)(AddElement(new mse::gui::Text(
-                                                                        this, 
-                                                                        U"", 
-                                                                        {110, 15, 100, 10}, 
-                                                                        {0, 0, 0, 255}, 
-                                                                        {255, 255, 255, 255})));
-    std::stringstream battleNumberContents;
-    battleNumberContents << "Битва " << (game.battleCounter + 1) << " из 5";
-    battleNumber->ChangeText(utf8::utf8to32(battleNumberContents.str()));
-    battleNumberContents.str("");
-    battleNumberContents.clear();
-    
     // player life
-    AddElement(new mse::gui::Image(this, {250, 15, 13, 13}, "./data/img/screen-images.png", {168, 119, 13, 13}, {0, 0, 0, 255}));
+    AddElement(new mse::gui::Image(this, {260, 15, 13, 13}, "./data/img/screen-images.png", {168, 119, 13, 13}, {0, 0, 0, 255}));
     playerLife = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                                                                  this, 
                                                                  U"", 
-                                                                 {265, 15, 20, 10}, 
+                                                                 {275, 15, 20, 10}, 
                                                                  {0, 0, 0, 255}, 
                                                                  {255, 196, 0, 255})));
     // player character
@@ -694,34 +682,36 @@ void ArenaUILayer::OnInit()
             }
         }
         
-        AddElement(new mse::gui::Image(this, {240, 90 - src.w, src.z, src.w}, "./data/img/heroes.png", src, {0, 0, 0, 255}));
+        AddElement(new mse::gui::Image(this, {250, 90 - src.w, src.z, src.w}, "./data/img/heroes.png", src, {0, 0, 0, 255}));
     }
     
-    messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
-                                                                 this, 
-                                                                 U"", 
-                                                                 {10, 90, 280, 120}, 
-                                                                 {0, 64, 0, 255}, 
-                                                                 {255, 255, 128, 255},
-                                                                 1,
-                                                                 true,
-                                                                 {255, 196, 0, 255})));
-    AddElement(new mse::gui::VScrollbar(
-                                        this, 
-                                        {290, 90, 13, 120}, 
-                                        messageLog, 
-                                        "./data/img/screen-images.png", 
-                                        {0, 0, 0},
-                                        {24, 49, 52, 12},
-                                        {24, 74, 44, 10},
-                                        {24, 61, 52, 12},
-                                        {63, 61, 13, 4},
-                                        {63, 65, 13, 4},
-                                        {63, 69, 13, 4}));
+    // tetris map
+//    messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+//                                                                 this, 
+//                                                                 U"", 
+//                                                                 {10, 90, 280, 120}, 
+//                                                                 {0, 64, 0, 255}, 
+//                                                                 {255, 255, 128, 255},
+//                                                                 1,
+//                                                                 true,
+//                                                                 {255, 196, 0, 255})));
+//    AddElement(new mse::gui::VScrollbar(
+//                                        this, 
+//                                        {290, 90, 13, 120}, 
+//                                        messageLog, 
+//                                        "./data/img/screen-images.png", 
+//                                        {0, 0, 0},
+//                                        {24, 49, 52, 12},
+//                                        {24, 74, 44, 10},
+//                                        {24, 61, 52, 12},
+//                                        {63, 61, 13, 4},
+//                                        {63, 65, 13, 4},
+//                                        {63, 69, 13, 4}));
     
+    // bottom line
     mse::gui::Checkbox* fastBattleBtn = (mse::gui::Checkbox*)AddElement(new mse::gui::Checkbox(
                                         this, 
-                                        {30, 215, 14, 13}, 
+                                        {15, 215, 14, 13}, 
                                         "data/img/screen-images.png", 
                                         {0, 0, 0}, 
                                         &(game.config.fastBattle),
@@ -737,19 +727,31 @@ void ArenaUILayer::OnInit()
     AddElement(new mse::gui::Text(
                                         this, 
                                         U"Быстрый бой", 
-                                        {45, 215, 100, 10}, 
+                                        {30, 215, 85, 10}, 
                                         {0, 0, 0, 255}, 
                                         {255, 255, 255, 255},
                                         1
                                         ));
 
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
-                  this, U"Продолжить", {32, 32, 32, 255}, {150, 215, 100, 13}, 
+                  this, U"Продолжить", {32, 32, 32, 255}, {120, 215, 85, 13}, 
                   "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     nextBtn->Disable();
     nextBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         game.gamePageHasToChange = true;
     };
+    
+    mse::gui::Text* battleNumber = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+                                                                                   this, 
+                                                                                   U"", 
+                                                                                   {220, 215, 90, 10}, 
+                                                                                   {0, 0, 0, 255}, 
+                                                                                   {255, 255, 255, 255})));
+    std::stringstream battleNumberContents;
+    battleNumberContents << "Битва " << (game.battleCounter + 1) << " из 5";
+    battleNumber->ChangeText(utf8::utf8to32(battleNumberContents.str()));
+    battleNumberContents.str("");
+    battleNumberContents.clear();
 }
 
 void ArenaUILayer::OnUpdate(mse::TimeType t)
@@ -777,11 +779,11 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
         item = item->next;
     }
     item = nullptr;
-    if (needToUpdateText)
-    {
-        messageLog->ChangeText(messages);
-        MSE_LOG("Message Log text changed!")
-    }
+//    if (needToUpdateText)
+//    {
+//        messageLog->ChangeText(messages);
+//        MSE_LOG("Message Log text changed!")
+//    }
     
     if ((game.battleFinished) && !(nextBtn->isEnabled))
     {

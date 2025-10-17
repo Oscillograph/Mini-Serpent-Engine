@@ -1,18 +1,26 @@
 ## 0.1.2 ##
 New:
 + Custom cursors set up via special resource type management
-+ New GUI items: text, image
++ New GUI items: text, image (including HTemplate, VTemplate), scrollbar, slider, checkbox
 + GUI: button can now be initialized with a spritelist
 + Fullscreen mode for an app window
++ File I/O utils class for easier work with YAML/JSON save/load
++ AppConfig struct to operate music and sound volumes, music in background, fullscreen mode, etc.
+
+API Changes:
+* "Layer->OnUpdate()" and "Layer->Update()" methods are "Layer->OnUpdate(TimeType t)" and "Layer->Update(TimeType t)" now. They get frame time from application run routine with each update so it is easier to implement animations that are not dependent on framerate.
 
 Fixes:
 - Memory leak in Garbage collector due to it did not properly delete resources data
 - Bitmap fonts did not fit the defined text area properly
 - Bitmap fonts used left-edge x coordinate correction before typing a symbol -> now they do right-edge correction after typing a symbol
 - Event handlers crashed the app if more than one layer present
+- App crashed on window with multiple layers due to lack of GUIItemMouseOut event processor
+- vertical scrollbar didn't take into account actual vertical size of a printed text, thus incorrectly prevented user from scrolling down to the real end
 
 Examples:
 + Lesta Autobattler: originally made as a test task for Lesta Academy
++ Dungeontris: develoment of the first potentially public game
 
 
 ## 0.1.1 ##

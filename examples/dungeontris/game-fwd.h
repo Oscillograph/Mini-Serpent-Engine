@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 #include <mse/systems/platform/renderer/texture.h>
+#include <mse/systems/windows/layers/gui/guiitem.h>
 
 // globals
 namespace DTetris
@@ -270,9 +271,10 @@ namespace DTetris
         std::vector<Block> map;
         
         // view
-        std::vector<std::vector<BlockSprite>> blockSprites;
+        std::vector<BlockSprite> blockSprites;
         
         // controller
+        void Resize(int w, int h);
 //        Update();
     };
     
@@ -313,6 +315,34 @@ namespace DTetris
     
     GameDB& InitAutobattlerData();
     TetriminoTemplatesDB& InitTetriminoDB();
+}
+
+namespace mse
+{
+    namespace gui
+    {
+        class TetrisMapGUI : public GUIItem
+        {
+        public:
+            // general initialization
+            TetrisMapGUI();
+            TetrisMapGUI(Layer* layer, 
+                         const glm::uvec4& area, 
+                         const std::string& spritelist,
+                         DTetris::TetrisMap* tetrisMap,
+                         int width,
+                         int height);
+            virtual ~TetrisMapGUI();
+            
+            // general GUIItem interface
+            virtual void Display();
+            
+        protected:
+            // sprite-based
+            Resource* m_spriteList = nullptr;
+            DTetris::TetrisMap* m_tetrisMap = nullptr;
+        };
+    }
 }
 
 #endif
