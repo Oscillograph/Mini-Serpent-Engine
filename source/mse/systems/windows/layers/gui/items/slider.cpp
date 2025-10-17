@@ -228,10 +228,10 @@ namespace mse
         HSlider::~HSlider()
         {
             MSE_CORE_LOG("HSlider: destructor");
-            delete m_BtnUp;
-            m_BtnUp = nullptr;
-            delete m_BtnDown;
-            m_BtnDown = nullptr;
+            delete m_btnLeft;
+            m_btnLeft = nullptr;
+            delete m_btnRight;
+            m_btnRight = nullptr;
             delete m_BtnBall;
             m_BtnBall = nullptr;
             MSE_CORE_LOG("HSlider destroyed");

@@ -5,6 +5,9 @@
 #include <utf8.h> // utf8
 #include <SDL2/SDL.h> // SDL_Delay
 
+#include <mse/systems/windows/layers/layer.h>
+#include <mse/systems/resources/resource_manager.h>
+
 namespace DTetris
 {
     MessageLog::MessageLog()
@@ -99,5 +102,44 @@ namespace DTetris
                 blockSprites[index].texture = nullptr;
             }
         }
+    }
+}
+
+namespace mse
+{
+    namespace gui
+    {
+        TetrisMapGUI::TetrisMapGUI()
+        {
+            Init(nullptr, {0, 0, 0, 0}, "", nullptr, 0, 0);
+        }
+        
+        TetrisMapGUI::TetrisMapGUI(Layer* layer, const glm::uvec4& area, const std::string& spritelist, DTetris::TetrisMap* tetrisMap, int width, int height)
+        {
+            Init(layer, area, spritelist, tetrisMap, width, height);
+        }
+        
+        TetrisMapGUI::Init(Layer* layer, 
+                           const glm::uvec4& area, 
+                           const std::string& spritelist,
+                           DTetris::TetrisMap* tetrisMap,
+                           int width,
+                           int height)
+        {
+            if (layer != nullptr)
+            {
+                parentLayer = layer;
+                windowUser = layer->GetWindow();
+                layerArea = area;
+                m_spriteList = (Texture*)ResourceManager::UseResource(ResourceType::Texture, spritelist, windowUser);
+                m_tetrisMap = tetrisMap;
+            }
+        }
+        
+        TetrisMapGUI::~TetrisMapGUI()
+        {}
+        
+        void TetrisMapGUI::Display()
+        {}
     }
 }

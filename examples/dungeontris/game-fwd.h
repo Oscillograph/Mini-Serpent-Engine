@@ -332,6 +332,12 @@ namespace mse
                          DTetris::TetrisMap* tetrisMap,
                          int width,
                          int height);
+            Init(Layer* layer, 
+                 const glm::uvec4& area, 
+                 const std::string& spritelist,
+                 DTetris::TetrisMap* tetrisMap,
+                 int width,
+                 int height);
             virtual ~TetrisMapGUI();
             
             // general GUIItem interface
@@ -339,7 +345,7 @@ namespace mse
             
         protected:
             // sprite-based
-            Resource* m_spriteList = nullptr;
+            mse::Texture* m_spriteList = nullptr;
             DTetris::TetrisMap* m_tetrisMap = nullptr;
         };
     }
