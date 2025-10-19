@@ -225,6 +225,8 @@ namespace DTetris
         Block,
         Healing,
         Treasure,
+        Attack,
+        Defence,
     };
     
     struct Block
@@ -332,7 +334,7 @@ namespace mse
                          DTetris::TetrisMap* tetrisMap,
                          int width,
                          int height);
-            Init(Layer* layer, 
+            void Init(Layer* layer, 
                  const glm::uvec4& area, 
                  const std::string& spritelist,
                  DTetris::TetrisMap* tetrisMap,
@@ -341,7 +343,7 @@ namespace mse
             virtual ~TetrisMapGUI();
             
             // general GUIItem interface
-            virtual void Display();
+            virtual void Display() override;
             
         protected:
             // sprite-based

@@ -91,7 +91,7 @@ namespace DTetris
                 int index = j*width + i;
                 map[index].coordinates.x = i;
                 map[index].coordinates.y = j;
-                map[index].type = BlockType::None;
+                map[index].type = BlockType::Block;
                 map[index].color = {0, 0, 0};
                 
                 blockSprites[index].place = {
@@ -111,32 +111,45 @@ namespace mse
     namespace gui
     {
         TetrisMapGUI::TetrisMapGUI()
+        : GUIItem()
         {
             Init(nullptr, {0, 0, 0, 0}, "", nullptr, 0, 0);
         }
         
-        TetrisMapGUI::TetrisMapGUI(Layer* layer, const glm::uvec4& area, const std::string& spritelist, DTetris::TetrisMap* tetrisMap, int width, int height)
+        TetrisMapGUI::TetrisMapGUI(Layer* layer, 
+                                   const glm::uvec4& area, 
+                                   const std::string& spritelist, 
+                                   DTetris::TetrisMap* tetrisMap, 
+                                   int width, 
+                                   int height)
+        : GUIItem()
         {
+            MSE_CORE_LOG("TetrisMapGUI construction");
             Init(layer, area, spritelist, tetrisMap, width, height);
+            MSE_CORE_LOG("TetrisMapGUI constructed");
         }
         
-        TetrisMapGUI::Init(Layer* layer, 
+        void TetrisMapGUI::Init(Layer* layer, 
                            const glm::uvec4& area, 
                            const std::string& spritelist,
                            DTetris::TetrisMap* tetrisMap,
                            int width,
                            int height)
         {
-            MSE_CORE_LOG("TetrisMap: initialization...")
+            MSE_CORE_LOG("TetrisMapGUI: initialization...")
+            MSE_CORE_LOG("layer address: ", layer);
+            MSE_CORE_LOG("Nullptr is: ", nullptr);
             if (layer != nullptr)
             {
+                MSE_CORE_LOG("Layer exists!");
                 parentLayer = layer;
                 windowUser = layer->GetWindow();
                 layerArea = area;
-                m_spriteList = (Texture*)ResourceManager::UseResource(ResourceType::Texture, spritelist, windowUser);
+                m_spriteList = (Texture*)(ResourceManager::UseResource(ResourceType::Texture, spritelist, windowUser)->data);
                 m_tetrisMap = tetrisMap;
                 m_width = width;
                 m_height = height;
+                MSE_CORE_LOG("TetrisMapGUI: initialization complete");
             } else {
                 MSE_CORE_LOG("TetrisMap: failed to initialize due to non-existent layer");
             }
@@ -147,17 +160,18 @@ namespace mse
         
         void TetrisMapGUI::Display()
         {
+            MSE_CORE_LOG("TetrisMapGUI: Display");
             if (parentLayer != nullptr)
             {
                 SDL_FRect destRect = {0, 0, 10, 10};
                 SDL_Rect srcRect = {0, 0, 10, 10};
-                for (int xIndex = 0; xIndex < width; ++xIndex)
+                for (int xIndex = 0; xIndex < m_width; ++xIndex)
                 {
                     destRect.x = layerArea.x + xIndex*destRect.w;
-                    for (int yIndex = 0; yIndes < height; ++yIndex)
+                    for (int yIndex = 0; yIndex < m_height; ++yIndex)
                     {
                         // skip the iteration if the block is empty
-                        if (m_tetrisMap.map[yIndex*width + xIndex].type == DTetris::BlockType::None)
+                        if (m_tetrisMap->map[yIndex*m_width + xIndex].type == DTetris::BlockType::None)
                         {
                             continue;
                         }
@@ -165,18 +179,36 @@ namespace mse
                         destRect.x = layerArea.y + xIndex*destRect.h;
                         
                         // pick a proper image to draw
-                        switch (m_tetrisMap.map[yIndex*width + xIndex].type)
+                        switch (m_tetrisMap->map[yIndex*m_width + xIndex].type)
                         {
                         case DTetris::BlockType::Block:
                             {
+                                srcRect.x = 25;
+                                srcRect.y = 194;
                                 break;
                             }
                         case DTetris::BlockType::Healing:
                             {
+                                srcRect.x = 36;
+                                srcRect.y = 194;
                                 break;
                             }
                         case DTetris::BlockType::Treasure:
                             {
+                                srcRect.x = 47;
+                                srcRect.y = 194;
+                                break;
+                            }
+                        case DTetris::BlockType::Attack:
+                            {
+                                srcRect.x = 25;
+                                srcRect.y = 216;
+                                break;
+                            }
+                        case DTetris::BlockType::Defence:
+                            {
+                                srcRect.x = 36;
+                                srcRect.y = 216;
                                 break;
                             }
                         }

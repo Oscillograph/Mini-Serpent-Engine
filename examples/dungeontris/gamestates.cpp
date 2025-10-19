@@ -9,6 +9,7 @@
 
 extern DTetris::GameDB gameDB;
 extern DTetris::Game game;
+extern DTetris::TetrisMap tetrisMap;
 extern GameStateMachine gsm;
 
 GameState::GameState()
@@ -513,6 +514,10 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
            game.npcCharacter.stats.agility,
            game.npcCharacter.stats.endurance);
     
+    // configure tetrisMap
+    tetrisMap.Resize(15, 20);
+    
+    // configure GUI layer
     if (pass_layer != nullptr)
     {
         if (layer != pass_layer)

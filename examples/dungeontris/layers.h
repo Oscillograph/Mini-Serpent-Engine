@@ -131,11 +131,12 @@ public:
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
     
-    mse::gui::Text* messageLog = nullptr;
+//    mse::gui::Text* messageLog = nullptr;
     mse::gui::Button* nextBtn = nullptr;
     mse::gui::Text* npcLife = nullptr;
     mse::gui::Text* playerLife = nullptr;
     mse::gui::Text* npcStats = nullptr;
+    mse::gui::TetrisMapGUI* tetrisMapGUI = nullptr;
 };
 
 class CharacterUpdateUILayer : public mse::Layer

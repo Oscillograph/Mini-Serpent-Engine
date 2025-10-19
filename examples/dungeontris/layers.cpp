@@ -8,6 +8,7 @@
 
 extern DTetris::GameDB gameDB;
 extern DTetris::Game game;
+extern DTetris::TetrisMap tetrisMap;
 extern GameStateMachine gsm;
 
 void GameLogo(mse::Layer* layer)
@@ -560,7 +561,7 @@ ArenaUILayer::ArenaUILayer() : mse::Layer()
 }
 ArenaUILayer::~ArenaUILayer()
 {
-    messageLog = nullptr;
+//    messageLog = nullptr;
     
     int i = 0;
     game.UILogger.Clear();
@@ -686,6 +687,14 @@ void ArenaUILayer::OnInit()
     }
     
     // tetris map
+    tetrisMapGUI = (mse::gui::TetrisMapGUI*)(AddElement(new mse::gui::TetrisMapGUI(
+                       this,
+                       {10, 10, 150, 200},
+                       "data/img/screen-images.png",
+                       &tetrisMap,
+                       tetrisMap.width,
+                       tetrisMap.height
+                       )));
 //    messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
 //                                                                 this, 
 //                                                                 U"", 
@@ -769,16 +778,16 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
     playerLifeTextStream.str("");
     playerLifeTextStream.clear();
     
-    std::u32string messages = U"";
-    DTetris::MessageLogItem* item = game.UILogger.stack;
-    static bool needToUpdateText = false;
-    while (item != nullptr)
-    {
-        needToUpdateText = true;
-        messages += item->text;
-        item = item->next;
-    }
-    item = nullptr;
+//    std::u32string messages = U"";
+//    DTetris::MessageLogItem* item = game.UILogger.stack;
+//    static bool needToUpdateText = false;
+//    while (item != nullptr)
+//    {
+//        needToUpdateText = true;
+//        messages += item->text;
+//        item = item->next;
+//    }
+//    item = nullptr;
 //    if (needToUpdateText)
 //    {
 //        messageLog->ChangeText(messages);
@@ -789,7 +798,7 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
     {
         nextBtn->Enable();
     }
-    needToUpdateText = false;
+//    needToUpdateText = false;
 }
 
 CharacterUpdateUILayer::CharacterUpdateUILayer() : mse::Layer()
