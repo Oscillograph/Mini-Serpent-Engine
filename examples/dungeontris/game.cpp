@@ -142,13 +142,40 @@ namespace mse
             if (layer != nullptr)
             {
                 MSE_CORE_LOG("Layer exists!");
+                
+                // model
                 parentLayer = layer;
                 windowUser = layer->GetWindow();
+                m_elementName = "TetrisMapGUI";
                 layerArea = area;
                 m_spriteList = (Texture*)(ResourceManager::UseResource(ResourceType::Texture, spritelist, windowUser)->data);
                 m_tetrisMap = tetrisMap;
                 m_width = width;
                 m_height = height;
+                
+                layerMask.resize(area.z * area.w);
+                for (int x = 0; x < area.z; ++x)
+                {
+                    for (int y = 0; y < area.w; ++y)
+                    {
+                        layerMask[x + y*area.z] = id;
+                    }
+                }
+                
+                // view
+                
+                // controller
+                callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+                };
+                
+                callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+                };
+                
+                callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
+                };
+                
+                callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
+                };
                 MSE_CORE_LOG("TetrisMapGUI: initialization complete");
             } else {
                 MSE_CORE_LOG("TetrisMap: failed to initialize due to non-existent layer");
@@ -176,7 +203,7 @@ namespace mse
                             continue;
                         }
                         
-                        destRect.x = layerArea.y + xIndex*destRect.h;
+                        destRect.y = layerArea.y + xIndex*destRect.h;
                         
                         // pick a proper image to draw
                         switch (m_tetrisMap->map[yIndex*m_width + xIndex].type)

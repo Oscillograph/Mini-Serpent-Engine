@@ -343,11 +343,11 @@ namespace mse
             virtual ~TetrisMapGUI();
             
             // general GUIItem interface
-            virtual void Display() override;
+            virtual void Display();
             
         protected:
             // sprite-based
-            mse::Texture* m_spriteList = nullptr;
+            Texture* m_spriteList = nullptr;
             DTetris::TetrisMap* m_tetrisMap = nullptr;
             int m_width = 0;
             int m_height = 0;
