@@ -562,6 +562,7 @@ ArenaUILayer::ArenaUILayer() : mse::Layer()
 ArenaUILayer::~ArenaUILayer()
 {
 //    messageLog = nullptr;
+    tetrisMapGUI = nullptr;
     
     int i = 0;
     game.UILogger.Clear();
