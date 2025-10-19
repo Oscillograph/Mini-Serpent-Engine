@@ -347,6 +347,8 @@ namespace mse
             // sprite-based
             mse::Texture* m_spriteList = nullptr;
             DTetris::TetrisMap* m_tetrisMap = nullptr;
+            int m_width = 0;
+            int m_height = 0;
         };
     }
 }

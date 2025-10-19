@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h> // SDL_Delay
 
 #include <mse/systems/windows/layers/layer.h>
+#include <mse/systems/platform/renderer/renderer.h>
 #include <mse/systems/resources/resource_manager.h>
 
 namespace DTetris
@@ -126,6 +127,7 @@ namespace mse
                            int width,
                            int height)
         {
+            MSE_CORE_LOG("TetrisMap: initialization...")
             if (layer != nullptr)
             {
                 parentLayer = layer;
@@ -133,6 +135,10 @@ namespace mse
                 layerArea = area;
                 m_spriteList = (Texture*)ResourceManager::UseResource(ResourceType::Texture, spritelist, windowUser);
                 m_tetrisMap = tetrisMap;
+                m_width = width;
+                m_height = height;
+            } else {
+                MSE_CORE_LOG("TetrisMap: failed to initialize due to non-existent layer");
             }
         }
         
@@ -140,6 +146,48 @@ namespace mse
         {}
         
         void TetrisMapGUI::Display()
-        {}
+        {
+            if (parentLayer != nullptr)
+            {
+                SDL_FRect destRect = {0, 0, 10, 10};
+                SDL_Rect srcRect = {0, 0, 10, 10};
+                for (int xIndex = 0; xIndex < width; ++xIndex)
+                {
+                    destRect.x = layerArea.x + xIndex*destRect.w;
+                    for (int yIndex = 0; yIndes < height; ++yIndex)
+                    {
+                        // skip the iteration if the block is empty
+                        if (m_tetrisMap.map[yIndex*width + xIndex].type == DTetris::BlockType::None)
+                        {
+                            continue;
+                        }
+                        
+                        destRect.x = layerArea.y + xIndex*destRect.h;
+                        
+                        // pick a proper image to draw
+                        switch (m_tetrisMap.map[yIndex*width + xIndex].type)
+                        {
+                        case DTetris::BlockType::Block:
+                            {
+                                break;
+                            }
+                        case DTetris::BlockType::Healing:
+                            {
+                                break;
+                            }
+                        case DTetris::BlockType::Treasure:
+                            {
+                                break;
+                            }
+                        }
+                        
+                        // draw the image of a block
+                        Renderer::DrawTexture(m_spriteList, &destRect, &srcRect);
+                    }
+                }
+            } else {
+                MSE_CORE_LOG("TetrisMap: cannot display due to not been initialized");
+            }
+        }
     }
 }
