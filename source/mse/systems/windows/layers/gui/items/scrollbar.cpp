@@ -436,12 +436,12 @@ namespace mse
         HScrollbar::~HScrollbar()
         {
             MSE_CORE_LOG("HScrollbar destroyed");
-            delete m_BtnUp;
-            m_BtnUp = nullptr;
-            delete m_BtnDown;
-            m_BtnDown = nullptr;
-            delete m_BtnBall;
-            m_BtnBall = nullptr;
+//            delete m_BtnUp;
+//            m_BtnUp = nullptr;
+//            delete m_BtnDown;
+//            m_BtnDown = nullptr;
+//            delete m_BtnBall;
+//            m_BtnBall = nullptr;
         }
         
         // general GUIItem interface
