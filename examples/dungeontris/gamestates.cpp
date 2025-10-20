@@ -515,7 +515,7 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
            game.npcCharacter.stats.endurance);
     
     // configure tetrisMap
-    tetrisMap.Resize(15, 20);
+    tetrisMap.Resize(12, 20);
     
     // configure GUI layer
     if (pass_layer != nullptr)

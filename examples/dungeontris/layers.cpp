@@ -690,7 +690,7 @@ void ArenaUILayer::OnInit()
     // tetris map
     tetrisMapGUI = (mse::gui::TetrisMapGUI*)(AddElement(new mse::gui::TetrisMapGUI(
                        this,
-                       {10, 10, 150, 200},
+                       {100, 10, 150, 200},
                        "data/img/screen-images.png",
                        &tetrisMap,
                        tetrisMap.width,

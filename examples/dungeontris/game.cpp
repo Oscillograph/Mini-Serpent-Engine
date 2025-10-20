@@ -8,6 +8,7 @@
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/platform/renderer/renderer.h>
 #include <mse/systems/resources/resource_manager.h>
+#include <mse/systems/windows/window.h>
 
 namespace DTetris
 {
@@ -187,14 +188,15 @@ namespace mse
         
         void TetrisMapGUI::Display()
         {
-            MSE_CORE_LOG("TetrisMapGUI: Display");
+//            MSE_CORE_LOG("TetrisMapGUI: Display");
             if (parentLayer != nullptr)
             {
-                SDL_FRect destRect = {0, 0, 10, 10};
+                SDL_FRect destRect = {0, 0, 10.0 / windowUser->GetPrefs().width, 10.0 / windowUser->GetPrefs().height};
                 SDL_Rect srcRect = {0, 0, 10, 10};
                 for (int xIndex = 0; xIndex < m_width; ++xIndex)
                 {
-                    destRect.x = layerArea.x + xIndex*destRect.w;
+                    destRect.x = (float)(layerArea.x) / windowUser->GetPrefs().width + xIndex*destRect.w;
+//                    destRect.x = 0 + xIndex*destRect.w;
                     for (int yIndex = 0; yIndex < m_height; ++yIndex)
                     {
                         // skip the iteration if the block is empty
@@ -203,7 +205,8 @@ namespace mse
                             continue;
                         }
                         
-                        destRect.y = layerArea.y + xIndex*destRect.h;
+                        destRect.y = (float)(layerArea.y) / windowUser->GetPrefs().height + yIndex*destRect.h;
+//                        destRect.y = 0 + xIndex*destRect.h;
                         
                         // pick a proper image to draw
                         switch (m_tetrisMap->map[yIndex*m_width + xIndex].type)
@@ -241,6 +244,7 @@ namespace mse
                         }
                         
                         // draw the image of a block
+//                        MSE_LOG("Drawing at: ", destRect.x, ", ", destRect.y);
                         Renderer::DrawTexture(m_spriteList, &destRect, &srcRect);
                     }
                 }
