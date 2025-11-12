@@ -13,6 +13,7 @@
 DTetris::GameDB gameDB = DTetris::InitAutobattlerData();
 DTetris::Game game;
 DTetris::TetriminoTemplatesDB tetriminoDB = DTetris::InitTetriminoDB();
+DTetris::Tetrimino tetrimino;
 DTetris::TetrisMap tetrisMap;
 GameStateMachine gsm;
 

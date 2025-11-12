@@ -262,6 +262,7 @@ namespace DTetris
     struct Tetrimino
     {
         std::vector<Block> blocks = {}; // 4x4 or 3x3 areas
+        bool fell = false;
     };
     
     // Tetris

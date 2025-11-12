@@ -10,6 +10,8 @@
 extern DTetris::GameDB gameDB;
 extern DTetris::Game game;
 extern DTetris::TetrisMap tetrisMap;
+extern DTetris::TetriminoTemplatesDB tetriminoDB;
+extern DTetris::Tetrimino tetrimino;
 extern GameStateMachine gsm;
 
 GameState::GameState()
@@ -517,6 +519,29 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
     // configure tetrisMap
     tetrisMap.Resize(12, 20);
     
+    // pick random first tetrimino
+    int tetriminoId = rand() % tetriminoDB.data.size();
+    for (int i = 0; i < tetriminoDB.data[tetriminoId].block.size(); ++i)
+    {
+        switch (tetriminoDB.data[tetriminoId].block[i])
+        {
+        case 0:
+            {
+                tetrimino.blocks[i].type = DTetris::BlockType::None; 
+                break;
+            }
+        case 1:
+            {
+                tetrimino.blocks[i].type = DTetris::BlockType::Block;
+                break;
+            }
+        default:
+            {
+                tetrimino.blocks[i].type = DTetris::BlockType::None;
+            }
+        } 
+    }
+    
     // configure GUI layer
     if (pass_layer != nullptr)
     {
@@ -644,13 +669,31 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     static mse::TimeType localTime = 0;
     std::stringstream strForLogger;
     
-    if ((!game.battleFinished) && (game.turn < 30))
+    if (!game.battleFinished)
     {
         if (localTime >= game.config.turnLength)
         {
-            game.turn++;
+            // ###################################################################################
+            //                         BASIC TETRIS logic
+            // ###################################################################################
+            // 1. Pick tetramino and calculate next one.
+            // 2. Check if can move tetramino (and keep track of its movement counts).
+            // 3.1. If can move.
+            // 3.1.1. Move the tetramino lower and go to (2).
+            // 3.2. If can't move.
+            // 3.2.1. Place the tetramino.
+            // 3.2.2. If movement counts == 0, then declare game over.
+            // 4. Check for full lines.
+            // 4.1. If a line is full, clear it.
+            // 5. Check for empty lines.
+            // 5.1. If a line is empty, move the line from the top of it to its place.
             
+         
+            // ###################################################################################
+            //                         BASIC AUTOBATLER logic
+            // ###################################################################################
             // swap roles
+            game.turn++;
             if (game.turn > 1)
             {
                 DTetris::Character* tmp = nullptr;

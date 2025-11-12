@@ -92,7 +92,7 @@ namespace DTetris
                 int index = j*width + i;
                 map[index].coordinates.x = i;
                 map[index].coordinates.y = j;
-                map[index].type = BlockType::Block;
+                map[index].type = BlockType::None;
                 map[index].color = {0, 0, 0};
                 
                 blockSprites[index].place = {
