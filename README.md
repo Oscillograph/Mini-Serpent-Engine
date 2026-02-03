@@ -3,6 +3,8 @@
 Mini Serpent Engine (MSE) is a simple game engine for scientific research and entertainment applications. It is based on SDL v2.28.4 and at some point will replace with itself a version of another project of mine called Crystal Serpent Engine.
 Currently, MSE is meant to be windows-only with main compatibility focus on Windows 7 and OpenGL 3.3+.
 
+Upd. (3.02.2026): Due to personal circumstances, the project's attention is being shifted towards Linux compatibility with portable approach in mind.
+
 ## Features ##
 The game engine heavily relies on the vision briefly discussed on page: https://kvk-tech.ru/post/devlog-cse-001
 
