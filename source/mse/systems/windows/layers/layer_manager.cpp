@@ -76,7 +76,7 @@ namespace mse
 		
         if (elementId == -1)
 		{
-            if ((event->type == SDL_MOUSEMOTION) || (event->type == SDL_MOUSEBUTTONDOWN) || (event->type == SDL_MOUSEBUTTONUP) || (event->type == SDL_MOUSEWHEEL))
+            if ((event->type == SDL_EVENT_MOUSE_MOTION) || (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) || (event->type == SDL_EVENT_MOUSE_BUTTON_UP) || (event->type == SDL_EVENT_MOUSE_WHEEL))
             {
                 // map real mouse coordinates to window basePrefs
                 int mouseX = 0;

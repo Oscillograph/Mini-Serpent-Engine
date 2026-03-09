@@ -78,13 +78,13 @@ public:
 		MSE_LOG("Commanding to open a window");
 		m_window = mse::WindowManager::CreateWindow(u8"Леста Автобатлер", 50, 50, 320, 240);
 		m_window->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
-			MSE_LOG("Key pressed: ", event->key.keysym.sym);
-            if (event->key.keysym.scancode == SDL_SCANCODE_SPACE)
+			MSE_LOG("Key pressed: ", event->key.key);
+            if (event->key.key == SDL_SCANCODE_SPACE)
             {
 //                m_window->ToggleFullscreen();
                 mse::SoundMan::PlayNext();
             }
-            if (event->key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+            if (event->key.key == SDL_SCANCODE_ESCAPE)
             {
                 if (gsm.current->page == LAutobattler::GamePages::MainMenu)
                 {

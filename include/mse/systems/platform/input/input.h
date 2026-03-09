@@ -22,12 +22,12 @@ namespace mse
 			Space = SDLK_SPACE,
 			
 			Exclaim = SDLK_EXCLAIM,
-			DoubleQuote = SDLK_QUOTEDBL,
+			DoubleQuote = SDLK_DBLAPOSTROPHE,
 			Hash = SDLK_HASH,
 			Percent = SDLK_PERCENT,
 			Dollar = SDLK_DOLLAR,
 			Ampersand = SDLK_AMPERSAND,
-			SingleQuote = SDLK_QUOTE,
+			SingleQuote = SDLK_APOSTROPHE,
 			LeftParenthesis = SDLK_LEFTPAREN,
 			RightParenthesis = SDLK_RIGHTPAREN,
 			Asterisk = SDLK_ASTERISK,
@@ -60,33 +60,33 @@ namespace mse
 			RightBracket = SDLK_RIGHTBRACKET, // ]
 			Caret = SDLK_CARET, // ^
 			Underscore = SDLK_UNDERSCORE,
-			BackQuote = SDLK_BACKQUOTE, // `
-			_a = SDLK_a,
-			_b = SDLK_b,
-			_c = SDLK_c,
-			_d = SDLK_d,
-			_e = SDLK_e,
-			_f = SDLK_f,
-			_g = SDLK_g,
-			_h = SDLK_h,
-			_i = SDLK_i,
-			_j = SDLK_j,
-			_k = SDLK_k,
-			_l = SDLK_l,
-			_m = SDLK_m,
-			_n = SDLK_n,
-			_o = SDLK_o,
-			_p = SDLK_p,
-			_q = SDLK_q,
-			_r = SDLK_r,
-			_s = SDLK_s,
-			_t = SDLK_t,
-			_u = SDLK_u,
-			_v = SDLK_v,
-			_w = SDLK_w,
-			_x = SDLK_x,
-			_y = SDLK_y,
-			_z = SDLK_z,
+			BackQuote = SDLK_GRAVE, // `
+			_a = SDLK_A,
+			_b = SDLK_B,
+			_c = SDLK_C,
+			_d = SDLK_D,
+			_e = SDLK_E,
+			_f = SDLK_F,
+			_g = SDLK_G,
+			_h = SDLK_H,
+			_i = SDLK_I,
+			_j = SDLK_J,
+			_k = SDLK_K,
+			_l = SDLK_L,
+			_m = SDLK_M,
+			_n = SDLK_N,
+			_o = SDLK_O,
+			_p = SDLK_P,
+			_q = SDLK_Q,
+			_r = SDLK_R,
+			_s = SDLK_S,
+			_t = SDLK_T,
+			_u = SDLK_U,
+			_v = SDLK_V,
+			_w = SDLK_W,
+			_x = SDLK_X,
+			_y = SDLK_Y,
+			_z = SDLK_Z,
 			
 			CapsLock = SDLK_CAPSLOCK,
 			
@@ -149,6 +149,7 @@ namespace mse
 			Mode = SDLK_MODE,
 			
 			// weird things
+			/*
 			SDLK_APPLICATION = SDL_SCANCODE_TO_KEYCODE(SDL_SCANCODE_APPLICATION),
 			SDLK_POWER = SDL_SCANCODE_TO_KEYCODE(SDL_SCANCODE_POWER),
 			SDLK_KP_EQUALS = SDL_SCANCODE_TO_KEYCODE(SDL_SCANCODE_KP_EQUALS),
@@ -277,6 +278,7 @@ namespace mse
 			SDLK_SOFTRIGHT = SDL_SCANCODE_TO_KEYCODE(SDL_SCANCODE_SOFTRIGHT),
 			SDLK_CALL = SDL_SCANCODE_TO_KEYCODE(SDL_SCANCODE_CALL),
 			SDLK_ENDCALL = SDL_SCANCODE_TO_KEYCODE(SDL_SCANCODE_ENDCALL)
+			*/
 		} MSE_KeyCode;
 	}
 	
@@ -590,17 +592,17 @@ namespace mse
 			 */
 			/* @{ */
 			
-			AudioNext = SDL_SCANCODE_AUDIONEXT,
-			AudioPrev = SDL_SCANCODE_AUDIOPREV,
-			AudioStop = SDL_SCANCODE_AUDIOSTOP,
-			AudioPlay = SDL_SCANCODE_AUDIOPLAY,
-			AudioMute = SDL_SCANCODE_AUDIOMUTE,
-			MediaSelect =  SDL_SCANCODE_MEDIASELECT,
-			WWW = SDL_SCANCODE_WWW,
-			Mail = SDL_SCANCODE_MAIL,
-			Calculator = SDL_SCANCODE_CALCULATOR,
-			Computer = SDL_SCANCODE_COMPUTER,
-			Search = SDL_SCANCODE_AC_SEARCH,
+			AudioNext = SDL_SCANCODE_MEDIA_NEXT_TRACK,
+			AudioPrev = SDL_SCANCODE_MEDIA_PREVIOUS_TRACK,
+			AudioStop = SDL_SCANCODE_MEDIA_STOP,
+			AudioPlay = SDL_SCANCODE_MEDIA_PLAY,
+			AudioMute = SDL_SCANCODE_MUTE,
+			MediaSelect =  SDL_SCANCODE_MEDIA_SELECT,
+//			WWW = SDL_SCANCODE_WWW,
+//			Mail = SDL_SCANCODE_MAIL,
+//			Calculator = SDL_SCANCODE_CALCULATOR,
+//			Computer = SDL_SCANCODE_COMPUTER,
+//			Search = SDL_SCANCODE_AC_SEARCH,
 			AC_Home = SDL_SCANCODE_AC_HOME,
 			AC_Back = SDL_SCANCODE_AC_BACK,
 			AC_Forward = SDL_SCANCODE_AC_FORWARD,
@@ -617,18 +619,17 @@ namespace mse
 			 */
 			/* @{ */
 			
-			BrightnessDown = SDL_SCANCODE_BRIGHTNESSDOWN,
-			BrightnessUp = SDL_SCANCODE_BRIGHTNESSUP,
-			DisplaySwitch = SDL_SCANCODE_DISPLAYSWITCH, /**< display mirroring/dual display
-			  switch, video mode switch */
-			KBDillumToggle = SDL_SCANCODE_KBDILLUMTOGGLE,
-			KBDillumDown = SDL_SCANCODE_KBDILLUMDOWN,
-			KBDillumUp = SDL_SCANCODE_KBDILLUMUP,
-			Eject = SDL_SCANCODE_EJECT,
-			Sleep = SDL_SCANCODE_SLEEP,
+//			BrightnessDown = SDL_SCANCODE_BRIGHTNESSDOWN,
+//			BrightnessUp = SDL_SCANCODE_BRIGHTNESSUP,
+//			DisplaySwitch = SDL_SCANCODE_DISPLAYSWITCH, /**< display mirroring/dual display switch, video mode switch */
+//			KBDillumToggle = SDL_SCANCODE_KBDILLUMTOGGLE,
+//			KBDillumDown = SDL_SCANCODE_KBDILLUMDOWN,
+//			KBDillumUp = SDL_SCANCODE_KBDILLUMUP,
+//			Eject = SDL_SCANCODE_EJECT,
+//			Sleep = SDL_SCANCODE_SLEEP,
 			
-			Application_1 = SDL_SCANCODE_APP1,
-			Application_2 = SDL_SCANCODE_APP2,
+//			Application_1 = SDL_SCANCODE_APP1,
+//			Application_2 = SDL_SCANCODE_APP2,
 			
 			/* @} *//* Walther keys */
 			
@@ -639,8 +640,8 @@ namespace mse
 			 */
 			/* @{ */
 			
-			AudioReqind = SDL_SCANCODE_AUDIOREWIND,
-			AudioFastForward = SDL_SCANCODE_AUDIOFASTFORWARD,
+			AudioReqind = SDL_SCANCODE_MEDIA_REWIND,
+			AudioFastForward = SDL_SCANCODE_MEDIA_FAST_FORWARD,
 			
 			/* @} *//* Usage page 0x0C (additional media keys) */
 			
@@ -666,7 +667,7 @@ namespace mse
 			
 			/* Add any other keys here. */
 			
-			TotalScancodes = SDL_NUM_SCANCODES /**< not a key, just marks the number of scancodes
+			TotalScancodes = SDL_SCANCODE_COUNT /**< not a key, just marks the number of scancodes
 			  for array bounds */
 		} Scancode;
 	}

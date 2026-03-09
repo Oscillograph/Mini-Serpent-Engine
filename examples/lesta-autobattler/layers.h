@@ -31,7 +31,7 @@ public:
     ~IntroUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
     
     mse::gui::Text* text = nullptr;
     int counterBackup = 0;
@@ -44,7 +44,7 @@ public:
     ~MainMenuUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class CharacterCreateUILayer : public mse::Layer
@@ -54,7 +54,7 @@ public:
     ~CharacterCreateUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
     
     mse::gui::Text* rogueStatsBox = nullptr;
     mse::gui::Text* warriorStatsBox = nullptr;
@@ -68,7 +68,7 @@ public:
     ~CharacterLoadUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class CharacterSaveUILayer : public mse::Layer
@@ -78,7 +78,7 @@ public:
     ~CharacterSaveUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class WinnerUILayer : public mse::Layer
@@ -88,7 +88,7 @@ public:
     ~WinnerUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class GameOverUILayer : public mse::Layer
@@ -98,7 +98,7 @@ public:
     ~GameOverUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class HighscoresUILayer : public mse::Layer
@@ -108,7 +108,7 @@ public:
     ~HighscoresUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class CreditsUILayer : public mse::Layer
@@ -118,7 +118,7 @@ public:
     ~CreditsUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class ExitUILayer : public mse::Layer
@@ -128,7 +128,7 @@ public:
     ~ExitUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class ArenaUILayer : public mse::Layer
@@ -138,7 +138,7 @@ public:
     ~ArenaUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
     
     mse::gui::Text* messageLog = nullptr;
     mse::gui::Button* nextBtn = nullptr;
@@ -153,7 +153,7 @@ public:
     ~CharacterUpdateUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
     
     mse::gui::Button* classRogueBtn = nullptr;
     mse::gui::Button* classWarriorBtn = nullptr;
@@ -172,7 +172,7 @@ public:
     ~SettingsUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
     
     mse::gui::HSlider* musicVolumeSlider = nullptr;
     mse::gui::HSlider* soundsVolumeSlider = nullptr;
@@ -185,7 +185,7 @@ public:
     ~SimpleUILayer();
     
     virtual void OnInit() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 #endif

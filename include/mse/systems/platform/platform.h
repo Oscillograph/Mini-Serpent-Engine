@@ -4,9 +4,9 @@
 #include <mse/core.h>
 
 // Simple Direct media Library
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_image.h>
+#include <SDL3/SDL_mixer.h>
 
 namespace mse
 {
@@ -37,7 +37,7 @@ namespace mse
 		static void DestroyRenderer(void* renderer);
 		
 		// Utils
-		inline static uint64_t GetTimeMs() { return SDL_GetTicks64(); }
+		inline static uint64_t GetTimeMs() { return SDL_GetTicks(); }
 		
 	private:
 		static uint32_t m_platformFlags;

@@ -85,7 +85,7 @@ namespace mse
 			windowScale.y * m_CurrentScreen.w
 		};
 		// SDL_RenderSetViewport(GetActiveRenderer(), &viewport);
-		SDL_RenderSetClipRect(GetActiveRenderer(), &viewport);
+		SDL_SetRenderClipRect(GetActiveRenderer(), &viewport);
 	}
 	
 	void Renderer::SetActiveScreenDefault()
@@ -110,7 +110,7 @@ namespace mse
 			windowScale.y * m_CurrentScreen.w
 		};
 		// SDL_RenderSetViewport(GetActiveRenderer(), &viewport);
-		SDL_RenderSetClipRect(GetActiveRenderer(), &viewport);
+		SDL_SetRenderClipRect(GetActiveRenderer(), &viewport);
 	}
 	
 	void Renderer::SetBackgroundColor(const glm::uvec4& color)
@@ -137,7 +137,7 @@ namespace mse
 		Uint32 data = getPixel(gSurface, 200, 200);
 		SDL_GetRGB(data, gSurface->format, &rgb.r, &rgb.g, &rgb.b);
 		- - - - - - - - - - - - - - - */
-		int bpp = surface->GetSurface()->format->BytesPerPixel;
+		int bpp = SDL_GetPixelFormatDetails(surface->GetSurface()->format)->bytes_per_pixel;
 		/* Here p is the address to the pixel we want to retrieve */
 		uint8_t *p = (uint8_t *)surface->GetSurface()->pixels + y * surface->GetSurface()->pitch + x * bpp;
 		
@@ -178,7 +178,7 @@ namespace mse
 	void Renderer::GeneralDrawTexture(Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect, glm::vec2 tilingFactor, const glm::vec4& tintColor)
 	{
 		SDL_FRect* place = new SDL_FRect; 
-		SDL_Rect* source = new SDL_Rect; 
+		SDL_FRect* source = new SDL_FRect; 
 		
 		// TODO: find out why Application::Get()->GetWindows() is not allowed to be accessed from here
 		glm::vec2 windowScale = {
@@ -277,7 +277,7 @@ namespace mse
 //				MSE_CORE_LOG("xNum: ", xNum, "; yNum: ", yNum, "; xMod: ", xMod, "; yMod: ", yMod);
 				
 				SDL_FRect* newPlace = new SDL_FRect;
-				SDL_Rect* newSource = new SDL_Rect;
+				SDL_FRect* newSource = new SDL_FRect;
 				
 				glm::uvec4 currentTilePlace = {0, 0, 0, 0};
 				
@@ -331,14 +331,14 @@ namespace mse
 //						MSE_CORE_LOG("Current tile size: ", currentTileSize.x, "; height: ", currentTileSize.y);\
 //						MSE_CORE_LOG("New place (SDL_Rect): (", (*newPlace).x, "; ", (*newPlace).y, "; ", (*newPlace).w, "; ", (*newPlace).h, ")");
 						
-						SDL_RenderCopyExF(
+						SDL_RenderTextureRotated(
 							GetActiveRenderer(), 
 							texture->GetTexture(), 
 							newSource, 
 							newPlace,
 							0,
 							NULL,
-							SDL_RendererFlip::SDL_FLIP_NONE
+							SDL_FlipMode::SDL_FLIP_NONE
 							);
 					}
 				}
@@ -346,14 +346,14 @@ namespace mse
 				delete newPlace;
 				delete newSource;
 			} else {
-				SDL_RenderCopyExF(
+				SDL_RenderTextureRotated(
 					GetActiveRenderer(), 
 					texture->GetTexture(), 
 					source, 
 					place,
 					0,
 					NULL,
-					SDL_RendererFlip::SDL_FLIP_NONE
+					SDL_FlipMode::SDL_FLIP_NONE
 					);
 			}
 		}
@@ -385,7 +385,7 @@ namespace mse
 		};
 		
 		SDL_SetRenderDrawColor(GetActiveRenderer(), color.r, color.g, color.b, color.a);
-		SDL_RenderDrawRectF(GetActiveRenderer(), &rect);
+		SDL_RenderRect(GetActiveRenderer(), &rect);
 		SetBackgroundColor(m_BackgroundColor);
 	}
 	
@@ -403,7 +403,7 @@ namespace mse
 			GetActiveWindow()->GetPrefs().height
 		};
 		
-		SDL_Point points[5] = {
+		SDL_FPoint points[5] = {
 			{
 				(int)roundf(windowScale.x * (m_CurrentScreen.x + m_CurrentScreen.z * p1.x)),
 				(int)roundf(windowScale.y * (m_CurrentScreen.y + m_CurrentScreen.w * p1.y)),
@@ -427,7 +427,7 @@ namespace mse
 		};
 		
 		SDL_SetRenderDrawColor(GetActiveRenderer(), color.r, color.g, color.b, color.a);
-		SDL_RenderDrawLines(GetActiveRenderer(), points, 5);
+		SDL_RenderLines(GetActiveRenderer(), points, 5);
 		SetBackgroundColor(m_BackgroundColor);
 	}
 	
@@ -452,7 +452,7 @@ namespace mse
 		};
 		
 		SDL_SetRenderDrawColor(GetActiveRenderer(), color.r, color.g, color.b, color.a);
-		SDL_RenderFillRectF(GetActiveRenderer(), &rect);
+		SDL_RenderFillRect(GetActiveRenderer(), &rect);
 		SetBackgroundColor(m_BackgroundColor);
 	}
 	
@@ -460,7 +460,7 @@ namespace mse
 	void Renderer::SurfaceDrawPixel_unsafe(Texture* target, SDL_Point center, int pxSize, SDL_Color color)
 	{
 //		MSE_CORE_LOG("Render: pixel color is (", (int)color.r, ", ", (int)color.g, ", ", (int)color.b, ", ", (int)color.a, ")");
-		uint32_t pxColor = SDL_MapRGBA(target->GetSurface()->format, color.r, color.g, color.b, color.a);
+		uint32_t pxColor = SDL_MapRGBA(SDL_GetPixelFormatDetails(target->GetSurface()->format), SDL_GetSurfacePalette(target->GetSurface()), color.r, color.g, color.b, color.a);
 		int xn, yn = 0;
 		uint32_t* pxBuffer = nullptr;
 			
@@ -732,7 +732,7 @@ namespace mse
 		int curY = 0;
 		int alphabetId = 0;
 		bool foundSymbol = false;
-		uint32_t fontColor = SDL_MapRGBA(target->GetSurface()->format,
+		uint32_t fontColor = SDL_MapRGBA(SDL_GetPixelFormatDetails(target->GetSurface()->format), SDL_GetSurfacePalette(target->GetSurface()),
 			color.r, color.g, color.b, color.a);
 		
 		// for each symbol in text
@@ -1026,7 +1026,7 @@ namespace mse
 //					delete newPlace;
 //					delete newSource;
 				} else {
-					SDL_UpperBlit(
+					SDL_BlitSurface(
 						texture->GetSurface(),
 						source,
 						target->GetSurface(),

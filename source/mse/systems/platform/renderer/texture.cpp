@@ -28,15 +28,20 @@ namespace mse
 		m_Renderer = (SDL_Renderer*)renderer;
 		
 		m_Surface = IMG_Load(path.c_str()); //Load image at specified path
-		SDL_SetColorKey(m_Surface, SDL_TRUE, SDL_MapRGB(m_Surface->format, colorKey.r, colorKey.g, colorKey.b));
+		SDL_SetSurfaceColorKey(m_Surface, true, SDL_MapRGB(SDL_GetPixelFormatDetails(m_Surface->format), SDL_GetSurfacePalette(m_Surface), colorKey.r, colorKey.g, colorKey.b));
 		m_Texture = SDL_CreateTextureFromSurface(m_Renderer, m_Surface);
+		
+		if(!SDL_SetTextureScaleMode(m_Texture, SDL_SCALEMODE_NEAREST))
+		{
+			MSE_CORE_LOG("Unable to set texture scale mode for ", path.c_str(), "! SDL Error: ", SDL_GetError());
+		}
 	}
 	
 	Texture::Texture(	void* renderer, int w, int h, uint32_t flags, int depth,
 		uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask)
 	{
 		m_Renderer = (SDL_Renderer*)renderer;
-		m_Surface = SDL_CreateRGBSurfaceWithFormat(flags, w, h, depth, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGBA8888);
+		m_Surface = SDL_CreateSurface(w, h, SDL_PIXELFORMAT_RGBA8888);
 		m_Texture = SDL_CreateTexture(
 			m_Renderer,
 			SDL_PIXELFORMAT_RGBA8888,
@@ -47,6 +52,10 @@ namespace mse
 			);
 
         SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
+		if(!SDL_SetTextureScaleMode(m_Texture, SDL_SCALEMODE_NEAREST))
+		{
+			MSE_CORE_LOG("Unable to set texture scale mode for generic! SDL Error: ", SDL_GetError());
+		}
 	}
 	
 	Texture::~Texture()
@@ -62,13 +71,13 @@ namespace mse
 		
 		if(m_Surface == NULL)
 		{
-			MSE_CORE_LOG("Unable to load image ", path.c_str(), "! SDL_image Error: ", IMG_GetError());
+			MSE_CORE_LOG("Unable to load image ", path.c_str(), "! SDL_image Error: ", SDL_GetError());
 			m_Surface = IMG_Load("./MSE/assets/no_texture.bmp");
 		}
 		
 		if(m_Surface == NULL)
 		{
-			MSE_CORE_LOG("Unable to load no_texture.bmp image! SDL_image Error: ", IMG_GetError());
+			MSE_CORE_LOG("Unable to load no_texture.bmp image! SDL_image Error: ", SDL_GetError());
 		} else {
 			FreeTexture();
 			
@@ -79,7 +88,12 @@ namespace mse
 			{
 				MSE_CORE_LOG("Unable to create texture from ", path.c_str(), "! SDL Error: ", SDL_GetError());
 			} 
-		} 
+		}
+		
+		if(!SDL_SetTextureScaleMode(m_Texture, SDL_SCALEMODE_NEAREST))
+		{
+			MSE_CORE_LOG("Unable to set texture scale mode for ", path.c_str(), "! SDL Error: ", SDL_GetError());
+		}
 	}
 	
 	SDL_Texture* Texture::ConvertToSurface(SDL_Surface* srcSurface)
@@ -151,7 +165,7 @@ namespace mse
 	{
 		if (m_Surface != NULL)
 		{
-			SDL_FreeSurface(m_Surface);
+			SDL_DestroySurface(m_Surface);
 			m_Surface = NULL;
 		}
 	}

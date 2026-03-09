@@ -32,7 +32,7 @@ public:
 		
 		gameCanvas->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 			MSE_LOG("Callback!");
-			switch (event->key.keysym.sym)
+			switch (event->key.key)
 			{
 				case SDLK_LEFT:
 				{
@@ -86,7 +86,7 @@ public:
 		mse::Application::GetApplication()->SetFPS(MSE_FPS60);
 	}
 	
-	virtual void OnUpdate() override
+	virtual void OnUpdate(mse::TimeType t) override
 	{
 		switch (mode)
 		{

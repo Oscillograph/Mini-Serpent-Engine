@@ -17,9 +17,9 @@ namespace mse
     AppConfig Application::config = 
     {
         true,
-        MIX_MAX_VOLUME,
+        1.0f,
         true,
-        MIX_MAX_VOLUME,
+        1.0f,
         true,
         true,
     };
@@ -28,10 +28,10 @@ namespace mse
 	{
 		MSE_CORE_LOG("Application: constructor called");
 		Platform::Init(
-			SDL_INIT_EVERYTHING,
-			SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL,
-			SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE,
-			IMG_INIT_PNG | IMG_INIT_JPG
+			SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS,
+			SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL,
+			0,
+			0
 			);
 		WindowManager::Init();
 		ResourceManager::Init();
@@ -41,10 +41,10 @@ namespace mse
 		// default callbacks
 		callbacks[EventTypes::None] = [&](SDL_Event* event) { return false; };
 		callbacks[EventTypes::KeyDown] = [&](SDL_Event* event) {
-			switch (Platform::PeekEvent()->key.keysym.sym)
+			switch (Platform::PeekEvent()->key.key)
 			{
 				// turn fps counter on/off
-				case SDL_KeyCode::SDLK_BACKQUOTE:
+				case SDLK_GRAVE:
 				{
 					m_showFPS = !m_showFPS;
 					if (!m_showFPS)
@@ -137,6 +137,7 @@ namespace mse
 	
 	void Application::BackendProcessing()
 	{
+		/*
 		CanbanEvent canbanData;
 		
 		if (Canban::GetTask(CanbanEvents::Backend_Create, canbanData))
@@ -154,6 +155,7 @@ namespace mse
 		
 		if (Canban::GetTask(CanbanEvents::Backend_Recreate, canbanData))
 		{}
+		*/
 	}
 	
 	void Application::Run()
@@ -180,67 +182,63 @@ namespace mse
 					// process events crucial to the engine's work
 					switch (Platform::PeekEvent()->type)
 					{
-						case SDL_QUIT:
+						case SDL_EVENT_QUIT:
 						{
 							m_shouldExit = true;
 							break;
 						}
-						
-						case SDL_WINDOWEVENT:
-						{
-							for (Window* window : WindowManager::GetWindows())
-							{
-								if (Platform::PeekEvent()->window.windowID == window->GetNativeWindowID())
-								{
-									switch (Platform::PeekEvent()->window.event)
-									{
-										case SDL_WINDOWEVENT_CLOSE:
-										{
-											if (WindowManager::GetWindows().size() == 1)
-											{
-												m_shouldExit = true;
-											} else {
-												WindowManager::DestroyWindow(window);
-											}
-											break; // this event should not go into OnEvent mechanism
-										}
-									}
-								}
-							}
-							break;
-						}
 					}
 					
+					for (Window* window : WindowManager::GetWindows())
+					{
+						if (Platform::PeekEvent()->window.windowID == window->GetNativeWindowID())
+						{
+							switch (Platform::PeekEvent()->type)
+							{
+								case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+								{
+									if (WindowManager::GetWindows().size() == 1)
+									{
+										m_shouldExit = true;
+									} else {
+										WindowManager::DestroyWindow(window);
+									}
+									break; // this event should not go into OnEvent mechanism
+								}
+							}
+						}
+					}
+				
 					// try to process the event
 					bool handled = false;
 					switch (Platform::PeekEvent()->type)
 					{
-						case SDL_KEYDOWN:
+						case SDL_EVENT_KEY_DOWN:
 						{
 							handled = callbacks[EventTypes::KeyDown](Platform::PeekEvent());
 							break;
 						}
-						case SDL_KEYUP:
+						case SDL_EVENT_KEY_UP:
 						{
 							handled = callbacks[EventTypes::KeyUp](Platform::PeekEvent());
 							break;
 						}
-						case SDL_MOUSEBUTTONDOWN:
+						case SDL_EVENT_MOUSE_BUTTON_DOWN:
 						{
 							handled = callbacks[EventTypes::MouseButtonDown](Platform::PeekEvent());
 							break;
 						}
-						case SDL_MOUSEBUTTONUP:
+						case SDL_EVENT_MOUSE_BUTTON_UP:
 						{
 							handled = callbacks[EventTypes::MouseButtonUp](Platform::PeekEvent());
 							break;
 						}
-						case SDL_MOUSEMOTION:
+						case SDL_EVENT_MOUSE_MOTION:
 						{
 							handled = callbacks[EventTypes::MouseMoved](Platform::PeekEvent());
 							break;
 						}
-						case SDL_MOUSEWHEEL:
+						case SDL_EVENT_MOUSE_WHEEL:
 						{
 							handled = callbacks[EventTypes::MouseWheel](Platform::PeekEvent());
 							break;

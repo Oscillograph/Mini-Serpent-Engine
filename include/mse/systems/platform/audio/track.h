@@ -18,10 +18,10 @@ namespace mse
         
         void Free();
         
-        inline Mix_Music* GetAudio() { return m_audio; }
+        inline MIX_Audio* GetAudio() { return m_audio; }
 	private:
 		std::string m_path = "";
-        Mix_Music* m_audio = nullptr;
+        MIX_Audio* m_audio = nullptr;
 	};
 }
 

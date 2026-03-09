@@ -49,7 +49,7 @@ void IntroUILayer::OnInit()
 //    mse::SoundMan::PlayTrack("data/audio/tracks/01_towards_neon_shadows.mp3");
 }
 
-void IntroUILayer::OnUpdate()
+void IntroUILayer::OnUpdate(mse::TimeType t)
 {
 //    if (counterBackup != ((IntroPageState*)gsm.current)->counter)
 //    {
@@ -198,7 +198,7 @@ void MainMenuUILayer::OnInit()
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void MainMenuUILayer::OnUpdate()
+void MainMenuUILayer::OnUpdate(mse::TimeType t)
 {}
 
 CharacterCreateUILayer::CharacterCreateUILayer() : mse::Layer()
@@ -309,7 +309,7 @@ void CharacterCreateUILayer::OnInit()
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void CharacterCreateUILayer::OnUpdate()
+void CharacterCreateUILayer::OnUpdate(mse::TimeType t)
 {}
 
 CharacterLoadUILayer::CharacterLoadUILayer() : mse::Layer()
@@ -324,7 +324,7 @@ CharacterLoadUILayer::~CharacterLoadUILayer()
 void CharacterLoadUILayer::OnInit()
 {}
 
-void CharacterLoadUILayer::OnUpdate()
+void CharacterLoadUILayer::OnUpdate(mse::TimeType t)
 {}
 
 CharacterSaveUILayer::CharacterSaveUILayer() : mse::Layer()
@@ -339,7 +339,7 @@ CharacterSaveUILayer::~CharacterSaveUILayer()
 void CharacterSaveUILayer::OnInit()
 {}
 
-void CharacterSaveUILayer::OnUpdate()
+void CharacterSaveUILayer::OnUpdate(mse::TimeType t)
 {}
 
 WinnerUILayer::WinnerUILayer() : mse::Layer()
@@ -418,7 +418,7 @@ void WinnerUILayer::OnInit()
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void WinnerUILayer::OnUpdate()
+void WinnerUILayer::OnUpdate(mse::TimeType t)
 {}
 
 GameOverUILayer::GameOverUILayer() : mse::Layer()
@@ -477,7 +477,7 @@ void GameOverUILayer::OnInit()
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void GameOverUILayer::OnUpdate()
+void GameOverUILayer::OnUpdate(mse::TimeType t)
 {}
 
 HighscoresUILayer::HighscoresUILayer() : mse::Layer()
@@ -492,7 +492,7 @@ HighscoresUILayer::~HighscoresUILayer()
 void HighscoresUILayer::OnInit()
 {}
 
-void HighscoresUILayer::OnUpdate()
+void HighscoresUILayer::OnUpdate(mse::TimeType t)
 {}
 
 CreditsUILayer::CreditsUILayer() : mse::Layer()
@@ -635,7 +635,7 @@ void CreditsUILayer::OnInit()
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void CreditsUILayer::OnUpdate()
+void CreditsUILayer::OnUpdate(mse::TimeType t)
 {}
 
 ExitUILayer::ExitUILayer() : mse::Layer()
@@ -650,7 +650,7 @@ ExitUILayer::~ExitUILayer()
 void ExitUILayer::OnInit()
 {}
 
-void ExitUILayer::OnUpdate()
+void ExitUILayer::OnUpdate(mse::TimeType t)
 {}
 
 ArenaUILayer::ArenaUILayer() : mse::Layer()
@@ -853,7 +853,7 @@ void ArenaUILayer::OnInit()
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void ArenaUILayer::OnUpdate()
+void ArenaUILayer::OnUpdate(mse::TimeType t)
 {
 //    std::u32string npcLifeTextContent = U"";
     std::stringstream npcLifeTextStream;
@@ -1191,7 +1191,7 @@ void CharacterUpdateUILayer::OnInit()
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void CharacterUpdateUILayer::OnUpdate()
+void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
 {
     if (changeMade)
     {
@@ -1353,8 +1353,8 @@ void SettingsUILayer::OnInit()
                                   {210, 68, 80, 13}, 
                                   &(game.config.musicVolume),
                                   0,
-                                  MIX_MAX_VOLUME,
-                                  MIX_MAX_VOLUME / 16,
+                                  1.0f,
+                                  1.0f / 16,
                                   "data/img/screen-images.png", 
                                   {0, 0, 0}, 
                                   {24, 23, 52, 13}, 
@@ -1376,8 +1376,8 @@ void SettingsUILayer::OnInit()
                                      {210, 82, 80, 13}, 
                                      &(game.config.soundsVolume),
                                      0,
-                                     MIX_MAX_VOLUME,
-                                     MIX_MAX_VOLUME / 16,
+                                     1.0f,
+                                     1.0f / 16,
                                      "data/img/screen-images.png", 
                                      {0, 0, 0}, 
                                      {24, 23, 52, 13}, 
@@ -1457,7 +1457,7 @@ void SettingsUILayer::OnInit()
     mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void SettingsUILayer::OnUpdate()
+void SettingsUILayer::OnUpdate(mse::TimeType t)
 {
     if (musicVolumeSlider->valueChanged)
     {
@@ -1490,7 +1490,7 @@ void SimpleUILayer::OnInit()
 //    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(this, {0, 0, 320, 240}, "./data/img/background.png", {0, 0, 320, 240}, {0, 0, 0, 255})));
 }
 
-void SimpleUILayer::OnUpdate()
+void SimpleUILayer::OnUpdate(mse::TimeType t)
 {}
 
 #endif

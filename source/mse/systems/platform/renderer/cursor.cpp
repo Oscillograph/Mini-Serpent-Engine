@@ -13,7 +13,7 @@ namespace mse
     
     Cursor::~Cursor()
     {
-        SDL_FreeCursor(m_Cursor);
+        SDL_DestroyCursor(m_Cursor);
         ResourceManager::DropResource(m_texture, m_window);
         MSE_CORE_LOG("Cursor destroyed");
     }

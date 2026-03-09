@@ -86,173 +86,164 @@ namespace mse
 	
 	bool Window::EventProcessor(SDL_Event* event)
 	{
-		switch (event->type)
+		if (event->window.windowID == m_windowNativeID)
 		{
-			case SDL_WINDOWEVENT:
+			// check window-specific events first
+			switch (event->type)
 			{
-				if (event->window.windowID == m_windowNativeID)
+				case SDL_EVENT_WINDOW_MOVED:
 				{
-					switch (event->window.event)
-					{
-					case SDL_WINDOWEVENT_MOVED:
-						{
-							MSE_CORE_LOG("Window: Window moved to: ", event->window.data1, ", ", event->window.data2);
-							return true;
-							break;
-						}
-						
-					case SDL_WINDOWEVENT_RESIZED:
-						{
-							static int count = 0;
-							count++;
-							MSE_CORE_LOG("Window: Resize Event count: ", count);
-							OnResize();
-							return true;
-							break;
-						}
-						
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-						{
-							MSE_CORE_LOG("Window: Window \"", m_basePrefs.title, "\" gained focus");
-							WindowManager::SetCurrentWindow(this);
-							SetFocus(true);
-                            if (!Application::GetApplication()->config.playInBackground)
-                            {
-                                SoundMan::UnPauseAll();
-                            }
-							return true;
-							break;
-						}
-						
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-						{
-							MSE_CORE_LOG("Window: Window \"", m_basePrefs.title, "\" lost focus");
-							SetFocus(false);
-                            if (!Application::GetApplication()->config.playInBackground)
-                            {
-                                SoundMan::PauseAll();
-                            }
-							return true;
-							break;
-						}
-					}
+					MSE_CORE_LOG("Window: Window moved to: ", event->window.data1, ", ", event->window.data2);
+					return true;
+					break;
 				}
-				break;
+				
+				case SDL_EVENT_WINDOW_RESIZED:
+				{
+					static int count = 0;
+					count++;
+					MSE_CORE_LOG("Window: Resize Event count: ", count);
+					OnResize();
+					return true;
+					break;
+				}
+				
+				case SDL_EVENT_WINDOW_FOCUS_GAINED:
+				{
+					MSE_CORE_LOG("Window: Window \"", m_basePrefs.title, "\" gained focus");
+					WindowManager::SetCurrentWindow(this);
+					SetFocus(true);
+                   	if (!Application::GetApplication()->config.playInBackground)
+                    {
+                        SoundMan::UnPauseAll();
+                    }
+					return true;
+					break;
+				}
+					
+				case SDL_EVENT_WINDOW_FOCUS_LOST:
+				{
+					MSE_CORE_LOG("Window: Window \"", m_basePrefs.title, "\" lost focus");
+					SetFocus(false);
+                    if (!Application::GetApplication()->config.playInBackground)
+                    {
+                        SoundMan::PauseAll();
+                    }
+					return true;
+					break;
+				}
 			}
+		}
 
-			default:
+		// now proceed with layer event-based logic
+		if (GetLayerManager() != nullptr)
+		{
+			switch (event->type)
 			{
-				if (GetLayerManager() != nullptr)
+				case SDL_EVENT_MOUSE_MOTION:
 				{
-					switch (event->type)
+					if (event->motion.windowID == m_windowNativeID)
 					{
-						case SDL_MOUSEMOTION:
+//						MSE_CORE_LOG("Window: Mouse moved to: (", Platform::PeekEvent()->motion.x, "; ", Platform::PeekEvent()->motion.y, ")");
+						if (m_layerManager->HandleEvent(EventTypes::MouseMoved, event))
 						{
-							if (event->motion.windowID == m_windowNativeID)
-							{
-//								MSE_CORE_LOG("Window: Mouse moved to: (", Platform::PeekEvent()->motion.x, "; ", Platform::PeekEvent()->motion.y, ")");
-								if (m_layerManager->HandleEvent(EventTypes::MouseMoved, event))
-								{
-									return true;
-								} else {
-									return callbacks[EventTypes::MouseMoved](event);
-								}
-							} else {
-								return false;
-							}
-							break;
+							return true;
+						} else {
+							return callbacks[EventTypes::MouseMoved](event);
 						}
-						
-						case SDL_MOUSEBUTTONDOWN:
-						{
-							if (event->button.windowID == m_windowNativeID)
-							{
-//								MSE_CORE_LOG("Window: Mouse ", Platform::PeekEvent()->button.button, " button is down");
-								if (m_layerManager->HandleEvent(EventTypes::MouseButtonDown, event))
-								{
-									return true;
-								} else {
-									return callbacks[EventTypes::MouseButtonDown](event);
-								}
-							} else {
-								return false;
-							}
-							break;
-						}
-						
-						case SDL_MOUSEBUTTONUP:
-						{
-							if (event->button.windowID == m_windowNativeID)
-							{
-//								MSE_CORE_LOG("Window: Mouse ", Platform::PeekEvent()->button.button, " button is up");
-								if (m_layerManager->HandleEvent(EventTypes::MouseButtonUp, event))
-								{
-									return true;
-								} else {
-									return callbacks[EventTypes::MouseButtonUp](event);
-								}
-							} else {
-								return false;
-							}
-							break;
-						}
-						
-						case SDL_MOUSEWHEEL:
-						{
-							if (event->wheel.windowID == m_windowNativeID)
-							{
-//								MSE_CORE_LOG("Window: Mouse wheel moved in ", Platform::PeekEvent()->wheel.y, " direction");
-								if (m_layerManager->HandleEvent(EventTypes::MouseWheel, event))
-								{
-									return true;
-								} else {
-									return callbacks[EventTypes::MouseWheel](event);
-								}
-							} else {
-								return false;
-							}
-							break;
-						}			
-						
-						case SDL_KEYDOWN:
-						{
-							if (event->key.windowID == m_windowNativeID)
-							{
-//								MSE_CORE_LOG("Window: Key pressed: ", event->key.keysym.sym);
-								if (m_layerManager->HandleEvent(EventTypes::KeyDown, event))
-								{
-									return true;
-								} else {
-									return callbacks[EventTypes::KeyDown](event);
-								}
-							} else {
-								return false;
-							}
-							break;
-						}
-						
-						case SDL_KEYUP:
-						{
-							if (event->key.windowID == m_windowNativeID)
-							{
-//								MSE_CORE_LOG("Window: Key released: ", event->key.keysym.sym);
-								if (m_layerManager->HandleEvent(EventTypes::KeyUp, event))
-								{
-									return true;
-								} else {
-									return callbacks[EventTypes::KeyUp](event);
-								}
-							} else {
-								return false;
-							}
-							break;
-						}
+					} else {
+						return false;
 					}
-				} else {
-					MSE_CORE_LOG("Window: An undefined event coudld not be processed due to the lack of layer manager in the window ", GetPrefs().title);
+					break;
 				}
-				return false;
+				
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
+				{
+					if (event->button.windowID == m_windowNativeID)
+					{
+//						MSE_CORE_LOG("Window: Mouse ", Platform::PeekEvent()->button.button, " button is down");
+						if (m_layerManager->HandleEvent(EventTypes::MouseButtonDown, event))
+						{
+							return true;
+						} else {
+							return callbacks[EventTypes::MouseButtonDown](event);
+						}
+					} else {
+						return false;
+					}
+					break;
+				}
+					
+				case SDL_EVENT_MOUSE_BUTTON_UP:
+				{
+					if (event->button.windowID == m_windowNativeID)
+					{
+//						MSE_CORE_LOG("Window: Mouse ", Platform::PeekEvent()->button.button, " button is up");
+						if (m_layerManager->HandleEvent(EventTypes::MouseButtonUp, event))
+						{
+							return true;
+						} else {
+							return callbacks[EventTypes::MouseButtonUp](event);
+						}
+					} else {
+						return false;
+					}
+					break;
+				}
+					
+				case SDL_EVENT_MOUSE_WHEEL:
+				{
+					if (event->wheel.windowID == m_windowNativeID)
+					{
+//						MSE_CORE_LOG("Window: Mouse wheel moved in ", Platform::PeekEvent()->wheel.y, " direction");
+						if (m_layerManager->HandleEvent(EventTypes::MouseWheel, event))
+						{
+							return true;
+						} else {
+							return callbacks[EventTypes::MouseWheel](event);
+						}
+					} else {
+						return false;
+					}
+					break;
+				}			
+					
+				case SDL_EVENT_KEY_DOWN:
+				{
+					if (event->key.windowID == m_windowNativeID)
+					{
+//						MSE_CORE_LOG("Window: Key pressed: ", event->key.keysym.sym);
+						if (m_layerManager->HandleEvent(EventTypes::KeyDown, event))
+						{
+							return true;
+						} else {
+							return callbacks[EventTypes::KeyDown](event);
+						}
+					} else {
+						return false;
+					}
+					break;
+				}
+						
+				case SDL_EVENT_KEY_UP:
+				{
+					if (event->key.windowID == m_windowNativeID)
+					{
+//						MSE_CORE_LOG("Window: Key released: ", event->key.keysym.sym);
+						if (m_layerManager->HandleEvent(EventTypes::KeyUp, event))
+						{
+							return true;
+						} else {
+							return callbacks[EventTypes::KeyUp](event);
+						}
+					} else {
+						return false;
+					}
+					break;
+				}
 			}
+		} else {
+			MSE_CORE_LOG("Window: An undefined event coudld not be processed due to the lack of layer manager in the window ", GetPrefs().title);
 		}
 		return false;
 	}

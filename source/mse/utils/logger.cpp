@@ -1,6 +1,7 @@
 #include <mse/utils/logger.h>
+#include <iostream>
 
-#include <color-console/color.hpp> // colorizing console output
+// #include <color-console/color.hpp> // colorizing console output
 
 namespace mse
 {
@@ -18,31 +19,33 @@ namespace mse
 			{
 				case 0: // engine log
 				{
-					std::cout << dye::light_yellow(m_u8string);
+					// yellow
+					std::cout << "\033[38;2;255;255;0m" << m_u8string << "\033[0m";
 					break;
 				}
 				
 				case 1: // app log
 				{
-					std::cout << dye::white(m_u8string);
+					// white
+					std::cout << "\033[38;2;255;255;255m" << m_u8string << "\033[0m";
 					break;
 				}
 				
 				case 2: // dark red
 				{
-					std::cout << dye::red(m_u8string);
+					std::cout << "\033[38;2;255;0;0m" <<  m_u8string << "\033[0m";
 					break;
 				}
 				
 				case 3: // light red
 				{
-					std::cout << dye::light_red(m_u8string);
+					std::cout << "\033[38;2;255;255;128m" << m_u8string << "\033[0m";
 					break;
 				}
 				
 				default: // no idea who's log
 				{
-					std::cout << dye::grey(m_u8string);
+					std::cout << "\033[38;2;164;164;164m" << m_u8string << "\033[0m";
 				}
 			}
 		}

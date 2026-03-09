@@ -76,7 +76,8 @@ namespace mse
 						// get the pixel color
 						SDL_GetRGB(
 							Renderer::GetPixel(image, j*fontClip.z + k, i*fontClip.w + l), 
-							image->GetSurface()->format,
+							SDL_GetPixelFormatDetails(image->GetSurface()->format),
+							SDL_GetSurfacePalette(image->GetSurface()),
 							&rgb.r, 
 							&rgb.g, 
 							&rgb.b

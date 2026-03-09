@@ -237,7 +237,7 @@ namespace mse
 		paused = true;
 		currentAnimation = EntityStates::IDLE;
 		currentFrame = 0;
-		timeBefore = SDL_GetTicks64();
+		timeBefore = SDL_GetTicks();
 		framesTotal = 0;
 	};
 	

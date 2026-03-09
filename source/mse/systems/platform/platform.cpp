@@ -12,12 +12,13 @@ namespace mse
 	
 	int Platform::InitDefault()
 	{
-		m_platformFlags = SDL_INIT_EVERYTHING;
-		m_windowFlags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
+		m_platformFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS;
+		m_windowFlags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
 		// m_rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE;
 		// m_rendererFlags = SDL_RENDERER_SOFTWARE | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE;
-		m_rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE;
-		m_imgFlags = IMG_INIT_PNG + IMG_INIT_JPG;
+		m_rendererFlags = 0;
+		// m_imgFlags = IMG_INIT_PNG + IMG_INIT_JPG;
+		m_imgFlags = 0;
 		
 		return Init(m_platformFlags, m_rendererFlags, m_windowFlags, m_imgFlags);
 	}
@@ -46,7 +47,7 @@ namespace mse
 		*/
 		
 		// Initialize SDL Core
-		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) < 0)
 		{
 			MSE_CORE_LOG("Platform: Error initializing SDL");
 			std::exit(-1);
@@ -54,19 +55,22 @@ namespace mse
 		MSE_CORE_LOG("Platform: SDL initialized.");
 		
 		// Initialize SDL Image
+		/*
 		if (!(IMG_Init(imgFlags) & imgFlags))
 		{
-			MSE_CORE_LOG("Platform: SDL_image could not initialize! SDL_image Error: ", IMG_GetError());
+			MSE_CORE_LOG("Platform: SDL_image could not initialize! SDL_image Error: ", SDL_GetError());
 			SDL_Quit();
 			std::exit(-2);
 		}
+		*/
 		MSE_CORE_LOG("Platform: SDL_image online.");
 		
 		// Initialize SDL_mixer 
-		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) 
+		if (MIX_Init() < 0) 		
+//		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) 
 		{ 
-			MSE_CORE_LOG( "Platform: SDL_mixer could not initialize! SDL_mixer Error: ", Mix_GetError() );
-			IMG_Quit();
+			MSE_CORE_LOG( "Platform: SDL_mixer could not initialize! SDL_mixer Error: ", SDL_GetError() );
+//			IMG_Quit();
 			SDL_Quit();
 			std::exit(-3);
 		}
@@ -98,9 +102,9 @@ namespace mse
 		SDL_Window* window = nullptr;
 		if (winFlags < 0)
 		{
-			window = SDL_CreateWindow(title, x, y, width, height, winFlags);
+			window = SDL_CreateWindow(title, width, height, winFlags);
 		} else {
-			window = SDL_CreateWindow(title, x, y, width, height, m_windowFlags);
+			window = SDL_CreateWindow(title, width, height, m_windowFlags);
 		}
 		
 		MSE_CORE_ASSERT(window != NULL, "Error creating window: ", SDL_GetError());
@@ -152,10 +156,12 @@ namespace mse
                 }
             case 2:
                 {
+                    /*
                     if (SDL_SetWindowFullscreen((SDL_Window*)window, SDL_WINDOW_FULLSCREEN_DESKTOP))
                     {
                         MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
                     }
+                    */
                     break;
                 }
             default:
@@ -212,7 +218,8 @@ namespace mse
 	
 	void* Platform::InitRenderer(void* window)
 	{
-		SDL_Renderer* renderer = SDL_CreateRenderer((SDL_Window*)window, -1, m_rendererFlags);
+//		SDL_Renderer* renderer = SDL_CreateRenderer((SDL_Window*)window, -1, m_rendererFlags);
+		SDL_Renderer* renderer = SDL_CreateRenderer((SDL_Window*)window, NULL);		
 		MSE_CORE_ASSERT(renderer != NULL, "Renderer could not be created! SDL Error: ", SDL_GetError());
 		
 		MSE_CORE_LOG("Platform: Renderer initialized.");
@@ -231,9 +238,9 @@ namespace mse
 		m_eventListener = nullptr;
 		
 		// quit systems
-		Mix_Quit();
+		MIX_Quit();
 		MSE_CORE_LOG("Platform: SDL_mixer offline.");
-		IMG_Quit();
+//		IMG_Quit();
 		MSE_CORE_LOG("Platform: SDL_image offline.");
 		SDL_Quit();
 		MSE_CORE_LOG("Platform: SDL offline.");

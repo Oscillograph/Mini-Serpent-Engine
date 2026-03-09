@@ -205,7 +205,7 @@ namespace mse
                     }
                     valueChanged = true;
                     SDL_Event* e = new SDL_Event();
-                    e->type = SDL_EventType::SDL_USEREVENT;
+                    e->type = SDL_EVENT_USER;
                     SDL_PushEvent(e);
                     
                     float areaPercentage = *var / varMax;

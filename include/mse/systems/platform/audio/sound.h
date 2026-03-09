@@ -18,11 +18,11 @@ namespace mse
         
         void Free();
         
-        inline Mix_Chunk* GetAudio() { return m_audio; }
+        inline MIX_Audio* GetAudio() { return m_audio; }
 		
 	protected:
         std::string m_path = "";
-        Mix_Chunk* m_audio = nullptr;
+        MIX_Audio* m_audio = nullptr;
 	};
 }
 

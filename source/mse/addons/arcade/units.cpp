@@ -14,6 +14,7 @@ namespace mse
 {
 	namespace Arcade
 	{
+		/*
 		std::vector<Unit*> CollectionManager::PresetUnitCollection = {};
 //		std::vector<SpriteUnit*> CollectionManager::PresetSpriteUnitCollection = {};
 //		std::vector<Doodad*> CollectionManager::PresetDoodadCollection = {};
@@ -36,9 +37,9 @@ namespace mse
 				PresetUnitCollection.erase(it);
 			}
 		}
+		*/
 		
 		// ================== Unit
-		
 		Unit::Unit(
 			Scene* scene,
 			Window* window,
@@ -58,7 +59,6 @@ namespace mse
 			m_Entity = scene->CreateEntity(name);
 			m_EntityID = m_Entity->GetID();
 			m_Scene = scene;
-			
 		}
 		
 		Unit::~Unit()
@@ -77,7 +77,7 @@ namespace mse
 			// physical position
 			PositionComponent& position = m_Entity->AddComponent<PositionComponent>(10, 0);
 			position.direction = 1; // 1 means right, -1 means left
-			MSE_CORE_LOG("Entity ID: ", (uint32_t)(m_Entity->GetID()), "\; Position: ", m_Entity->GetComponent<PositionComponent>().x, ", ", m_Entity->GetComponent<PositionComponent>().y);
+			MSE_CORE_LOG("Entity ID: ", (uint32_t)(m_Entity->GetID()), "\\; Position: ", m_Entity->GetComponent<PositionComponent>().x, ", ", m_Entity->GetComponent<PositionComponent>().y);
 			
 			// state machine setup
 			// TODO: Allow set up states manually
@@ -112,7 +112,7 @@ namespace mse
 			stateMachine.SetState(EntityStates::STAND);
 			
 			// controls setup
-			KeyBoardComponent& keyboard = m_Entity->AddComponent<KeyBoardComponent>(m_keyboardControls);
+//			KeyBoardComponent& keyboard = m_Entity->AddComponent<KeyBoardComponent>(m_keyboardControls);
 			
 			// physics setup
 			PhysicsComponent& physicsComponent = m_Entity->AddComponent<PhysicsComponent>();
@@ -175,7 +175,7 @@ namespace mse
 			glm::uvec2 startPoint = {0 , 0};
 			glm::uvec2 endPoint = {0, 0};
 			
-			for (int i = 0; i < animationStates.size(); i++)
+			for (size_t i = 0; i < animationStates.size(); i++)
 			{
 				startPoint = {0, i * frameSize.y};
 				endPoint = {((Texture*)(m_SpriteTexture->data))->GetWidth(), (i * frameSize.y + frameSize.y)};

@@ -38,10 +38,10 @@ namespace mse
         } 
         
         m_path = path;
-        m_audio = Mix_LoadWAV(path.c_str());
+        m_audio = MIX_LoadAudio(NULL, path.c_str(), false);
         if (!m_audio)
         {
-            MSE_CORE_LOG("Sound ", m_path.c_str(), " could not be loaded: ", Mix_GetError());
+            MSE_CORE_LOG("Sound ", m_path.c_str(), " could not be loaded: ", SDL_GetError());
             return;
         }
         
@@ -50,7 +50,7 @@ namespace mse
     
     void Sound::Free()
     {
-        Mix_FreeChunk(m_audio);
+        MIX_DestroyAudio(m_audio);
         MSE_CORE_LOG("Sound ", m_path.c_str(), " unloaded");
     }
 }
