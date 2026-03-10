@@ -77,3 +77,6 @@ target_link_libraries(proto-snake PUBLIC
     yaml-cpp
     )
 target_link_libraries(proto-snake PRIVATE -lpthread "-Wl,-rpath,./bin")
+
+# actually, chalkboard, protosnake, lesta-autobattler and dungeontris shouldn't share the same /out/lesta-autobattler directory, but I didn't plan ahead
+install(TARGETS chalkboard proto-snake lesta-autobattler dungeontris RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out/lesta-autobattler)

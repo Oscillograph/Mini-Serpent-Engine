@@ -63,6 +63,11 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     yaml-cpp
     )
 target_link_libraries(${PROJECT_NAME} PRIVATE -lpthread "-Wl,-rpath,./bin")
+install(TARGETS ${PROJECT_NAME} 
+	RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out
+	LIBRARY DESTINATION ${MSE_BASE_SOURCE_DIR}/out
+	ARCHIVE DESTINATION ${MSE_BASE_SOURCE_DIR}/out
+	)
 
 # build examples
 add_subdirectory(${MSE_BASE_SOURCE_DIR}/examples)
