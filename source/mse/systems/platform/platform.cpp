@@ -47,7 +47,7 @@ namespace mse
 		*/
 		
 		// Initialize SDL Core
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) < 0)
+		if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS))
 		{
 			MSE_CORE_LOG("Platform: Error initializing SDL");
 			std::exit(-1);
@@ -66,7 +66,7 @@ namespace mse
 		MSE_CORE_LOG("Platform: SDL_image online.");
 		
 		// Initialize SDL_mixer 
-		if (MIX_Init() < 0) 		
+		if (!MIX_Init())
 //		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) 
 		{ 
 			MSE_CORE_LOG( "Platform: SDL_mixer could not initialize! SDL_mixer Error: ", SDL_GetError() );

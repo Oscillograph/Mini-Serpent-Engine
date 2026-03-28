@@ -8,17 +8,12 @@ set_target_properties(mse PROPERTIES IMPORTED_LOCATION ${MSE_BASE_SOURCE_DIR}/bu
 
 add_executable(lesta-autobattler
     lesta-autobattler.cpp
-#    lesta-autobattler/data-loader.h
     lesta-autobattler/data-loader.cpp
-#    lesta-autobattler/game-data.h
-#    lesta-autobattler/game-fwd.h
     lesta-autobattler/game.cpp
-#    lesta-autobattler/gamestates.h
     lesta-autobattler/gamestates.cpp
-#    lesta-autobattler/layers.h
     lesta-autobattler/layers.cpp)
 target_include_directories(lesta-autobattler PUBLIC ${MSE_BASE_SOURCE_DIR}/examples)
-target_compile_options(lesta-autobattler PRIVATE -Wall -Wfatal-errors)
+target_compile_options(lesta-autobattler PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
 target_link_libraries(lesta-autobattler PUBLIC 
     mse
     sdl3
@@ -27,21 +22,16 @@ target_link_libraries(lesta-autobattler PUBLIC
     sdl3_ttf
     yaml-cpp
     )
-target_link_libraries(lesta-autobattler PRIVATE -lpthread "-Wl,-rpath,./bin")
+target_link_libraries(lesta-autobattler PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
     
 add_executable(dungeontris
     dungeontris.cpp
-#    dungeontris/data-loader.h
     dungeontris/data-loader.cpp
-#    dungeontris/game-data.h
-#    dungeontris/game-fwd.h
     dungeontris/game.cpp
-#    dungeontris/gamestates.h
     dungeontris/gamestates.cpp
-#    dungeontris/layers.h
     dungeontris/layers.cpp)
 target_include_directories(dungeontris PUBLIC ${MSE_BASE_SOURCE_DIR}/examples)
-target_compile_options(dungeontris PRIVATE -Wall -Wfatal-errors)
+target_compile_options(dungeontris PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
 target_link_libraries(dungeontris PUBLIC
     mse
     sdl3
@@ -50,11 +40,11 @@ target_link_libraries(dungeontris PUBLIC
     sdl3_ttf
     yaml-cpp
     )
-target_link_libraries(dungeontris PRIVATE -lpthread "-Wl,-rpath,./bin")
+target_link_libraries(dungeontris PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
     
 add_executable(chalkboard
     chalkboard.cpp)
-target_compile_options(chalkboard PRIVATE -Wall -Wfatal-errors)
+target_compile_options(chalkboard PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
 target_link_libraries(chalkboard PUBLIC
     mse
     sdl3
@@ -63,11 +53,11 @@ target_link_libraries(chalkboard PUBLIC
     sdl3_ttf
     yaml-cpp
     )
-target_link_libraries(chalkboard PRIVATE -lpthread "-Wl,-rpath,./bin")
+target_link_libraries(chalkboard PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
     
 add_executable(proto-snake
     proto-snake.cpp)
-target_compile_options(proto-snake PRIVATE -Wall -Wfatal-errors)
+target_compile_options(proto-snake PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
 target_link_libraries(proto-snake PUBLIC
     mse
     sdl3
@@ -76,7 +66,7 @@ target_link_libraries(proto-snake PUBLIC
     sdl3_ttf
     yaml-cpp
     )
-target_link_libraries(proto-snake PRIVATE -lpthread "-Wl,-rpath,./bin")
+target_link_libraries(proto-snake PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
 
 # actually, chalkboard, protosnake, lesta-autobattler and dungeontris shouldn't share the same /out/lesta-autobattler directory, but I didn't plan ahead
 install(TARGETS chalkboard proto-snake lesta-autobattler dungeontris RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out/lesta-autobattler)

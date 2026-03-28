@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.28)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(GCC_GLOBAL_COMPILER_SETTINGS -Wall -Wextra -Wfatal-errors -O2)
+set(GCC_GLOBAL_LINKER_SETTINGS "-Wl,-rpath,./bin")
 
 # set the project name
 project(Mini_Serpent_Engine)

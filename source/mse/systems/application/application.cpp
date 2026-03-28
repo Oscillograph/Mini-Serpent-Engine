@@ -187,6 +187,11 @@ namespace mse
 							m_shouldExit = true;
 							break;
 						}
+
+						default:
+						{
+							// don't do anything
+						}
 					}
 					
 					for (Window* window : WindowManager::GetWindows())
