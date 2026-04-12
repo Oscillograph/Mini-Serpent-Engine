@@ -34,20 +34,17 @@ namespace mse
 		/*
 		* - `SDL_INIT_TIMER`: timer subsystem
 		* - `SDL_INIT_AUDIO`: audio subsystem
-		* - `SDL_INIT_VIDEO`: video subsystem; automatically initializes the events
-		*   subsystem
-		* - `SDL_INIT_JOYSTICK`: joystick subsystem; automatically initializes the
-		*   events subsystem
+		* - `SDL_INIT_VIDEO`: video subsystem; automatically initializes the events subsystem
+		* - `SDL_INIT_JOYSTICK`: joystick subsystem; automatically initializes the events subsystem
 		* - `SDL_INIT_HAPTIC`: haptic (force feedback) subsystem
-		* - `SDL_INIT_GAMECONTROLLER`: controller subsystem; automatically
-		*   initializes the joystick subsystem
+		* - `SDL_INIT_GAMECONTROLLER`: controller subsystem; automatically initializes the joystick subsystem
 		* - `SDL_INIT_EVENTS`: events subsystem
 		* - `SDL_INIT_EVERYTHING`: all of the above subsystems
 		* - `SDL_INIT_NOPARACHUTE`: compatibility; this flag is ignored
 		*/
 		
 		// Initialize SDL Core
-		if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS))
+		if (!SDL_Init(m_platformFlags))
 		{
 			MSE_CORE_LOG("Platform: Error initializing SDL");
 			std::exit(-1);
@@ -62,8 +59,8 @@ namespace mse
 			SDL_Quit();
 			std::exit(-2);
 		}
-		*/
 		MSE_CORE_LOG("Platform: SDL_image online.");
+		*/
 		
 		// Initialize SDL_mixer 
 		if (!MIX_Init())
@@ -241,7 +238,7 @@ namespace mse
 		MIX_Quit();
 		MSE_CORE_LOG("Platform: SDL_mixer offline.");
 //		IMG_Quit();
-		MSE_CORE_LOG("Platform: SDL_image offline.");
+//		MSE_CORE_LOG("Platform: SDL_image offline.");
 		SDL_Quit();
 		MSE_CORE_LOG("Platform: SDL offline.");
 		

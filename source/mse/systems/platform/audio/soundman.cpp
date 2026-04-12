@@ -1,3 +1,6 @@
+#include "SDL3/SDL_audio.h"
+#include "SDL3/SDL_mixer.h"
+#include "mse/utils/logger.h"
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/platform/audio/sound.h>
@@ -5,12 +8,13 @@
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/application/application.h>
 
-// TODO: Update for SDL3_Mixer
+// TODO: Rewrite Soundman API to avoid confusion between what Track means in SDL and what Track means here. Or leave it as it is.
 
 namespace mse
 {
     std::unordered_map<std::string, Sound*> SoundMan::sounds_bank = {};
     std::unordered_map<std::string, Track*> SoundMan::tracks_bank = {};
+    std::unordered_map<int, MIX_Track*> SoundMan::channels = {};
     std::vector<std::string> SoundMan::tracks_playlist = {};
     int SoundMan::tracks_playlist_current = -1;
     
@@ -18,37 +22,42 @@ namespace mse
     bool SoundMan::music_enabled = true;
     bool SoundMan::sounds_enabled = true;
     bool SoundMan::play_in_background = false;
-    int SoundMan::channels = 8;
+
+    MIX_Mixer* SoundMan::mixer = NULL;
+
+    int SoundMan::channels_max = 8;
     // MIX_CHANNELS is 8 by default
-    std::unordered_map<int, int> SoundMan::sounds_volume {
-        {0, 1.0f},
-        {1, 1.0f},
-        {2, 1.0f},
-        {3, 1.0f},
-        {4, 1.0f},
-        {5, 1.0f},
-        {6, 1.0f},
-        {7, 1.0f},
-    };
-    int SoundMan::tracks_volume = 1.0f;
+    std::unordered_map<int, float> SoundMan::sounds_volume {};
+    float SoundMan::tracks_volume = 1.0f;
     
-    void SoundMan::SetUpChannels(int number)
+    void SoundMan::Init(int channels_count)
     {
-        /*
-        channels = MIX_CreateTrack(number);
-        for (int i = 0; i < number; ++i)
+        // General plan if channels_count is more than 1:
+        // channel 0 - for background music
+        // channel 1..7 - for sounds (including characters speech)
+
+        if (channels_count > channels_max)
         {
-            sounds_volume[i] = Application::config.soundsVolume;
-            Mix_Volume(i, sounds_volume[i]);
+            channels_count = channels_max;
         }
-        
-        Mix_VolumeMusic(tracks_volume);
-        */
+
+        mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
+        if (!mixer)
+        {
+            MSE_CORE_ERROR("SoundMan: couldn't create mixer on default device: ", SDL_GetError());
+        }
+
+        for (int i = 0; i < channels_count; ++i)
+        {
+            channels[i] = MIX_CreateTrack(mixer);
+
+            sounds_volume[i] = Application::config.soundsVolume;
+            MIX_SetTrackGain(channels[i], sounds_volume[i]);
+        }
     }
     
     void SoundMan::LoadSounds(const std::vector<std::string>& paths)
     {
-        /*
         Sound* sound = nullptr;
         MSE_CORE_LOG("SoundMan: Load ", paths.size(), " sounds");
         for (int i = 0; i < paths.size(); ++i)
@@ -61,12 +70,10 @@ namespace mse
                 sounds_bank[paths[i]] = sound;
             }
         }
-        */
     }
     
     void SoundMan::LoadTracks(const std::vector<std::string>& paths)
     {
-        /*
         Track* track = nullptr;
         MSE_CORE_LOG("SoundMan: Load ", paths.size(), " tracks");
         for (int i = 0; i < paths.size(); ++i)
@@ -83,7 +90,6 @@ namespace mse
                 }
             }
         }
-        */
     }
     
     void SoundMan::LoadPlaylist(const std::vector<std::string>& paths)
@@ -135,6 +141,11 @@ namespace mse
         MSE_CORE_LOG("SoundMan: Shutdown...")
         StopAll();
         DropBanks();
+
+        for (int i = 0; i < channels_max; ++i)
+        {
+            MIX_DestroyTrack(channels[i]);
+        }
         MSE_CORE_LOG("SoundMan: Shutdown complete.");
     }
     
@@ -147,10 +158,16 @@ namespace mse
         
         if (sounds_bank.find(path) != sounds_bank.end())
         {
-        	/*
-            Mix_PlayChannel(-1, sounds_bank[path]->GetAudio(), 0);
+            for (size_t i = 0; i < channels.size(); ++i)
+            {
+                if (!MIX_TrackPlaying(channels[i]))
+                {
+                    MIX_SetTrackAudio(channels[i], sounds_bank[path]->GetAudio());
+                    MIX_PlayTrack(channels[i], 0);
+                }
+            }
+
             MSE_CORE_LOG("SoundMan: Playing ", path.c_str());
-            */
             return true;
         }
         
@@ -160,23 +177,16 @@ namespace mse
     
     bool SoundMan::IsPlayingTrack()
     {
-        if (MIX_TrackPlaying(NULL))
-        {
-//            MSE_CORE_LOG("SoundMan: is playing music");
-            return true;
-        }
-//        MSE_CORE_LOG("SoundMan: is not playing music");
-        return false;
+        return MIX_TrackPlaying(channels[0]);
     }
     
     bool SoundMan::PlayTrack(const std::string& path)
     {
         if (tracks_bank.find(path) != tracks_bank.end())
         {
-            /*
-            Mix_PlayMusic(tracks_bank[path]->GetAudio(), 0);
+            MIX_SetTrackAudio(channels[0], tracks_bank[path]->GetAudio());
+            MIX_PlayTrack(channels[0], 0);
             MSE_CORE_LOG("SoundMan: Playing ", path.c_str());
-            */
             return true;
         }
         
@@ -207,32 +217,32 @@ namespace mse
     
     void SoundMan::StopTrack()
     {
-        /*
-        if (MIX_TrackPlaying())
+        if (MIX_TrackPlaying(channels[0]))
         {
-            Mix_HaltMusic();
+            MIX_StopTrack(channels[0], 0);
         }
-        */
+
+        MSE_CORE_LOG("SoundMan: Stopped ");
     }
     
     void SoundMan::PauseTrack()
     {
-        /*
-        if (!Mix_PausedMusic())
+        if (MIX_TrackPlaying(channels[0]))
         {
-            Mix_PauseMusic();
+            MIX_PauseTrack(channels[0]);
         }
-        */
+
+        MSE_CORE_LOG("SoundMan: Paused ");
     }
     
     void SoundMan::UnPauseTrack()
     {
-        /*
-        if (Mix_PausedMusic())
+        if (MIX_TrackPaused(channels[0]))
         {
-            Mix_ResumeMusic();
+            MIX_ResumeTrack(channels[0]);
         }
-        */
+
+        MSE_CORE_LOG("SoundMan: Resumed music");
     }
     
     // for the lazyiest dev in the world
@@ -242,7 +252,7 @@ namespace mse
         {
             return true;
         }
-        if (!PlayTrack(path))
+        if (PlayTrack(path))
         {
             return true;
         }
@@ -251,74 +261,61 @@ namespace mse
     
     void SoundMan::PauseAll()
     {
-        /*
-        for (int i = 0; i < channels; ++i)
+        for (size_t i = 0; i < channels.size(); ++i)
         {
-            if (Mix_Playing(i))
+            if (MIX_TrackPlaying(channels[i]))
             {
-                Mix_Pause(i);
+                MIX_PauseTrack(channels[i]);
             }
         }
-        if (Mix_PlayingMusic())
-        {
-            Mix_PauseMusic();
-        }
-        */
+
         paused = true;
+        MSE_CORE_LOG("SoundMan: Paused all tracks ");
     }
     
     void SoundMan::UnPauseAll()
     {
-        /*
-        for (int i = 0; i < channels; ++i)
+        for (size_t i = 0; i < channels.size(); ++i)
         {
-            if (Mix_Paused(i))
+            if (MIX_TrackPaused(channels[i]))
             {
-                Mix_Resume(i);
+                MIX_ResumeTrack(channels[i]);
             }
         }
-        if (Mix_PausedMusic())
-        {
-            Mix_ResumeMusic();
-        }
-        */
+
         paused = false;
+        MSE_CORE_LOG("SoundMan: Resumed all tracks ");
     }
     
     void SoundMan::StopAll()
     {
-        /*
-        for (int i = 0; i < channels; ++i)
+        for (size_t i = 0; i < channels.size(); ++i)
         {
-            if (Mix_Playing(i))
+            if (MIX_TrackPlaying(channels[i]))
             {
-                Mix_HaltChannel(i);
+                MIX_StopTrack(channels[i], 0);
             }
         }
-        if (Mix_PlayingMusic())
-        {
-            Mix_HaltMusic();
-        }
-        */
+
+        MSE_CORE_LOG("SoundMan: Stopped all tracks ");
     }
     
-    void SoundMan::AdjustSoundsVolume(int level)
+    void SoundMan::AdjustSoundsVolume(float level)
     {
-        /*
-        for (int i = 0; i < channels; ++i)
+        for (size_t i = 0; i < channels.size(); ++i)
         {
-            Mix_Volume(i, level);
             sounds_volume[i] = level;
+            MIX_SetTrackGain(channels[i], sounds_volume[i]);
         }
-        */
+
         MSE_CORE_LOG("SoundMan: sounds volume changed to ", level);
     }
     
-    void SoundMan::AdjustTrackVolume(int level)
+    void SoundMan::AdjustTrackVolume(float level)
     {
         PauseTrack();
-//        Mix_VolumeMusic(level);
         tracks_volume = level;
+        MIX_SetTrackGain(channels[0], tracks_volume);
         MSE_CORE_LOG("SoundMan: music volume changed to ", tracks_volume);
         UnPauseTrack();
     }

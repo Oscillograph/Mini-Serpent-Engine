@@ -36,7 +36,7 @@ namespace mse
 		WindowManager::Init();
 		ResourceManager::Init();
 		SceneManager::Init();
-        SoundMan::SetUpChannels();
+        SoundMan::Init();
 		
 		// default callbacks
 		callbacks[EventTypes::None] = [&](SDL_Event* event) { return false; };

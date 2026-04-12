@@ -1,6 +1,7 @@
 #ifndef MSE_SYSTEMS_PLATFORM_AUDIO_SOUNDMAN_H
 #define MSE_SYSTEMS_PLATFORM_AUDIO_SOUNDMAN_H
 
+#include "SDL3/SDL_mixer.h"
 #include <mse/core.h>
 #include <mse/systems/platform/platform.h>
 
@@ -20,7 +21,7 @@ namespace mse
 	{
 	public:
 		// system setup and utilities
-        static void SetUpChannels(int number = 8);
+        static void Init(int channels_count = 8);
 		static void LoadSounds(const std::vector<std::string>& paths);
         static void LoadTracks(const std::vector<std::string>& paths);
         static void LoadPlaylist(const std::vector<std::string>& paths);
@@ -45,8 +46,8 @@ namespace mse
         static void UnPauseAll();
         static void StopAll();
         
-        static void AdjustSoundsVolume(int level);
-        static void AdjustTrackVolume(int level);
+        static void AdjustSoundsVolume(float level);
+        static void AdjustTrackVolume(float level);
         
 		// mid-level methods - sound sources and environments, listener modelling
 		
@@ -60,11 +61,13 @@ namespace mse
         static bool music_enabled;
         static bool sounds_enabled;
         static bool play_in_background;
-        static std::unordered_map<int, int> sounds_volume;
-        static int tracks_volume;
+        static std::unordered_map<int, float> sounds_volume;
+        static std::unordered_map<int, MIX_Track*> channels;
+        static float tracks_volume;
         
         static bool paused;
-        static int channels;
+        static int channels_max;
+        static MIX_Mixer* mixer;
 	};
 }
 

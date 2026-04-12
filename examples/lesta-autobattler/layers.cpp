@@ -1464,14 +1464,14 @@ void SettingsUILayer::OnUpdate(mse::TimeType t)
         MSE_CORE_LOG("musicVolumeSlider");
         musicVolumeSlider->valueChanged = false;
         mse::Application::config.musicVolume = game.config.musicVolume;
-        mse::SoundMan::AdjustTrackVolume((int)roundf(mse::Application::config.musicVolume));
+        mse::SoundMan::AdjustTrackVolume(mse::Application::config.musicVolume);
     }
     if (soundsVolumeSlider->valueChanged)
     {
         MSE_CORE_LOG("soundsVolumeSlider");
         soundsVolumeSlider->valueChanged = false;
         mse::Application::config.soundsVolume = game.config.soundsVolume;
-        mse::SoundMan::AdjustSoundsVolume((int)roundf(mse::Application::config.soundsVolume));
+        mse::SoundMan::AdjustSoundsVolume(mse::Application::config.soundsVolume);
     }
 }
 

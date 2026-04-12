@@ -126,6 +126,7 @@ public:
         
         mse::SoundMan::LoadSounds({
             "data/audio/sounds/click.wav",
+//            "data/audio/sounds/click_old.wav", // WAVEX format somehow bugged on a certain Arch installation
             "data/audio/sounds/samplefocus.com-sword-cut-fx.wav",
             "data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav",
             "data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav",
