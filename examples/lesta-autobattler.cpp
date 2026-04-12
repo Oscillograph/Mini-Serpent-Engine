@@ -121,7 +121,7 @@ public:
         mse::SoundMan::AdjustSoundsVolume(game.config.soundsVolume);
         if (config.fullscreen)
         {
-            m_window->ToggleFullscreen(2);
+            m_window->ToggleFullscreen(1);
         }
         
         mse::SoundMan::LoadSounds({

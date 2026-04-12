@@ -302,7 +302,7 @@ namespace mse
     
     void SoundMan::AdjustSoundsVolume(float level)
     {
-        for (size_t i = 0; i < channels.size(); ++i)
+        for (size_t i = 1; i < channels.size(); ++i)
         {
             sounds_volume[i] = level;
             MIX_SetTrackGain(channels[i], sounds_volume[i]);

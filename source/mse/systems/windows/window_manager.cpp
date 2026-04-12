@@ -31,6 +31,11 @@ namespace mse
 	Window* WindowManager::CreateWindow(const std::string& title, int x, int y, int width, int height, int flags)
 	{
 		MSE_CORE_LOG("Window manager: open a window");
+		if (flags == -1)
+		{
+			// default window flags
+			flags = SDL_WINDOW_RESIZABLE;
+		}
 		Window* window = new Window(title, x, y, width, height, flags);
 		m_windows.emplace(m_windows.begin() + m_windowInsertIndex, window);
 		m_windowInsertIndex++;

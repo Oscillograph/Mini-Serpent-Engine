@@ -579,7 +579,7 @@ void CreditsUILayer::OnInit()
                                   1));
     AddElement(new mse::gui::Text(
                                   this, 
-                                  U"SDL2, utf8-cpp, Color Console\nYAML-cpp, GLM, EnTT, SDL-Mixer", 
+                                  U"SDL3, utf8-cpp, I use Arch btw,\nYAML-cpp, GLM, EnTT, SDL-Mixer",
                                   {60, 110, 240, 20}, 
                                   {0, 0, 0, 255}, 
                                   {196, 196, 196, 255},

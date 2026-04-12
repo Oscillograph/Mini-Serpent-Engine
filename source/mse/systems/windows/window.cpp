@@ -64,9 +64,9 @@ namespace mse
     
     void Window::ToggleFullscreen(int mode)
     {
-        if (!m_isFullscreen || (mode == 2))
+        if (!m_isFullscreen || (mode == 1))
         {
-            Platform::ToggleWindowFullScreen(m_windowNative, 2);
+            Platform::ToggleWindowFullScreen(m_windowNative, 1);
             m_isFullscreen = true;
         } else {
             Platform::ToggleWindowFullScreen(m_windowNative, 0);

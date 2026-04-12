@@ -1,3 +1,4 @@
+#include "SDL3/SDL_video.h"
 #include <mse/core.h>
 #include <mse/systems/platform/platform.h>
 
@@ -105,9 +106,16 @@ namespace mse
 		}
 		
 		MSE_CORE_ASSERT(window != NULL, "Error creating window: ", SDL_GetError());
+		SDL_SetWindowMinimumSize(window, width, height);
 		
 		MSE_CORE_LOG("Platform: created a window \"", title, "\"");
 		return (void*)window;
+	}
+
+	void* Platform::ResizeWindow(void* window, int width, int height)
+	{
+		SDL_SetWindowSize((SDL_Window*)window, width, height);
+		MSE_CORE_LOG("Platform: resized window to ", width, "x", height);
 	}
 	
 	int Platform::DestroyWindow(void* window)
@@ -145,25 +153,26 @@ namespace mse
             {
             case 1:
                 {
-                    if (SDL_SetWindowFullscreen((SDL_Window*)window, SDL_WINDOW_FULLSCREEN))
-                    {
-                        MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
-                    }
+					// Maximized window mode
+					if (!SDL_MaximizeWindow((SDL_Window*)window))
+					{
+						MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
+					}
                     break;
                 }
             case 2:
                 {
-                    /*
-                    if (SDL_SetWindowFullscreen((SDL_Window*)window, SDL_WINDOW_FULLSCREEN_DESKTOP))
-                    {
-                        MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
-                    }
-                    */
+					// Fullscreen borderless mode
+					if (!SDL_SetWindowFullscreen((SDL_Window*)window, true))
+					{
+						MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
+					}
                     break;
                 }
             default:
                 {
-                    if (SDL_SetWindowFullscreen((SDL_Window*)window, 0))
+					// Usual window mode
+                    if (!SDL_RestoreWindow((SDL_Window*)window))
                     {
                         MSE_CORE_ERROR("SDL Fullscreen Error: ", SDL_GetError())
                     }

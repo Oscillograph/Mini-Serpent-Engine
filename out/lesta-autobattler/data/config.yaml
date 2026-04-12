@@ -1,7 +1,7 @@
 Music: false
 MusicVolume: 1
 Sounds: false
-SoundsVolume: 1
+SoundsVolume: 0.0625
 PlayInBackground: true
 Fullscreen: true
 TurnLength: 0

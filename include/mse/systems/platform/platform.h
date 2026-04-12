@@ -21,6 +21,7 @@ namespace mse
 		
 		// Windowing
 		static void* CreateWindow(const char* title, int x, int y, int width, int height, uint32_t winFlags);
+		static void* ResizeWindow(void* window, int width, int height);
 		static Uint32 GetWindowID(void* window) { return SDL_GetWindowID((SDL_Window*)window); }
 		static int DestroyWindow(void* window);
 		static int SetWindowTitle(void* window, std::string& title);
