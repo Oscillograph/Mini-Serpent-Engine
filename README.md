@@ -13,9 +13,10 @@ Currently MSE has:
 + Platform system which consists of a simple 2D Renderer, Window management and events listener which all are bound to SDL;
 + Resource management system which doesn't plot allocated memory structure yet;
 + Window management system to provide access to windows created by the app in runtime;
++ Sound management system which doesn't plot allocated memory structure yet and isn't very cooperative with Resource manager;
 + Individual Layer manegement system per window;
 + Layers which are attached to windows by the engine user's design and can have graphical user interface (GUI) items which have their own editable callbacks;
-+ GUI items (Canvas and a generic Button);
++ GUI items (Canvas, generic button, slider (vertical and horizontal), textbox, checkbox);
 + Application class itself;
 + Bitmap fonts support (if the font was not developed specifically for MSE, the alphabet might need to be hardcoded though).
 
@@ -27,6 +28,7 @@ Currently MSE has:
 + /external - external libraries developed by someone else
 + /examples - example apps using MSE
 + /include - header files
++ /lib - static libraries
 + /src - source files
 + /out - output .exe here
 + /tests - tests (TODO: implement them)
@@ -91,26 +93,32 @@ mse::Application* mse::CreateApplication()
 That's it -- you're ready to have fun!
 
 ## Build notes ##
-MSE is built using TDM-GCC via Red Panda C++ IDE.
+MSE is built using GCC-based compilers that support C++17. It utilizes power of CMake 3.28+, and from February 2026 its main supported OS is Linux (due to personal circumstances).
 
-Linker options:
+To build the engine and its examples, open the directory where your MSE repository copy resides and use the following commands:
 ```
--lmingw32_@@_-lSDL2main_@@_-lSDL2_@@_-lSDL2_image_@@_-lSDL2_mixer
+cmake -S . -B build
+cd build
+make
+make install
 ```
-(Obviously, there should be compiled libraries for SDL2, SDL_image and SDL_mixer)
+The first line creates "build" directory in the repository root and configures compiler instructions there.  
+The second line walks into said directory so that make commands could do their job.  
+the third line compiles the engine and its examples, and the last line moves compiled examples into "out" directory in the repository root.  
 
-Includes directories should contain:
-- SDL/include
-- Mini Serpent Engine/include
-- Mini Serpent Engine/external
+Feel free to look inside CMakeLists.txt to understand how to build your own project with MSE. Its scripts are actually quite primitive.
 
-A precompiled header can dramatically decrease compilation time:
-mse/common.h
+## Dev notes ##
+If you, like me, use an LSP server, you might want to make a symlink for compiler_commands.json from "build" directory and put it in the repository root so that your automated code analysis and autocompletion features could work properly.
 
 ## Tech Stack ##
 + **C++17** (almost everything)
 + **[UTF8-CPP](https://github.com/nemtrif/utfcpp)** (unicode strings support)
-+ **[SDL2](https://github.com/libsdl-org/SDL)** (windowing, events listening, rendering, sounds)
++ **[SDL3](https://github.com/libsdl-org/SDL)** (windowing, events listening, rendering)
++ **[SDL3_Mixer](https://github.com/libsdl-org/SDL_mixer)** (audio management)
++ **[SDL_ttf](https://github.com/libsdl-org/SDL_ttf/)** (TrueType fonts management)
++ **[SDL_Image](https://github.com/libsdl-org/SDL_image/)** (load and process various image formats)
 + **[GLM](https://github.com/g-truc/glm)** (math library)
 + **[Color Console](https://github.com/aafulei/color-console)** (Windows-only)
 + **[EnTT](https://github.com/skypjack/entt)** (entities and components management in scenes)
++ **[YAML-CPP](https://github.com/jbeder/yaml-cpp)** (YAML parsing)
