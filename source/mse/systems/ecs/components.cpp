@@ -219,7 +219,9 @@ namespace mse
 	// Animation Component
 	AnimationComponent::AnimationComponent()
 	{
-		paused = true;
+		paused = false;
+		started = false;
+		stopped = false;
 		currentAnimation = EntityStates::IDLE;
 		currentFrame = 0;
 		timeBefore = Platform::GetTimeMs();
@@ -234,7 +236,9 @@ namespace mse
 	AnimationComponent::AnimationComponent(std::unordered_map<int, AnimationFrames*>& f)
 	: frames(f) 
 	{
-		paused = true;
+		paused = false;
+		started = false;
+		stopped = false;
 		currentAnimation = EntityStates::IDLE;
 		currentFrame = 0;
 		timeBefore = SDL_GetTicks();
@@ -265,14 +269,26 @@ namespace mse
 	
 	void AnimationComponent::Stop()
 	{
-		paused = true;
+		paused = false;
+		stopped = true;
 		currentFrame = 0;
+
+		if (onStoppedCallback != nullptr)
+		{
+			onStoppedCallback(onStoppedCallbackObject, onStoppedCallbackComponent, onStoppedCallbackUserData);
+		}
 	}
 	
 	void AnimationComponent::Start()
 	{
+		started = true;
 		paused = false;
 		currentFrame = 0;
+
+		if (onStartedCallback != nullptr)
+		{
+			onStartedCallback(onStartedCallbackObject, onStartedCallbackComponent, onStartedCallbackUserData);
+		}
 	}
 	
 	void AnimationComponent::Pause()
@@ -287,6 +303,8 @@ namespace mse
 	
 	void AnimationComponent::Reset()
 	{
+		stopped = false;
+		started = false;
 		currentFrame = 0;
 	}
 	
@@ -297,6 +315,22 @@ namespace mse
 			delete frames[state];
 		}
 		Add(state, animFrames);
+	}
+
+	void AnimationComponent::SetOnStartedCallback(MSE_UserCallback* callback, void* object, void* component, void* userdata)
+	{
+		onStartedCallback = callback;
+		onStartedCallbackObject = object;
+		onStartedCallbackComponent = object;
+		onStartedCallbackUserData = userdata;
+	}
+
+	void AnimationComponent::SetOnStoppedCallback(MSE_UserCallback* callback, void* object, void* component, void* userdata)
+	{
+		onStoppedCallback = callback;
+		onStoppedCallbackObject = object;
+		onStoppedCallbackComponent = object;
+		onStoppedCallbackUserData = userdata;
 	}
 	
 	// KeyBoard Component

@@ -1,6 +1,7 @@
 #ifndef MSE_SYSTEMS_ECS_COMPONENTS_H
 #define MSE_SYSTEMS_ECS_COMPONENTS_H
 
+#include "mse/common.h"
 #include <mse/core.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/texture.h>
@@ -167,6 +168,23 @@ namespace mse
 		uint64_t timeBefore; // last time this component was checked
 		int framesTotal;
 		bool paused;
+		bool started;
+		bool stopped;
+
+		// How the callbacks are meant to be used:
+		// 1) callbackObject is an arbitrary object that the engine user wants to operate on
+		// 2) callbackComponent can be set as this AnimationComponent, so that the callback can get access to currentAnimation field
+		// 3) userData is a pointer to custom struct or anything that fits the engine user design
+		// callbackComponent can actually be anything else, but I think it's just convenient to use it for the ECS component.
+		// Point is, these callback allow interaction between layer logic and game logic, so that what's shown on screen correlates to what is being processed in backend. Does that make sense?
+		MSE_UserCallback* onStartedCallback = nullptr;
+		void* onStartedCallbackObject = nullptr;
+		void* onStartedCallbackComponent = nullptr;
+		void* onStartedCallbackUserData = nullptr;
+		MSE_UserCallback* onStoppedCallback = nullptr;
+		void* onStoppedCallbackObject = nullptr;
+		void* onStoppedCallbackComponent = nullptr;
+		void* onStoppedCallbackUserData = nullptr;
 		
 		AnimationComponent();
 		AnimationComponent(const AnimationComponent&) = default;
@@ -182,9 +200,11 @@ namespace mse
 		void Unpause();
 		void Reset();
 		void Change(int state, AnimationFrames* animFrames);
+		void SetOnStartedCallback(MSE_UserCallback* callback = nullptr, void* object = nullptr, void* component = nullptr, void* userdata = nullptr);
+		void SetOnStoppedCallback(MSE_UserCallback* callback = nullptr, void* object = nullptr, void* component = nullptr, void* userdata = nullptr);
 	};
 	// ================================================
-	
+
 	// ==================  Physics  ===================
 	// TODO: tie out from box2d
 	namespace PhysicsDefines
