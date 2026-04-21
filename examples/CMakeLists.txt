@@ -68,5 +68,18 @@ target_link_libraries(proto-snake PUBLIC
     )
 target_link_libraries(proto-snake PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
 
+add_executable(sandbox
+    sandbox.cpp)
+target_compile_options(sandbox PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
+target_link_libraries(sandbox PUBLIC
+    mse
+    sdl3
+    sdl3_image
+    sdl3_mixer
+    sdl3_ttf
+    yaml-cpp
+    )
+target_link_libraries(sandbox PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
+
 # actually, chalkboard, protosnake, lesta-autobattler and dungeontris shouldn't share the same /out/lesta-autobattler directory, but I didn't plan ahead
-install(TARGETS chalkboard proto-snake lesta-autobattler dungeontris RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out/lesta-autobattler)
+install(TARGETS chalkboard proto-snake lesta-autobattler dungeontris sandbox RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out/lesta-autobattler)

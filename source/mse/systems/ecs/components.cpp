@@ -98,7 +98,7 @@ namespace mse
 	
 	StateMachineComponent::~StateMachineComponent()
 	{
-		for (int i = 0; i < States.size(); i++)
+		for (size_t i = 0; i < States.size(); i++)
 		{
 			delete States[i];
 			States[i] = nullptr;
@@ -108,7 +108,7 @@ namespace mse
 	
 	State* StateMachineComponent::AddState(int state)
 	{
-		for (int i = 0; i < States.size(); i++)
+		for (size_t i = 0; i < States.size(); i++)
 		{
 			if (States[i]->data == state)
 			{
@@ -123,7 +123,7 @@ namespace mse
 	
 	bool StateMachineComponent::HasState(int state)
 	{
-		for (int i = 0; i < States.size(); i++)
+		for (size_t i = 0; i < States.size(); i++)
 		{
 			if (States[i]->data == state)
 			{
@@ -139,7 +139,7 @@ namespace mse
 		if (m_CurrentState == nullptr)
 		{
 			// look the state up
-			for (int i = 0; i < States.size(); i++)
+			for (size_t i = 0; i < States.size(); i++)
 			{
 				if (States[i]->data == state)
 				{
@@ -153,7 +153,7 @@ namespace mse
 		
 		if (m_CurrentState->data != state)
 		{
-			for (int i = 0; i < States.size(); i++)
+			for (size_t i = 0; i < States.size(); i++)
 			{
 				if (States[i]->data == state)
 				{

@@ -45,7 +45,7 @@ The engine is designed to be used through a header file. The common way to use i
 #include <mse/mse.h>
 
 // Set up layers:
-class Layer1 : public CSE::Layer
+class Layer1 : public mse::Layer
 {
 public:
 	Layer1()
