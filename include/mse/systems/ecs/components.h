@@ -200,8 +200,8 @@ namespace mse
 		void Unpause();
 		void Reset();
 		void Change(int state, AnimationFrames* animFrames);
-		void SetOnStartedCallback(MSE_UserCallback* callback = nullptr, void* object = nullptr, void* component = nullptr, void* userdata = nullptr);
-		void SetOnStoppedCallback(MSE_UserCallback* callback = nullptr, void* object = nullptr, void* component = nullptr, void* userdata = nullptr);
+		void SetOnStartedCallback(MSE_UserCallback callback, void* object = nullptr, void* component = nullptr, void* userdata = nullptr);
+		void SetOnStoppedCallback(MSE_UserCallback callback, void* object = nullptr, void* component = nullptr, void* userdata = nullptr);
 	};
 	// ================================================
 

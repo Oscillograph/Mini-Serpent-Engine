@@ -317,19 +317,19 @@ namespace mse
 		Add(state, animFrames);
 	}
 
-	void AnimationComponent::SetOnStartedCallback(MSE_UserCallback* callback, void* object, void* component, void* userdata)
+	void AnimationComponent::SetOnStartedCallback(MSE_UserCallback callback, void* object, void* component, void* userdata)
 	{
 		onStartedCallback = callback;
 		onStartedCallbackObject = object;
-		onStartedCallbackComponent = object;
+		onStartedCallbackComponent = component;
 		onStartedCallbackUserData = userdata;
 	}
 
-	void AnimationComponent::SetOnStoppedCallback(MSE_UserCallback* callback, void* object, void* component, void* userdata)
+	void AnimationComponent::SetOnStoppedCallback(MSE_UserCallback callback, void* object, void* component, void* userdata)
 	{
 		onStoppedCallback = callback;
 		onStoppedCallbackObject = object;
-		onStoppedCallbackComponent = object;
+		onStoppedCallbackComponent = component;
 		onStoppedCallbackUserData = userdata;
 	}
 	
