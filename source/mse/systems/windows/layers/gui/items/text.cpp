@@ -1,3 +1,4 @@
+#include "mse/utils/logger.h"
 #include <mse/systems/windows/layers/gui/items/text.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
@@ -127,7 +128,7 @@ namespace mse
             
             UpdateTexture();
             
-            MSE_CORE_LOG("Text: texture edited");
+            // MSE_CORE_LOG("Text: texture edited");
         }
         
         void Text::UpdateTexture()
@@ -167,6 +168,7 @@ namespace mse
                                            bmpFont, 			// font
                                            {m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
                                            0); 				// interval between rows
+            // MSE_CONSOLE_TEAL("TextItem text place: (", m_scrollXY.x + 2, ", ", m_scrollXY.y + 2, ", ", layerArea.z, ", ", layerArea.w,  ")");
             m_scrollXY.z = scrollWH.first;
             m_scrollXY.w = -scrollWH.second;
             

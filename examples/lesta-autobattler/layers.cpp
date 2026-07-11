@@ -871,12 +871,21 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
     std::u32string messages = U"";
     LAutobattler::MessageLogItem* item = game.UILogger.stack;
     static bool needToUpdateText = false;
-    while (item != nullptr)
+
+    // only update text if UILogger was recently updated
+    if (game.UILogger.recently_updated)
     {
-        needToUpdateText = true;
-        messages += item->text;
-        item = item->next;
+        while (item != nullptr)
+        {
+            needToUpdateText = true;
+            messages += item->text;
+            item = item->next;
+        }
+
+        // TODO: Decouple game.UILogger and this layer | or not, because it works
+        game.UILogger.recently_updated = false;
     }
+
     item = nullptr;
     if (needToUpdateText)
     {

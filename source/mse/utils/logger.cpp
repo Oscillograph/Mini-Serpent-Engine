@@ -42,7 +42,42 @@ namespace mse
 					std::cout << "\033[38;2;255;255;128m" << m_u8string << "\033[0m";
 					break;
 				}
-				
+				case 4: // teal
+				{
+					std::cout << "\033[38;2;0;255;255m" << m_u8string << "\033[0m";
+					break;
+				}
+
+				case 5: // cyan
+				{
+					std::cout << "\033[38;2;128;255;255m" << m_u8string << "\033[0m";
+					break;
+				}
+
+				case 6: // blue
+				{
+					std::cout << "\033[38;2;0;128;255m" << m_u8string << "\033[0m";
+					break;
+				}
+
+				case 7: // magenta
+				{
+					std::cout << "\033[38;2;255;0;255m" << m_u8string << "\033[0m";
+					break;
+				}
+
+				case 8: // green
+				{
+					std::cout << "\033[38;2;0;255;0m" << m_u8string << "\033[0m";
+					break;
+				}
+
+				case 9: // caption: black on white
+				{
+					std::cout << m_u8string << "\033[0m";
+					break;
+				}
+
 				default: // no idea who's log
 				{
 					std::cout << "\033[38;2;164;164;164m" << m_u8string << "\033[0m";

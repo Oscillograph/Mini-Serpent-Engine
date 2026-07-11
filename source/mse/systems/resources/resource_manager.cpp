@@ -169,7 +169,7 @@ namespace mse
 	
 	Resource* ResourceManager::UseResource(ResourceType type, const std::string& path, const ResourceUser& user)
 	{
-		MSE_CORE_LOG("Requesting resource of type ", m_ResourceTypeNames[type], " with path \"", path.c_str(), "\".");
+		// MSE_CORE_LOG("Requesting resource of type ", m_ResourceTypeNames[type], " with path \"", path.c_str(), "\".");
 		auto it = m_Cache[type].find(path);
 		if (it == m_Cache[type].end())
 		{

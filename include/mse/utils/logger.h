@@ -77,6 +77,19 @@
 	#define MSE_ERROR(...)				{::mse::Logger::Text("App Error: ", __VA_ARGS__); ::mse::Logger::Flush(0, 3);}
 	#define MSE_DEBUG(...)				{::mse::Logger::Text("App: ", __VA_ARGS__); ::mse::Logger::Flush(1, 1);}
 	#define MSE_ASSERT(x, ...)			{ if (!(x)) { MSE_LOG(__VA_ARGS__); std::exit(-4); } }
+
+	// MSE misc console macros
+	#define MSE_CONSOLE_GREY(...)				{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, -1);}
+	#define MSE_CONSOLE_YELLOW(...)	    		{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 0);}
+	#define MSE_CONSOLE_WHITE(...)				{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 1);}
+	#define MSE_CONSOLE_DARKRED(...)			{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 2);}
+	#define MSE_CONSOLE_RED(...)				{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 3);}
+	#define MSE_CONSOLE_TEAL(...)				{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 4);}
+	#define MSE_CONSOLE_CYAN(...)				{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 5);}
+	#define MSE_CONSOLE_BLUE(...)				{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 6);}
+	#define MSE_CONSOLE_MAGENTA(...)			{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 7);}
+	#define MSE_CONSOLE_GREEN(...)				{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 8);}
+	#define MSE_CONSOLE_CAPTION_BLACK(...)		{::mse::Logger::Text(__VA_ARGS__); ::mse::Logger::Flush(0, 9);}
 #else
 	#define MSE_CORE_LOG(...)			{std::cout << "MSE: " << __VA_ARGS__ << "\n";}
 	#define MSE_CORE_TRACE(...)			{std::cout << "MSE: " << __VA_ARGS__ << "\n";}

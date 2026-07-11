@@ -41,7 +41,7 @@ public:
 		animationComponent.SetOnStartedCallback([](void* a, void* b, void* c) -> void {
 			MSE_LOG("Callback: Animation started");
 			return;
-		});
+		}, nullptr, nullptr, nullptr);
 		MSE_LOG("Animation component set up.");
 		animationComponent.Start();
 	};

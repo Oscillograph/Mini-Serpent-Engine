@@ -1,3 +1,4 @@
+#include "mse/utils/logger.h"
 #include <mse/mse.h>
 #include <lesta-autobattler/game-fwd.h>
 #include <lesta-autobattler/game-data.h>
@@ -72,6 +73,19 @@ public:
 	{
 		MSE_LOG("Hello, world!");
 		MSE_ERROR("Joke");
+
+        MSE_CONSOLE_CAPTION_BLACK("Savannah Logger Test");
+        MSE_CONSOLE_YELLOW("Yellow");
+        MSE_CONSOLE_WHITE("White");
+        MSE_CONSOLE_DARKRED("Dark red");
+        MSE_CONSOLE_RED("Red");
+        MSE_CONSOLE_TEAL("Teal");
+        MSE_CONSOLE_CYAN("Cyan");
+        MSE_CONSOLE_BLUE("Blue");
+        MSE_CONSOLE_GREEN("Green");
+        MSE_CONSOLE_MAGENTA("Magenta");
+        MSE_CONSOLE_GREY("Grey");
+//        MSE_CONSOLE_CAPTION_BLACK("Where am I: ", std::filesystem::current_path().c_str());
         
         std::srand((unsigned int)(time(NULL)));
 		

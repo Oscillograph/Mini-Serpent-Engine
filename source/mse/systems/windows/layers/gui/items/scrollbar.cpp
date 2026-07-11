@@ -1,3 +1,4 @@
+#include "mse/utils/logger.h"
 #include <mse/systems/windows/layers/gui/items/scrollbar.h>
 #include <mse/systems/windows/layers/gui/items/text.h>
 #include <mse/systems/windows/layers/gui/items/button.h>
@@ -80,6 +81,7 @@ namespace mse
                              {btnUp.x + 2*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight},
                              {btnUp.x + 3*btnUpWidth, btnUp.y, btnUpWidth, btnUpHeight})));
                 m_BtnUp->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
+                    // MSE_CONSOLE_CYAN("m_textItem->Scroll(", 0, ", ", -stepY, ")");
                     m_textItem->Scroll(0, stepY);
                     
                     float areaPercentage = (float)stepY / (m_textItem->m_scrollXY.w);
@@ -115,17 +117,28 @@ namespace mse
                     {
                         if (m_BtnBall->isPushed)
                         {
-                            int yrel = event->motion.yrel;
-                            int yrelPixels = (int)roundf((float)yrel / windowUser->GetScale().y);
+                            // SDL3 Changed the way event->motion.yrel is stored
+                            // It is no loner int - it's float!
+                            // and as it's float, I need to know its bounds
+
+                            float yrel = event->motion.yrel;
+                            MSE_CONSOLE_CYAN("event->motion.yrel: ", event->motion.yrel);
+                            float yrelPixels = yrel * windowUser->GetScale().y;
+                            MSE_CONSOLE_CYAN("windowUser->GetScale().y: ", windowUser->GetScale().y);
+                            MSE_CONSOLE_CYAN("yrelPixels: ", yrelPixels);
+
 //                        float linesPercentage = (float)yrelPixels / m_textItem->m_scrollXY.w;
-                            float areaPercentage = (float)yrelPixels / (area.w - btnUp.w - btnDown.w - btnBall.w + 1);
+                            float areaPercentage = yrelPixels / (area.w - btnUp.w - btnDown.w - btnBall.w + 1);
+                            MSE_CONSOLE_CYAN("areaPercentage: ", areaPercentage);
                             int linesToScroll = (int)roundf(m_textItem->m_scrollXY.w * areaPercentage);
+                            MSE_CONSOLE_CYAN("linesToScroll: ", linesToScroll);
                             
-                            if (yrel < 0)
+                            // MSE_CONSOLE_CYAN("m_textItem->Scroll(", 0, ", ", linesToScroll, ")");
+                            if (yrel < 0.0f)
                             {
                                 textItem->Scroll(0, linesToScroll);
                             } else {
-                                if (yrel > 0)
+                                if (yrel > 0.0f)
                                 {
                                     textItem->Scroll(0, linesToScroll);
                                 }
@@ -188,6 +201,7 @@ namespace mse
                              {btnDown.x + 3*btnDownWidth, btnDown.y, btnDownWidth, btnDownHeight})));
                 m_BtnDown->callbacks[EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
                     m_textItem->Scroll(0, -stepY);
+                    // MSE_CONSOLE_CYAN("m_textItem->Scroll(", 0, ", ", -stepY, ")");
                         
                     float areaPercentage = -(float)stepY / (m_textItem->m_scrollXY.w);
                     int yrelPixels = (int)roundf((float)areaPercentage * m_sliderPanel->layerArea.w);

@@ -65,7 +65,7 @@ namespace mse
 		static void SurfaceDrawCircleFilled(Texture* target, SDL_Point center, int r, int pxSize, SDL_Color color = {128, 255, 255, 255});
 		
         // returns width and height of what was printed actually
-		static std::pair<int, int> SurfaceDrawText_unsafe(Texture* target, const glm::uvec4& place, int pxSize, const std::u32string& text, Resource* textFont, const glm::uvec4& color = {128, 255, 255, 255}, int interval = 2);
+		static std::pair<int, int> SurfaceDrawText_unsafe(Texture* target, const glm::ivec4& place, int pxSize, const std::u32string& text, Resource* textFont, const glm::uvec4& color = {128, 255, 255, 255}, int interval = 2);
 		static std::pair<int, int> SurfaceDrawText(Texture* target, const glm::uvec4& place, int pxSize, const std::u32string& text, Resource* textFont, const glm::uvec4& color = {128, 255, 255, 255}, int interval = 2);
 		
 		static void SurfaceDrawTexture(Texture* target, Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect);

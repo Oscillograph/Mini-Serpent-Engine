@@ -33,6 +33,8 @@ namespace LAutobattler
             stack = current;
             current = nullptr;
             size--;
+
+            recently_updated = true;
             
             return true;
         }
@@ -62,10 +64,12 @@ namespace LAutobattler
                 }
             }
         }
-        
+
         if (size > size_max)
         {
             Pop();
         }
+
+        recently_updated = true;
     }
 }

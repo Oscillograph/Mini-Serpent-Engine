@@ -21,6 +21,7 @@ namespace LAutobattler
     
     struct MessageLog
     {
+        bool recently_updated = false;
         int size_max = 31;
         int size = 0;
         MessageLogItem* stack = nullptr;

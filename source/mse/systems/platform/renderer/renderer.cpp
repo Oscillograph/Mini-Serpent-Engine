@@ -700,7 +700,7 @@ namespace mse
 	
 	std::pair<int, int> Renderer::SurfaceDrawText_unsafe(
 		Texture* target,
-		const glm::uvec4& place,	// where to draw  
+		const glm::ivec4& place,	// where to draw
 		int pxSize, 				// size of the pen
 		const std::u32string& text, 		// what to draw
 		Resource* textFont,			// how is should look like

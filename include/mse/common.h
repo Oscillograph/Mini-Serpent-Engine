@@ -25,7 +25,8 @@
 
 // custom types
 typedef void (MSE_UserCallback)(void* object, void* component, void* userdata); // callback function template for ECS components and other systems
-// typedef function<void(void*, void* void*)> MSE_UserCallback;
+// typedef std::function<void(void*, void*, void*)> MSE_UserCallback; // callback function template for ECS components and other systems
+// using MSE_UserCallback = std::function<void(void*, void*, void*)>; // callback function template for ECS components and other systems
 
 // constants
 namespace mse
