@@ -117,48 +117,40 @@ namespace mse
                     {
                         if (m_BtnBall->isPushed)
                         {
-                            // SDL3 Changed the way event->motion.yrel is stored
-                            // It is no loner int - it's float!
-                            // and as it's float, I need to know its bounds
+                            int width1 = area.w;
+                            int width2 = area.w - btnUp.w - btnDown.w;
+                            int width3 = width2 - btnBall.w / 2 + 1;
+                            if (width3 == 0)
+                            {
+                                width3 = 1;
+                            }
 
                             float yrel = event->motion.yrel;
-                            MSE_CONSOLE_CYAN("event->motion.yrel: ", event->motion.yrel);
-                            float yrelPixels = yrel * windowUser->GetScale().y;
-                            MSE_CONSOLE_CYAN("windowUser->GetScale().y: ", windowUser->GetScale().y);
-                            MSE_CONSOLE_CYAN("yrelPixels: ", yrelPixels);
+                            float yrelPixels = yrel;
 
-//                        float linesPercentage = (float)yrelPixels / m_textItem->m_scrollXY.w;
-                            float areaPercentage = yrelPixels / (area.w - btnUp.w - btnDown.w - btnBall.w + 1);
-                            MSE_CONSOLE_CYAN("areaPercentage: ", areaPercentage);
+                            float areaPercentage = yrelPixels / width3;
                             int linesToScroll = (int)roundf(m_textItem->m_scrollXY.w * areaPercentage);
-                            MSE_CONSOLE_CYAN("linesToScroll: ", linesToScroll);
-                            
-                            // MSE_CONSOLE_CYAN("m_textItem->Scroll(", 0, ", ", linesToScroll, ")");
-                            if (yrel < 0.0f)
+
+                            if (linesToScroll != 0)
                             {
-                                textItem->Scroll(0, linesToScroll);
-                            } else {
-                                if (yrel > 0.0f)
-                                {
-                                    textItem->Scroll(0, linesToScroll);
-                                }
+                                std::pair<float, float> scrolled_percentage = textItem->Scroll(0, stepY * linesToScroll);
+                                m_BtnBall->layerArea.y = area.y + btnUp.w + 1 + width3 * scrolled_percentage.second;
                             }
-                            
-                            m_BtnBall->layerArea.y += yrelPixels;
-                            
+
                             if (m_BtnBall->layerArea.y < (area.y + btnUp.w + 1))
                             {
                                 m_BtnBall->layerArea.y = area.y + btnUp.w + 1;
                             }
-                            if (m_BtnBall->layerArea.y > (area.y + area.w - btnDown.w - btnUp.w + 1))
+                            if (m_BtnBall->layerArea.y > (area.y + area.w - btnUp.w - btnBall.w - 1))
                             {
-                                m_BtnBall->layerArea.y = area.y + area.w - btnDown.w - btnUp.w + 1;
+                                m_BtnBall->layerArea.y = area.y + area.w - btnUp.w - btnBall.w - 1;
                             }
-                            
+
+                            // TODO: remove correctingMousePosition associated mechanism as it no longer is needed
                             correctingMousePosition = true;
-                            SDL_WarpMouseInWindow((SDL_Window*)(windowUser->GetNativeWindow()), 
-                                                  windowUser->GetScale().x * (2*m_BtnBall->layerArea.x + m_BtnBall->layerArea.z)/2,
-                                                  windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
+                            // SDL_WarpMouseInWindow((SDL_Window*)(windowUser->GetNativeWindow()),
+                            //                       windowUser->GetScale().x * (2*m_BtnBall->layerArea.x + m_BtnBall->layerArea.z)/2,
+                            //                       windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
                         }
                     } else {
                         correctingMousePosition = false;

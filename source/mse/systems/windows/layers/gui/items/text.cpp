@@ -186,8 +186,10 @@ namespace mse
             ((Texture*)(m_texture->data))->Update();
         }
         
-        void Text::Scroll(int x, int y)
+        std::pair<float, float> Text::Scroll(int x, int y)
         {
+            std::pair<float, float> scrolled_percentage = {0.0f, 0.0f};
+
             m_scrollXY.x += x;
             m_scrollXY.y += y;
             
@@ -209,8 +211,52 @@ namespace mse
             {
                 m_scrollXY.y = 0;
             }
+
+            if ((m_scrollXY.z != 0) && (m_scrollXY.w != 0))
+            {
+                scrolled_percentage.first  = (float)m_scrollXY.x / m_scrollXY.z;
+                scrolled_percentage.second = (float)m_scrollXY.y / m_scrollXY.w;
+            }
             
             UpdateTexture();
+
+            return scrolled_percentage;
+        }
+
+        std::pair<float, float> Text::ScrollTo(int x, int y)
+        {
+            std::pair<float, float> scrolled_percentage = {0.0f, 0.0f};
+            m_scrollXY.x = x;
+            m_scrollXY.y = y;
+
+            // these scroll limits are calculated in UpdateTexture()
+            if (m_scrollXY.y < m_scrollXY.w)
+            {
+                m_scrollXY.y = m_scrollXY.w;
+            }
+            if (m_scrollXY.x < m_scrollXY.z)
+            {
+                m_scrollXY.x = m_scrollXY.z;
+            }
+
+            if (m_scrollXY.x > 0)
+            {
+                m_scrollXY.x = 0;
+            }
+            if (m_scrollXY.y > 0)
+            {
+                m_scrollXY.y = 0;
+            }
+
+            if ((m_scrollXY.z != 0) && (m_scrollXY.w != 0))
+            {
+                scrolled_percentage.first  = (float)m_scrollXY.x / m_scrollXY.z;
+                scrolled_percentage.second = (float)m_scrollXY.y / m_scrollXY.w;
+            }
+
+            UpdateTexture();
+
+            return scrolled_percentage;
         }
 	}
 }

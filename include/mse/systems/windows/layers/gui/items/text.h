@@ -24,7 +24,8 @@ namespace mse
             // unique Text interface
             void ChangeText(const std::u32string& text);
             void UpdateTexture();
-            void Scroll(int x, int y);
+            std::pair<float, float> Scroll(int x, int y);
+			std::pair<float, float> ScrollTo(int x, int y);
             
             bool showBorder = false;
             bool scrollableY = false;
