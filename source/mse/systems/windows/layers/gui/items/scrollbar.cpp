@@ -340,23 +340,25 @@ namespace mse
                     {
                         if (m_BtnBall->isPushed)
                         {
-                            int xrel = event->motion.xrel;
-                            int xrelPixels = (int)roundf((float)xrel / windowUser->GetScale().x);
-//                        float linesPercentage = (float)yrelPixels / m_textItem->m_scrollXY.w;
-                            float areaPercentage = (float)xrelPixels / (area.z - btnUpWidth - btnDown.z / 4 - btnBallWidth + 1);
-                            int linesToScroll = (int)roundf(m_textItem->m_scrollXY.z * areaPercentage);
-                            
-                            if (xrel < 0)
+                            int width1 = area.z;
+                            int width2 = area.z - btnUp.z - btnDown.z;
+                            int width3 = width2 - btnBall.z / 2 + 1;
+                            if (width3 == 0)
                             {
-                                textItem->Scroll(linesToScroll, 0);
-                            } else {
-                                if (xrel > 0)
-                                {
-                                    textItem->Scroll(linesToScroll, 0);
-                                }
+                                width3 = 1;
                             }
-                            
-                            m_BtnBall->layerArea.x += xrelPixels;
+
+                            float xrel = event->motion.xrel;
+                            float xrelPixels = xrel;
+//                        float linesPercentage = (float)yrelPixels / m_textItem->m_scrollXY.w;
+                            float areaPercentage = xrelPixels / width3;
+                            int linesToScroll = (int)roundf(m_textItem->m_scrollXY.z * areaPercentage);
+
+                            if (linesToScroll != 0)
+                            {
+                                std::pair<float, float> scrolled_percentage = textItem->Scroll(stepX * linesToScroll, 0);
+                                m_BtnBall->layerArea.x = area.x + btnUp.z + 1 + width3 * scrolled_percentage.first;
+                            }
                             
                             if (m_BtnBall->layerArea.x < (area.x + btnUpWidth + 1))
                             {
@@ -367,10 +369,11 @@ namespace mse
                                 m_BtnBall->layerArea.x = area.x + area.z - btnDown.z / 4 - btnUpWidth + 1;
                             }
                             
+                            // TODO: remove correctingMousePosition associated mechanism as it no longer is needed
                             correctingMousePosition = true;
-                            SDL_WarpMouseInWindow((SDL_Window*)(windowUser->GetNativeWindow()), 
-                                                  windowUser->GetScale().x * (2*m_BtnBall->layerArea.x + m_BtnBall->layerArea.z)/2,
-                                                  windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
+                            // SDL_WarpMouseInWindow((SDL_Window*)(windowUser->GetNativeWindow()),
+                            //                       windowUser->GetScale().x * (2*m_BtnBall->layerArea.x + m_BtnBall->layerArea.z)/2,
+                            //                       windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
                         }
                     } else {
                         correctingMousePosition = false;
