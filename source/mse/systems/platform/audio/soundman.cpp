@@ -159,7 +159,7 @@ namespace mse
         
         if (sounds_bank.find(path) != sounds_bank.end())
         {
-            for (size_t i = 0; i < channels.size(); ++i)
+            for (size_t i = 1; i < channels.size(); ++i)
             {
                 if (!MIX_TrackPlaying(channels[i]))
                 {
@@ -317,7 +317,7 @@ namespace mse
         PauseTrack();
         tracks_volume = level;
         MIX_SetTrackGain(channels[0], tracks_volume);
-        MSE_CORE_LOG("SoundMan: music volume changed to ", tracks_volume);
+        MSE_CORE_LOG("SoundMan: music volume changed to ", MIX_GetTrackGain(channels[0]));
         UnPauseTrack();
     }
 }
