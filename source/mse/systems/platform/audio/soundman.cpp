@@ -60,7 +60,7 @@ namespace mse
     {
         Sound* sound = nullptr;
         MSE_CORE_LOG("SoundMan: Load ", paths.size(), " sounds");
-        for (int i = 0; i < paths.size(); ++i)
+        for (size_t i = 0; i < paths.size(); ++i)
         {
             sound = new Sound(paths[i]);
             if (!sound->GetAudio())
@@ -76,7 +76,7 @@ namespace mse
     {
         Track* track = nullptr;
         MSE_CORE_LOG("SoundMan: Load ", paths.size(), " tracks");
-        for (int i = 0; i < paths.size(); ++i)
+        for (size_t i = 0; i < paths.size(); ++i)
         {
             MSE_CORE_LOG(paths[i].c_str());
             if (tracks_bank.find(paths[i]) == tracks_bank.end())
@@ -97,7 +97,7 @@ namespace mse
         LoadTracks(paths);
         tracks_playlist.clear();
         tracks_playlist.resize(paths.size());
-        for (int i = 0; i < paths.size(); ++i)
+        for (size_t i = 0; i < paths.size(); ++i)
         {
             if (tracks_bank.find(paths[i]) != tracks_bank.end())
             {
@@ -151,6 +151,7 @@ namespace mse
     
     bool SoundMan::PlaySound(const std::string& path)
     {
+        // TODO: Request sound from Resource manager and play silence if there is no data available
         if (sounds_bank.find(path) == sounds_bank.end())
         {
             LoadSounds({path});

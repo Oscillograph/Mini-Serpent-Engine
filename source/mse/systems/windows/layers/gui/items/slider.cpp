@@ -65,9 +65,15 @@ namespace mse
                                                            {0, 0, 0, 0});
                 MSE_CORE_LOG("HSlider: texture obtained");
                 
-                // draw btn to scroll up
+                // pre-calculate widths of elements
                 int btnLeftWidth = btnLeft.z / 4;
                 int btnLeftHeight = btnLeft.w;
+                int btnBallWidth = btnBall.z / 4;
+                int btnBallHeight = btnBall.w;
+                int btnRightWidth = btnRight.z / 4;
+                int btnRightHeight = btnRight.w;
+
+                // draw btn to scroll up
                 m_btnLeft = (Button*)(layer->AddElement(new Button(
                                                                  layer, 
                                                                  {area.x, area.y, btnLeftWidth, btnLeftHeight}, 
@@ -99,8 +105,6 @@ namespace mse
                 
                 
                 // draw ball btn
-                int btnBallWidth = btnBall.z / 4;
-                int btnBallHeight = btnBall.w;
                 int where = (int)roundf((layerArea.z - btnBallWidth - btnLeftWidth - btnRight.z / 4 - 2) * (*var / varMax));
                 
                 m_BtnBall = (Button*)(layer->AddElement(new Button(
@@ -119,12 +123,20 @@ namespace mse
                     {
                         if (m_BtnBall->isPushed)
                         {
-                            int xrel = event->motion.xrel;
-                            int xrelPixels = (int)roundf((float)xrel / windowUser->GetScale().x);
-                            float areaPercentage = (float)xrelPixels / (area.z - btnLeftWidth - btnBallWidth - btnRight.z / 4 + 2);
-                            float linesToScroll = varMax * areaPercentage;
+                            int width1 = area.z;
+                            int width2 = area.z - btnLeftWidth - btnRightWidth;
+                            int width3 = width2 - btnBallWidth / 2 + 1;
+                            if (width3 == 0)
+                            {
+                                width3 = 1;
+                            }
+
+                            float xrel = event->motion.xrel;
+                            float xrelPixels = xrel;
+                            float areaPercentage = (float)xrelPixels / width3;
+                            float varChange = varMax * areaPercentage;
                             
-                            *var += linesToScroll;
+                            *var += varChange;
                             if (*var < varMin)
                             {
                                 *var = varMin;
@@ -133,26 +145,29 @@ namespace mse
                             {
                                 *var = varMax;
                             }
-                            valueChanged = true;
-                            SDL_Event* e = new SDL_Event();
-                            SDL_PushEvent(e);
-                            MSE_CORE_LOG("lines to scroll: ", linesToScroll, "; volume = ", *var);
-                            
-                            m_BtnBall->layerArea.x += xrelPixels;
+
+                            if (abs(varChange) > 0.01)
+                            {
+                                valueChanged = true;
+                                m_BtnBall->layerArea.x += xrelPixels;
+                                MSE_CORE_LOG("varChange: ", varChange, "; volume = ", *var);
+                            }
+
                             
                             if (m_BtnBall->layerArea.x < (area.x + btnLeftWidth + 1))
                             {
                                 m_BtnBall->layerArea.x = area.x + btnLeftWidth + 1;
                             }
-                            if (m_BtnBall->layerArea.x > (area.x + area.z - btnRight.z / 4 - btnLeftWidth + 2))
+                            if (m_BtnBall->layerArea.x > (area.x + area.z - btnRightWidth - btnLeftWidth + 2))
                             {
-                                m_BtnBall->layerArea.x = area.x + area.z - btnRight.z / 4 - btnLeftWidth + 2;
+                                m_BtnBall->layerArea.x = area.x + area.z - btnRightWidth - btnLeftWidth + 2;
                             }
-                            
+
+                            // TODO: remove correctingMousePosition associated mechanism as it no longer is needed
                             correctingMousePosition = true;
-                            SDL_WarpMouseInWindow((SDL_Window*)(windowUser->GetNativeWindow()), 
-                                                  windowUser->GetScale().x * (2*m_BtnBall->layerArea.x + m_BtnBall->layerArea.z)/2,
-                                                  windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
+                            // SDL_WarpMouseInWindow((SDL_Window*)(windowUser->GetNativeWindow()),
+                            //                       windowUser->GetScale().x * (2*m_BtnBall->layerArea.x + m_BtnBall->layerArea.z)/2,
+                            //                       windowUser->GetScale().y * (2*m_BtnBall->layerArea.y + m_BtnBall->layerArea.w)/2);
                         }
                     } else {
                         correctingMousePosition = false;
@@ -185,8 +200,6 @@ namespace mse
                 MSE_CORE_LOG("HSlider: HImage Template");
                 
                 // draw btn to scroll down
-                int btnRightWidth = btnRight.z / 4;
-                int btnRightHeight = btnRight.w;
                 m_btnRight = (Button*)(layer->AddElement(new Button(
                                                                    layer, 
                                                                    {area.x + area.z - btnRightWidth, area.y, btnLeftWidth, btnLeftHeight}, 
