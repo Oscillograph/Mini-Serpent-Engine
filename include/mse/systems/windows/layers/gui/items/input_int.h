@@ -67,7 +67,6 @@ namespace mse
 			// unique InputInt interface
 			int value = 0;
 			bool isHover = false;
-			bool isPushed = false;
 			bool isFocused = false;
 
 			void UpdateDigits();

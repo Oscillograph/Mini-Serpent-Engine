@@ -281,6 +281,50 @@ namespace mse
 		// general GUIItem interface
 		void InputInt::Display()
 		{
+			glm::vec4 scaled = {
+				(float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
+				(float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
+				(float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
+				(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
+			};
+
+			SDL_FRect destRect = {
+				(float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
+				(float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
+				(float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
+				(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
+			};
+
+			SDL_Rect srcRect;
+			if (isEnabled)
+			{
+				if (!isHover && !isFocused)
+				{
+					srcRect = {
+						0, 0, layerArea.z, layerArea.w
+					};
+				} else {
+					if (isHover)
+					{
+						srcRect = {
+							layerArea.z, 0, layerArea.z, layerArea.w
+						};
+					}
+
+					if (isFocused)
+					{
+						srcRect = {
+							layerArea.z * 2, 0, layerArea.z, layerArea.w
+						};
+					}
+				}
+			} else {
+				srcRect = {
+					layerArea.z * 3, 0, layerArea.z, layerArea.w
+				};
+			}
+
+			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
 		}
 
 		bool InputInt::HandleEvent(EventTypes eventType, SDL_Event* event)
@@ -328,6 +372,11 @@ namespace mse
 
 		void InputInt::UpdateTexture()
 		{
+			if (m_texture == nullptr)
+			{
+				return;
+			}
+
 			mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
 
 			// general state

@@ -44,7 +44,7 @@ public:
 		MSE_LOG("GUISimpleApp: Hello, world!");
 
 		MSE_LOG("GUISimpleApp: Commanding to open a window");
-		m_window = mse::WindowManager::CreateWindow(u8"GUISimple: испытания графического интерфейса", 50, 50, 640, 480);
+		m_window = mse::WindowManager::CreateWindow(u8"GUISimple: испытания графического интерфейса", 50, 50, 320, 240);
 		mse::Renderer::SetActiveWindow(m_window);
 
 		m_window->GetLayerManager()->Attach(new MainLayer());
