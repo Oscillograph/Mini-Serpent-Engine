@@ -94,5 +94,12 @@ target_link_libraries(gui-simple PUBLIC
     )
 target_link_libraries(gui-simple PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
 
-# actually, chalkboard, protosnake, lesta-autobattler and dungeontris shouldn't share the same /out/lesta-autobattler directory, but I didn't plan ahead
-install(TARGETS chalkboard proto-snake lesta-autobattler dungeontris sandbox RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out/lesta-autobattler)
+# actually, chalkboard, protosnake, lesta-autobattler and dungeontris shouldn't share the same /out/examples directory, but I didn't plan ahead
+install(TARGETS
+            chalkboard
+            proto-snake
+            lesta-autobattler
+            dungeontris
+            sandbox
+            gui-simple
+        RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out/examples)
