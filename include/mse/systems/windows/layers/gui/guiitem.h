@@ -2,6 +2,7 @@
 #define MSE_SYSTEMS_WINDOWS_LAYERS_GUI_GUIITEM_H
 
 #include <mse/core.h>
+#include <mse/systems/windows/layers/gui/guitypes.h>
 #include <mse/systems/platform/events/events.h>
 
 namespace mse

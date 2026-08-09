@@ -38,6 +38,8 @@ namespace mse
 		GUIItemDestroy,
 		GUIItemFocusGain,
 		GUIItemFocusLost,
+		GUIItemKeyDown,
+		GUIItemKeyUp,
 		GUIItemMouseOver,
 		GUIItemMouseMove,
 		GUIItemMouseOut,

@@ -20,6 +20,19 @@ public:
 	{
 		MSE_LOG("GUISimpleApp/MainLayer: Deconstructed a simple layer");
 	};
+
+	virtual void OnInit() override
+	{
+		mse::gui::InputInt* inputInt = (mse::gui::InputInt*)(AddElement(new mse::gui::InputInt(this, 0, {2, 10, 15, 10}, {196, 64, 64, 255}, {196, 196, 32, 255})));
+		inputInt->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, inputInt](SDL_Event* event){
+			inputInt->isFocused = true;
+		};
+
+		// mse::gui::Button* redPencil = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Red Pencil", {2, 10, 15, 10}, {196, 64, 64, 255}, {196, 196, 32, 255})));
+		// redPencil->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&, canvas](SDL_Event* event){
+		// 	canvas->SetDrawColor({228, 64, 64, 255});
+		// };
+	}
 };
 
 // Set up the app class:

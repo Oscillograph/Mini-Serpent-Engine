@@ -3,6 +3,7 @@
 
 #include <mse/core.h>
 #include <mse/systems/windows/layers/gui/guiitem.h>
+#include <string>
 
 namespace mse
 {
@@ -19,7 +20,8 @@ namespace mse
 				int defaultValue,
 				const glm::uvec4& area,
 				const glm::uvec4& bgColor,
-				const glm::uvec4& color
+				const glm::uvec4& color,
+				size_t length = 10
 				);
 			// constructor from spritelist
 			InputInt(
@@ -30,7 +32,8 @@ namespace mse
 				const std::string& spritelist,
 				const glm::uvec4& leftSource,
 				const glm::uvec4& midSource,
-				const glm::uvec4& rightSource
+				const glm::uvec4& rightSource,
+				size_t length = 10
 				);
 
 			void Init(
@@ -38,7 +41,8 @@ namespace mse
 				int defaultValue,
 				const glm::uvec4& area,
 				const glm::uvec4& bgColor,
-				const glm::uvec4& color
+				const glm::uvec4& color,
+				size_t length = 10
 				);
 			void Init(
 				Layer* layer,
@@ -48,8 +52,11 @@ namespace mse
 				const std::string& spritelist,
 				const glm::uvec4& leftSource,
 				const glm::uvec4& midSource,
-				const glm::uvec4& rightSource
+				const glm::uvec4& rightSource,
+				size_t length = 10
 				);
+
+			void RegisterCallbacks();
 
 			virtual ~InputInt();
 
@@ -64,7 +71,12 @@ namespace mse
 			bool isFocused = false;
 
 		protected:
-			int m_value = 0;
+			std::u32string m_text = U""; // text representation of the value
+
+			size_t m_length = 10;
+			SymbolsContainer<int, 10> m_digits;
+			size_t m_cursorPosition = 0;
+			bool m_negative = false;
 
 			// generic
 			glm::uvec4 m_backgroundColor = {0, 0, 0, 0};
