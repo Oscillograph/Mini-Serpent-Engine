@@ -17,6 +17,7 @@ namespace mse
 	{
 		SymbolsContainer(std::initializer_list<S> list)
 		{
+			// MSE_LOG("SymbolsContainer constructor with initializer list...");
 			size_t position = 0;
 			for (S element : list)
 			{
@@ -27,8 +28,9 @@ namespace mse
 					break;
 				}
 				++position;
+				// MSE_LOG(position, " of ", size);
 			}
-			// MSE_LOG("Symbols Container. Size: ", size);
+			// MSE_LOG("SymbolsContainer constructor complete.");
 		}
 
 		Symbol<S> container[size];
@@ -57,8 +59,11 @@ namespace mse
 
 		void input_in_place(S symbol, size_t position = 0)
 		{
+			// MSE_LOG("SymbolsContainer: input in place start");
 			container[position].symbol = symbol;
+			// MSE_LOG("SymbolsContainer: input in place 1/2");
 			container[position].empty = false;
+			// MSE_LOG("SymbolsContainer: input in place end");
 		}
 
 		// invoked by pressing "Delete" button

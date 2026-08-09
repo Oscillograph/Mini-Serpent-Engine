@@ -68,6 +68,7 @@ namespace mse
 			m_backgroundColor = bgColor;
 			m_textColor = color;
 			m_length = length;
+			MSE_LOG("m_length = ", m_length);
 
 			// collect digits
 			UpdateDigits();
@@ -289,14 +290,28 @@ namespace mse
 
 		void InputInt::UpdateDigits()
 		{
+			// MSE_LOG("UpdateDigits start");
 			m_negative = (value < 0) ? true : false;
 
 			int temp = value;
-			for (size_t i = m_length - 1; i >= 0; --i)
+			int i = m_length - 1;
+			for ( ; i >= 0; --i)
 			{
+				// MSE_LOG("UpdateDigits ", i, " of ", m_length);
 				m_digits.input_in_place(temp % 10, i);
 				temp = (temp - m_digits[i]) / 10;
 			}
+
+			if (i > 0)
+			{
+				for ( ; i >= 0; --i)
+				{
+					m_digits.container[i].empty = true;
+				}
+			}
+
+			// MSE_LOG("UpdateDigits end");
+			UpdateText();
 		}
 
 		void InputInt::UpdateText()
@@ -307,12 +322,12 @@ namespace mse
 				symbols[i] = '0' + m_digits[i];
 			}
 			m_text = std::u32string(symbols);
+
+			UpdateTexture();
 		}
 
 		void InputInt::UpdateTexture()
 		{
-			UpdateText();
-
 			mse::Resource* bmpFont = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
 
 			// general state
