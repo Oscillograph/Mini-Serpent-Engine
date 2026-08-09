@@ -70,11 +70,15 @@ namespace mse
 			bool isPushed = false;
 			bool isFocused = false;
 
+			void UpdateDigits();
+			void UpdateText();
+			void UpdateTexture();
+
 		protected:
 			std::u32string m_text = U""; // text representation of the value
 
 			size_t m_length = 10;
-			SymbolsContainer<int, 10> m_digits;
+			SymbolsContainer<int, 10> m_digits = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 			size_t m_cursorPosition = 0;
 			bool m_negative = false;
 

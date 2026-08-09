@@ -22,12 +22,13 @@ namespace mse
 			{
 				if (position < size)
 				{
-					input(element, position);
+					input_in_place(element, position);
 				} else {
 					break;
 				}
 				++position;
 			}
+			// MSE_LOG("Symbols Container. Size: ", size);
 		}
 
 		Symbol<S> container[size];
@@ -42,9 +43,9 @@ namespace mse
 			{
 				for (size_t i = position; i < size; ++i)
 				{
-					temp = temp xor container[i];
-					container[i] = temp xor container[i];
-					temp = temp xor container[i];
+					temp.symbol = temp.symbol xor container[i].symbol;
+					container[i].symbol = temp.symbol xor container[i].symbol;
+					temp.symbol = temp.symbol xor container[i].symbol;
 
 					if (temp.empty)
 					{
@@ -54,8 +55,14 @@ namespace mse
 			}
 		}
 
+		void input_in_place(S symbol, size_t position = 0)
+		{
+			container[position].symbol = symbol;
+			container[position].empty = false;
+		}
+
 		// invoked by pressing "Delete" button
-		void remove(S symbol, size_t position = 0)
+		void remove(size_t position = 0)
 		{
 			if (position < size)
 			{
@@ -68,7 +75,7 @@ namespace mse
 		}
 
 		// invoked by pressing "Backspace" button
-		void backspace(S symbol, size_t position = 0)
+		void backspace(size_t position = 0)
 		{
 			if (position > 0)
 			{
@@ -102,7 +109,7 @@ namespace mse
 			{
 				if (container[i].empty)
 				{
-					for (size_t position = i, size_t j = position + 1; j < size; ++position, ++j)
+					for (size_t position = i, j = position + 1; j < size; ++position, ++j)
 					{
 						if (!container[j].empty)
 						{
