@@ -94,6 +94,20 @@ target_link_libraries(gui-simple PUBLIC
     )
 target_link_libraries(gui-simple PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
 
+add_executable(card-game
+    card-game.cpp)
+target_include_directories(card-game PUBLIC ${MSE_BASE_SOURCE_DIR}/examples)
+target_compile_options(card-game PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
+target_link_libraries(card-game PUBLIC
+    mse
+    sdl3
+    sdl3_image
+    sdl3_mixer
+    sdl3_ttf
+    yaml-cpp
+    )
+target_link_libraries(card-game PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
+
 # actually, chalkboard, protosnake, lesta-autobattler and dungeontris shouldn't share the same /out/examples directory, but I didn't plan ahead
 install(TARGETS
             chalkboard
@@ -102,4 +116,5 @@ install(TARGETS
             dungeontris
             sandbox
             gui-simple
+            card-game
         RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out/examples)

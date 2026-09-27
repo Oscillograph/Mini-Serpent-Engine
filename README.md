@@ -110,6 +110,9 @@ Feel free to look inside CMakeLists.txt to understand how to build your own proj
 
 ## Dev notes ##
 If you, like me, use an LSP server, you might want to make a symlink for compiler_commands.json from "build" directory and put it in the repository root so that your automated code analysis and autocompletion features could work properly.
+```
+ln -s build/compile_commands.json compile_commands.json
+```
 
 ## Tech Stack ##
 + **C++17** (almost everything)

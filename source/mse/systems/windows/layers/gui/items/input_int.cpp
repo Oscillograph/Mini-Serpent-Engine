@@ -1,3 +1,4 @@
+#include <charconv>
 #include <mse/systems/windows/layers/gui/items/input_int.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/renderer.h>
@@ -8,7 +9,9 @@
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/layers/layer_manager.h>
+#include <mse/systems/windows/layers/gui/items/text.h>
 #include <mse/systems/resources/resource_manager.h>
+#include <string>
 
 
 namespace mse
@@ -71,6 +74,14 @@ namespace mse
 			MSE_LOG("m_length = ", m_length);
 
 			// collect digits
+			m_textItem = (Text*)(layer->AddElement(new Text(
+				layer,
+				U"",
+				area,
+				bgColor,
+				color
+			)));
+
 			UpdateDigits();
 
 			// prepare layer mask for the element
@@ -325,6 +336,7 @@ namespace mse
 			}
 
 			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
+			((Text*)m_textItem)->Display();
 		}
 
 		bool InputInt::HandleEvent(EventTypes eventType, SDL_Event* event)
@@ -360,14 +372,22 @@ namespace mse
 
 		void InputInt::UpdateText()
 		{
-			char32_t symbols[m_length];
-			for (size_t i = 0; i < m_length; ++i)
+			// create the string from digits and sign
+			std::u32string inputItemText = U"";
+			if (m_negative)
 			{
-				symbols[i] = '0' + m_digits[i];
+				inputItemText.append(U"-");
 			}
-			m_text = std::u32string(symbols);
+			for (int i = 0; i < m_length; ++i)
+			{
+				if (m_digits[i] >= 0)
+				{
+					inputItemText.append((char32_t*)(U'0' + m_digits[i]));
+				}
+			}
 
-			UpdateTexture();
+			// update text texture
+			((Text*)m_textItem)->ChangeText(inputItemText);
 		}
 
 		void InputInt::UpdateTexture()
@@ -385,14 +405,6 @@ namespace mse
 				{0, 0, layerArea.z, layerArea.w},
 				{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
 			);
-			mse::Renderer::SurfaceDrawText(
-				(Texture*)(m_texture->data),
-				{2, 2, layerArea.z, layerArea.w}, 	// where to
-				1, 					// pixel size
-				m_text, 			// text content
-				bmpFont, 			// font
-				{m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
-				0); 				// interval between rows
 
 			// hover state
 			Renderer::SurfaceDrawRectFilled(
@@ -405,14 +417,6 @@ namespace mse
 				{layerArea.z + 1, 1, layerArea.z - 2, layerArea.w - 2},
 				{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
 			);
-			mse::Renderer::SurfaceDrawText(
-				(Texture*)(m_texture->data),
-				{layerArea.z + 2, 2, layerArea.z, layerArea.w}, 	// where to
-				1, 					// pixel size
-				m_text, 			// text content
-				bmpFont, 			// font
-				{m_textColor.x, m_textColor.y, m_textColor.z, m_textColor.w}, // color
-				0); 				// interval between rows
 
 			// focused state
 			Renderer::SurfaceDrawRectFilled(
@@ -420,14 +424,6 @@ namespace mse
 				{layerArea.z * 2, 0, layerArea.z, layerArea.w},
 				{255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
 			);
-			mse::Renderer::SurfaceDrawText(
-				(Texture*)(m_texture->data),
-				{layerArea.z * 2 + 2, 2, layerArea.z, layerArea.w}, 	// where to
-				1, 					// pixel size
-				m_text, 			// text content
-				bmpFont, 			// font
-				{255 - m_textColor.x, 255 - m_textColor.y, 255 - m_textColor.z, 255 - m_textColor.w}, // color
-				0); 				// interval between rows
 
 			// disabled state
 			Renderer::SurfaceDrawRectFilled(
@@ -435,14 +431,6 @@ namespace mse
 				{layerArea.z * 3, 0, layerArea.z, layerArea.w},
 				{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w / 2}
 			);
-			mse::Renderer::SurfaceDrawText(
-				(Texture*)(m_texture->data),
-				{layerArea.z * 3 + 2, 2, layerArea.z, layerArea.w}, 	// where to
-				1, 					// pixel size
-				m_text, 			// text content
-				bmpFont, 			// font
-				{255 - m_textColor.x, 255 - m_textColor.y, 255 - m_textColor.z, m_textColor.w / 2}, // color
-				0); 				// interval between rows
 
 			((Texture*)(m_texture->data))->Update();
 

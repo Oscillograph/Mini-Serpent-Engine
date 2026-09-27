@@ -23,7 +23,7 @@ namespace mse
             virtual ~HSlider();
             
             // general GUIItem interface
-            virtual void Display();
+            virtual void Display() override;
             virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
             
             float varMin = 0;

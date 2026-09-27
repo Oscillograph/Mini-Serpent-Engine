@@ -9,6 +9,8 @@ namespace mse
 {
 	namespace gui
 	{
+		class Text;
+
 		class InputInt : public GUIItem
 		{
 		public:
@@ -61,7 +63,7 @@ namespace mse
 			virtual ~InputInt();
 
 			// general GUIItem interface
-			virtual void Display();
+			virtual void Display() override;
 			virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
 
 			// unique InputInt interface
@@ -77,7 +79,7 @@ namespace mse
 			std::u32string m_text = U""; // text representation of the value
 
 			size_t m_length = 10;
-			SymbolsContainer<int, 10> m_digits = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+			SymbolsContainer<int, 10> m_digits = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 			size_t m_cursorPosition = 0;
 			bool m_negative = false;
 
@@ -87,9 +89,13 @@ namespace mse
 
 			// sprite-based
 			Resource* m_spriteList = nullptr;
+
 			glm::uvec4 m_leftSource = {0, 0, 0, 0};
 			glm::uvec4 m_midSource = {0, 0, 0, 0};
 			glm::uvec4 m_rightSource = {0, 0, 0, 0};
+
+		protected:
+			Text* m_textItem = nullptr; // for displaying text
 		};
 	}
 }

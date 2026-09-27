@@ -21,7 +21,7 @@ namespace mse
 			virtual ~VScrollbar();
 			
 			// general GUIItem interface
-			virtual void Display();
+			virtual void Display() override;
 			virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
 
             int stepX = 10;
@@ -50,7 +50,7 @@ namespace mse
             virtual ~HScrollbar();
             
             // general GUIItem interface
-            virtual void Display();
+            virtual void Display() override;
             virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
             
             int stepX = 10;

@@ -6,6 +6,7 @@
 .clang-format
 .cproject
 .project
+AGENTS.md
 /.cache
 /makefile.win
 /app.ico
