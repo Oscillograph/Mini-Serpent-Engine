@@ -60,11 +60,7 @@ public:
 		m_window = mse::WindowManager::CreateWindow(u8"Фехтоватор", 50, 50, 320, 240);
 		m_window->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 			MSE_LOG("Key pressed: ", event->key.key);
-			if (event->key.key == SDL_SCANCODE_SPACE)
-			{
-				mse::SoundMan::PlayNext();
-			}
-			if (event->key.key == SDL_SCANCODE_ESCAPE)
+			if (event->key.key == SDLK_ESCAPE)
 			{
 				this->Stop();
 			}

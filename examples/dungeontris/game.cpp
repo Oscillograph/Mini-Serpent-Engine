@@ -3,7 +3,6 @@
 #include <ctime> // clock
 #include <sstream> // stringstream
 #include <utf8.h> // utf8
-#include <SDL2/SDL.h> // SDL_Delay
 
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/platform/renderer/renderer.h>
