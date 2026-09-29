@@ -5,9 +5,6 @@
 #include <mse/systems/platform/platform.h>
 
 // bricks of the renderer system
-#include <mse/systems/platform/renderer/texture.h>
-#include <mse/systems/platform/renderer/cursor.h>
-// #include <CSE/systems/renderer/camera2d.h>
 
 // TODO: Consider developing Render class into a per-scene object instead of a static global
 
@@ -75,7 +72,7 @@ namespace mse
 		static void ShowFrame();
 
 		// high-level methods (complex graphics operations)
-		static int Init(WindowContextType windowContextType = WindowContextType::SDL);
+		static int Init(Window* window, WindowContextType windowContextType = WindowContextType::SDL);
 		static int Shutdown();
 
 	public:

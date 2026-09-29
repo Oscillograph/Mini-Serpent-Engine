@@ -1,12 +1,10 @@
-#ifndef MSE_SYSTEMS_PLATFORM_RENDER_API_H
-#define MSE_SYSTEMS_PLATFORM_RENDER_API_H
+#ifndef MSE_SYSTEMS_PLATFORM_RENDER_BASE_H
+#define MSE_SYSTEMS_PLATFORM_RENDER_BASE_H
 
 #include <mse/core.h>
+#include <mse/systems/platform/platform.h>
 
 // bricks of the renderer system
-#include <mse/systems/platform/renderer/texture.h>
-#include <mse/systems/platform/renderer/cursor.h>
-// #include <CSE/systems/renderer/camera2d.h>
 
 namespace mse
 {

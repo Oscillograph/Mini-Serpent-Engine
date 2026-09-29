@@ -1,6 +1,6 @@
 #include <mse/systems/platform/renderAPI.h>
-#include <mse/systems/platform/platform.h>
 
+#include <mse/utils/logger.h>
 
 namespace mse
 {
@@ -230,26 +230,45 @@ namespace mse
 	}
 
 	// high-level methods (complex graphics operations)
-	int RendererAPI::Init(WindowContextType windowContextType)
+	int RendererAPI::Init(Window* window, WindowContextType windowContextType)
 	{
-		switch (windowContextType)
+		if (window != nullptr)
 		{
-			case WindowContextType::OpenGL:
+			switch (windowContextType)
 			{
-				m_Impl = new RendererOpenGL();
-				break;
+				case mse::WindowContextType::None:
+				{
+					m_Impl = nullptr;
+					return 0;
+					break;
+				}
+				case WindowContextType::OpenGL:
+				{
+					m_Impl = new RendererOpenGL(window);
+					return 0;
+					break;
+				}
+				case WindowContextType::SDL:
+				{
+					m_Impl = new RendererSDL(window);
+					return 0;
+					break;
+				}
+				default:
+				{
+					MSE_CORE_ERROR("RendererAPI: Unknown context type");
+					return 0;
+				}
 			}
-			case WindowContextType::SDL:
-			default:
-			{
-				m_Impl = new RendererSDL();
-			}
+		} else {
+			return 0;
 		}
 	}
 
 	int RendererAPI::Shutdown()
 	{
 		delete m_Impl;
+		return 0;
 	}
 }
 
