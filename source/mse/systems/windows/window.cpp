@@ -29,7 +29,7 @@ namespace mse
 	void Window::NewWindow()
 	{
 		m_basePrefs = {m_title, m_x, m_y, m_width, m_height};
-		m_windowNative = Platform::CreateWindow(m_title.c_str(), m_x, m_y, m_width, m_height, m_flags);
+		m_windowNative = Platform::CreateWindow(m_title.c_str(), m_x, m_y, m_width, m_height, m_flags, WindowContextType::SDL);
 		m_windowNativeID = Platform::GetWindowID(m_windowNative);
 		m_renderer = Platform::InitRenderer(m_windowNative);
 		Renderer::SetActiveRenderer(m_renderer);
@@ -268,7 +268,7 @@ namespace mse
 		// newTitle << GetBaseTitle() << " - FPS: " << fpsCount;
 		// SetTitle(newTitle.str());
 		
-		sprintf(m_newTitle, u8"%s - FPS: %d", m_basePrefs.title.c_str(), fps);
+		sprintf(m_newTitle, u8"%s - FPS: %d", m_basePrefs.title.c_str(), (int)fps);
 		std::string fpsString(m_newTitle);
 		SetTitle(fpsString);
 	}

@@ -1,4 +1,5 @@
 #include <mse/systems/platform/renderAPI.h>
+#include <mse/systems/platform/renderer_base.h>
 
 #include <mse/utils/logger.h>
 
@@ -31,7 +32,7 @@ namespace mse
 		m_Impl->SetActiveLayer(layer);
 	}
 
-	static Layer* RendererAPI::GetActiveLayer()
+	Layer* RendererAPI::GetActiveLayer()
 	{
 		return m_Impl->GetActiveLayer();
 	}
@@ -121,7 +122,7 @@ namespace mse
 	// low-level methods on surfaces (for software rendering)
 	void RendererAPI::SurfaceDrawPixel_unsafe(Texture* target, SDL_Point center, int pxSize, SDL_Color color)
 	{
-		m_Impl->SurfaceDrawCircleFilled_unsafe(target, center, pxSize, color);
+		m_Impl->SurfaceDrawPixel_unsafe(target, center, pxSize, color);
 	}
 
 	void RendererAPI::SurfaceDrawPixel(Texture* target, SDL_Point center, int pxSize, SDL_Color color)
@@ -131,7 +132,7 @@ namespace mse
 
 	void RendererAPI::SurfaceDrawLine_unsafe(Texture* target, int x1, int y1, int x2, int y2, int pxSize, SDL_Color color)
 	{
-		m_Impl->SurfaceDrawLine_unsafe(target, x1, y1, x2, y2, pxSize, color)
+		m_Impl->SurfaceDrawLine_unsafe(target, x1, y1, x2, y2, pxSize, color);
 	}
 
 	void RendererAPI::SurfaceDrawLine(Texture* target, int x1, int y1, int x2, int y2, int pxSize, SDL_Color color)

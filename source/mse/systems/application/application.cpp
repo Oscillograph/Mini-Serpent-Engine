@@ -31,7 +31,8 @@ namespace mse
 			SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS,
 			SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL,
 			0,
-			0
+			0,
+			WindowContextType::SDL
 			);
 		WindowManager::Init();
 		ResourceManager::Init();

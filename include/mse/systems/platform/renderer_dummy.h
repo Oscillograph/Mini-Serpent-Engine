@@ -68,7 +68,7 @@ namespace mse
 		virtual void ShowFrame() override;
 
 		// high-level methods (complex graphics operations)
-		virtual int Init(WindowContextType windowContextType = WindowContextType::SDL) override;
+		virtual int Init(Window* window, WindowContextType windowContextType = WindowContextType::SDL) override;
 		virtual int Shutdown() override;
 	};
 }

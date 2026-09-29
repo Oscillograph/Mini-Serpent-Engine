@@ -11,6 +11,7 @@ namespace mse
 
 	void* RendererDummy::GetActiveRenderer()
 	{
+		return nullptr;
 	}
 
 	void RendererDummy::SetActiveScene(Scene* scene)
@@ -19,14 +20,16 @@ namespace mse
 
 	Scene* RendererDummy::GetActiveScene()
 	{
+		return nullptr;
 	}
 
 	void RendererDummy::SetActiveLayer(Layer* layer)
 	{
 	}
 
-	static Layer* RendererDummy::GetActiveLayer()
+	Layer* RendererDummy::GetActiveLayer()
 	{
+		return nullptr;
 	}
 
 	void RendererDummy::SetActiveWindow(Window* window)
@@ -35,6 +38,7 @@ namespace mse
 
 	Window* RendererDummy::GetActiveWindow()
 	{
+		return nullptr;
 	}
 
 	void RendererDummy::SetActiveCamera(Camera2D* camera)
@@ -43,7 +47,8 @@ namespace mse
 
 	Camera2D* RendererDummy::GetActiveCamera()
 	{
-	};
+		return nullptr;
+	}
 
 	void RendererDummy::SetActiveScreen(const glm::uvec4& screen)
 	{
@@ -55,6 +60,7 @@ namespace mse
 
 	glm::uvec4 RendererDummy::GetActiveScreen()
 	{
+		return {0, 0, 0, 0};
 	}
 
 	void RendererDummy::SetBackgroundColor(const glm::uvec4& color)
@@ -69,6 +75,7 @@ namespace mse
 	// low-level methods (draw pixels, primitives, operate with data)
 	uint32_t RendererDummy::GetPixel(Texture* surface, int x, int y)
 	{
+		return 0;
 	}
 
 	void RendererDummy::DrawTexture(Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect)
@@ -153,6 +160,7 @@ namespace mse
 		const glm::uvec4& color,	// color
 		int interval)				// interval between lines
 	{
+		return {0, 0};
 	}
 
 	std::pair<int, int> RendererDummy::SurfaceDrawText(
@@ -164,6 +172,7 @@ namespace mse
 		const glm::uvec4& color,	// color
 		int interval)				// interval between lines
 	{
+		return {0, 0};
 	}
 
 	void RendererDummy::SurfaceDrawTexture(Texture* target, Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect)
@@ -190,9 +199,11 @@ namespace mse
 	// high-level methods (complex graphics operations)
 	int RendererDummy::Init(Window* window, WindowContextType windowContextType)
 	{
+		return 0;
 	}
 
 	int RendererDummy::Shutdown()
 	{
+		return 0;
 	}
 }
