@@ -1,6 +1,7 @@
 #ifndef MSE_SYSTEMS_PLATFORM_PLATFORM_H
 #define MSE_SYSTEMS_PLATFORM_PLATFORM_H
 
+#include "SDL3/SDL_pixels.h"
 #include <mse/core.h>
 
 // Simple Direct media Library

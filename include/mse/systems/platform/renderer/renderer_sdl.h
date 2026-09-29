@@ -1,5 +1,5 @@
-#ifndef MSE_SYSTEMS_PLATFORM_RENDER_DUMMY_H
-#define MSE_SYSTEMS_PLATFORM_RENDER_DUMMY_H
+#ifndef MSE_SYSTEMS_PLATFORM_RENDER_SDL_H
+#define MSE_SYSTEMS_PLATFORM_RENDER_SDL_H
 
 #include <mse/core.h>
 
@@ -8,12 +8,12 @@
 
 namespace mse
 {
-	class RendererDummy : public RendererBase
+	class RendererSDL : public RendererBase
 	{
 	public:
-		RendererDummy();
-		RendererDummy(Window* window);
-		virtual ~RendererDummy();
+		RendererSDL();
+		RendererSDL(Window* window);
+		virtual ~RendererSDL();
 		// system setup and utilities
 		virtual void SetActiveRenderer(void* renderer) override;
 		virtual void* GetActiveRenderer() override;

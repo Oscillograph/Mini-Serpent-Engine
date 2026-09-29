@@ -1,5 +1,8 @@
+#include "mse/systems/platform/renderer_dummy.h"
 #include <mse/systems/platform/renderAPI.h>
 #include <mse/systems/platform/renderer_base.h>
+#include <mse/systems/platform/renderer/renderer_opengl.h>
+#include <mse/systems/platform/renderer/renderer_sdl.h>
 
 #include <mse/utils/logger.h>
 
@@ -239,7 +242,7 @@ namespace mse
 			{
 				case mse::WindowContextType::None:
 				{
-					m_Impl = nullptr;
+					m_Impl = new RendererDummy(window);
 					return 0;
 					break;
 				}

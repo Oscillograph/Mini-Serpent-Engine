@@ -12,6 +12,7 @@ namespace mse
 	class RendererBase
 	{
 	public:
+		virtual ~RendererBase() = default;
 		// system setup and utilities
 		virtual void SetActiveRenderer(void* renderer) = 0;
 		virtual void* GetActiveRenderer() = 0;

@@ -5,6 +5,15 @@
 
 namespace mse
 {
+	RendererDummy::RendererDummy()
+	{}
+
+	RendererDummy::RendererDummy(Window* window)
+	{}
+
+	RendererDummy::~RendererDummy()
+	{}
+
 	void RendererDummy::SetActiveRenderer(void* renderer)
 	{
 	}

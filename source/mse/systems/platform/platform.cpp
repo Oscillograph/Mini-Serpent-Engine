@@ -10,7 +10,7 @@ namespace mse
 	uint32_t Platform::m_rendererFlags = 0;
 	uint32_t Platform::m_imgFlags = 0;
 	SDL_Event* Platform::m_eventListener = nullptr;
-	WindowContextType m_windowContextType = WindowContextType::None;
+	WindowContextType Platform::m_windowContextType = WindowContextType::None;
 	
 	int Platform::InitDefault()
 	{
@@ -33,6 +33,7 @@ namespace mse
 		m_windowFlags = rendererFlags;
 		m_rendererFlags = winFlags;
 		m_imgFlags = imgFlags;
+		m_windowContextType = windowContextType;
 		
 		/*
 		* - `SDL_INIT_TIMER`: timer subsystem
