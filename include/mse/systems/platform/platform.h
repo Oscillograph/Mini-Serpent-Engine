@@ -10,17 +10,27 @@
 
 namespace mse
 {
+	enum class WindowContextType
+	{
+		None,
+		SDL,
+		OpenGL,
+		Vulkan,
+		DirectX11,
+		DirectX12,
+	};
+
 	// arguments involving SDL-specific types should be void* or engine-specific to allow other systems stay platform-agnostic
 	// the comment above doesn't restrict SDL_Event. This is a decision.
 	class Platform
 	{
 	public:
 		static int InitDefault();
-		static int Init(uint32_t platformFlags, uint32_t rendererFlags, uint32_t winFlags, uint32_t imgFlags);
+		static int Init(uint32_t platformFlags, uint32_t rendererFlags, uint32_t winFlags, uint32_t imgFlags, WindowContextType windowContextType);
 		static int Shutdown();
 		
 		// Windowing
-		static void* CreateWindow(const char* title, int x, int y, int width, int height, uint32_t winFlags);
+		static void* CreateWindow(const char* title, int x, int y, int width, int height, uint32_t winFlags, WindowContextType windowContextType);
 		static void* ResizeWindow(void* window, int width, int height);
 		static Uint32 GetWindowID(void* window) { return SDL_GetWindowID((SDL_Window*)window); }
 		static int DestroyWindow(void* window);
@@ -34,6 +44,7 @@ namespace mse
 		
 		// Renderer
 		static void* InitRenderer(void* window);
+		static void* CreateContext(void* window);
 		static SDL_Surface* GetWindowSurface(void* window);
 		static void DestroyRenderer(void* renderer);
 		
@@ -46,6 +57,7 @@ namespace mse
 		static uint32_t m_windowFlags;
 		static uint32_t m_imgFlags;
 		static SDL_Event* m_eventListener;
+		static WindowContextType m_windowContextType;
 	};
 }
 

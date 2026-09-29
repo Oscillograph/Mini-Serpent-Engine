@@ -10,6 +10,7 @@ namespace mse
 	uint32_t Platform::m_rendererFlags = 0;
 	uint32_t Platform::m_imgFlags = 0;
 	SDL_Event* Platform::m_eventListener = nullptr;
+	WindowContextType m_windowContextType = WindowContextType::None;
 	
 	int Platform::InitDefault()
 	{
@@ -20,11 +21,12 @@ namespace mse
 		m_rendererFlags = 0;
 		// m_imgFlags = IMG_INIT_PNG + IMG_INIT_JPG;
 		m_imgFlags = 0;
+		m_windowContextType = WindowContextType::SDL;
 		
-		return Init(m_platformFlags, m_rendererFlags, m_windowFlags, m_imgFlags);
+		return Init(m_platformFlags, m_rendererFlags, m_windowFlags, m_imgFlags, m_windowContextType);
 	}
 	
-	int Platform::Init(uint32_t platformFlags, uint32_t rendererFlags, uint32_t winFlags, uint32_t imgFlags)
+	int Platform::Init(uint32_t platformFlags, uint32_t rendererFlags, uint32_t winFlags, uint32_t imgFlags, WindowContextType windowContextType)
 	{
 		// MSE_CORE_LOG("Renderer flags on Init: ", m_rendererFlags);
 		m_platformFlags = platformFlags;
@@ -95,7 +97,7 @@ namespace mse
 		return 0;
 	}
 	
-	void* Platform::CreateWindow(const char* title, int x, int y, int width, int height, uint32_t winFlags)
+	void* Platform::CreateWindow(const char* title, int x, int y, int width, int height, uint32_t winFlags, WindowContextType windowContextType)
 	{
 		SDL_Window* window = nullptr;
 		if (winFlags < 0)
@@ -107,6 +109,12 @@ namespace mse
 		
 		MSE_CORE_ASSERT(window != NULL, "Error creating window: ", SDL_GetError());
 		SDL_SetWindowMinimumSize(window, width, height);
+
+		if (m_windowContextType == WindowContextType::OpenGL)
+		{
+			SDL_GLContext glContext = SDL_GL_CreateContext(window);
+			MSE_CORE_ASSERT(glContext != NULL, "Error creating OpenGL Contect: ", SDL_GetError());
+		}
 		
 		MSE_CORE_LOG("Platform: created a window \"", title, "\"");
 		return (void*)window;
@@ -116,6 +124,8 @@ namespace mse
 	{
 		SDL_SetWindowSize((SDL_Window*)window, width, height);
 		MSE_CORE_LOG("Platform: resized window to ", width, "x", height);
+
+		return nullptr;
 	}
 	
 	int Platform::DestroyWindow(void* window)
