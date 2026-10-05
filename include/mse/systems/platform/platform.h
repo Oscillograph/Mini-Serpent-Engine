@@ -44,7 +44,7 @@ namespace mse
 		static SDL_Event* PeekEvent();
 		
 		// Renderer
-		static void* InitRenderer(void* window);
+		static RendererBase* InitRenderer(void* window);
 		static void* CreateContext(void* window);
 		static SDL_Surface* GetWindowSurface(void* window);
 		static void DestroyRenderer(void* renderer);

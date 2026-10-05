@@ -2,7 +2,7 @@
 #include <mse/systems/application/application.h>
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/platform/platform.h>
-#include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/rendererAPI.h>
 #include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/window.h>
@@ -333,7 +333,7 @@ namespace mse
 							Renderer::SetActiveScreen({0, 0, window->GetPrefs().width, window->GetPrefs().height});
 						}
 						
-						Renderer::NewFrame();
+						Renderer::NewFrame(window);
 						
 						if (window->IsFocused())
 						{
@@ -345,7 +345,7 @@ namespace mse
 						
 						window->GetLayerManager()->Display();
 						
-						Renderer::ShowFrame();
+						Renderer::ShowFrame(window);
 					}
 				}
 				

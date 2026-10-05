@@ -1,7 +1,7 @@
 #include <lesta-autobattler/gamestates.h>
 #include <lesta-autobattler/layers.h>
 //#include <mse/mse.h>
-#include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/rendererAPI.h>
 #include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/application/application.h>
 #include <mse/systems/windows/window.h>
@@ -133,6 +133,7 @@ bool MainPageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("MainPageState OnEnter...");
     layer = new MainMenuUILayer();
+
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     MSE_LOG("MainPageState OnEnter...done");
     return true;

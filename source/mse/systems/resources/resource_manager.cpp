@@ -7,7 +7,8 @@
 //#include <mse/systems/scenes/scene.h>
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/window.h>
-#include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/rendererAPI.h>
+#include <mse/systems/platform/renderer_base.h>
 
 namespace mse
 {
@@ -140,12 +141,12 @@ namespace mse
 				break;
 			case ResourceType::Texture:
 				{
-					resource->data = new Texture(path, user->GetRenderer());
+					resource->data = new Texture(path, user->GetRenderer()->GetActiveRenderer());
 				}
 				break;
 			case ResourceType::FontBitmap:
 				{
-					resource->data = new FontBitmap(path, user->GetRenderer());
+					resource->data = new FontBitmap(path, user->GetRenderer()->GetActiveRenderer());
                     break;
 				}
             case ResourceType::Sound:
@@ -323,7 +324,7 @@ namespace mse
 				);
 			
 			// TODO: monitor layers among users
-			resource->data = new Texture(path, user->GetRenderer(), {colorKey.x, colorKey.y, colorKey.z});
+			resource->data = new Texture(path, user->GetRenderer()->GetActiveRenderer(), {colorKey.x, colorKey.y, colorKey.z});
 			
 			m_Cache[type][path] = resource;
 		}
@@ -378,7 +379,7 @@ namespace mse
 //			MSE_CORE_LOG("Resource Manager: creating a new cursor...");
             mse::Resource* cursorTexture = mse::ResourceManager::CreateTexture(
                                                                         user,
-                                                                        user->GetRenderer(),
+                                                                        user->GetRenderer()->GetActiveRenderer(),
                                                                         32, 32,
                                                                         0,
                                                                         32,

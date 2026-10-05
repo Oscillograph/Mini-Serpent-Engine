@@ -8,6 +8,7 @@
 .project
 AGENTS.md
 /.cache
+/backups
 /makefile.win
 /app.ico
 /compile_commands.json

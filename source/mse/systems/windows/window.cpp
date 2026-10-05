@@ -2,7 +2,8 @@
 #include <mse/systems/windows/window.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/application/application.h>
-#include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/rendererAPI.h>
+#include <mse/systems/platform/renderer_base.h>
 #include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/windows/layers/layer_manager.h>
 
@@ -31,8 +32,8 @@ namespace mse
 		m_basePrefs = {m_title, m_x, m_y, m_width, m_height};
 		m_windowNative = Platform::CreateWindow(m_title.c_str(), m_x, m_y, m_width, m_height, m_flags, WindowContextType::SDL);
 		m_windowNativeID = Platform::GetWindowID(m_windowNative);
-		m_renderer = Platform::InitRenderer(m_windowNative);
-		Renderer::SetActiveRenderer(m_renderer);
+		m_renderer = Platform::InitRenderer(this);
+		// Renderer::SetActiveRenderer(m_renderer);
 		m_layerManager = new LayerManager(this);
 		
 		callbacks[EventTypes::None] = [&](SDL_Event* event) { return false; };

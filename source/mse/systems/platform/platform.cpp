@@ -1,6 +1,9 @@
 #include "SDL3/SDL_video.h"
 #include <mse/core.h>
 #include <mse/systems/platform/platform.h>
+#include <mse/systems/platform/rendererAPI.h>
+#include <mse/systems/platform/renderer_base.h>
+#include <mse/systems/windows/window.h>
 
 namespace mse
 {
@@ -233,19 +236,21 @@ namespace mse
 		return surface;
 	}
 	
-	void* Platform::InitRenderer(void* window)
+	RendererBase* Platform::InitRenderer(void* window)
 	{
 //		SDL_Renderer* renderer = SDL_CreateRenderer((SDL_Window*)window, -1, m_rendererFlags);
-		SDL_Renderer* renderer = SDL_CreateRenderer((SDL_Window*)window, NULL);		
-		MSE_CORE_ASSERT(renderer != NULL, "Renderer could not be created! SDL Error: ", SDL_GetError());
+		RendererBase* renderer = Renderer::Init((Window*)window, WindowContextType::SDL);
+		((Window*)window)->SetRenderer(renderer);
+		// SDL_Renderer* renderer = SDL_CreateRenderer((SDL_Window*)window, NULL);
+		MSE_CORE_ASSERT(renderer != nullptr, "Renderer could not be created!");
 		
 		MSE_CORE_LOG("Platform: Renderer initialized.");
-		return (void*)renderer;
+		return renderer;
 	}
 	
 	void Platform::DestroyRenderer(void* renderer)
 	{
-		SDL_DestroyRenderer((SDL_Renderer*)renderer);
+		((RendererBase*)renderer)->Shutdown();
 		MSE_CORE_LOG("Platform: Renderer destroyed.");
 	}
 	

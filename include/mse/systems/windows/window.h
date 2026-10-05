@@ -44,7 +44,7 @@ namespace mse
 		bool EventProcessor(SDL_Event* event);
 		
 		// set private properties
-		inline void SetRenderer(void* renderer) { m_renderer = renderer; }
+		inline void SetRenderer(RendererBase* renderer) { m_renderer = renderer; }
 		inline void SetNativeWindowID(uint32_t id) { m_windowNativeID = id; }
 		void SetFocus(bool focus);
 		void SetTitle(std::string& title);
@@ -53,7 +53,7 @@ namespace mse
 		// just get private properties 
 		inline void* GetNativeWindow() { return m_windowNative; }
 		inline uint32_t GetNativeWindowID() { return m_windowNativeID; }
-		inline void* GetRenderer() { return m_renderer; }
+		inline RendererBase* GetRenderer() { return m_renderer; }
 		inline WindowPrefs& GetPrefs() { return m_basePrefs; }
 		inline WindowScale& GetScale() { return m_scale; }
 		inline std::string& GetBaseTitle() { return m_basePrefs.title; }
@@ -76,7 +76,7 @@ namespace mse
 		
 		void* m_windowNative = nullptr;
 		uint32_t m_windowNativeID = 0;
-		void* m_renderer = nullptr;
+		RendererBase* m_renderer = nullptr;
 		WindowPrefs m_basePrefs;
 		WindowScale m_scale = {1.0, 1.0};
 		std::string m_title = "";

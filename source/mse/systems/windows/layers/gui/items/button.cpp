@@ -1,6 +1,7 @@
 #include <mse/systems/windows/layers/gui/items/button.h>
 #include <mse/systems/platform/platform.h>
-#include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/rendererAPI.h>
+#include <mse/systems/platform/renderer_base.h>
 #include <mse/systems/platform/renderer/texture.h>
 #include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/platform/events/events.h>
@@ -62,7 +63,7 @@ namespace mse
                 MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
                 m_texture = ResourceManager::CreateTexture(
                    windowUser,
-                   windowUser->GetRenderer(),
+                   windowUser->GetRenderer()->GetActiveRenderer(),
                    textureWidth,
                    textureHeight,
                    0,
@@ -148,7 +149,7 @@ namespace mse
 				MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
 				m_texture = ResourceManager::CreateTexture(
 					windowUser,
-					windowUser->GetRenderer(),
+					windowUser->GetRenderer()->GetActiveRenderer(),
 					layerArea.z * 4,
 					layerArea.w,
 					0,
@@ -279,7 +280,7 @@ namespace mse
                 MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
                 m_texture = ResourceManager::CreateTexture(
                                                            windowUser,
-                                                           windowUser->GetRenderer(),
+                                                           windowUser->GetRenderer()->GetActiveRenderer(),
                                                            layerArea.z * 4,
                                                            layerArea.w,
                                                            0,

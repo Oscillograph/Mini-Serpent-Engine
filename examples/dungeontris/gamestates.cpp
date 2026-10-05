@@ -1,7 +1,7 @@
 #include <dungeontris/gamestates.h>
 #include <dungeontris/layers.h>
 //#include <mse/mse.h>
-#include <mse/systems/platform/renderer/renderer.h>
+#include <mse/systems/platform/rendererAPI.h>
 #include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/application/application.h>
 #include <mse/systems/windows/window.h>

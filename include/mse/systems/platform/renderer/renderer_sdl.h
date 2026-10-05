@@ -20,11 +20,11 @@ namespace mse
 		virtual void SetActiveScene(Scene* scene) override;
 		virtual Scene* GetActiveScene() override;
 		virtual void SetActiveCamera(Camera2D* camera) override;
-		virtual Layer* GetActiveLayer() override;
-		virtual void SetActiveLayer(Layer* layer) override;
-		virtual Window* GetActiveWindow() override;
-		virtual void SetActiveWindow(Window* window) override;
 		virtual Camera2D* GetActiveCamera() override;
+		virtual void SetActiveLayer(Layer* layer) override;
+		virtual Layer* GetActiveLayer() override;
+		virtual void SetActiveWindow(Window* window) override;
+		virtual Window* GetActiveWindow() override;
 		virtual void SetActiveScreen(const glm::uvec4& screen) override;
 		virtual void SetActiveScreenDefault() override;
 		virtual glm::uvec4 GetActiveScreen() override;
@@ -72,6 +72,25 @@ namespace mse
 		// high-level methods (complex graphics operations)
 		virtual int Init(Window* window, WindowContextType windowContextType = WindowContextType::SDL) override;
 		virtual int Shutdown() override;
+
+	private:
+		SDL_Renderer* m_Renderer;
+		Scene* m_ActiveScene;
+		Layer* m_ActiveLayer;
+		Window* m_ActiveWindow;
+		SDL_Window* m_NativeWindow;
+		Camera2D* m_ActiveCamera;
+
+		uint32_t m_rendererFlags;
+		glm::uvec4 m_CurrentScreen; // contains rect properties of a current viewport
+		glm::vec2 m_PixelSize;
+		glm::uvec4 m_BackgroundColor;
+
+		glm::vec2 m_FrameSize;
+		glm::vec2 m_FrameScale;
+		glm::vec2 m_CameraPosition;
+
+		std::vector<std::vector<uint32_t>> m_symbols8bitTable; // a whole table from the 8-bit bmp-font table
 	};
 }
 

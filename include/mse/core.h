@@ -35,6 +35,7 @@ namespace mse
 {
 	class Platform; // static - a system to abstract away various platform calls from window management and event listening to renderer and audio system calls
 	class Renderer; // static - a platform subsystem specifically for rendering routines
+	class RendererBase; // pure virtual from which all other renderers descend
 	class Texture;
     class Cursor;
     class SoundMan; // static - a platform subsystem specifically for audio management routines

@@ -13,7 +13,7 @@ namespace mse
 	// class for different renderer implementations
 	class RendererBase;
 
-	class RendererAPI
+	class Renderer
 	{
 	public:
 		// system setup and utilities
@@ -68,15 +68,16 @@ namespace mse
 		static void SurfaceGeneralDrawTexture(Texture* target, Texture* texture, SDL_FRect* destRect, SDL_Rect* srcRect, glm::vec2 tilingFactor, const glm::vec4& tintColor);
 
 		// mid-level methods (advanced renderer commands)
-		static void NewFrame();
-		static void ShowFrame();
+		static void NewFrame(Window* window);
+		static void ShowFrame(Window* window);
 
 		// high-level methods (complex graphics operations)
-		static int Init(Window* window, WindowContextType windowContextType = WindowContextType::SDL);
+		static RendererBase* Init(Window* window, WindowContextType windowContextType = WindowContextType::SDL);
 		static int Shutdown();
 
 	public:
 		static RendererBase* m_Impl;
+		static Window* m_activeWindow;
 	};
 }
 
