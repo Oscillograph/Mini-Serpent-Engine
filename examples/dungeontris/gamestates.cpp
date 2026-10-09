@@ -570,7 +570,10 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
     
     // configure tetrisMap
     tetrisMap.Resize(12, 20);
-    
+    tetrimino.blocks.resize(16);
+    tetrimino.x = 4;
+    tetrimino.y = 0;
+
     // pick random first tetrimino
     int tetriminoId = rand() % tetriminoDB.data.size();
     for (size_t i = 0; i < tetriminoDB.data[tetriminoId].block.size(); ++i)
@@ -725,17 +728,42 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             // ###################################################################################
             //                         BASIC TETRIS logic
             // ###################################################################################
-            // 1. Pick tetramino and calculate next one.
-            // 2. Check if can move tetramino (and keep track of its movement counts).
-            // 3.1. If can move.
-            // 3.1.1. Move the tetramino lower and go to (2).
-            // 3.2. If can't move.
-            // 3.2.1. Place the tetramino.
-            // 3.2.2. If movement counts == 0, then declare game over.
-            // 4. Check for full lines.
-            // 4.1. If a line is full, clear it.
-            // 5. Check for empty lines.
-            // 5.1. If a line is empty, move the line from the top of it to its place.
+            switch (DTetris::tetrisData.state)
+            {
+                case DTetris::TetrisStates::Processing:
+                    // 1. Pick tetramino and calculate next one.
+                    DTetris::TetrisEngine_Tick();
+                    // 2. Check if can move tetramino (and keep track of its movement counts).
+                    // 3.1. If can move.
+                    // 3.1.1. Move the tetramino lower and go to (2).
+                    // 3.2. If can't move.
+                    // 3.2.1. Place the tetramino.
+                    // 3.2.2. If movement counts == 0, then declare game over.
+                    // 4. Check for full lines.
+                    // 4.1. If a line is full, clear it.
+                    // 5. Check for empty lines.
+                    // 5.1. If a line is empty, move the line from the top of it to its place.
+                {
+
+                    break;
+                }
+                case DTetris::TetrisStates::Paused:
+                {
+                    break;
+                }
+                case DTetris::TetrisStates::GameOver:
+                {
+                    break;
+                }
+                case DTetris::TetrisStates::Win:
+                {
+                    break;
+                }
+                case DTetris::TetrisStates::None:
+                {
+                    break;
+                }
+            }
             
          
             // ###################################################################################

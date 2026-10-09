@@ -4,10 +4,20 @@
 #include <cstdint> // for size_t, uint32_t
 
 namespace DTetris {
+	enum class TetrisStates
+	{
+		None		= 0,
+		Processing	= 1,
+		Paused		= 2,
+		GameOver	= 3,
+		Win			= 4,
+	}
+
 	struct TetrisData
 	{
 		int gameSpeed = 0;
 		uint32_t gameTimer = 0;
+		TetrisStates state = TetrisStates::None;
 	};
 
 	static TetrisData tetrisData;

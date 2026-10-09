@@ -5,6 +5,7 @@
 
 #include <dungeontris/gamestates.h>
 #include <dungeontris/layers.h>
+#include <dungeontris/tetris.h>
 
 // ********************************************************************************************** //
 //                                    SCENES (do I need one?)

@@ -261,6 +261,7 @@ namespace DTetris
     
     struct Tetrimino
     {
+        int x, y = 0; // left-upper corner coordinates
         std::vector<Block> blocks = {}; // 4x4 or 3x3 areas
         bool fell = false;
     };
