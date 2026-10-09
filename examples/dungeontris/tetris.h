@@ -1,26 +1,12 @@
 #ifndef DUNGEONTRIS_TETRIS_H
 #define DUNGEONTRIS_TETRIS_H
 
+#include "mse/systems/platform/input/input.h"
+#include <dungeontris/game-fwd.h>
 #include <cstdint> // for size_t, uint32_t
 
 namespace DTetris {
-	enum class TetrisStates
-	{
-		None		= 0,
-		Processing	= 1,
-		Paused		= 2,
-		GameOver	= 3,
-		Win			= 4,
-	}
-
-	struct TetrisData
-	{
-		int gameSpeed = 0;
-		uint32_t gameTimer = 0;
-		TetrisStates state = TetrisStates::None;
-	};
-
-	static TetrisData tetrisData;
+	static TetrisEngineData tetrisEngineData;
 
 	// TetrisEngine API
 	int TetrisEngine_Init();
@@ -31,10 +17,11 @@ namespace DTetris {
 	// TetrisEngine internals
 	int TetrisEngine_sumLayers();
 	int TetrisEngine_cleanLayer(int id);
-	int TetrisEngine_tetriblockControl(void* block);
-	bool TetrisEngine_moveAllowed(void* block, int direction);
-	bool TetrisEngine_rotateAllowed(void* block, int direction);
-	int TetrisEngine_addBlock(void* block);
+	int TetrisEngine_tetriblockControl(Tetrimino* block);
+	bool TetrisEngine_moveAllowed(Tetrimino* block, TetrisMoveDirection moveDirection);
+	bool TetrisEngine_rotateAllowed(Tetrimino* block);
+	int TetrisEngine_Rotate(Tetrimino* block);
+	int TetrisEngine_addBlock(Tetrimino* block);
 	int TetrisEngine_processLines();
 	int TetrisEngine_addScore(int score);
 	int TetrisEngine_pauseOn();

@@ -1,10 +1,14 @@
 #ifndef DUNGEONTRIS_LAYERS_CPP
 #define DUNGEONTRIS_LAYERS_CPP
 
+#include "dungeontris/tetris.h"
+#include "mse/systems/platform/events/events.h"
+#include "mse/systems/platform/input/input.h"
 #include <mse/systems/platform/audio/soundman.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/gamestates.h>
+#include <dungeontris/tetris.h>
 
 extern DTetris::GameDB gameDB;
 extern DTetris::Game game;
@@ -800,6 +804,44 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
         nextBtn->Enable();
     }
 //    needToUpdateText = false;
+}
+
+bool ArenaUILayer::HandleEvent(mse::EventTypes eventType, SDL_Event* event, int elementId)
+{
+    switch (eventType)
+    {
+        case mse::EventTypes::KeyDown:
+        {
+            switch (event->key.key)
+            {
+                // Move block
+                case mse::KeyCode::Left:
+                {
+                    tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Left;
+                    break;
+                }
+                case mse::KeyCode::Right:
+                {
+                    tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Right;
+                    break;
+                }
+                case mse::KeyCode::Down:
+                {
+                    tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
+                    break;
+                }
+                // Rotate block
+                case mse::KeyCode::Up:
+                {
+                    tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Up;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    return true;
 }
 
 CharacterUpdateUILayer::CharacterUpdateUILayer() : mse::Layer()

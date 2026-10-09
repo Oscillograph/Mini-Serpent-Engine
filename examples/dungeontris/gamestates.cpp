@@ -1,3 +1,4 @@
+#include "dungeontris/game-fwd.h"
 #include <dungeontris/gamestates.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/tetris.h>
@@ -720,6 +721,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     game.battleJustStarted = false;
     static mse::TimeType localTime = 0;
     std::stringstream strForLogger;
+    DTetris::TetrisMoveDirection moveDirection = DTetris::TetrisMoveDirection::Down;
     
     if (!game.battleFinished)
     {
@@ -728,20 +730,57 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             // ###################################################################################
             //                         BASIC TETRIS logic
             // ###################################################################################
+            // 1. Pick tetrimino.
             switch (DTetris::tetrisData.state)
             {
                 case DTetris::TetrisStates::Processing:
-                    // 1. Pick tetramino and calculate next one.
-                    DTetris::TetrisEngine_Tick();
-                    // 2. Check if can move tetramino (and keep track of its movement counts).
-                    // 3.1. If can move.
-                    // 3.1.1. Move the tetramino lower and go to (2).
-                    // 3.2. If can't move.
-                    // 3.2.1. Place the tetramino.
-                    // 3.2.2. If movement counts == 0, then declare game over.
+                    // 2. Check if can move tetrimino (and keep track of its movement counts).
+                    if (DTetris::TetrisEngine_moveAllowed(&tetrimino, tetrisEngineData.moveDirection))
+                    {
+                        // 3.1. If can move.
+                        // 3.1.1. Move the tetrimino lower and go to (2).
+
+                    } else {
+                        // 3.2. If can't move.
+                        // 3.2.1. Place the tetrimino.
+                        DTetris::TetrisEngine_addBlock(&tetrimino);
+                        // 3.2.2. If movement counts == 0, then declare game over.
+
+                    }
+
                     // 4. Check for full lines.
-                    // 4.1. If a line is full, clear it.
-                    // 5. Check for empty lines.
+                    DTetris::tetrisEngineData.linesFilled.clear();
+                    int actualWidth = tetrisMap.width - 2;
+                    int actualHeight = tetrisMap.height;
+                    for (int y = 1; y < actualHeight; ++y)
+                    {
+                        int yFactor = y * tetrisMap.width;
+                        int filled = 0;
+                        for (int x = 1; x < actualWidth; ++x)
+                        {
+                            if (tetrisMap.map[x + yFactor].type != DTetris::BlockType::None)
+                            {
+                                filled++;
+                            }
+                        }
+
+                        // 4.1. If a line is full, clear it.
+                        if (filled == actualWidth)
+                        {
+                            if (!DTetris::tetrisEngineData.animateLinesRemove)
+                            {
+                                for (int x = 1; x < actualWidth; ++x)
+                                {
+                                    // clear the line
+                                    tetrisMap.map[x + yFactor].type = DTetris::BlockType::None;
+                                    // register the newly empty line
+                                    DTetris::tetrisEngineData.linesFilled.push_back(y);
+                                }
+                            }
+                        }
+                    }
+
+                    // 5. Check for registered empty lines.
                     // 5.1. If a line is empty, move the line from the top of it to its place.
                 {
 

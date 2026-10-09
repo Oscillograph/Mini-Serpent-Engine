@@ -279,7 +279,38 @@ namespace DTetris
         
         // controller
         void Resize(int w, int h);
-//        Update();
+    };
+
+    enum class TetrisStates
+    {
+        None		= 0,
+        Processing	= 1,
+        Paused		= 2,
+        GameOver	= 3,
+        Win			= 4,
+    };
+
+    enum class TetrisMoveDirection
+    {
+        Down		= 0,
+        Left		= 1,
+        Right		= 2,
+        Up			= 3,
+    };
+
+    struct TetrisEngineData
+    {
+        // Game speed formulae: 10ms*(gameSpeedMax - gameSpeed)
+        int gameSpeed = 0;
+        int gameSpeedMax = 25;
+        uint32_t gameTimer = 0;
+        int gameDifficulty = 2; // 0 means A, 1 means B, 2 means C
+        int playerScore = 0;
+        bool justPlacedTetrimino = false;
+        bool animateLinesRemove = false;
+        std::vector<int> linesFilled = {};
+        TetrisStates state = TetrisStates::None;
+        TetrisMoveDirection moveDirection = TetrisMoveDirection::Down;
     };
     
     // various game data for everything
