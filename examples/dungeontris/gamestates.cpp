@@ -721,7 +721,6 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     game.battleJustStarted = false;
     static mse::TimeType localTime = 0;
     std::stringstream strForLogger;
-    DTetris::TetrisMoveDirection moveDirection = DTetris::TetrisMoveDirection::Down;
     
     if (!game.battleFinished)
     {
@@ -735,18 +734,29 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             {
                 case DTetris::TetrisStates::Processing:
                 {
+                    if (DTetris::tetrisEngineData.rotateTetrimino)
+                    {
+                        if (DTetris::TetrisEngine_rotateAllowed(&tetrimino))
+                        {
+                            DTetris::TetrisEngine_Rotate(&tetrimino);
+                        }
+
+                        DTetris::tetrisEngineData.rotateTetrimino = true;
+                    }
+
                     // 2. Check if can move tetrimino (and keep track of its movement counts).
                     if (DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::tetrisEngineData.moveDirection))
                     {
                         // 3.1. If can move.
                         // 3.1.1. Move the tetrimino lower and go to (2).
+                        DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                        DTetris::tetrisEngineData.justPlacedTetrimino = false;
 
                     } else {
                         // 3.2. If can't move.
                         // 3.2.1. Place the tetrimino.
                         DTetris::TetrisEngine_addBlock(&tetrimino);
-                        // 3.2.2. If movement counts == 0, then declare game over.
-
+                        DTetris::tetrisEngineData.justPlacedTetrimino = true;
                     }
 
                     // 4. Check for full lines.

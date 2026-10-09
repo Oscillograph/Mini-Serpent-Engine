@@ -20,6 +20,7 @@ namespace DTetris
 	int TetrisEngine_cleanLayer(int id);
 	int TetrisEngine_tetriblockControl(Tetrimino* block);
 	bool TetrisEngine_moveAllowed(Tetrimino* block, TetrisMoveDirection moveDirection);
+	int TetrisEngine_Move(Tetrimino* block, TetrisMoveDirection moveDirection);
 	bool TetrisEngine_rotateAllowed(Tetrimino* block);
 	int TetrisEngine_Rotate(Tetrimino* block);
 	int TetrisEngine_addBlock(Tetrimino* block);

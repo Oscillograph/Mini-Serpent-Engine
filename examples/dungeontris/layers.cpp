@@ -833,7 +833,7 @@ bool ArenaUILayer::HandleEvent(mse::EventTypes eventType, SDL_Event* event, int 
                 // Rotate block
                 case mse::KeyCode::Up:
                 {
-                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Up;
+                    DTetris::tetrisEngineData.rotateTetrimino = true;
                     break;
                 }
             }

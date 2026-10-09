@@ -306,6 +306,7 @@ namespace DTetris
         uint32_t gameTimer = 0;
         int gameDifficulty = 2; // 0 means A, 1 means B, 2 means C
         int playerScore = 0;
+        bool rotateTetrimino = false;
         bool justPlacedTetrimino = false;
         bool animateLinesRemove = false;
         bool removeLines = false;

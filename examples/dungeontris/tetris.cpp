@@ -17,6 +17,7 @@ namespace DTetris
 		false,
 		false,
 		false,
+		false,
 		{},
 		TetrisStates::None,
 		TetrisMoveDirection::Down
@@ -79,6 +80,11 @@ namespace DTetris
 		// }
 
 		return isAllowed;
+	}
+
+	int TetrisEngine_Move(Tetrimino* block, TetrisMoveDirection moveDirection)
+	{
+		return 0;
 	}
 
 	bool TetrisEngine_rotateAllowed(Tetrimino* block){
