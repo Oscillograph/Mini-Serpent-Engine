@@ -308,7 +308,8 @@ namespace DTetris
         int playerScore = 0;
         bool justPlacedTetrimino = false;
         bool animateLinesRemove = false;
-        std::vector<int> linesFilled = {};
+        bool removeLines = false;
+        std::map<int, bool> linesFilled = {};
         TetrisStates state = TetrisStates::None;
         TetrisMoveDirection moveDirection = TetrisMoveDirection::Down;
     };

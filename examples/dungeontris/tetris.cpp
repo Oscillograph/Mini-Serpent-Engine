@@ -16,6 +16,7 @@ namespace DTetris
 		0,
 		false,
 		false,
+		false,
 		{},
 		TetrisStates::None,
 		TetrisMoveDirection::Down

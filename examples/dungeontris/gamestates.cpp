@@ -734,6 +734,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             switch (DTetris::tetrisData.state)
             {
                 case DTetris::TetrisStates::Processing:
+                {
                     // 2. Check if can move tetrimino (and keep track of its movement counts).
                     if (DTetris::TetrisEngine_moveAllowed(&tetrimino, tetrisEngineData.moveDirection))
                     {
@@ -756,7 +757,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                     {
                         int yFactor = y * tetrisMap.width;
                         int filled = 0;
-                        for (int x = 1; x < actualWidth; ++x)
+                        for (int x = 1; x < tetrisMap.width - 1; ++x)
                         {
                             if (tetrisMap.map[x + yFactor].type != DTetris::BlockType::None)
                             {
@@ -767,14 +768,21 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                         // 4.1. If a line is full, clear it.
                         if (filled == actualWidth)
                         {
+                            if (DTetris::tetrisEngineData.linesFilled.find(y) == DTetris::tetrisEngineData.linesFilled.end())
+                            {
+                                // register the newly empty line
+                                DTetris::tetrisEngineData.linesFilled[y] = true;
+
+                                // start the lines removal animation
+                                DTetris::tetrisEngineData.animateLinesRemove = true;
+                            }
+
                             if (!DTetris::tetrisEngineData.animateLinesRemove)
                             {
-                                for (int x = 1; x < actualWidth; ++x)
+                                for (int x = 1; x < tetrisMap.width - 1; ++x)
                                 {
                                     // clear the line
                                     tetrisMap.map[x + yFactor].type = DTetris::BlockType::None;
-                                    // register the newly empty line
-                                    DTetris::tetrisEngineData.linesFilled.push_back(y);
                                 }
                             }
                         }
@@ -782,7 +790,26 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
 
                     // 5. Check for registered empty lines.
                     // 5.1. If a line is empty, move the line from the top of it to its place.
-                {
+                    if (DTetris::tetrisEngineData.removeLines)
+                    {
+                        int moveDownCount = 0;
+                        int moveDownFactor = 0;
+                        int yFactor = 0;
+                        for (int y = 1; y < actualHeight; ++y)
+                        {
+                            yFactor = y * tetrisMap.width;
+                            if (DTetris::tetrisEngineData.linesFilled.find(y) != DTetris::tetrisEngineData.linesFilled.end())
+                            {
+                                moveDownCount++;
+                                moveDownFactor = (y + moveDownCount) * tetrisMap.width;
+                            }
+
+                            for (int x = 1; x < tetrisMap.width - 1; ++x)
+                            {
+                                tetrisMap.map[x + yFactor] = tetrisMap.map[x + modeDownFactor];
+                            }
+                        }
+                    }
 
                     break;
                 }
