@@ -5,7 +5,8 @@
 #include <dungeontris/game-fwd.h>
 #include <cstdint> // for size_t, uint32_t
 
-namespace DTetris {
+namespace DTetris
+{
 	static TetrisEngineData tetrisEngineData;
 
 	// TetrisEngine API

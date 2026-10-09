@@ -817,23 +817,23 @@ bool ArenaUILayer::HandleEvent(mse::EventTypes eventType, SDL_Event* event, int 
                 // Move block
                 case mse::KeyCode::Left:
                 {
-                    tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Left;
+                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Left;
                     break;
                 }
                 case mse::KeyCode::Right:
                 {
-                    tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Right;
+                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Right;
                     break;
                 }
                 case mse::KeyCode::Down:
                 {
-                    tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
+                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
                     break;
                 }
                 // Rotate block
                 case mse::KeyCode::Up:
                 {
-                    tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Up;
+                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Up;
                     break;
                 }
             }

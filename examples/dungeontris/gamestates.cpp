@@ -731,12 +731,12 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             //                         BASIC TETRIS logic
             // ###################################################################################
             // 1. Pick tetrimino.
-            switch (DTetris::tetrisData.state)
+            switch (DTetris::tetrisEngineData.state)
             {
                 case DTetris::TetrisStates::Processing:
                 {
                     // 2. Check if can move tetrimino (and keep track of its movement counts).
-                    if (DTetris::TetrisEngine_moveAllowed(&tetrimino, tetrisEngineData.moveDirection))
+                    if (DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::tetrisEngineData.moveDirection))
                     {
                         // 3.1. If can move.
                         // 3.1.1. Move the tetrimino lower and go to (2).
@@ -806,7 +806,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
 
                             for (int x = 1; x < tetrisMap.width - 1; ++x)
                             {
-                                tetrisMap.map[x + yFactor] = tetrisMap.map[x + modeDownFactor];
+                                tetrisMap.map[x + yFactor] = tetrisMap.map[x + moveDownFactor];
                             }
                         }
                     }
