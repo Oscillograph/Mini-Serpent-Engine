@@ -1,5 +1,6 @@
 #include <dungeontris/gamestates.h>
 #include <dungeontris/layers.h>
+#include <dungeontris/tetris.h>
 //#include <mse/mse.h>
 #include <mse/systems/platform/rendererAPI.h>
 #include <mse/systems/platform/audio/soundman.h>
@@ -135,8 +136,16 @@ MainPageState::~MainPageState()
 bool MainPageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("MainPageState OnEnter...");
-    layer = new MainMenuUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new MainMenuUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
     MSE_LOG("MainPageState OnEnter...done");
     return true;
 }
@@ -144,8 +153,11 @@ bool MainPageState::OnEnter(mse::Layer* pass_layer)
 bool MainPageState::OnExit(bool pass_layer)
 {
     MSE_LOG("MainPageState OnExit...");
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
     MSE_LOG("MainPageState OnExit...done");
     return true;
 }
@@ -185,8 +197,11 @@ bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
 bool CharacterCreatePageState::OnExit(bool pass_layer)
 {
     MSE_LOG("CharacterCreatePageState OnExit..");
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
     MSE_LOG("CharacterCreatePageState OnExit..done");
     return true;
 }
@@ -235,7 +250,7 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
             game.inputWeapon   // weapon
         };
         printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n", 
-               game.playerCharacter.name.c_str(),
+               (char*)(game.playerCharacter.name.c_str()),
                game.playerCharacter.stats.health,
                game.playerCharacter.stats.strength,
                game.playerCharacter.stats.agility,
@@ -267,8 +282,16 @@ CharacterLoadPageState::~CharacterLoadPageState()
 bool CharacterLoadPageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("CharacterLoadPageState OnEnter...");
-    layer = new CharacterLoadUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new CharacterLoadUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
     MSE_LOG("CharacterLoadPageState OnEnter...done");
     return true;
 }
@@ -276,8 +299,11 @@ bool CharacterLoadPageState::OnEnter(mse::Layer* pass_layer)
 bool CharacterLoadPageState::OnExit(bool pass_layer)
 {
     MSE_LOG("CharacterLoadPageState OnExit...");
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
     MSE_LOG("CharacterLoadPageState OnExit...done");
     return true;
 }
@@ -298,8 +324,16 @@ CharacterSavePageState::~CharacterSavePageState()
 bool CharacterSavePageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("CharacterSavePageState OnEnter...");
-    layer = new CharacterSaveUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new CharacterSaveUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
     MSE_LOG("CharacterSavePageState OnEnter...done");
     return true;
 }
@@ -307,8 +341,11 @@ bool CharacterSavePageState::OnEnter(mse::Layer* pass_layer)
 bool CharacterSavePageState::OnExit(bool pass_layer)
 {
     MSE_LOG("CharacterSavePageState OnExit...");
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
     MSE_LOG("CharacterSavePageState OnExit...done");
     return true;
 }
@@ -338,8 +375,16 @@ bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
         printf("Player lvl: %d, ", game.playerCharacter.level);
     }
     
-    layer = new CharacterUpdateUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new CharacterUpdateUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
     MSE_LOG("CharacterUpdatePageState OnEnter...done");
     return true;
 }
@@ -347,8 +392,11 @@ bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
 bool CharacterUpdatePageState::OnExit(bool pass_layer)
 {
     MSE_LOG("CharacterUpdatePageState OnExit...");
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-    layer = nullptr;
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
     MSE_LOG("CharacterUpdatePageState OnExit...done");
     return true;
 }
@@ -426,6 +474,8 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                         }
                         break;
                     }
+                default:
+                    {}
                 }
             } else {
                 // update main class level
@@ -476,6 +526,8 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                         }
                         break;
                     }
+                default:
+                    {}
                 }
             }
         }
@@ -510,7 +562,7 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
     
     printf("Next opponent (of %d) is %s! (%.2f, %.2f, %.2f, %.2f)\n",
            npcCount,
-           game.npcCharacter.name.c_str(),
+           (char*)(game.npcCharacter.name.c_str()),
            game.npcCharacter.stats.health,
            game.npcCharacter.stats.strength,
            game.npcCharacter.stats.agility,
@@ -521,7 +573,7 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
     
     // pick random first tetrimino
     int tetriminoId = rand() % tetriminoDB.data.size();
-    for (int i = 0; i < tetriminoDB.data[tetriminoId].block.size(); ++i)
+    for (size_t i = 0; i < tetriminoDB.data[tetriminoId].block.size(); ++i)
     {
         switch (tetriminoDB.data[tetriminoId].block[i])
         {
@@ -543,12 +595,9 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
     }
     
     // configure GUI layer
-    if (pass_layer != nullptr)
+    if ((pass_layer != nullptr) && (layer != pass_layer))
     {
-        if (layer != pass_layer)
-        {
-            layer = pass_layer;
-        }
+        layer = pass_layer;
     } else {
         layer = new ArenaUILayer();
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
@@ -671,7 +720,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     
     if (!game.battleFinished)
     {
-        if (localTime >= game.config.turnLength)
+        if ((int)localTime >= game.config.turnLength)
         {
             // ###################################################################################
             //                         BASIC TETRIS logic
@@ -708,7 +757,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             
             printf("Turn %d: %s attacks.\n",
                    game.turn,
-                   game.attacker->name.c_str());
+                   (char*)(game.attacker->name.c_str()));
             
             // start of the turn
             // calculate attack chance
@@ -735,7 +784,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                         skillDamage += 1;
                     }
                     
-                    if ((trait == DTetris::Traits::Poison))
+                    if (trait == DTetris::Traits::Poison)
                     {
                         skillDamage += game.turn;
                     }
@@ -794,9 +843,9 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                 game.defender->stats.health -= totalDamage;
                 printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n", 
                        game.turn, 
-                       game.attacker->name.c_str(), 
+                       (char*)(game.attacker->name.c_str()),
                        totalDamage, 
-                       game.defender->name.c_str(), 
+                       (char*)(game.defender->name.c_str()),
                        game.defender->stats.health);
                 
                 strForLogger << "Ход " << game.turn << ": " 
@@ -820,7 +869,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             } else {
                 printf("Turn %d: %s misses!\n", 
                        game.turn, 
-                       game.attacker->name.c_str());
+                       (char*)(game.attacker->name.c_str()));
                 
                 strForLogger << "Ход " << game.turn << ": " 
                 << utf8::utf32to8(game.attacker->name.c_str()) 

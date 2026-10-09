@@ -9,13 +9,13 @@ namespace DTetris
     // ****************************************************************************************** //
     //                             General Game Types and Constants
     // ****************************************************************************************** //
-    TetriminoTemplate::TetriminoTemplate(const std::vector<int>& data)
+    inline TetriminoTemplate::TetriminoTemplate(const std::vector<int>& data)
     {
         block = data;
     }
         
     
-    GameDB& InitAutobattlerData()
+    inline GameDB& InitAutobattlerData()
     {
         static GameDB gameDB;
         gameDB.level_max = 3;
@@ -23,23 +23,23 @@ namespace DTetris
         gameDB.weapons =
         {
             // player collectible
-            { 0, {U"Кулак",             0,    DamageType::None,        WeaponSprite::Fist}},
-            { 1, {U"Кастет",            1,    DamageType::None,        WeaponSprite::Fist}},
-            { 2, {U"Кинжал",            2,    DamageType::Piercing,    WeaponSprite::Dagger}},
-            { 3, {U"Меч",               3,    DamageType::Cutting,     WeaponSprite::Sword}},
-            { 4, {U"Дубина",            3,    DamageType::Crushing,    WeaponSprite::Club}},
-            { 5, {U"Копьё",             3,    DamageType::Piercing,    WeaponSprite::Spear}},
-            { 6, {U"Топор",             4,    DamageType::Cutting,     WeaponSprite::Axe}},
-            { 7, {U"Легендарный Меч",  10,    DamageType::Cutting,     WeaponSprite::LegendarySword}},
+            { 0, {{U"Кулак"},             0,    DamageType::None,        WeaponSprite::Fist}},
+            { 1, {{U"Кастет"},            1,    DamageType::None,        WeaponSprite::Fist}},
+            { 2, {{U"Кинжал"},            2,    DamageType::Piercing,    WeaponSprite::Dagger}},
+            { 3, {{U"Меч"},               3,    DamageType::Cutting,     WeaponSprite::Sword}},
+            { 4, {{U"Дубина"},            3,    DamageType::Crushing,    WeaponSprite::Club}},
+            { 5, {{U"Копьё"},             3,    DamageType::Piercing,    WeaponSprite::Spear}},
+            { 6, {{U"Топор"},             4,    DamageType::Cutting,     WeaponSprite::Axe}},
+            { 7, {{U"Легендарный Меч"},  10,    DamageType::Cutting,     WeaponSprite::LegendarySword}},
             
             // npc weapons
-            { 9, {U"Шип",               1,    DamageType::None,        WeaponSprite::None}},
-            {10, {U"Сгнивший меч",      2,    DamageType::None,        WeaponSprite::None}},
-            {11, {U"Кадило",            3,    DamageType::None,        WeaponSprite::None}},
-            {12, {U"Клык и коготь",     4,    DamageType::None,        WeaponSprite::None}},
+            { 9, {{U"Шип"},               1,    DamageType::None,        WeaponSprite::None}},
+            {10, {{U"Сгнивший меч"},      2,    DamageType::None,        WeaponSprite::None}},
+            {11, {{U"Кадило"},            3,    DamageType::None,        WeaponSprite::None}},
+            {12, {{U"Клык и коготь"},     4,    DamageType::None,        WeaponSprite::None}},
             
             // easter eggs
-            {13, {U"Пулемёт Максим",  100,    DamageType::Divine,      WeaponSprite::MaximGun}},
+            {13, {{U"Пулемёт Максим"},  100,    DamageType::Divine,      WeaponSprite::MaximGun}},
         };
         
         gameDB.traits = 
@@ -316,7 +316,7 @@ namespace DTetris
         return gameDB;
     }
     
-    TetriminoTemplatesDB& InitTetriminoDB()
+    inline TetriminoTemplatesDB& InitTetriminoDB()
     {
         static TetriminoTemplatesDB tetriminoDB;
         // empty block
@@ -361,6 +361,12 @@ namespace DTetris
             0, 1, 0, 0,
             0, 1, 1, 0,
             0, 0, 1, 0,
+            0, 0, 0, 0
+        }));
+        tetriminoDB.data.push_back(TetriminoTemplate({
+            0, 0, 1, 0,
+            0, 1, 1, 0,
+            0, 1, 0, 0,
             0, 0, 0, 0
         }));
         // brick game mode

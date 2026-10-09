@@ -1,14 +1,11 @@
-#ifdef OLDCODE
 // #include "globals.h"
 
 // !!!!!!!!!!!!!!
 // GameData - глобальная структура с важными данными для всего игрового приложения
 // но есть и переменные, важные только для cTetrisEngine
-extern globalGameData GameData;
-extern globalPlayerData PlayerData;
 
-//cTetrisEngine::cTetrisEngine(){
-void cTetrisEngine::init(){
+//TetrisEngine_cTetrisEngine(){
+void TetrisEngine_init(){
 	animateLinesRemove = false;
 	GameData.selfName = "Tetris";
 
@@ -41,7 +38,7 @@ void cTetrisEngine::init(){
 }
 
 // look at what we have in the layer 9
-void cTetrisEngine::sumLayers(){
+void TetrisEngine_sumLayers(){
 	this->cleanLayer(9);
 
 	for (y = 0; y < BOARD_HEIGHT; y++){
@@ -54,7 +51,7 @@ void cTetrisEngine::sumLayers(){
 	}
 }
 
-void cTetrisEngine::cleanLayer(int id){
+void TetrisEngine_cleanLayer(int id){
 	for (y = 0; y < BOARD_HEIGHT; y++){
 		for (x = 0; x < BOARD_WIDTH; x++){
 			// clean the layer
@@ -64,7 +61,7 @@ void cTetrisEngine::cleanLayer(int id){
 }
 
 // init tetriBlock on its layer
-void cTetrisEngine::tetriBlockControl(cPlayerCharacter *block){
+void TetrisEngine_tetriBlockControl(cPlayerCharacter *block){
 	this->cleanLayer(2);
 
 	for (y = 0; y < BLOCK_HEIGHT; y++){
@@ -74,7 +71,7 @@ void cTetrisEngine::tetriBlockControl(cPlayerCharacter *block){
 	}
 }
 
-bool cTetrisEngine::moveAllowed(cPlayerCharacter *block, int moveDirection){
+bool TetrisEngine_moveAllowed(cPlayerCharacter *block, int moveDirection){
 	bool isAllowed = true;
 	const int xbackup = PlayerData.x;
 	const int ybackup = PlayerData.y;
@@ -98,7 +95,7 @@ bool cTetrisEngine::moveAllowed(cPlayerCharacter *block, int moveDirection){
 	return isAllowed;
 }
 
-bool cTetrisEngine::rotateAllowed(cPlayerCharacter *block, int rotateDirection){
+bool TetrisEngine_rotateAllowed(cPlayerCharacter *block, int rotateDirection){
 	bool isAllowed = true;
 
 	if (PlayerData.blockNum != 1){
@@ -128,7 +125,7 @@ bool cTetrisEngine::rotateAllowed(cPlayerCharacter *block, int rotateDirection){
 	return isAllowed;
 }
 
-void cTetrisEngine::addBlock(cPlayerCharacter *block){
+void TetrisEngine_addBlock(cPlayerCharacter *block){
 	const int currentBlockColor = PlayerData.color;
 	for (y = 0; y < BOARD_HEIGHT; y++){
 		for (x = 0; x < BOARD_WIDTH; x++){
@@ -139,7 +136,7 @@ void cTetrisEngine::addBlock(cPlayerCharacter *block){
 	this->addScore(SCORE_ADD_BLOCK);
 }
 
-void cTetrisEngine::processLines(){ // Check if certain lines to be removed - and remove them, probably animating
+void TetrisEngine_processLines(){ // Check if certain lines to be removed - and remove them, probably animating
 	// remove line block
 	static int xCount, yCount;
 	static int colorIndex;
@@ -229,7 +226,7 @@ void cTetrisEngine::processLines(){ // Check if certain lines to be removed - an
 	}
 }
 
-void cTetrisEngine::addScore(int scoreType){
+void TetrisEngine_addScore(int scoreType){
 	switch (scoreType){
 		case SCORE_MOVE_DOWN:	GameData.playerScore+=  1; break;
 		case SCORE_ADD_BLOCK:	GameData.playerScore+=  1; break;
@@ -237,7 +234,7 @@ void cTetrisEngine::addScore(int scoreType){
 	}
 }
 
-void cTetrisEngine::gameRestart(cPlayerCharacter *block){
+void TetrisEngine_gameRestart(cPlayerCharacter *block){
 	this->cleanLayer(1);
 	this->cleanLayer(2);
 	this->cleanLayer(3);
@@ -255,7 +252,7 @@ void cTetrisEngine::gameRestart(cPlayerCharacter *block){
 	GameData.gamePause = false;
 }
 
-void cTetrisEngine::processGamePlay(cPlayerCharacter *TBlock){
+void TetrisEngine_processGamePlay(cPlayerCharacter *TBlock){
 	if (GameData.gameStart){
 		if (GameData.gameTimer == (GameData.gameSpeedMax - GameData.gameSpeed)){
 			tetriBlockControl(TBlock);
@@ -295,7 +292,7 @@ void cTetrisEngine::processGamePlay(cPlayerCharacter *TBlock){
 	}
 }
 
-void cTetrisEngine::userInputManagement(char btn, cPlayerCharacter *TBlock){
+void TetrisEngine_userInputManagement(char btn, cPlayerCharacter *TBlock){
 	switch (btn){
 		case 'w': // w key - rotate TBlock
 			PlayerData.canRotate = rotateAllowed(TBlock, 1);
@@ -332,17 +329,16 @@ void cTetrisEngine::userInputManagement(char btn, cPlayerCharacter *TBlock){
 	}
 }
 
-void cTetrisEngine::pauseOn(){
+void TetrisEngine_pauseOn(){
 	GameData.gameStart = false;
 }
 
-void cTetrisEngine::pauseOff(){
+void TetrisEngine_pauseOff(){
 	GameData.gameStart = true;
 }
 
-cTetrisEngine::cTetrisEngine(){
+TetrisEngine_cTetrisEngine(){
 	// this->init();
 	// empty constructor
 	// selfName = "Tetris";
 }
-#endif

@@ -81,7 +81,7 @@ namespace DTetris
     struct Class
     {
         Classes type = Classes::None;
-        size_t level = 0;
+        int level = 0;
     };
 
     enum class DamageType
