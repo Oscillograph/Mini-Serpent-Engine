@@ -93,12 +93,14 @@ public:
                 if (gsm.current->page == DTetris::GamePages::MainMenu)
                 {
                     this->Stop();
+                    return true;
                 } else {
                     gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
+                    return true;
                 }
             }
             game.keyPressed = true;
-			return true;
+            return false;
 		};
         
         // create a custom cursor

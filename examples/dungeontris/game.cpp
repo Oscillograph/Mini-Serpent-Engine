@@ -1,3 +1,4 @@
+#include "dungeontris/tetris.h"
 #include <algorithm>
 #include <dungeontris/game-fwd.h>
 #include <random> // rand
@@ -204,31 +205,45 @@ namespace mse
                 // view
                 
                 // controller
-                callbacks[EventTypes::GUIItemKeyDown] = [&](SDL_Event* event){
+                callbacks[EventTypes::KeyDown] = [&](SDL_Event* event){
                     switch (event->key.key)
                     {
+                        case mse::KeyCode::_w:
+                        case mse::KeyCode::NumPad_8:
+                        case mse::KeyCode::Space:
                         case mse::KeyCode::Up:
                         {
-                            MSE_CORE_LOG("Canvas: Left Mouse button is up");
+                            MSE_CORE_LOG("TetrisMapGUI: Rotate tetrimino");
+                            DTetris::tetrisEngineData.rotateTetrimino = true;
                             break;
                         }
+                        case mse::KeyCode::_a:
+                        case mse::KeyCode::NumPad_4:
                         case mse::KeyCode::Left:
                         {
-                            MSE_CORE_LOG("Canvas: Right Mouse button is up");
+                            MSE_CORE_LOG("TetrisMapGUI: Move tetrimino Left");
+                            DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Left;
                             break;
                         }
+                        case mse::KeyCode::_d:
+                        case mse::KeyCode::NumPad_6:
                         case mse::KeyCode::Right:
                         {
-                            MSE_CORE_LOG("Canvas: Middle Mouse button is up");
+                            MSE_CORE_LOG("TetrisMapGUI: Move tetrimino Right");
+                            DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Right;
                             break;
                         }
+                        case mse::KeyCode::_s:
+                        case mse::KeyCode::NumPad_2:
                         case mse::KeyCode::Down:
                         {
-                            MSE_CORE_LOG("Canvas: Middle Mouse button is up");
+                            MSE_CORE_LOG("TetrisMapGUI: Move tetrimino Down");
+                            DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
                             break;
                         }
                     }
                 };
+
                 MSE_CORE_LOG("TetrisMapGUI: initialization complete");
             } else {
                 MSE_CORE_LOG("TetrisMap: failed to initialize due to non-existent layer");

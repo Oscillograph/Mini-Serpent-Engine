@@ -1,4 +1,5 @@
-#include "dungeontris/game-fwd.h"
+#include <dungeontris/game-fwd.h>
+// #include <dungeontris/game-data.h>
 #include <dungeontris/tetris.h>
 // #include "globals.h"
 
@@ -7,6 +8,8 @@
 // но есть и переменные, важные только для cTetrisEngine
 
 extern DTetris::TetrisMap tetrisMap;
+extern DTetris::TetriminoTemplatesDB tetriminoDB;
+extern DTetris::Tetrimino tetrimino;
 
 namespace DTetris
 {
@@ -109,23 +112,132 @@ namespace DTetris
 	bool TetrisEngine_rotateAllowed(Tetrimino* block){
 		bool isAllowed = true;
 
-		if (block)
+		TetrisEngine_Rotate(block, TetrisRotateDirection::Clockwise);
+
+		for (int x = 0; x < 4; ++x)
 		{
-		} else {
-			isAllowed = false;
+			int xIndex = x + block->x;
+			for (int y = 0; y < 4; ++y)
+			{
+				int yIndex = y + block->y;
+
+				if ((block->blocks[x + 4*y].type == BlockType::Block) &&
+					(tetrisMap.map[xIndex + yIndex*tetrisMap.width].type == BlockType::Block))
+				{
+					isAllowed = false;
+					break;
+				}
+			}
 		}
+
+		if (!isAllowed)
+		{
+			TetrisEngine_Rotate(block, TetrisRotateDirection::CounterClockwise);
+		}
+
 
 		return isAllowed;
 	}
 
-	int TetrisEngine_Rotate(Tetrimino* block)
+	int TetrisEngine_Rotate(Tetrimino* block, TetrisRotateDirection direction)
 	{
+		std::vector<Block> newBlock;
+		newBlock.resize(16);
+		newBlock.assign(block->blocks.begin(), block->blocks.end());
+
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				switch (direction)
+				{
+					case TetrisRotateDirection::None:
+					{
+						break;
+					}
+					case TetrisRotateDirection::Clockwise:
+					{
+						newBlock[4*y + x] = block->blocks[4*x + (4 - y)];
+						break;
+					}
+					case TetrisRotateDirection::CounterClockwise:
+					{
+						newBlock[4*y + x] = block->blocks[4*(4 - x) + y];
+						break;
+					}
+				}
+			}
+		}
+
 		return 0;
 	}
 
-	int TetrisEngine_addBlock(Tetrimino* block)
+	int TetrisEngine_AddBlock(Tetrimino* block)
 	{
+		for (int x = 0; x < 4; ++x)
+		{
+			int xIndex = x + block->x;
+			for (int y = 0; y < 4; ++y)
+			{
+				int yIndex = y + block->y;
 
+				tetrisMap.map[xIndex + yIndex*tetrisMap.width].type = block->blocks[x + 4*y].type;
+			}
+		}
+
+		return 0;
+	}
+
+	int TetrisEngine_NewBlock()
+	{
+		int setSize = 0;
+		switch (tetrisEngineData.gameDifficulty)
+		{
+			case 0:
+			{
+				// Classic mode
+				setSize = 7;
+				break;
+			}
+
+			case 1:
+			{
+				// Brick Game mode
+				setSize = 16;
+				break;
+			}
+
+			case 2:
+			default:
+			{
+				// Brick Game mode
+				setSize = 16;
+				break;
+			}
+		}
+
+		int tetriminoId = rand() % setSize + 1;
+		printf("tetrimino ID: %d of %d\n;", tetriminoId, (int)tetriminoDB.data.size());
+		for (size_t i = 0; i < tetriminoDB.data[tetriminoId].block.size(); ++i)
+		{
+			switch (tetriminoDB.data[tetriminoId].block[i])
+			{
+				case 0:
+				{
+					tetrimino.blocks[i].type = DTetris::BlockType::None;
+					break;
+				}
+				case 1:
+				{
+					tetrimino.blocks[i].type = DTetris::BlockType::Block;
+					break;
+				}
+				default:
+				{
+					tetrimino.blocks[i].type = DTetris::BlockType::None;
+				}
+			}
+		}
 
 		return 0;
 	}

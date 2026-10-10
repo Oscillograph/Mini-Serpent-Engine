@@ -577,28 +577,7 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
     tetrimino.y = 0;
 
     // pick random first tetrimino
-    int tetriminoId = rand() % tetriminoDB.data.size();
-    printf("tetrimino ID: %d of %d\n;", tetriminoId, (int)tetriminoDB.data.size());
-    for (size_t i = 0; i < tetriminoDB.data[tetriminoId].block.size(); ++i)
-    {
-        switch (tetriminoDB.data[tetriminoId].block[i])
-        {
-        case 0:
-            {
-                tetrimino.blocks[i].type = DTetris::BlockType::None; 
-                break;
-            }
-        case 1:
-            {
-                tetrimino.blocks[i].type = DTetris::BlockType::Block;
-                break;
-            }
-        default:
-            {
-                tetrimino.blocks[i].type = DTetris::BlockType::None;
-            }
-        } 
-    }
+    DTetris::TetrisEngine_NewBlock();
     
     // configure GUI layer
     if ((pass_layer != nullptr) && (layer != pass_layer))
@@ -741,11 +720,16 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
             {
                 case DTetris::TetrisStates::Processing:
                 {
+                    if (DTetris::tetrisEngineData.justPlacedTetrimino)
+                    {
+                        DTetris::TetrisEngine_NewBlock();
+                    }
+
                     if (DTetris::tetrisEngineData.rotateTetrimino)
                     {
                         if (DTetris::TetrisEngine_rotateAllowed(&tetrimino))
                         {
-                            DTetris::TetrisEngine_Rotate(&tetrimino);
+                            DTetris::TetrisEngine_Rotate(&tetrimino, DTetris::TetrisRotateDirection::Clockwise);
                         }
 
                         DTetris::tetrisEngineData.rotateTetrimino = true;
@@ -762,7 +746,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                     } else {
                         // 3.2. If can't move.
                         // 3.2.1. Place the tetrimino.
-                        DTetris::TetrisEngine_addBlock(&tetrimino);
+                        DTetris::TetrisEngine_AddBlock(&tetrimino);
                         DTetris::tetrisEngineData.justPlacedTetrimino = true;
                     }
 

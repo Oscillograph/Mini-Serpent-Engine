@@ -2,6 +2,7 @@
 #define DUNGEONTRIS_AUTOBATTLER_GAME_FWD_H
 
 //#include <mse/mse.h>
+#include <cmath>
 #include <string>
 #include <vector>
 #include <map>
@@ -299,6 +300,13 @@ namespace DTetris
         Left		= 1,
         Right		= 2,
         Up			= 3,
+    };
+
+    enum class TetrisRotateDirection
+    {
+        None                = 0,
+        Clockwise           = 1,
+        CounterClockwise    = 2,
     };
 
     struct TetrisEngineData

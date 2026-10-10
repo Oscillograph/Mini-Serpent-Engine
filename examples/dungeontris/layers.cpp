@@ -700,6 +700,9 @@ void ArenaUILayer::OnInit()
                        tetrisMap.width,
                        tetrisMap.height
                        )));
+
+    int elementId = this->GetElementId(tetrisMapGUI);
+    this->elementInFocus = elementId;
 //    messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
 //                                                                 this, 
 //                                                                 U"", 

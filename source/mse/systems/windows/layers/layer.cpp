@@ -146,7 +146,7 @@ namespace mse
 				switch (eventType)
 				{
 				// mouse can either move to the element, move out of it or do something over it
-				case EventTypes::MouseMoved:
+					case EventTypes::MouseMoved:
 					{
                         int oldMouseOverId = m_window->GetLayerManager()->m_mouseOverElementID;
 						if (elementId != oldMouseOverId)
@@ -173,36 +173,49 @@ namespace mse
 						}
 						break;
 					}
-				case EventTypes::MouseButtonDown:
+					case EventTypes::MouseButtonDown:
 					{
 						return m_elements[elementId]->HandleEvent(EventTypes::GUIItemMouseButtonDown, event);
 						break;
 					}
-				case EventTypes::MouseButtonUp:
+					case EventTypes::MouseButtonUp:
 					{
 						return m_elements[elementId]->HandleEvent(EventTypes::GUIItemMouseButtonUp, event);
 						break;
 					}
-				case EventTypes::MouseWheel:
+					case EventTypes::MouseWheel:
 					{
 						return m_elements[elementId]->HandleEvent(EventTypes::GUIItemMouseWheel, event);
 						break;
 					}
-				case EventTypes::KeyDown:
-					{
-						return m_elements[elementId]->HandleEvent(EventTypes::KeyDown, event);
-						break;
-					}
-				case EventTypes::KeyUp:
-					{
-						return m_elements[elementId]->HandleEvent(EventTypes::KeyUp, event);
-						break;
-					}
-                case EventTypes::GUIItemMouseOut:
+					case EventTypes::GUIItemMouseOut:
                     {
                         return m_elements[elementId]->HandleEvent(EventTypes::GUIItemMouseOut, event);
                         break;
                     }
+				}
+			}
+		}
+
+		if (elementInFocus != -1)
+		{
+			if (m_elements.find(elementId) != m_elements.end())
+			{
+				if (elementInFocus == elementId)
+				{
+					switch (eventType)
+					{
+						case EventTypes::KeyDown:
+						{
+							return m_elements[elementId]->HandleEvent(EventTypes::KeyDown, event);
+							break;
+						}
+						case EventTypes::KeyUp:
+						{
+							return m_elements[elementId]->HandleEvent(EventTypes::KeyUp, event);
+							break;
+						}
+					}
 				}
 			}
 		}
