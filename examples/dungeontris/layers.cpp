@@ -9,6 +9,7 @@
 #include <dungeontris/layers.h>
 #include <dungeontris/gamestates.h>
 #include <dungeontris/tetris.h>
+#include <dungeontris/tetrisUI.h>
 
 extern DTetris::GameDB gameDB;
 extern DTetris::Game game;

@@ -4,6 +4,7 @@
 #include <sstream> // stringstream
 #include <utf8.h> // utf8
 
+#include <mse/systems/platform/input/input.h>
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/platform/renderer/renderer.h>
 #include <mse/systems/resources/resource_manager.h>
@@ -154,9 +155,9 @@ namespace mse
                 m_height = height;
                 
                 layerMask.resize(area.z * area.w);
-                for (int x = 0; x < area.z; ++x)
+                for (unsigned int x = 0; x < area.z; ++x)
                 {
-                    for (int y = 0; y < area.w; ++y)
+                    for (unsigned int y = 0; y < area.w; ++y)
                     {
                         layerMask[x + y*area.z] = id;
                     }
@@ -165,16 +166,30 @@ namespace mse
                 // view
                 
                 // controller
-                callbacks[EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-                };
-                
-                callbacks[EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-                };
-                
-                callbacks[EventTypes::GUIItemMouseOver] = [&](SDL_Event* event){
-                };
-                
-                callbacks[EventTypes::GUIItemMouseOut] = [&](SDL_Event* event){
+                callbacks[EventTypes::GUIItemKeyDown] = [&](SDL_Event* event){
+                    switch (event->key.key)
+                    {
+                        case mse::KeyCode::Up:
+                        {
+                            MSE_CORE_LOG("Canvas: Left Mouse button is up");
+                            break;
+                        }
+                        case mse::KeyCode::Left:
+                        {
+                            MSE_CORE_LOG("Canvas: Right Mouse button is up");
+                            break;
+                        }
+                        case mse::KeyCode::Right:
+                        {
+                            MSE_CORE_LOG("Canvas: Middle Mouse button is up");
+                            break;
+                        }
+                        case mse::KeyCode::Down:
+                        {
+                            MSE_CORE_LOG("Canvas: Middle Mouse button is up");
+                            break;
+                        }
+                    }
                 };
                 MSE_CORE_LOG("TetrisMapGUI: initialization complete");
             } else {
@@ -190,7 +205,7 @@ namespace mse
 //            MSE_CORE_LOG("TetrisMapGUI: Display");
             if (parentLayer != nullptr)
             {
-                SDL_FRect destRect = {0, 0, 10.0 / windowUser->GetPrefs().width, 10.0 / windowUser->GetPrefs().height};
+                SDL_FRect destRect = {0, 0, 10.0f / windowUser->GetPrefs().width, 10.0f / windowUser->GetPrefs().height};
                 SDL_Rect srcRect = {0, 0, 10, 10};
                 for (int xIndex = 0; xIndex < m_width; ++xIndex)
                 {
@@ -210,36 +225,38 @@ namespace mse
                         // pick a proper image to draw
                         switch (m_tetrisMap->map[yIndex*m_width + xIndex].type)
                         {
-                        case DTetris::BlockType::Block:
+                            case DTetris::BlockType::Block:
                             {
                                 srcRect.x = 25;
                                 srcRect.y = 194;
                                 break;
                             }
-                        case DTetris::BlockType::Healing:
+                            case DTetris::BlockType::Healing:
                             {
                                 srcRect.x = 36;
                                 srcRect.y = 194;
                                 break;
                             }
-                        case DTetris::BlockType::Treasure:
+                            case DTetris::BlockType::Treasure:
                             {
                                 srcRect.x = 47;
                                 srcRect.y = 194;
                                 break;
                             }
-                        case DTetris::BlockType::Attack:
+                            case DTetris::BlockType::Attack:
                             {
                                 srcRect.x = 25;
                                 srcRect.y = 216;
                                 break;
                             }
-                        case DTetris::BlockType::Defence:
+                            case DTetris::BlockType::Defence:
                             {
                                 srcRect.x = 36;
                                 srcRect.y = 216;
                                 break;
                             }
+                            default:
+                            {}
                         }
                         
                         // draw the image of a block
