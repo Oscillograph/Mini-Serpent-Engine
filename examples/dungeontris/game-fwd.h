@@ -227,6 +227,7 @@ namespace DTetris
         Treasure,
         Attack,
         Defence,
+        Wall,
     };
     
     struct Block
@@ -270,15 +271,17 @@ namespace DTetris
     struct TetrisMap
     {
         // model
-        int width = 15;
+        int width = 12;
         int height = 20;
-        std::vector<Block> map;
+        std::vector<Block> map_backend; // this is only blocks that landed
+        std::vector<Block> map;         // this is all blocks PLUS player's tetrimino
         
         // view
         std::vector<BlockSprite> blockSprites;
         
         // controller
         void Resize(int w, int h);
+        void Clear();
     };
 
     enum class TetrisStates

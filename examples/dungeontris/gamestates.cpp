@@ -571,6 +571,7 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
     
     // configure tetrisMap
     tetrisMap.Resize(12, 20);
+    tetrisMap.Clear();
     tetrimino.blocks.resize(16);
     tetrimino.x = 4;
     tetrimino.y = 0;

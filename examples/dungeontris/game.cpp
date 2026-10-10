@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <dungeontris/game-fwd.h>
 #include <random> // rand
 #include <ctime> // clock
@@ -81,8 +82,10 @@ namespace DTetris
         int total = width * height;
         
         map.resize(0);
+        map_backend.resize(0);
         blockSprites.resize(0);
         map.resize(total);
+        map_backend.resize(total);
         blockSprites.resize(total);
         
         for (int j = 0; j < height; ++j)
@@ -90,20 +93,53 @@ namespace DTetris
             for (int i = 0; i < width; ++i)
             {
                 int index = j*width + i;
-                map[index].coordinates.x = i;
-                map[index].coordinates.y = j;
-                map[index].type = BlockType::None;
-                map[index].color = {0, 0, 0};
+                map_backend[index].coordinates.x = i;
+                map_backend[index].coordinates.y = j;
+                map_backend[index].type = BlockType::None;
+                map_backend[index].color = {0, 0, 0};
                 
                 blockSprites[index].place = {
-                    map[index].coordinates.x * 10,
-                    map[index].coordinates.y * 10,
+                    map_backend[index].coordinates.x * 10,
+                    map_backend[index].coordinates.y * 10,
                     10,
                     10
                 };
                 blockSprites[index].texture = nullptr;
             }
         }
+
+        map.assign(map_backend.begin(), map_backend.end());
+    }
+
+    void TetrisMap::Clear()
+    {
+        for (int j = 0; j < height; ++j)
+        {
+            for (int i = 0; i < width; ++i)
+            {
+                int index = j*width + i;
+                map_backend[index].coordinates.x = i;
+                map_backend[index].coordinates.y = j;
+
+                if ((j == height-1) || (i == 0) || (i == width-1))
+                {
+                    map_backend[index].type = BlockType::Wall;
+                } else {
+                    map_backend[index].type = BlockType::None;
+                    map_backend[index].color = {0, 0, 0};
+                }
+
+                blockSprites[index].place = {
+                    map_backend[index].coordinates.x * 10,
+                    map_backend[index].coordinates.y * 10,
+                    10,
+                    10
+                };
+                blockSprites[index].texture = nullptr;
+            }
+        }
+
+        map.assign(map_backend.begin(), map_backend.end());
     }
 }
 
@@ -202,11 +238,22 @@ namespace mse
         
         void TetrisMapGUI::Display()
         {
-//            MSE_CORE_LOG("TetrisMapGUI: Display");
+           // MSE_CORE_LOG("TetrisMapGUI: Display");
             if (parentLayer != nullptr)
             {
-                SDL_FRect destRect = {0, 0, 10.0f / windowUser->GetPrefs().width, 10.0f / windowUser->GetPrefs().height};
-                SDL_Rect srcRect = {0, 0, 10, 10};
+                // MSE_CORE_LOG("TetrisMapGUI: Display");
+                SDL_FRect destRect = {
+                    0.0f,
+                    0.0f,
+                    10.0f / windowUser->GetPrefs().width,
+                    10.0f / windowUser->GetPrefs().height
+                };
+                SDL_Rect srcRect = {
+                    0,
+                    0,
+                    10,
+                    10
+                };
                 for (int xIndex = 0; xIndex < m_width; ++xIndex)
                 {
                     destRect.x = (float)(layerArea.x) / windowUser->GetPrefs().width + xIndex*destRect.w;
@@ -227,32 +274,50 @@ namespace mse
                         {
                             case DTetris::BlockType::Block:
                             {
-                                srcRect.x = 25;
-                                srcRect.y = 194;
+                                srcRect.x = 24;
+                                srcRect.y = 74;
+                                srcRect.w = 10;
+                                srcRect.h = 10;
                                 break;
                             }
                             case DTetris::BlockType::Healing:
                             {
                                 srcRect.x = 36;
                                 srcRect.y = 194;
+                                srcRect.w = 10;
+                                srcRect.h = 10;
                                 break;
                             }
                             case DTetris::BlockType::Treasure:
                             {
                                 srcRect.x = 47;
                                 srcRect.y = 194;
+                                srcRect.w = 10;
+                                srcRect.h = 10;
                                 break;
                             }
                             case DTetris::BlockType::Attack:
                             {
                                 srcRect.x = 25;
                                 srcRect.y = 216;
+                                srcRect.w = 10;
+                                srcRect.h = 10;
                                 break;
                             }
                             case DTetris::BlockType::Defence:
                             {
                                 srcRect.x = 36;
                                 srcRect.y = 216;
+                                srcRect.w = 10;
+                                srcRect.h = 10;
+                                break;
+                            }
+                            case DTetris::BlockType::Wall:
+                            {
+                                srcRect.x = 153;
+                                srcRect.y = 137;
+                                srcRect.w = 13;
+                                srcRect.h = 12;
                                 break;
                             }
                             default:
@@ -260,7 +325,7 @@ namespace mse
                         }
                         
                         // draw the image of a block
-//                        MSE_LOG("Drawing at: ", destRect.x, ", ", destRect.y);
+                        // MSE_LOG("Drawing at: ", destRect.x, ", ", destRect.y);
                         Renderer::DrawTexture(m_spriteList, &destRect, &srcRect);
                     }
                 }
