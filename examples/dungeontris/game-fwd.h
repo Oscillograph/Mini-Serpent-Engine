@@ -384,6 +384,8 @@ namespace mse
             virtual void Display();
             
         protected:
+            void ChooseSrcRect(DTetris::BlockType blockType, SDL_Rect& srcRect);
+
             // sprite-based
             Texture* m_spriteList = nullptr;
             DTetris::TetrisMap* m_tetrisMap = nullptr;

@@ -578,6 +578,7 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
 
     // pick random first tetrimino
     int tetriminoId = rand() % tetriminoDB.data.size();
+    printf("tetrimino ID: %d of %d\n;", tetriminoId, (int)tetriminoDB.data.size());
     for (size_t i = 0; i < tetriminoDB.data[tetriminoId].block.size(); ++i)
     {
         switch (tetriminoDB.data[tetriminoId].block[i])
@@ -725,6 +726,11 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     
     if (!game.battleFinished)
     {
+        if (DTetris::tetrisEngineData.state == DTetris::TetrisStates::None)
+        {
+            DTetris::tetrisEngineData.state == DTetris::TetrisStates::Processing;
+        }
+
         if ((int)localTime >= game.config.turnLength)
         {
             // ###################################################################################
@@ -770,7 +776,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                         int filled = 0;
                         for (int x = 1; x < tetrisMap.width - 1; ++x)
                         {
-                            if (tetrisMap.map[x + yFactor].type != DTetris::BlockType::None)
+                            if (tetrisMap.map_backend[x + yFactor].type != DTetris::BlockType::None)
                             {
                                 filled++;
                             }
@@ -793,7 +799,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                                 for (int x = 1; x < tetrisMap.width - 1; ++x)
                                 {
                                     // clear the line
-                                    tetrisMap.map[x + yFactor].type = DTetris::BlockType::None;
+                                    tetrisMap.map_backend[x + yFactor].type = DTetris::BlockType::None;
                                 }
                             }
                         }
@@ -817,7 +823,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
 
                             for (int x = 1; x < tetrisMap.width - 1; ++x)
                             {
-                                tetrisMap.map[x + yFactor] = tetrisMap.map[x + moveDownFactor];
+                                tetrisMap.map_backend[x + yFactor] = tetrisMap.map_backend[x + moveDownFactor];
                             }
                         }
                     }

@@ -11,6 +11,8 @@
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/windows/window.h>
 
+extern DTetris::Tetrimino tetrimino;
+
 namespace DTetris
 {
     MessageLog::MessageLog()
@@ -254,6 +256,7 @@ namespace mse
                     10,
                     10
                 };
+
                 for (int xIndex = 0; xIndex < m_width; ++xIndex)
                 {
                     destRect.x = (float)(layerArea.x) / windowUser->GetPrefs().width + xIndex*destRect.w;
@@ -270,67 +273,96 @@ namespace mse
 //                        destRect.y = 0 + xIndex*destRect.h;
                         
                         // pick a proper image to draw
-                        switch (m_tetrisMap->map[yIndex*m_width + xIndex].type)
-                        {
-                            case DTetris::BlockType::Block:
-                            {
-                                srcRect.x = 24;
-                                srcRect.y = 74;
-                                srcRect.w = 10;
-                                srcRect.h = 10;
-                                break;
-                            }
-                            case DTetris::BlockType::Healing:
-                            {
-                                srcRect.x = 36;
-                                srcRect.y = 194;
-                                srcRect.w = 10;
-                                srcRect.h = 10;
-                                break;
-                            }
-                            case DTetris::BlockType::Treasure:
-                            {
-                                srcRect.x = 47;
-                                srcRect.y = 194;
-                                srcRect.w = 10;
-                                srcRect.h = 10;
-                                break;
-                            }
-                            case DTetris::BlockType::Attack:
-                            {
-                                srcRect.x = 25;
-                                srcRect.y = 216;
-                                srcRect.w = 10;
-                                srcRect.h = 10;
-                                break;
-                            }
-                            case DTetris::BlockType::Defence:
-                            {
-                                srcRect.x = 36;
-                                srcRect.y = 216;
-                                srcRect.w = 10;
-                                srcRect.h = 10;
-                                break;
-                            }
-                            case DTetris::BlockType::Wall:
-                            {
-                                srcRect.x = 153;
-                                srcRect.y = 137;
-                                srcRect.w = 13;
-                                srcRect.h = 12;
-                                break;
-                            }
-                            default:
-                            {}
-                        }
+                        ChooseSrcRect(m_tetrisMap->map[yIndex*m_width + xIndex].type, srcRect);
                         
                         // draw the image of a block
                         // MSE_LOG("Drawing at: ", destRect.x, ", ", destRect.y);
                         Renderer::DrawTexture(m_spriteList, &destRect, &srcRect);
                     }
                 }
+
+                int xIndex, yIndex = 0;
+                for (int x = 0; x < 4; ++x)
+                {
+                    xIndex = x + tetrimino.x;
+                    destRect.x = (float)(layerArea.x) / windowUser->GetPrefs().width + xIndex*destRect.w;
+                    for (int y = 0; y < 4; ++y)
+                    {
+                        yIndex = y + tetrimino.y;
+                        destRect.y = (float)(layerArea.y) / windowUser->GetPrefs().height + yIndex*destRect.h;
+
+                        // pick a proper image to draw
+                        ChooseSrcRect(tetrimino.blocks[x + 4*y].type, srcRect);
+
+                        // draw the image of a block
+                        Renderer::DrawTexture(m_spriteList, &destRect, &srcRect);
+                    }
+                }
+
             } else {
                 MSE_CORE_LOG("TetrisMap: cannot display due to not been initialized");
+            }
+        }
+
+        void TetrisMapGUI::ChooseSrcRect(DTetris::BlockType blockType, SDL_Rect& srcRect)
+        {
+            switch (blockType)
+            {
+                case DTetris::BlockType::Block:
+                {
+                    srcRect.x = 24;
+                    srcRect.y = 74;
+                    srcRect.w = 10;
+                    srcRect.h = 10;
+                    break;
+                }
+                case DTetris::BlockType::Healing:
+                {
+                    srcRect.x = 36;
+                    srcRect.y = 194;
+                    srcRect.w = 10;
+                    srcRect.h = 10;
+                    break;
+                }
+                case DTetris::BlockType::Treasure:
+                {
+                    srcRect.x = 47;
+                    srcRect.y = 194;
+                    srcRect.w = 10;
+                    srcRect.h = 10;
+                    break;
+                }
+                case DTetris::BlockType::Attack:
+                {
+                    srcRect.x = 25;
+                    srcRect.y = 216;
+                    srcRect.w = 10;
+                    srcRect.h = 10;
+                    break;
+                }
+                case DTetris::BlockType::Defence:
+                {
+                    srcRect.x = 36;
+                    srcRect.y = 216;
+                    srcRect.w = 10;
+                    srcRect.h = 10;
+                    break;
+                }
+                case DTetris::BlockType::Wall:
+                {
+                    srcRect.x = 153;
+                    srcRect.y = 137;
+                    srcRect.w = 13;
+                    srcRect.h = 12;
+                    break;
+                }
+                default:
+                {
+                    srcRect.x = 10;
+                    srcRect.y = 10;
+                    srcRect.w = 10;
+                    srcRect.h = 10;
+                }
             }
         }
     }

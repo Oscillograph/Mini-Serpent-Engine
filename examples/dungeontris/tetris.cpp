@@ -6,6 +6,8 @@
 // GameData - глобальная структура с важными данными для всего игрового приложения
 // но есть и переменные, важные только для cTetrisEngine
 
+extern DTetris::TetrisMap tetrisMap;
+
 namespace DTetris
 {
 	TetrisEngineData TetrisEngineData = {
@@ -26,64 +28,81 @@ namespace DTetris
 	//TetrisEngine_cTetrisEngine(){
 	int TetrisEngine_init(){
 		TetrisEngineData.animateLinesRemove = false;
+
+		return 0;
 	}
 
 	// look at what we have in the layer 9
 	int TetrisEngine_sumLayers()
 	{
-	// 	this->cleanLayer(9);
-
-	// 	for (y = 0; y < BOARD_HEIGHT; y++){
-	// 		for (x = 0; x < BOARD_WIDTH; x++){
-	// 			// sum up all layers
-	// 			for (index = 0; index < 8; index++){
-	// 				GameData.gameLayer[9][y][x] = GameData.gameLayer[9][y][x] + GameData.gameLayer[index][y][x];
-	// 			}
-	// 		}
-	// 	}
-	// }
- //
-	// int TetrisEngine_cleanLayer(int id){
-	// 	for (y = 0; y < BOARD_HEIGHT; y++){
-	// 		for (x = 0; x < BOARD_WIDTH; x++){
-	// 			// clean the layer
-	// 			GameData.gameLayer[id][y][x] = 0;
-	// 		}
-	// 	}
+		return 0;
 	}
 
 	// init tetriBlock on its layer
 	int TetrisEngine_tetriBlockControl(Tetrimino* block)
 	{
-		// this->cleanLayer(2);
-  //
-		// for (y = 0; y < BLOCK_HEIGHT; y++){
-		// 	for (x = 0; x < BLOCK_WIDTH; x++){
-		// 		GameData.gameLayer[2][PlayerData.y + y][PlayerData.x + x] = PlayerData.form[y][x];
-		// 	}
-		// }
+		return 0;
 	}
 
 	bool TetrisEngine_moveAllowed(Tetrimino* block, TetrisMoveDirection moveDirection)
 	{
 		bool isAllowed = true;
 
-		// for (y = 0; y < BOARD_HEIGHT; y++)
-		// {
-		// 	for (x = 0; x < BOARD_WIDTH; x++)
-		// 	{
-		// 		if (GameData.gameLayer[9][y][x] > 1)
-		// 		{
-		// 			isAllowed = false;
-		// 		}
-		// 	}
-		// }
+		int x_backup = block->x;
+		int y_backup = block->y;
+
+		TetrisEngine_Move(block, moveDirection);
+
+		for (int x = 0; x < 4; ++x)
+		{
+			int xIndex = x + block->x;
+			for (int y = 0; y < 4; ++y)
+			{
+				int yIndex = y + block->y;
+
+				if ((block->blocks[x + 4*y].type == BlockType::Block) &&
+					(tetrisMap.map[xIndex + yIndex*tetrisMap.width].type == BlockType::Block))
+				{
+					isAllowed = false;
+					break;
+				}
+			}
+		}
+
+		if (!isAllowed)
+		{
+			block->x = x_backup;
+			block->y = y_backup;
+		}
 
 		return isAllowed;
 	}
 
 	int TetrisEngine_Move(Tetrimino* block, TetrisMoveDirection moveDirection)
 	{
+		switch (moveDirection)
+		{
+			case TetrisMoveDirection::Left:
+			{
+				block->x--;
+				break;
+			}
+			case TetrisMoveDirection::Right:
+			{
+				block->x++;
+				break;
+			}
+			case TetrisMoveDirection::Up:
+			{
+				block->y--;
+			}
+			case TetrisMoveDirection::Down:
+			default:
+			{
+				block->y++;
+			}
+		}
+
 		return 0;
 	}
 
