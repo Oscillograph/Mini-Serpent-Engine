@@ -24,7 +24,7 @@ namespace mse
 		virtual void OnDetach();
 		void Detach();
 		
-		virtual bool HandleEvent(EventTypes eventType, SDL_Event* event, int elementId = -1);
+		bool HandleEvent(EventTypes eventType, SDL_Event* event, int elementId = -1);
 		Window* GetWindow();
 		GUIItem* AddElement(GUIItem* element);
 		

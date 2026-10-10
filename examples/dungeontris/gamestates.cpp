@@ -373,7 +373,7 @@ bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
     if (game.playerCharacter.level < 3)
     {
         game.playerCharacter.level++;
-        printf("Player lvl: %d, ", game.playerCharacter.level);
+        printf("Player lvl: %d, ", (int)game.playerCharacter.level);
     }
     
     if (pass_layer != nullptr)

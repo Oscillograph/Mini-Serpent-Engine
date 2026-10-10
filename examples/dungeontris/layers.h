@@ -130,7 +130,6 @@ public:
     
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
-    virtual bool HandleEvent(mse::EventTypes eventType, SDL_Event* event, int elementId = -1) override;
     
 //    mse::gui::Text* messageLog = nullptr;
     mse::gui::Button* nextBtn = nullptr;

@@ -230,7 +230,7 @@ void CharacterCreateUILayer::OnInit()
     mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {32, 32, 32, 255}, {20, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
         game.inputClass = DTetris::Classes::Rogue;
-        game.inputStats = {4, str, agi, end};
+        game.inputStats = {4, (float)str, (float)agi, (float)end};
     };
     
     AddElement(new mse::gui::Image(this, {140, 60, 34, 64}, "./data/img/heroes.png", {0, 128, 34, 64}, {0, 0, 0, 255}));
@@ -251,7 +251,7 @@ void CharacterCreateUILayer::OnInit()
     mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"   Воин", {32, 32, 32, 255}, {120, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
         game.inputClass = DTetris::Classes::Warrior;
-        game.inputStats = {5, str, agi, end};
+        game.inputStats = {5, (float)str, (float)agi, (float)end};
     };
     
     AddElement(new mse::gui::Image(this, {240, 60, 34, 64}, "./data/img/heroes.png", {68, 64, 34, 64}, {0, 0, 0, 255}));
@@ -272,7 +272,7 @@ void CharacterCreateUILayer::OnInit()
     mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"  Варвар", {32, 32, 32, 255}, {220, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
         game.inputClass = DTetris::Classes::Barbarian;
-        game.inputStats = {6, str, agi, end};
+        game.inputStats = {6, (float)str, (float)agi, (float)end};
     };
     
     mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {32, 32, 32, 255}, {120, 215, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
@@ -590,32 +590,32 @@ void ArenaUILayer::OnInit()
     
         switch (game.npcCharacter.race)
         {
-        case DTetris::Races::Goblin:
+            case DTetris::Races::Goblin:
             {
                 src = {222, 95, 30, 64};
                 break;
             }
-        case DTetris::Races::Skeleton:
+            case DTetris::Races::Skeleton:
             {
                 src = {257, 27, 34, 64};
                 break;
             }
-        case DTetris::Races::Slime:
+            case DTetris::Races::Slime:
             {
                 src = {225, 43, 30, 48};
                 break;
             }
-        case DTetris::Races::Ghost:
+            case DTetris::Races::Ghost:
             {
                 src = {252, 99, 32, 54};
                 break;
             }
-        case DTetris::Races::Golem:
+            case DTetris::Races::Golem:
             {
                 src = {200, 172, 30, 51};
                 break;
             }
-        case DTetris::Races::Dragon:
+            case DTetris::Races::Dragon:
             {
                 src = {232, 164, 34, 59};
                 break;
@@ -637,17 +637,17 @@ void ArenaUILayer::OnInit()
         glm::uvec4 src = {0, 0, 34, 64};
         switch (game.playerCharacter.main_class.type)
         {
-        case DTetris::Classes::Rogue:
+            case DTetris::Classes::Rogue:
             {
                 src.y = 0;
                 break;
             }
-        case DTetris::Classes::Warrior:
+            case DTetris::Classes::Warrior:
             {
                 src.y = 128;
                 break;
             }
-        case DTetris::Classes::Barbarian:
+            case DTetris::Classes::Barbarian:
             {
                 src.y = 64;
                 break;
@@ -656,32 +656,32 @@ void ArenaUILayer::OnInit()
         
         switch (game.playerCharacter.weapon.sprite)
         {
-        case DTetris::WeaponSprite::Dagger:
+            case DTetris::WeaponSprite::Dagger:
             {
                 src.x = 102;
                 break;
             }
-        case DTetris::WeaponSprite::Sword:
+            case DTetris::WeaponSprite::Sword:
             {
                 src.x = 0;
                 break;
             }
-        case DTetris::WeaponSprite::Spear:
+            case DTetris::WeaponSprite::Spear:
             {
                 src.x = 34;
                 break;
             }
-        case DTetris::WeaponSprite::Club:
+            case DTetris::WeaponSprite::Club:
             {
                 src.x = 68;
                 break;
             }
-        case DTetris::WeaponSprite::Axe:
+            case DTetris::WeaponSprite::Axe:
             {
                 src.x = 136;
                 break;
             }
-        case DTetris::WeaponSprite::LegendarySword:
+            case DTetris::WeaponSprite::LegendarySword:
             {
                 src.x = 170;
                 break;
@@ -806,43 +806,6 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
 //    needToUpdateText = false;
 }
 
-bool ArenaUILayer::HandleEvent(mse::EventTypes eventType, SDL_Event* event, int elementId)
-{
-    switch (eventType)
-    {
-        case mse::EventTypes::KeyDown:
-        {
-            switch (event->key.key)
-            {
-                // Move block
-                case mse::KeyCode::Left:
-                {
-                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Left;
-                    break;
-                }
-                case mse::KeyCode::Right:
-                {
-                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Right;
-                    break;
-                }
-                case mse::KeyCode::Down:
-                {
-                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
-                    break;
-                }
-                // Rotate block
-                case mse::KeyCode::Up:
-                {
-                    DTetris::tetrisEngineData.rotateTetrimino = true;
-                    break;
-                }
-            }
-            break;
-        }
-    }
-
-    return true;
-}
 
 CharacterUpdateUILayer::CharacterUpdateUILayer() : mse::Layer()
 {
@@ -992,19 +955,19 @@ void CharacterUpdateUILayer::OnInit()
     glm::uvec4 srcNew = {0, 0, 34, 64};
     switch (game.playerCharacter.main_class.type)
     {
-    case DTetris::Classes::Rogue:
+        case DTetris::Classes::Rogue:
         {
             srcKeep.y = 0;
             srcNew.y = 0;
             break;
         }
-    case DTetris::Classes::Warrior:
+        case DTetris::Classes::Warrior:
         {
             srcKeep.y = 128;
             srcNew.y = 128;
             break;
         }
-    case DTetris::Classes::Barbarian:
+        case DTetris::Classes::Barbarian:
         {
             srcKeep.y = 64;
             srcNew.y = 64;
@@ -1014,32 +977,32 @@ void CharacterUpdateUILayer::OnInit()
     
     switch (game.playerCharacter.weapon.sprite)
     {
-    case DTetris::WeaponSprite::Dagger:
+        case DTetris::WeaponSprite::Dagger:
         {
             srcKeep.x = 102;
             break;
         }
-    case DTetris::WeaponSprite::Sword:
+        case DTetris::WeaponSprite::Sword:
         {
             srcKeep.x = 0;
             break;
         }
-    case DTetris::WeaponSprite::Spear:
+        case DTetris::WeaponSprite::Spear:
         {
             srcKeep.x = 34;
             break;
         }
-    case DTetris::WeaponSprite::Club:
+        case DTetris::WeaponSprite::Club:
         {
             srcKeep.x = 68;
             break;
         }
-    case DTetris::WeaponSprite::Axe:
+        case DTetris::WeaponSprite::Axe:
         {
             srcKeep.x = 136;
             break;
         }
-    case DTetris::WeaponSprite::LegendarySword:
+        case DTetris::WeaponSprite::LegendarySword:
         {
             srcKeep.x = 170;
             break;
@@ -1053,27 +1016,27 @@ void CharacterUpdateUILayer::OnInit()
             srcNew.x = 102;
             break;
         }
-    case DTetris::WeaponSprite::Sword:
+        case DTetris::WeaponSprite::Sword:
         {
             srcNew.x = 0;
             break;
         }
-    case DTetris::WeaponSprite::Spear:
+        case DTetris::WeaponSprite::Spear:
         {
             srcNew.x = 34;
             break;
         }
-    case DTetris::WeaponSprite::Club:
+        case DTetris::WeaponSprite::Club:
         {
             srcNew.x = 68;
             break;
         }
-    case DTetris::WeaponSprite::Axe:
+        case DTetris::WeaponSprite::Axe:
         {
             srcNew.x = 136;
             break;
         }
-    case DTetris::WeaponSprite::LegendarySword:
+        case DTetris::WeaponSprite::LegendarySword:
         {
             srcNew.x = 170;
             break;
@@ -1202,7 +1165,7 @@ void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
         strstream << ", " << utf8::utf32to8(gameDB.damageTypes[game.inputWeapon.type].name);
         strstream << ")" <<
         "\nСпособности: ";
-        for (int i = 0; i < game.playerCharacter.traits.size(); ++i)
+        for (size_t i = 0; i < game.playerCharacter.traits.size(); ++i)
         {
             if (i > 0)
             {
