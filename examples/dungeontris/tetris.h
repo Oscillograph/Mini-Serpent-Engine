@@ -7,7 +7,7 @@
 
 namespace DTetris
 {
-	static TetrisEngineData tetrisEngineData;
+	extern TetrisEngineData tetrisEngineData;
 
 	// TetrisEngine API
 	int TetrisEngine_Init();

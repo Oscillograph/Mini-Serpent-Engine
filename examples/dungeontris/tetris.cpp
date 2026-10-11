@@ -13,7 +13,7 @@ extern DTetris::Tetrimino tetrimino;
 
 namespace DTetris
 {
-	TetrisEngineData TetrisEngineData = {
+	TetrisEngineData tetrisEngineData = {
 		0,
 		25,
 		0,
@@ -30,7 +30,7 @@ namespace DTetris
 
 	//TetrisEngine_cTetrisEngine(){
 	int TetrisEngine_init(){
-		TetrisEngineData.animateLinesRemove = false;
+		tetrisEngineData.animateLinesRemove = false;
 
 		return 0;
 	}
@@ -63,8 +63,8 @@ namespace DTetris
 			{
 				int yIndex = y + block->y;
 
-				if ((block->blocks[x + 4*y].type == BlockType::Block) &&
-					(tetrisMap.map[xIndex + yIndex*tetrisMap.width].type == BlockType::Block))
+				if ((block->blocks[x + 4*y].type != BlockType::None) &&
+					(tetrisMap.map[xIndex + yIndex*tetrisMap.width].type != BlockType::None))
 				{
 					isAllowed = false;
 					break;
@@ -121,8 +121,8 @@ namespace DTetris
 			{
 				int yIndex = y + block->y;
 
-				if ((block->blocks[x + 4*y].type == BlockType::Block) &&
-					(tetrisMap.map[xIndex + yIndex*tetrisMap.width].type == BlockType::Block))
+				if ((block->blocks[x + 4*y].type != BlockType::None) &&
+					(tetrisMap.map[xIndex + yIndex*tetrisMap.width].type != BlockType::None))
 				{
 					isAllowed = false;
 					break;
