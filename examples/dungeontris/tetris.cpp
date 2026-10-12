@@ -22,6 +22,8 @@ namespace DTetris
 		false,
 		false,
 		false,
+		0,
+		false,
 		false,
 		{},
 		TetrisStates::None,
@@ -135,34 +137,74 @@ namespace DTetris
 	int TetrisEngine_Rotate(Tetrimino* block, TetrisRotateDirection direction)
 	{
 		std::vector<Block> newBlock;
-		newBlock.resize(16);
-		for (int i = 0; i < 16; ++i)
-		{
-			newBlock[i].type = BlockType::None;
-		}
 
-		for (int x = 0; x < 4; ++x)
+		if (block->id == 2) // |-block
 		{
-			for (int y = 0; y < 4; ++y)
+			newBlock.resize(16);
+			for (int i = 0; i < 16; ++i)
 			{
-				switch (direction)
-				{
-					case TetrisRotateDirection::Clockwise:
-					{
-						newBlock[x + 4*y].type = block->blocks[(3 - y) + 4*x].type;
-						break;
-					}
-					case TetrisRotateDirection::CounterClockwise:
-					{
-						newBlock[x + 4*y].type = block->blocks[y + 4*(3 - x)].type;
-						break;
-					}
+				newBlock[i].type = BlockType::None;
+			}
 
-					default:
-					{}
+			for (int x = 0; x < 4; ++x)
+			{
+				for (int y = 0; y < 3; ++y)
+				{
+					switch (direction)
+					{
+						case TetrisRotateDirection::Clockwise:
+						{
+							newBlock[x + 4*y].type = block->blocks[(2 - y) + 4*x].type;
+							break;
+						}
+						case TetrisRotateDirection::CounterClockwise:
+						{
+							newBlock[x + 4*y].type = block->blocks[y + 4*(3 - x)].type;
+							break;
+						}
+
+						default:
+						{}
+					}
+				}
+			}
+		} else {
+			if (block->id == 3) // square
+			{
+
+			} else { // other 3x3 blocks
+				newBlock.resize(16);
+				for (int i = 0; i < 16; ++i)
+				{
+					newBlock[i].type = BlockType::None;
+				}
+
+				for (int x = 0; x < 3; ++x)
+				{
+					for (int y = 0; y < 3; ++y)
+					{
+						switch (direction)
+						{
+							case TetrisRotateDirection::Clockwise:
+							{
+								newBlock[x + 4*y].type = block->blocks[(2 - y) + 4*x].type;
+								break;
+							}
+							case TetrisRotateDirection::CounterClockwise:
+							{
+								newBlock[x + 4*y].type = block->blocks[y + 4*(2 - x)].type;
+								break;
+							}
+
+							default:
+							{}
+						}
+					}
 				}
 			}
 		}
+
+
 
 		block->blocks.assign(newBlock.begin(), newBlock.end());
 
@@ -241,6 +283,7 @@ namespace DTetris
 
 		tetrimino.x = 4;
 		tetrimino.y = 0;
+		tetrimino.id = tetriminoId;
 		tetrimino.fell = false;
 
 		return 0;

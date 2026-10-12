@@ -236,6 +236,7 @@ namespace DTetris
         glm::uvec2 coordinates = {0, 0};
         BlockType type = BlockType::None;
         glm::uvec3 color = {255, 255, 0};
+        bool remove = false; // flag for removal
     };
     
     struct BlockSprite
@@ -266,6 +267,7 @@ namespace DTetris
         int x, y = 0; // left-upper corner coordinates
         std::vector<Block> blocks = {}; // 4x4 or 3x3 areas
         bool fell = false;
+        int id = 0;
     };
     
     // Tetris
@@ -283,6 +285,7 @@ namespace DTetris
         // controller
         void Resize(int w, int h);
         void Clear();
+        void ClearLines(std::map<int, bool>& linesFilled);
     };
 
     enum class TetrisStates
@@ -291,7 +294,8 @@ namespace DTetris
         Processing	= 1,
         Paused		= 2,
         GameOver	= 3,
-        Win			= 4,
+        ClearLines  = 4,
+        Win		    = 5,
     };
 
     enum class TetrisMoveDirection
@@ -320,6 +324,8 @@ namespace DTetris
         bool rotateTetrimino = false;
         bool justPlacedTetrimino = false;
         bool animateLinesRemove = false;
+        int animateLinesFrame = 0;
+        bool forceDownMovement = false;
         bool removeLines = false;
         std::map<int, bool> linesFilled = {};
         TetrisStates state = TetrisStates::None;
@@ -389,10 +395,10 @@ namespace mse
             virtual ~TetrisMapGUI();
             
             // general GUIItem interface
-            virtual void Display();
+            virtual void Display() override;
             
         protected:
-            void ChooseSrcRect(DTetris::BlockType blockType, SDL_Rect& srcRect);
+            void ChooseSrcRect(DTetris::BlockType blockType, SDL_Rect& srcRect, bool remove = false);
 
             // sprite-based
             Texture* m_spriteList = nullptr;

@@ -711,303 +711,303 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     if (!game.battleFinished)
     {
         MSE_LOG("Local time: ", localTime, "; Last local time: ", lastLocalTime, "; delta: ", (localTime - lastLocalTime), " ? ", game.config.turnLength);
-        if ((localTime - lastLocalTime) >= 200) //game.config.turnLength)
+        if ((localTime - lastLocalTime) >= DTetris::tetrisEngineData.gameSpeedMax) //game.config.turnLength)
         {
-            lastLocalTime = localTime;
-
-            // ###################################################################################
-            //                         BASIC TETRIS logic
-            // ###################################################################################
-            // 1. Pick tetrimino.
-            MSE_LOG("Tetris state: ", (int)(DTetris::tetrisEngineData.state));
-            switch (DTetris::tetrisEngineData.state)
+            if (DTetris::tetrisEngineData.forceDownMovement || (localTime - lastLocalTime) >= 200)
             {
-                case DTetris::TetrisStates::Processing:
+                lastLocalTime = localTime;
+
+                // ###################################################################################
+                //                         BASIC TETRIS logic
+                // ###################################################################################
+                // 1. Pick tetrimino.
+                MSE_LOG("Tetris state: ", (int)(DTetris::tetrisEngineData.state));
+                switch (DTetris::tetrisEngineData.state)
                 {
-                    if (DTetris::tetrisEngineData.justPlacedTetrimino)
-                    {
-                        DTetris::TetrisEngine_NewBlock();
-                    }
-
-                    if (DTetris::tetrisEngineData.rotateTetrimino)
-                    {
-                        if (DTetris::TetrisEngine_rotateAllowed(&tetrimino))
-                        {
-                            DTetris::TetrisEngine_Rotate(&tetrimino, DTetris::TetrisRotateDirection::Clockwise);
-                        }
-                        DTetris::tetrisEngineData.rotateTetrimino = false;
-                    }
-
-                    // 2. Check if can move tetrimino (and keep track of its movement counts).
-                    bool canMoveDown, canMoveSide = false;
-                    if (DTetris::tetrisEngineData.moveDirection != DTetris::TetrisMoveDirection::Down)
-                    {
-                        canMoveSide = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::tetrisEngineData.moveDirection);
-                    }
-                    canMoveDown = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::TetrisMoveDirection::Down);
-
-
-                    if ((!canMoveDown && !canMoveSide))
+                    case DTetris::TetrisStates::Processing:
                     {
                         if (DTetris::tetrisEngineData.justPlacedTetrimino)
                         {
-                            DTetris::tetrisEngineData.state = DTetris::TetrisStates::GameOver;
-                        } else {
-                            // 3.2.1. Place the tetrimino.
-                            DTetris::TetrisEngine_AddBlock(&tetrimino);
-                            DTetris::tetrisEngineData.justPlacedTetrimino = true;
-                        }
-                    } else {
-                        if (DTetris::tetrisEngineData.justPlacedTetrimino)
-                        {
-                            DTetris::tetrisEngineData.justPlacedTetrimino = false;
+                            DTetris::TetrisEngine_NewBlock();
                         }
 
-                        if (canMoveSide)
+                        if (DTetris::tetrisEngineData.rotateTetrimino)
                         {
-                            DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
-                            DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
-                        } else {
-                            DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
-                            DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
-                        }
-                    }
-
-                    // 4. Check for full lines.
-                    DTetris::tetrisEngineData.linesFilled.clear();
-                    int actualWidth = tetrisMap.width - 2;
-                    int actualHeight = tetrisMap.height;
-                    for (int y = 1; y < actualHeight; ++y)
-                    {
-                        int yFactor = y * tetrisMap.width;
-                        int filled = 0;
-                        for (int x = 1; x < tetrisMap.width - 1; ++x)
-                        {
-                            if (tetrisMap.map_backend[x + yFactor].type != DTetris::BlockType::None)
+                            if (DTetris::TetrisEngine_rotateAllowed(&tetrimino))
                             {
-                                filled++;
+                                DTetris::TetrisEngine_Rotate(&tetrimino, DTetris::TetrisRotateDirection::Clockwise);
+                            }
+                            DTetris::tetrisEngineData.rotateTetrimino = false;
+                        }
+
+                        // 2. Check if can move tetrimino (and keep track of its movement counts).
+                        bool canMoveDown, canMoveSide = false;
+                        if (DTetris::tetrisEngineData.moveDirection != DTetris::TetrisMoveDirection::Down)
+                        {
+                            canMoveSide = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                        }
+                        canMoveDown = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::TetrisMoveDirection::Down);
+
+
+                        if ((!canMoveDown && !canMoveSide))
+                        {
+                            if (DTetris::tetrisEngineData.justPlacedTetrimino)
+                            {
+                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::GameOver;
+                            } else {
+                                // 3.2.1. Place the tetrimino.
+                                DTetris::TetrisEngine_AddBlock(&tetrimino);
+                                DTetris::tetrisEngineData.justPlacedTetrimino = true;
+                            }
+                        } else {
+                            if (DTetris::tetrisEngineData.justPlacedTetrimino)
+                            {
+                                DTetris::tetrisEngineData.justPlacedTetrimino = false;
+                            }
+
+                            if (canMoveSide)
+                            {
+                                DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                                DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
+                            } else {
+                                DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
+                                DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
                             }
                         }
 
-                        // 4.1. If a line is full, clear it.
-                        if (filled == actualWidth)
+                        // 4. Check for full lines.
+                        int actualWidth = tetrisMap.width - 2;
+                        int actualHeight = tetrisMap.height - 1;
+                        for (int y = 1; y < actualHeight; ++y)
                         {
-                            if (DTetris::tetrisEngineData.linesFilled.find(y) == DTetris::tetrisEngineData.linesFilled.end())
+                            int yFactor = y * tetrisMap.width;
+                            int filled = 0;
+                            for (int x = 1; x < tetrisMap.width - 1; ++x)
                             {
-                                // register the newly empty line
-                                DTetris::tetrisEngineData.linesFilled[y] = true;
-
-                                // start the lines removal animation
-                                DTetris::tetrisEngineData.animateLinesRemove = true;
+                                if (tetrisMap.map[x + yFactor].type != DTetris::BlockType::None)
+                                {
+                                    filled++;
+                                }
                             }
 
-                            if (!DTetris::tetrisEngineData.animateLinesRemove)
+                            // 4.1. If a line is full, clear it.
+                            if (filled == actualWidth)
                             {
+                                MSE_LOG("Here's a line filled: ", y);
                                 for (int x = 1; x < tetrisMap.width - 1; ++x)
                                 {
-                                    // clear the line
-                                    tetrisMap.map_backend[x + yFactor].type = DTetris::BlockType::None;
+                                    tetrisMap.map[x + yFactor].remove = true;
+                                }
+
+                                if (DTetris::tetrisEngineData.linesFilled.find(y) == DTetris::tetrisEngineData.linesFilled.end())
+                                {
+                                    // register the newly empty line
+                                    DTetris::tetrisEngineData.linesFilled[y] = true;
+                                    DTetris::tetrisEngineData.removeLines = true;
                                 }
                             }
                         }
-                    }
 
-                    // 5. Check for registered empty lines.
-                    // 5.1. If a line is empty, move the line from the top of it to its place.
-                    if (DTetris::tetrisEngineData.removeLines)
-                    {
-                        int moveDownCount = 0;
-                        int moveDownFactor = 0;
-                        int yFactor = 0;
-                        for (int y = 1; y < actualHeight; ++y)
+                        if (DTetris::tetrisEngineData.removeLines)
                         {
-                            yFactor = y * tetrisMap.width;
-                            if (DTetris::tetrisEngineData.linesFilled.find(y) != DTetris::tetrisEngineData.linesFilled.end())
-                            {
-                                moveDownCount++;
-                                moveDownFactor = (y + moveDownCount) * tetrisMap.width;
-                            }
+                            // start the lines removal animation
+                            DTetris::tetrisEngineData.animateLinesRemove = true;
 
-                            for (int x = 1; x < tetrisMap.width - 1; ++x)
-                            {
-                                tetrisMap.map_backend[x + yFactor] = tetrisMap.map_backend[x + moveDownFactor];
-                            }
+                            DTetris::tetrisEngineData.state = DTetris::TetrisStates::ClearLines;
+
+                            DTetris::tetrisEngineData.removeLines = false;
+                            DTetris::tetrisEngineData.justPlacedTetrimino = false;
                         }
-                    }
 
-                    break;
+                        break;
+                    }
+                    case DTetris::TetrisStates::Paused:
+                    {
+                        break;
+                    }
+                    case DTetris::TetrisStates::GameOver:
+                    {
+                        game.battleFinished = true;
+                        break;
+                    }
+                    case DTetris::TetrisStates::ClearLines:
+                    {
+                        // 5. Check for registered empty lines.
+                        // 5.1. If a line is empty, move the line from the top of it to its place.
+                        if (!DTetris::tetrisEngineData.animateLinesRemove)
+                        {
+                            tetrisMap.ClearLines(DTetris::tetrisEngineData.linesFilled);
+
+                            DTetris::tetrisEngineData.linesFilled.clear();
+
+                            DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
+                        }
+
+                        break;
+                    }
+                    case DTetris::TetrisStates::Win:
+                    {
+                        break;
+                    }
+                    case DTetris::TetrisStates::None:
+                    default:
+                    {
+                        break;
+                    }
                 }
-                case DTetris::TetrisStates::Paused:
-                {
-                    break;
-                }
-                case DTetris::TetrisStates::GameOver:
-                {
-                    game.battleFinished = true;
-                    break;
-                }
-                case DTetris::TetrisStates::Win:
-                {
-                    break;
-                }
-                case DTetris::TetrisStates::None:
-                default:
-                {
-                    break;
-                }
+
+
+                // ###################################################################################
+                //                         BASIC AUTOBATLER logic
+                // ###################################################################################
+                // swap roles
+    //             game.turn++;
+    //             if (game.turn > 1)
+    //             {
+    //                 DTetris::Character* tmp = nullptr;
+    //                 tmp = game.attacker;
+    //                 game.attacker = game.defender;
+    //                 game.defender = tmp;
+    //             }
+    //
+    //             weaponDamage = game.attacker->weapon.damage;
+    //             skillDamage = 0.0;
+    //             totalDamage = 0.0;
+    //
+    //             printf("Turn %d: %s attacks.\n",
+    //                    game.turn,
+    //                    (char*)(game.attacker->name.c_str()));
+    //
+    //             // start of the turn
+    //             // calculate attack chance
+    //             int agi_sum = game.attacker->stats.agility + game.defender->stats.agility;
+    //             int dice = (std::rand() % agi_sum) + 1;
+    // //                        printf("Rolled %d of %d\n", dice, agi_sum);
+    //             if (dice > game.defender->stats.agility)
+    //             {
+    //                 // apply attacker's effects
+    //                 for (DTetris::Traits trait : game.attacker->traits)
+    //                 {
+    //                     if (game.turn == 1)
+    //                     {
+    //                         if (trait == DTetris::Traits::Rush)
+    //                         {
+    //                             weaponDamage = game.attacker->weapon.damage * 2;
+    //                             skillDamage = game.attacker->stats.strength * 2;
+    //                         }
+    //                     }
+    //
+    //                     if ((trait == DTetris::Traits::HiddenStrike) &&
+    //                         (game.attacker->stats.agility > game.defender->stats.agility))
+    //                     {
+    //                         skillDamage += 1;
+    //                     }
+    //
+    //                     if (trait == DTetris::Traits::Poison)
+    //                     {
+    //                         skillDamage += game.turn;
+    //                     }
+    //
+    //                     if (trait == DTetris::Traits::Rage)
+    //                     {
+    //                         skillDamage = (game.turn < 4) ? (skillDamage + 2) : (skillDamage - 1);
+    //                     }
+    //
+    //                     if (trait == DTetris::Traits::FireBreather)
+    //                     {
+    //                         skillDamage = ((game.turn % 3) == 0) ? skillDamage + 3 : skillDamage;
+    //                     }
+    //                 }
+    //
+    //                 // apply defender's effects
+    //                 for (DTetris::Traits trait : game.defender->traits)
+    //                 {
+    //                     if ((trait == DTetris::Traits::CuttingImmune) &&
+    //                         (game.attacker->weapon.type == DTetris::DamageType::Cutting))
+    //                     {
+    //                         weaponDamage = 0.0;
+    //                     }
+    //
+    //                     if ((trait == DTetris::Traits::CrushingWeakness) &&
+    //                         (game.attacker->weapon.type == DTetris::DamageType::Crushing))
+    //                     {
+    //                         weaponDamage = weaponDamage * 2;
+    //                     }
+    //                 }
+    //
+    //                 // pre-calculate total damage
+    //                 totalDamage = weaponDamage + skillDamage;
+    //
+    //                 // apply defender's effects that affect total damage
+    //                 for (DTetris::Traits trait : game.defender->traits)
+    //                 {
+    //                     if (trait == DTetris::Traits::StoneSkin)
+    //                     {
+    //                         totalDamage -= game.defender->stats.endurance;
+    //                     }
+    //
+    //                     if ((trait == DTetris::Traits::Shield) &&
+    //                         (game.defender->stats.strength > game.attacker->stats.strength))
+    //                     {
+    //                         totalDamage -= 3;
+    //                     }
+    //                 }
+    //
+    //                 if (totalDamage < 0.0)
+    //                 {
+    //                     totalDamage = 0.0;
+    //                 }
+    //
+    //                 // clash
+    //                 game.defender->stats.health -= totalDamage;
+    //                 printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n",
+    //                        game.turn,
+    //                        (char*)(game.attacker->name.c_str()),
+    //                        totalDamage,
+    //                        (char*)(game.defender->name.c_str()),
+    //                        game.defender->stats.health);
+    //
+    //                 strForLogger << "Ход " << game.turn << ": "
+    //                 << utf8::utf32to8(game.attacker->name.c_str())
+    // //                << "(" << game.attacker->stats.health << ")"
+    //                 << " наносит " << totalDamage << " урона "
+    // //                << utf8::utf32to8(game.defender->name.c_str())
+    // //                << "(" << game.defender->stats.health << ")"
+    //                 << "\n";
+    //
+    //                 if (!game.config.fastBattle)
+    //                 {
+    //                     if (game.attacker->race == DTetris::Races::Human)
+    //                     {
+    //                         mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-sword-cut-fx.wav");
+    //                     } else {
+    //                         mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav");
+    //                     }
+    //                 }
+    //                 game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
+    //             } else {
+    //                 printf("Turn %d: %s misses!\n",
+    //                        game.turn,
+    //                        (char*)(game.attacker->name.c_str()));
+    //
+    //                 strForLogger << "Ход " << game.turn << ": "
+    //                 << utf8::utf32to8(game.attacker->name.c_str())
+    // //                << "(" << game.attacker->stats.health << ")"
+    //                 << " промахивается!\n";
+    //                 if (!game.config.fastBattle)
+    //                 {
+    //                     mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav");
+    //                 }
+    //                 game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
+    //             }
+    //
+    //             if (game.defender->stats.health <= 0.0)
+    //             {
+    //                 game.battleFinished = true;
+    //             }
+
+                // end of the turn
             }
-            
-         
-            // ###################################################################################
-            //                         BASIC AUTOBATLER logic
-            // ###################################################################################
-            // swap roles
-//             game.turn++;
-//             if (game.turn > 1)
-//             {
-//                 DTetris::Character* tmp = nullptr;
-//                 tmp = game.attacker;
-//                 game.attacker = game.defender;
-//                 game.defender = tmp;
-//             }
-//
-//             weaponDamage = game.attacker->weapon.damage;
-//             skillDamage = 0.0;
-//             totalDamage = 0.0;
-//
-//             printf("Turn %d: %s attacks.\n",
-//                    game.turn,
-//                    (char*)(game.attacker->name.c_str()));
-//
-//             // start of the turn
-//             // calculate attack chance
-//             int agi_sum = game.attacker->stats.agility + game.defender->stats.agility;
-//             int dice = (std::rand() % agi_sum) + 1;
-// //                        printf("Rolled %d of %d\n", dice, agi_sum);
-//             if (dice > game.defender->stats.agility)
-//             {
-//                 // apply attacker's effects
-//                 for (DTetris::Traits trait : game.attacker->traits)
-//                 {
-//                     if (game.turn == 1)
-//                     {
-//                         if (trait == DTetris::Traits::Rush)
-//                         {
-//                             weaponDamage = game.attacker->weapon.damage * 2;
-//                             skillDamage = game.attacker->stats.strength * 2;
-//                         }
-//                     }
-//
-//                     if ((trait == DTetris::Traits::HiddenStrike) &&
-//                         (game.attacker->stats.agility > game.defender->stats.agility))
-//                     {
-//                         skillDamage += 1;
-//                     }
-//
-//                     if (trait == DTetris::Traits::Poison)
-//                     {
-//                         skillDamage += game.turn;
-//                     }
-//
-//                     if (trait == DTetris::Traits::Rage)
-//                     {
-//                         skillDamage = (game.turn < 4) ? (skillDamage + 2) : (skillDamage - 1);
-//                     }
-//
-//                     if (trait == DTetris::Traits::FireBreather)
-//                     {
-//                         skillDamage = ((game.turn % 3) == 0) ? skillDamage + 3 : skillDamage;
-//                     }
-//                 }
-//
-//                 // apply defender's effects
-//                 for (DTetris::Traits trait : game.defender->traits)
-//                 {
-//                     if ((trait == DTetris::Traits::CuttingImmune) &&
-//                         (game.attacker->weapon.type == DTetris::DamageType::Cutting))
-//                     {
-//                         weaponDamage = 0.0;
-//                     }
-//
-//                     if ((trait == DTetris::Traits::CrushingWeakness) &&
-//                         (game.attacker->weapon.type == DTetris::DamageType::Crushing))
-//                     {
-//                         weaponDamage = weaponDamage * 2;
-//                     }
-//                 }
-//
-//                 // pre-calculate total damage
-//                 totalDamage = weaponDamage + skillDamage;
-//
-//                 // apply defender's effects that affect total damage
-//                 for (DTetris::Traits trait : game.defender->traits)
-//                 {
-//                     if (trait == DTetris::Traits::StoneSkin)
-//                     {
-//                         totalDamage -= game.defender->stats.endurance;
-//                     }
-//
-//                     if ((trait == DTetris::Traits::Shield) &&
-//                         (game.defender->stats.strength > game.attacker->stats.strength))
-//                     {
-//                         totalDamage -= 3;
-//                     }
-//                 }
-//
-//                 if (totalDamage < 0.0)
-//                 {
-//                     totalDamage = 0.0;
-//                 }
-//
-//                 // clash
-//                 game.defender->stats.health -= totalDamage;
-//                 printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n",
-//                        game.turn,
-//                        (char*)(game.attacker->name.c_str()),
-//                        totalDamage,
-//                        (char*)(game.defender->name.c_str()),
-//                        game.defender->stats.health);
-//
-//                 strForLogger << "Ход " << game.turn << ": "
-//                 << utf8::utf32to8(game.attacker->name.c_str())
-// //                << "(" << game.attacker->stats.health << ")"
-//                 << " наносит " << totalDamage << " урона "
-// //                << utf8::utf32to8(game.defender->name.c_str())
-// //                << "(" << game.defender->stats.health << ")"
-//                 << "\n";
-//
-//                 if (!game.config.fastBattle)
-//                 {
-//                     if (game.attacker->race == DTetris::Races::Human)
-//                     {
-//                         mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-sword-cut-fx.wav");
-//                     } else {
-//                         mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav");
-//                     }
-//                 }
-//                 game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
-//             } else {
-//                 printf("Turn %d: %s misses!\n",
-//                        game.turn,
-//                        (char*)(game.attacker->name.c_str()));
-//
-//                 strForLogger << "Ход " << game.turn << ": "
-//                 << utf8::utf32to8(game.attacker->name.c_str())
-// //                << "(" << game.attacker->stats.health << ")"
-//                 << " промахивается!\n";
-//                 if (!game.config.fastBattle)
-//                 {
-//                     mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav");
-//                 }
-//                 game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
-//             }
-//
-//             if (game.defender->stats.health <= 0.0)
-//             {
-//                 game.battleFinished = true;
-//             }
-            
-            // end of the turn
         }
         // localTime = 0;
         // localTime += 100;

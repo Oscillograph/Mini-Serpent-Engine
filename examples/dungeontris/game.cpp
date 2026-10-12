@@ -1,4 +1,7 @@
 #include "dungeontris/tetris.h"
+#include "mse/systems/application/application.h"
+#include "mse/systems/ecs/components.h"
+#include "mse/systems/platform/events/events.h"
 #include <algorithm>
 #include <dungeontris/game-fwd.h>
 #include <random> // rand
@@ -12,7 +15,10 @@
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/windows/window.h>
 
+#include <dungeontris/game-fwd.h> // DTetris::TetrisEngineData
+
 extern DTetris::Tetrimino tetrimino;
+extern DTetris::TetrisEngineData DTetris::tetrisEngineData;
 
 namespace DTetris
 {
@@ -144,6 +150,65 @@ namespace DTetris
 
         map.assign(map_backend.begin(), map_backend.end());
     }
+
+    void TetrisMap::ClearLines(std::map<int, bool>& linesFilled)
+    {
+        for (int j = 0; j < height; ++j)
+        {
+            for (int i = 0; i < width; ++i)
+            {
+                int index = j*width + i;
+                map_backend[index].coordinates.x = i;
+                map_backend[index].coordinates.y = j;
+
+                if ((j == height-1) || (i == 0) || (i == width-1))
+                {
+                    map_backend[index].type = BlockType::Wall;
+                } else {
+                    map_backend[index].type = BlockType::None;
+                    map_backend[index].color = {0, 0, 0};
+                }
+                map_backend[index].remove = false;
+
+                blockSprites[index].place = {
+                    map_backend[index].coordinates.x * 10,
+                    map_backend[index].coordinates.y * 10,
+                    10,
+                    10
+                };
+                blockSprites[index].texture = nullptr;
+            }
+        }
+
+        int actualHeight = height - 1;
+        int moveUpCount = 0;
+        int moveUpFactor = 0;
+        int yFactor = 0;
+
+        for (int y = actualHeight; y > -1; --y)
+        {
+            yFactor = y * width;
+            if (linesFilled.find(y) != linesFilled.end())
+            {
+                moveUpCount++;
+
+                if ((y - moveUpCount) < 0)
+                {
+                    break;
+                }
+            }
+
+            moveUpFactor = (y - moveUpCount) * width;
+
+            for (int x = 1; x < width - 1; ++x)
+            {
+                map_backend[x + yFactor] = map[x + moveUpFactor];
+                map_backend[x + yFactor].remove = false;
+            }
+        }
+
+        map.assign(map_backend.begin(), map_backend.end());
+    }
 }
 
 namespace mse
@@ -239,6 +304,23 @@ namespace mse
                         {
                             MSE_CORE_LOG("TetrisMapGUI: Move tetrimino Down");
                             DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
+                            DTetris::tetrisEngineData.forceDownMovement = true;
+                            break;
+                        }
+                    }
+                };
+
+                callbacks[EventTypes::KeyUp] = [&](SDL_Event* event){
+                    switch (event->key.key)
+                    {
+                        case mse::KeyCode::_s:
+                        case mse::KeyCode::NumPad_2:
+                        case mse::KeyCode::Down:
+                        {
+                            if (DTetris::tetrisEngineData.forceDownMovement)
+                            {
+                                DTetris::tetrisEngineData.forceDownMovement = false;
+                            }
                             break;
                         }
                     }
@@ -255,7 +337,9 @@ namespace mse
         
         void TetrisMapGUI::Display()
         {
-           // MSE_CORE_LOG("TetrisMapGUI: Display");
+            static int frameCounter = 0;
+
+            // MSE_CORE_LOG("TetrisMapGUI: Display");
             if (parentLayer != nullptr)
             {
                 // MSE_CORE_LOG("TetrisMapGUI: Display");
@@ -279,20 +363,17 @@ namespace mse
                     for (int yIndex = 0; yIndex < m_height; ++yIndex)
                     {
                         // skip the iteration if the block is empty
-                        if (m_tetrisMap->map[yIndex*m_width + xIndex].type == DTetris::BlockType::None)
+                        if (m_tetrisMap->map[yIndex*m_width + xIndex].type != DTetris::BlockType::None)
                         {
-                            continue;
+                            destRect.y = (float)(layerArea.y) / windowUser->GetPrefs().height + yIndex*destRect.h;
+
+                            // pick a proper image to draw
+                            ChooseSrcRect(m_tetrisMap->map[yIndex*m_width + xIndex].type, srcRect, m_tetrisMap->map[yIndex*m_width + xIndex].remove);
+
+                            // draw the image of a block
+                            // MSE_LOG("Drawing at: ", destRect.x, ", ", destRect.y);
+                            Renderer::DrawTexture(m_spriteList, &destRect, &srcRect);
                         }
-                        
-                        destRect.y = (float)(layerArea.y) / windowUser->GetPrefs().height + yIndex*destRect.h;
-//                        destRect.y = 0 + xIndex*destRect.h;
-                        
-                        // pick a proper image to draw
-                        ChooseSrcRect(m_tetrisMap->map[yIndex*m_width + xIndex].type, srcRect);
-                        
-                        // draw the image of a block
-                        // MSE_LOG("Drawing at: ", destRect.x, ", ", destRect.y);
-                        Renderer::DrawTexture(m_spriteList, &destRect, &srcRect);
                     }
                 }
 
@@ -307,25 +388,51 @@ namespace mse
                         destRect.y = (float)(layerArea.y) / windowUser->GetPrefs().height + yIndex*destRect.h;
 
                         // pick a proper image to draw
-                        ChooseSrcRect(tetrimino.blocks[x + 4*y].type, srcRect);
+                        ChooseSrcRect(tetrimino.blocks[x + 4*y].type, srcRect, tetrimino.blocks[x + 4*y].remove);
 
                         // draw the image of a block
                         Renderer::DrawTexture(m_spriteList, &destRect, &srcRect);
                     }
                 }
 
+                if (DTetris::tetrisEngineData.animateLinesRemove)
+                {
+                    DTetris::tetrisEngineData.animateLinesFrame = frameCounter / 20;
+                    if (DTetris::tetrisEngineData.animateLinesFrame > 3)
+                    {
+                        DTetris::tetrisEngineData.animateLinesFrame = 0;
+                        DTetris::tetrisEngineData.animateLinesRemove = false;
+                    }
+                }
+
             } else {
                 MSE_CORE_LOG("TetrisMap: cannot display due to not been initialized");
             }
+
+            if (frameCounter < 80)
+            {
+                frameCounter++;
+            } else {
+                frameCounter = 0;
+            }
         }
 
-        void TetrisMapGUI::ChooseSrcRect(DTetris::BlockType blockType, SDL_Rect& srcRect)
+        void TetrisMapGUI::ChooseSrcRect(DTetris::BlockType blockType, SDL_Rect& srcRect, bool remove)
         {
             switch (blockType)
             {
                 case DTetris::BlockType::Block:
                 {
-                    srcRect.x = 24;
+                    if (remove)
+                    {
+                        if (DTetris::tetrisEngineData.animateLinesRemove)
+                        {
+                            srcRect.x = 24 + DTetris::tetrisEngineData.animateLinesFrame * 10;
+                        }
+                    } else {
+                        srcRect.x = 24;
+                    }
+
                     srcRect.y = 74;
                     srcRect.w = 10;
                     srcRect.h = 10;
