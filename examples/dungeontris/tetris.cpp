@@ -204,8 +204,6 @@ namespace DTetris
 			}
 		}
 
-
-
 		block->blocks.assign(newBlock.begin(), newBlock.end());
 
 		return 0;
@@ -224,6 +222,8 @@ namespace DTetris
 				{
 					tetrisMap.map[xIndex + yIndex*tetrisMap.width].type = block->blocks[x + 4*y].type;
 				}
+
+				block->blocks[x + 4*y].type = DTetris::BlockType::None;
 			}
 		}
 
