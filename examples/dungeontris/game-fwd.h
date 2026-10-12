@@ -316,8 +316,8 @@ namespace DTetris
     struct TetrisEngineData
     {
         // Game speed formulae: 10ms*(gameSpeedMax - gameSpeed)
-        int gameSpeed = 0;
-        int gameSpeedMax = 25;
+        unsigned int gameSpeed = 1;
+        unsigned int gameSpeedMax = 25;
         uint32_t gameTimer = 0;
         int gameDifficulty = 2; // 0 means A, 1 means B, 2 means C
         int playerScore = 0;
