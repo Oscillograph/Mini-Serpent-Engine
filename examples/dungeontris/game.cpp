@@ -433,7 +433,7 @@ namespace mse
                         srcRect.x = 24;
                     }
 
-                    srcRect.y = 74;
+                    srcRect.y = 11;
                     srcRect.w = 10;
                     srcRect.h = 10;
                     break;

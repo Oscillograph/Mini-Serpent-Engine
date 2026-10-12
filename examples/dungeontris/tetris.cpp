@@ -1,3 +1,4 @@
+#include "mse/utils/logger.h"
 #include <dungeontris/game-fwd.h>
 // #include <dungeontris/game-data.h>
 #include <dungeontris/tetris.h>
@@ -227,11 +228,13 @@ namespace DTetris
 			}
 		}
 
+		MSE_LOG("Block added");
 		return 0;
 	}
 
 	int TetrisEngine_NewBlock()
 	{
+		MSE_LOG("New block");
 		int setSize = 0;
 		switch (tetrisEngineData.gameDifficulty)
 		{

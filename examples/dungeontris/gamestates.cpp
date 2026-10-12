@@ -816,7 +816,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                             DTetris::tetrisEngineData.state = DTetris::TetrisStates::ClearLines;
 
                             DTetris::tetrisEngineData.removeLines = false;
-                            DTetris::tetrisEngineData.justPlacedTetrimino = false;
+                            DTetris::tetrisEngineData.justPlacedTetrimino = true;
                         }
 
                         break;
