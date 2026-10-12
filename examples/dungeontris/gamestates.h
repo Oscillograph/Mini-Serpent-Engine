@@ -114,6 +114,9 @@ struct ArenaBattlePageState : GameState
     virtual bool OnEnter(mse::Layer* pass_layer = nullptr) override;
     virtual bool OnExit(bool pass_layer = false) override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
+
+    mse::TimeType localTime = 0;
+    mse::TimeType lastLocalTime = 0;
 };
 
 struct ArenaAftermathPageState : GameState
@@ -125,6 +128,7 @@ struct ArenaAftermathPageState : GameState
     virtual bool OnUpdate(mse::TimeType t = 0) override;
     
     mse::TimeType localTime = 0;
+    mse::TimeType lastLocalTime = 0;
 };
 
 struct WinnerPageState : GameState

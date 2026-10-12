@@ -72,11 +72,8 @@ namespace DTetris
 			}
 		}
 
-		if (!isAllowed)
-		{
-			block->x = x_backup;
-			block->y = y_backup;
-		}
+		block->x = x_backup;
+		block->y = y_backup;
 
 		return isAllowed;
 	}
@@ -130,11 +127,7 @@ namespace DTetris
 			}
 		}
 
-		if (!isAllowed)
-		{
-			TetrisEngine_Rotate(block, TetrisRotateDirection::CounterClockwise);
-		}
-
+		TetrisEngine_Rotate(block, TetrisRotateDirection::CounterClockwise);
 
 		return isAllowed;
 	}
@@ -143,7 +136,10 @@ namespace DTetris
 	{
 		std::vector<Block> newBlock;
 		newBlock.resize(16);
-		newBlock.assign(block->blocks.begin(), block->blocks.end());
+		for (int i = 0; i < 16; ++i)
+		{
+			newBlock[i].type = BlockType::None;
+		}
 
 		for (int x = 0; x < 4; ++x)
 		{
@@ -151,23 +147,24 @@ namespace DTetris
 			{
 				switch (direction)
 				{
-					case TetrisRotateDirection::None:
-					{
-						break;
-					}
 					case TetrisRotateDirection::Clockwise:
 					{
-						newBlock[4*y + x] = block->blocks[4*x + (4 - y)];
+						newBlock[x + 4*y].type = block->blocks[(3 - y) + 4*x].type;
 						break;
 					}
 					case TetrisRotateDirection::CounterClockwise:
 					{
-						newBlock[4*y + x] = block->blocks[4*(4 - x) + y];
+						newBlock[x + 4*y].type = block->blocks[y + 4*(3 - x)].type;
 						break;
 					}
+
+					default:
+					{}
 				}
 			}
 		}
+
+		block->blocks.assign(newBlock.begin(), newBlock.end());
 
 		return 0;
 	}
@@ -181,7 +178,10 @@ namespace DTetris
 			{
 				int yIndex = y + block->y;
 
-				tetrisMap.map[xIndex + yIndex*tetrisMap.width].type = block->blocks[x + 4*y].type;
+				if (block->blocks[x + 4*y].type != DTetris::BlockType::None)
+				{
+					tetrisMap.map[xIndex + yIndex*tetrisMap.width].type = block->blocks[x + 4*y].type;
+				}
 			}
 		}
 
@@ -217,7 +217,7 @@ namespace DTetris
 		}
 
 		int tetriminoId = rand() % setSize + 1;
-		printf("tetrimino ID: %d of %d\n;", tetriminoId, (int)tetriminoDB.data.size());
+		printf("tetrimino ID: %d of %d;\n", tetriminoId, (int)tetriminoDB.data.size());
 		for (size_t i = 0; i < tetriminoDB.data[tetriminoId].block.size(); ++i)
 		{
 			switch (tetriminoDB.data[tetriminoId].block[i])
@@ -238,6 +238,10 @@ namespace DTetris
 				}
 			}
 		}
+
+		tetrimino.x = 4;
+		tetrimino.y = 0;
+		tetrimino.fell = false;
 
 		return 0;
 	}

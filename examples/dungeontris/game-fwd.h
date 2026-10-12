@@ -217,7 +217,7 @@ namespace DTetris
         bool playInBackground = false;
         bool fullscreen = true;
         bool fastBattle = false;
-        int turnLength = 500; // in milliseconds
+        unsigned int turnLength = 500; // in milliseconds
     };
     
     enum class BlockType

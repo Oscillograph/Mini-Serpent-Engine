@@ -706,16 +706,15 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
     float skillDamage = 0.0;
     float totalDamage = 0.0;
     game.battleJustStarted = false;
-    static mse::TimeType lastLocalTime = 0;
-    static mse::TimeType localTime = 0;
-    localTime += t;
     std::stringstream strForLogger;
 
     if (!game.battleFinished)
     {
-        MSE_LOG("Local time: ", localTime);
-        if ((localTime - lastLocalTime) >= (unsigned int)(game.config.turnLength))
+        MSE_LOG("Local time: ", localTime, "; Last local time: ", lastLocalTime, "; delta: ", (localTime - lastLocalTime), " ? ", game.config.turnLength);
+        if ((localTime - lastLocalTime) >= 200) //game.config.turnLength)
         {
+            lastLocalTime = localTime;
+
             // ###################################################################################
             //                         BASIC TETRIS logic
             // ###################################################################################
@@ -740,25 +739,37 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                     }
 
                     // 2. Check if can move tetrimino (and keep track of its movement counts).
-                    if (DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::tetrisEngineData.moveDirection))
+                    bool canMoveDown, canMoveSide = false;
+                    if (DTetris::tetrisEngineData.moveDirection != DTetris::TetrisMoveDirection::Down)
                     {
-                        // 3.1. If can move.
-                        // 3.1.1. Move the tetrimino lower and go to (2).
-                        DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                        canMoveSide = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                    }
+                    canMoveDown = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::TetrisMoveDirection::Down);
 
+
+                    if ((!canMoveDown && !canMoveSide))
+                    {
+                        if (DTetris::tetrisEngineData.justPlacedTetrimino)
+                        {
+                            DTetris::tetrisEngineData.state = DTetris::TetrisStates::GameOver;
+                        } else {
+                            // 3.2.1. Place the tetrimino.
+                            DTetris::TetrisEngine_AddBlock(&tetrimino);
+                            DTetris::tetrisEngineData.justPlacedTetrimino = true;
+                        }
+                    } else {
                         if (DTetris::tetrisEngineData.justPlacedTetrimino)
                         {
                             DTetris::tetrisEngineData.justPlacedTetrimino = false;
                         }
-                    } else {
-                        // 3.2. If can't move.
-                        // 3.2.1. Place the tetrimino.
-                        if (!DTetris::tetrisEngineData.justPlacedTetrimino)
+
+                        if (canMoveSide)
                         {
-                            DTetris::TetrisEngine_AddBlock(&tetrimino);
-                            DTetris::tetrisEngineData.justPlacedTetrimino = true;
+                            DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                            DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
                         } else {
-                            DTetris::tetrisEngineData.state = DTetris::TetrisStates::GameOver;
+                            DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
+                            DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
                         }
                     }
 
@@ -824,8 +835,6 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                         }
                     }
 
-                    lastLocalTime = localTime;
-
                     break;
                 }
                 case DTetris::TetrisStates::Paused:
@@ -834,6 +843,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                 }
                 case DTetris::TetrisStates::GameOver:
                 {
+                    game.battleFinished = true;
                     break;
                 }
                 case DTetris::TetrisStates::Win:
@@ -846,8 +856,6 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                     break;
                 }
             }
-
-            lastLocalTime = localTime;
             
          
             // ###################################################################################
