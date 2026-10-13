@@ -11,6 +11,7 @@
 extern DTetris::TetrisMap tetrisMap;
 extern DTetris::TetriminoTemplatesDB tetriminoDB;
 extern DTetris::Tetrimino tetrimino;
+extern DTetris::Game game;
 
 namespace DTetris
 {
@@ -149,13 +150,13 @@ namespace DTetris
 
 			for (int x = 0; x < 4; ++x)
 			{
-				for (int y = 0; y < 3; ++y)
+				for (int y = 0; y < 4; ++y)
 				{
 					switch (direction)
 					{
 						case TetrisRotateDirection::Clockwise:
 						{
-							newBlock[x + 4*y].type = block->blocks[(2 - y) + 4*x].type;
+							newBlock[x + 4*y].type = block->blocks[(3 - y) + 4*x].type;
 							break;
 						}
 						case TetrisRotateDirection::CounterClockwise:
@@ -172,7 +173,7 @@ namespace DTetris
 		} else {
 			if (block->id == 3) // square
 			{
-
+				// do nothing
 			} else { // other 3x3 blocks
 				newBlock.resize(16);
 				for (int i = 0; i < 16; ++i)
@@ -274,7 +275,30 @@ namespace DTetris
 				}
 				case 1:
 				{
-					tetrimino.blocks[i].type = DTetris::BlockType::Block;
+					int blockType = rand() % 100;
+
+					if (blockType < 5)
+					{
+						tetrimino.blocks[i].type = DTetris::BlockType::Treasure;
+					} else {
+						if (blockType < 10)
+						{
+							tetrimino.blocks[i].type = DTetris::BlockType::Healing;
+						} else {
+							if (blockType < 30)
+							{
+								tetrimino.blocks[i].type = DTetris::BlockType::Defence;
+							} else {
+								if (blockType < 40)
+								{
+									tetrimino.blocks[i].type = DTetris::BlockType::Attack;
+								} else {
+									tetrimino.blocks[i].type = DTetris::BlockType::Block;
+								}
+							}
+						}
+					}
+
 					break;
 				}
 				default:

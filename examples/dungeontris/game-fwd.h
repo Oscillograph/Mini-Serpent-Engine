@@ -357,6 +357,8 @@ namespace DTetris
         
         int battleCounter = 0;
         int turn = 0;
+        bool turnNext = false;
+        bool playerAttacks = false;
         
         Character playerCharacter;
         Character npcCharacter;
@@ -369,6 +371,7 @@ namespace DTetris
     
     GameDB& InitAutobattlerData();
     TetriminoTemplatesDB& InitTetriminoDB();
+    void GameNextTurn(Game& game);
 }
 
 namespace mse

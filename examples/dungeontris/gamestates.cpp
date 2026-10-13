@@ -731,7 +731,6 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                         if (DTetris::tetrisEngineData.justPlacedTetrimino)
                         {
                             DTetris::TetrisEngine_NewBlock();
-                            game.turn++;
                         }
 
                         if (DTetris::tetrisEngineData.rotateTetrimino)
@@ -761,6 +760,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                                 // 3.2.1. Place the tetrimino.
                                 DTetris::TetrisEngine_AddBlock(&tetrimino);
                                 DTetris::tetrisEngineData.justPlacedTetrimino = true;
+                                DTetris::GameNextTurn(game);
                             }
                         } else {
                             if (DTetris::tetrisEngineData.justPlacedTetrimino)
@@ -817,9 +817,9 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                             DTetris::tetrisEngineData.animateLinesRemove = true;
 
                             DTetris::tetrisEngineData.state = DTetris::TetrisStates::ClearLines;
+                            game.playerAttacks = true;
 
                             DTetris::tetrisEngineData.removeLines = false;
-                            DTetris::tetrisEngineData.justPlacedTetrimino = true;
                         }
 
                         break;
@@ -864,154 +864,162 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                 //                         BASIC AUTOBATLER logic
                 // ###################################################################################
                 // swap roles
-                game.turn++;
 
-                if ((game.turn % 10) == 0)
+                if (game.turnNext)
                 {
-                    game.defender = &(game.playerCharacter);
-                    game.attacker = &(game.npcCharacter);
-                } else {
-                    game.attacker = &(game.playerCharacter);
-                    game.defender = &(game.npcCharacter);
-                }
+                    game.turnNext = false;
 
-                weaponDamage = game.attacker->weapon.damage;
-                skillDamage = 0.0;
-                totalDamage = 0.0;
-
-                printf("Turn %d: %s attacks.\n",
-                       game.turn,
-                       (char*)(game.attacker->name.c_str()));
-
-                // start of the turn
-                // calculate attack chance
-                int agi_sum = game.attacker->stats.agility + game.defender->stats.agility;
-                int dice = (std::rand() % agi_sum) + 1;
-    //                        printf("Rolled %d of %d\n", dice, agi_sum);
-                if (dice > game.defender->stats.agility)
-                {
-                    // apply attacker's effects
-                    for (DTetris::Traits trait : game.attacker->traits)
+                    if (game.playerAttacks)
                     {
-                        if (game.turn == 1)
+                        game.attacker = &(game.playerCharacter);
+                        game.defender = &(game.npcCharacter);
+                        game.playerAttacks = false;
+                    } else {
+                        if ((game.turn % 10) == 0)
                         {
-                            if (trait == DTetris::Traits::Rush)
-                            {
-                                weaponDamage = game.attacker->weapon.damage * 2;
-                                skillDamage = game.attacker->stats.strength * 2;
-                            }
-                        }
-
-                        if ((trait == DTetris::Traits::HiddenStrike) &&
-                            (game.attacker->stats.agility > game.defender->stats.agility))
-                        {
-                            skillDamage += 1;
-                        }
-
-                        if (trait == DTetris::Traits::Poison)
-                        {
-                            skillDamage += game.turn;
-                        }
-
-                        if (trait == DTetris::Traits::Rage)
-                        {
-                            skillDamage = (game.turn < 4) ? (skillDamage + 2) : (skillDamage - 1);
-                        }
-
-                        if (trait == DTetris::Traits::FireBreather)
-                        {
-                            skillDamage = ((game.turn % 3) == 0) ? skillDamage + 3 : skillDamage;
+                            game.defender = &(game.playerCharacter);
+                            game.attacker = &(game.npcCharacter);
                         }
                     }
 
-                    // apply defender's effects
-                    for (DTetris::Traits trait : game.defender->traits)
-                    {
-                        if ((trait == DTetris::Traits::CuttingImmune) &&
-                            (game.attacker->weapon.type == DTetris::DamageType::Cutting))
-                        {
-                            weaponDamage = 0.0;
-                        }
+                    weaponDamage = game.attacker->weapon.damage;
+                    skillDamage = 0.0;
+                    totalDamage = 0.0;
 
-                        if ((trait == DTetris::Traits::CrushingWeakness) &&
-                            (game.attacker->weapon.type == DTetris::DamageType::Crushing))
-                        {
-                            weaponDamage = weaponDamage * 2;
-                        }
-                    }
-
-                    // pre-calculate total damage
-                    totalDamage = weaponDamage + skillDamage;
-
-                    // apply defender's effects that affect total damage
-                    for (DTetris::Traits trait : game.defender->traits)
-                    {
-                        if (trait == DTetris::Traits::StoneSkin)
-                        {
-                            totalDamage -= game.defender->stats.endurance;
-                        }
-
-                        if ((trait == DTetris::Traits::Shield) &&
-                            (game.defender->stats.strength > game.attacker->stats.strength))
-                        {
-                            totalDamage -= 3;
-                        }
-                    }
-
-                    if (totalDamage < 0.0)
-                    {
-                        totalDamage = 0.0;
-                    }
-
-                    // clash
-                    game.defender->stats.health -= totalDamage;
-                    printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n",
-                           game.turn,
-                           (char*)(game.attacker->name.c_str()),
-                           totalDamage,
-                           (char*)(game.defender->name.c_str()),
-                           game.defender->stats.health);
-
-                    strForLogger << "Ход " << game.turn << ": "
-                    << utf8::utf32to8(game.attacker->name.c_str())
-    //                << "(" << game.attacker->stats.health << ")"
-                    << " наносит " << totalDamage << " урона "
-    //                << utf8::utf32to8(game.defender->name.c_str())
-    //                << "(" << game.defender->stats.health << ")"
-                    << "\n";
-
-                    if (!game.config.fastBattle)
-                    {
-                        if (game.attacker->race == DTetris::Races::Human)
-                        {
-                            mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-sword-cut-fx.wav");
-                        } else {
-                            mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav");
-                        }
-                    }
-                    game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
-                } else {
-                    printf("Turn %d: %s misses!\n",
+                    printf("Turn %d: %s attacks.\n",
                            game.turn,
                            (char*)(game.attacker->name.c_str()));
 
-                    strForLogger << "Ход " << game.turn << ": "
-                    << utf8::utf32to8(game.attacker->name.c_str())
-    //                << "(" << game.attacker->stats.health << ")"
-                    << " промахивается!\n";
-                    if (!game.config.fastBattle)
+                    // start of the turn
+                    // calculate attack chance
+                    int agi_sum = game.attacker->stats.agility + game.defender->stats.agility;
+                    int dice = (std::rand() % agi_sum) + 1;
+                    //                        printf("Rolled %d of %d\n", dice, agi_sum);
+                    if (dice > game.defender->stats.agility)
                     {
-                        mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav");
+                        // apply attacker's effects
+                        for (DTetris::Traits trait : game.attacker->traits)
+                        {
+                            if (game.turn == 1)
+                            {
+                                if (trait == DTetris::Traits::Rush)
+                                {
+                                    weaponDamage = game.attacker->weapon.damage * 2;
+                                    skillDamage = game.attacker->stats.strength * 2;
+                                }
+                            }
+
+                            if ((trait == DTetris::Traits::HiddenStrike) &&
+                                (game.attacker->stats.agility > game.defender->stats.agility))
+                            {
+                                skillDamage += 1;
+                            }
+
+                            if (trait == DTetris::Traits::Poison)
+                            {
+                                skillDamage += game.turn;
+                            }
+
+                            if (trait == DTetris::Traits::Rage)
+                            {
+                                skillDamage = (game.turn < 4) ? (skillDamage + 2) : (skillDamage - 1);
+                            }
+
+                            if (trait == DTetris::Traits::FireBreather)
+                            {
+                                skillDamage = ((game.turn % 3) == 0) ? skillDamage + 3 : skillDamage;
+                            }
+                        }
+
+                        // apply defender's effects
+                        for (DTetris::Traits trait : game.defender->traits)
+                        {
+                            if ((trait == DTetris::Traits::CuttingImmune) &&
+                                (game.attacker->weapon.type == DTetris::DamageType::Cutting))
+                            {
+                                weaponDamage = 0.0;
+                            }
+
+                            if ((trait == DTetris::Traits::CrushingWeakness) &&
+                                (game.attacker->weapon.type == DTetris::DamageType::Crushing))
+                            {
+                                weaponDamage = weaponDamage * 2;
+                            }
+                        }
+
+                        // pre-calculate total damage
+                        totalDamage = weaponDamage + skillDamage;
+
+                        // apply defender's effects that affect total damage
+                        for (DTetris::Traits trait : game.defender->traits)
+                        {
+                            if (trait == DTetris::Traits::StoneSkin)
+                            {
+                                totalDamage -= game.defender->stats.endurance;
+                            }
+
+                            if ((trait == DTetris::Traits::Shield) &&
+                                (game.defender->stats.strength > game.attacker->stats.strength))
+                            {
+                                totalDamage -= 3;
+                            }
+                        }
+
+                        if (totalDamage < 0.0)
+                        {
+                            totalDamage = 0.0;
+                        }
+
+                        // clash
+                        game.defender->stats.health -= totalDamage;
+                        printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n",
+                               game.turn,
+                               (char*)(game.attacker->name.c_str()),
+                               totalDamage,
+                               (char*)(game.defender->name.c_str()),
+                               game.defender->stats.health);
+
+                        strForLogger << "Ход " << game.turn << ": "
+                        << utf8::utf32to8(game.attacker->name.c_str())
+                        //                << "(" << game.attacker->stats.health << ")"
+                        << " наносит " << totalDamage << " урона "
+                        //                << utf8::utf32to8(game.defender->name.c_str())
+                        //                << "(" << game.defender->stats.health << ")"
+                        << "\n";
+
+                        if (!game.config.fastBattle)
+                        {
+                            if (game.attacker->race == DTetris::Races::Human)
+                            {
+                                mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-sword-cut-fx.wav");
+                            } else {
+                                mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav");
+                            }
+                        }
+                        game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
+                    } else {
+                        printf("Turn %d: %s misses!\n",
+                               game.turn,
+                               (char*)(game.attacker->name.c_str()));
+
+                        strForLogger << "Ход " << game.turn << ": "
+                        << utf8::utf32to8(game.attacker->name.c_str())
+                        //                << "(" << game.attacker->stats.health << ")"
+                        << " промахивается!\n";
+                        if (!game.config.fastBattle)
+                        {
+                            mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav");
+                        }
+                        game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
                     }
-                    game.UILogger.Push(utf8::utf8to32(strForLogger.str()));
-                }
 
-                if (game.defender->stats.health <= 0.0)
-                {
-                    game.battleFinished = true;
-                }
+                    if (game.defender->stats.health <= 0.0)
+                    {
+                        game.battleFinished = true;
+                    }
 
-                // end of the turn
+                    // end of the turn
+                }
             }
         }
         // localTime = 0;

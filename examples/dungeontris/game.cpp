@@ -22,6 +22,12 @@ extern DTetris::TetrisEngineData DTetris::tetrisEngineData;
 
 namespace DTetris
 {
+    void GameNextTurn(Game& game)
+    {
+        game.turnNext = true;
+        game.turn++;
+    }
+
     MessageLog::MessageLog()
     {}
     
@@ -191,19 +197,17 @@ namespace DTetris
             if (linesFilled.find(y) != linesFilled.end())
             {
                 moveUpCount++;
-
-                if ((y - moveUpCount) < 0)
-                {
-                    break;
-                }
             }
 
-            moveUpFactor = (y - moveUpCount) * width;
-
-            for (int x = 1; x < width - 1; ++x)
+            if ((y - moveUpCount) > 0)
             {
-                map_backend[x + yFactor] = map[x + moveUpFactor];
-                map_backend[x + yFactor].remove = false;
+                moveUpFactor = (y - moveUpCount) * width;
+
+                for (int x = 1; x < width - 1; ++x)
+                {
+                    map_backend[x + yFactor] = map[x + moveUpFactor];
+                    map_backend[x + yFactor].remove = false;
+                }
             }
         }
 
@@ -440,32 +444,68 @@ namespace mse
                 }
                 case DTetris::BlockType::Healing:
                 {
-                    srcRect.x = 36;
-                    srcRect.y = 194;
+                    if (remove)
+                    {
+                        if (DTetris::tetrisEngineData.animateLinesRemove)
+                        {
+                            srcRect.x = 24 + DTetris::tetrisEngineData.animateLinesFrame * 10;
+                        }
+                    } else {
+                        srcRect.x = 74;
+                    }
+
+                    srcRect.y = 11;
                     srcRect.w = 10;
                     srcRect.h = 10;
                     break;
                 }
                 case DTetris::BlockType::Treasure:
                 {
-                    srcRect.x = 47;
-                    srcRect.y = 194;
+                    if (remove)
+                    {
+                        if (DTetris::tetrisEngineData.animateLinesRemove)
+                        {
+                            srcRect.x = 24 + DTetris::tetrisEngineData.animateLinesFrame * 10;
+                        }
+                    } else {
+                        srcRect.x = 14;
+                    }
+
+                    srcRect.y = 11;
                     srcRect.w = 10;
                     srcRect.h = 10;
                     break;
                 }
                 case DTetris::BlockType::Attack:
                 {
-                    srcRect.x = 25;
-                    srcRect.y = 216;
+                    if (remove)
+                    {
+                        if (DTetris::tetrisEngineData.animateLinesRemove)
+                        {
+                            srcRect.x = 24 + DTetris::tetrisEngineData.animateLinesFrame * 10;
+                        }
+                    } else {
+                        srcRect.x = 64;
+                    }
+
+                    srcRect.y = 11;
                     srcRect.w = 10;
                     srcRect.h = 10;
                     break;
                 }
                 case DTetris::BlockType::Defence:
                 {
-                    srcRect.x = 36;
-                    srcRect.y = 216;
+                    if (remove)
+                    {
+                        if (DTetris::tetrisEngineData.animateLinesRemove)
+                        {
+                            srcRect.x = 24 + DTetris::tetrisEngineData.animateLinesFrame * 10;
+                        }
+                    } else {
+                        srcRect.x = 84;
+                    }
+
+                    srcRect.y = 11;
                     srcRect.w = 10;
                     srcRect.h = 10;
                     break;
@@ -481,7 +521,7 @@ namespace mse
                 default:
                 {
                     srcRect.x = 10;
-                    srcRect.y = 10;
+                    srcRect.y = 25;
                     srcRect.w = 10;
                     srcRect.h = 10;
                 }
