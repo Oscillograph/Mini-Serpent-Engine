@@ -125,3 +125,7 @@ ln -s build/compile_commands.json compile_commands.json
 + **[Color Console](https://github.com/aafulei/color-console)** (Windows-only)
 + **[EnTT](https://github.com/skypjack/entt)** (entities and components management in scenes)
 + **[YAML-CPP](https://github.com/jbeder/yaml-cpp)** (YAML parsing)
+
+## SAST Tools
+
+[PVS-Studio](https://pvs-studio.com/pvs-studio/?utm_source=website&utm_medium=github&utm_campaign=open_source) - static code analyzer for Enterprise (C, C++, C#, Go, and Java) and Web (JS and TS) development.
