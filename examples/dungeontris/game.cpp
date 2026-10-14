@@ -25,7 +25,6 @@ namespace DTetris
 {
     void GameNextTurn(Game& game)
     {
-        game.turnNext = true;
         game.turn++;
     }
 
@@ -354,6 +353,7 @@ namespace DTetris
                 int index = j*width + i;
                 map_backend[index].coordinates.x = i;
                 map_backend[index].coordinates.y = j;
+                map_backend[index].remove = false;
 
                 if ((j == height-1) || (i == 0) || (i == width-1))
                 {
@@ -362,7 +362,6 @@ namespace DTetris
                     map_backend[index].type = BlockType::None;
                     map_backend[index].color = {0, 0, 0};
                 }
-                map_backend[index].remove = false;
 
                 blockSprites[index].place = {
                     map_backend[index].coordinates.x * 10,
@@ -504,11 +503,15 @@ namespace mse
 
                         case mse::KeyCode::_p:
                         {
-                            if (DTetris::tetrisEngineData.state != DTetris::TetrisStates::Paused)
+                            if ((DTetris::tetrisEngineData.state != DTetris::TetrisStates::GameOver) &&
+                                (DTetris::tetrisEngineData.state != DTetris::TetrisStates::Win))
                             {
-                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::Paused;
-                            } else {
-                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
+                                if (DTetris::tetrisEngineData.state != DTetris::TetrisStates::Paused)
+                                {
+                                    DTetris::tetrisEngineData.state = DTetris::TetrisStates::Paused;
+                                } else {
+                                    DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
+                                }
                             }
                             break;
                         }
@@ -602,7 +605,7 @@ namespace mse
 
                 if (DTetris::tetrisEngineData.animateLinesRemove)
                 {
-                    DTetris::tetrisEngineData.animateLinesFrame = frameCounter / 20;
+                    DTetris::tetrisEngineData.animateLinesFrame = frameCounter / 10;
                     if (DTetris::tetrisEngineData.animateLinesFrame > 3)
                     {
                         DTetris::tetrisEngineData.animateLinesFrame = 0;
@@ -614,7 +617,7 @@ namespace mse
                 MSE_CORE_LOG("TetrisMap: cannot display due to not been initialized");
             }
 
-            if (frameCounter < 80)
+            if (frameCounter <= 40)
             {
                 frameCounter++;
             } else {

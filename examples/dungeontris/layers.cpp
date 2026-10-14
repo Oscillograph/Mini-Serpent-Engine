@@ -788,19 +788,6 @@ void ArenaUILayer::OnInit()
         {0, 0, 0, 255},
         {255, 255, 255, 255})));
 
-    // tetris map
-    tetrisMapGUI = (mse::gui::TetrisMapGUI*)(AddElement(new mse::gui::TetrisMapGUI(
-                       this,
-                       {100, 10, 150, 200},
-                       "data/img/screen-images.png",
-                       &tetrisMap,
-                       tetrisMap.width,
-                       tetrisMap.height
-                       )));
-
-    int elementId = this->GetElementId(tetrisMapGUI);
-    this->elementInFocus = elementId;
-    
     winMessage = (mse::gui::Text*)(AddElement(new mse::gui::Text(
         this,
         U"ПОБЕДА",
@@ -814,7 +801,7 @@ void ArenaUILayer::OnInit()
         U"ПРОВАЛ",
         {115, 30, 100, 20},
         {0, 0, 0, 0},
-        {255, 196, 0, 255},
+        {255, 96, 96, 255},
         2)));
     gameOverMessage->isVisible = false;
     pauseMessage = (mse::gui::Text*)(AddElement(new mse::gui::Text(
@@ -826,11 +813,24 @@ void ArenaUILayer::OnInit()
         2)));
     pauseMessage->isVisible = false;
 
+    // tetris map
+    tetrisMapGUI = (mse::gui::TetrisMapGUI*)(AddElement(new mse::gui::TetrisMapGUI(
+                       this,
+                       {100, 10, 150, 200},
+                       "data/img/screen-images.png",
+                       &tetrisMap,
+                       tetrisMap.width,
+                       tetrisMap.height
+                       )));
+
+    int elementId = this->GetElementId(tetrisMapGUI);
+    this->elementInFocus = elementId;
+    
     // bottom line
     AddElement(new mse::gui::Text(
         this,
         U"Ход:",
-        {30, 215, 45, 10},
+        {30, 215, 35, 10},
         {0, 0, 0, 255},
         {255, 255, 255, 255},
         1
@@ -838,7 +838,7 @@ void ArenaUILayer::OnInit()
     turnNumber = (mse::gui::Text*)AddElement(new mse::gui::Text(
                     this,
                     U"",
-                    {75, 215, 40, 10},
+                    {65, 215, 40, 10},
                     {0, 0, 0, 255},
                     {255, 255, 255, 255},
                     1
@@ -908,21 +908,42 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
 
     if (DTetris::tetrisEngineData.state == DTetris::TetrisStates::Win)
     {
-        winMessage->isVisible = true;
+        if (!winMessage->isVisible)
+        {
+            winMessage->isVisible = true;
+        }
+    } else {
+        if (winMessage->isVisible)
+        {
+            winMessage->isVisible = false;
+        }
     }
 
     if (DTetris::tetrisEngineData.state == DTetris::TetrisStates::GameOver)
     {
-        gameOverMessage->isVisible = true;
+        if (!gameOverMessage->isVisible)
+        {
+            gameOverMessage->isVisible = true;
+        }
+    } else {
+        if (gameOverMessage->isVisible)
+        {
+            gameOverMessage->isVisible = false;
+        }
     }
 
     if (DTetris::tetrisEngineData.state == DTetris::TetrisStates::Paused)
     {
-        pauseMessage->isVisible = true;
+        if (!pauseMessage->isVisible)
+        {
+            pauseMessage->isVisible = true;
+        }
     } else {
-        pauseMessage->isVisible = false;
+        if (pauseMessage->isVisible)
+        {
+            pauseMessage->isVisible = false;
+        }
     }
-//    needToUpdateText = false;
 }
 
 

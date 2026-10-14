@@ -72,7 +72,7 @@ namespace DTetris
                 Traits::StoneSkin,
                 {
                     Traits::StoneSkin,
-                    U"Кожа-камень",
+                    U"Толстокожий",
                     U"ущерб снижается на значение выносливости"
                 }
             },

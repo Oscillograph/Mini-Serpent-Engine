@@ -772,6 +772,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                                     DTetris::TetrisEngine_AddBlock(&tetrimino);
                                     DTetris::tetrisEngineData.justPlacedTetrimino = true;
                                     DTetris::GameNextTurn(game);
+                                    DTetris::tetrisEngineData.state = DTetris::TetrisStates::Autobattle;
                                 }
                             } else {
                                 if (DTetris::tetrisEngineData.justPlacedTetrimino)
@@ -819,6 +820,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                                         if (DTetris::tetrisEngineData.linesFilled.find(y) == DTetris::tetrisEngineData.linesFilled.end())
                                         {
                                             // register the newly empty line
+                                            MSE_LOG("Registered line ", y, " to remove");
                                             DTetris::tetrisEngineData.linesFilled[y] = true;
                                             DTetris::tetrisEngineData.removeLines = true;
                                         }
@@ -834,11 +836,6 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                                     game.playerAttacks = true;
 
                                     DTetris::tetrisEngineData.removeLines = false;
-                                }
-
-                                if (game.turnNext)
-                                {
-                                    DTetris::tetrisEngineData.state = DTetris::TetrisStates::Autobattle;
                                 }
                             }
 
@@ -861,7 +858,11 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                             {
                                 tetrisMap.ClearLines(DTetris::tetrisEngineData.linesFilled);
 
-                                DTetris::tetrisEngineData.linesFilled.clear();
+                                // DTetris::tetrisEngineData.linesFilled.clear();
+                                DTetris::tetrisEngineData.linesFilled.erase(
+                                    DTetris::tetrisEngineData.linesFilled.begin(),
+                                    DTetris::tetrisEngineData.linesFilled.end()
+                                );
 
                                 // heal player character
                                 game.AccumulateHeal(game.playerCharacter);
@@ -877,8 +878,6 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                             // ###################################################################################
                             //                         BASIC AUTOBATLER logic
                             // ###################################################################################
-                            game.turnNext = false;
-
                             if (game.playerAttacks)
                             {
                                 game.AccumulateAttack(game.playerCharacter);
@@ -900,6 +899,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                         }
                         case DTetris::TetrisStates::Win:
                         {
+                            game.battleFinished = true;
                             break;
                         }
                         case DTetris::TetrisStates::None:
@@ -913,8 +913,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
         }
     } else {
         // end of the battle
-        game.battleFinished = true;
-        if (game.playerCharacter.stats.health > 0.0)
+        if (game.playerCharacter.stats.health > 0.0 && DTetris::tetrisEngineData.state != DTetris::TetrisStates::GameOver)
         {
             DTetris::tetrisEngineData.state = DTetris::TetrisStates::Win;
         } else {
@@ -982,7 +981,7 @@ bool ArenaAftermathPageState::OnUpdate(mse::TimeType t)
     localTime += t;
     if ((localTime > 1000) && game.gamePageHasToChange)
     {
-        if (game.playerCharacter.stats.health > 0.0)
+        if (game.playerCharacter.stats.health > 0.0 && DTetris::tetrisEngineData.state != DTetris::TetrisStates::GameOver)
         {
             gsm.ChangeStateTo(DTetris::GamePages::Winner);
         } else {
