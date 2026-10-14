@@ -801,6 +801,31 @@ void ArenaUILayer::OnInit()
     int elementId = this->GetElementId(tetrisMapGUI);
     this->elementInFocus = elementId;
     
+    winMessage = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"ПОБЕДА",
+        {115, 30, 100, 20},
+        {0, 0, 0, 0},
+        {196, 255, 0, 255},
+        2)));
+    winMessage->isVisible = false;
+    gameOverMessage = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"ПРОВАЛ",
+        {115, 30, 100, 20},
+        {0, 0, 0, 0},
+        {255, 196, 0, 255},
+        2)));
+    gameOverMessage->isVisible = false;
+    pauseMessage = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"ПАУЗА",
+        {120, 30, 100, 20},
+        {0, 0, 0, 0},
+        {255, 196, 255, 255},
+        2)));
+    pauseMessage->isVisible = false;
+
     // bottom line
     AddElement(new mse::gui::Text(
         this,
@@ -879,6 +904,23 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
     if ((game.battleFinished) && !(nextBtn->isEnabled))
     {
         nextBtn->Enable();
+    }
+
+    if (DTetris::tetrisEngineData.state == DTetris::TetrisStates::Win)
+    {
+        winMessage->isVisible = true;
+    }
+
+    if (DTetris::tetrisEngineData.state == DTetris::TetrisStates::GameOver)
+    {
+        gameOverMessage->isVisible = true;
+    }
+
+    if (DTetris::tetrisEngineData.state == DTetris::TetrisStates::Paused)
+    {
+        pauseMessage->isVisible = true;
+    } else {
+        pauseMessage->isVisible = false;
     }
 //    needToUpdateText = false;
 }

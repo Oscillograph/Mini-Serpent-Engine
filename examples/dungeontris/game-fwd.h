@@ -370,6 +370,7 @@ namespace DTetris
         int turn = 0;
         bool turnNext = false;
         bool playerAttacks = false;
+        bool paused = false;
         std::unordered_map<BlockType, int> clearedBlocks = {
             {BlockType::Attack,     0},
             {BlockType::Defense,    0},

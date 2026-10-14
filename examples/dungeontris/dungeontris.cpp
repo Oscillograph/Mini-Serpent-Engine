@@ -1,3 +1,4 @@
+#include "mse/systems/platform/input/input.h"
 #include <mse/mse.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/game-data.h>
@@ -83,22 +84,22 @@ public:
 		m_window = mse::WindowManager::CreateWindow(u8"Подземетрис", 50, 50, 320, 240);
 		m_window->callbacks[mse::EventTypes::KeyDown] = [&](SDL_Event* event){
 			MSE_LOG("Key pressed: ", event->key.key);
-            if (event->key.key == SDL_SCANCODE_SPACE)
+            switch (event->key.key)
             {
-//                m_window->ToggleFullscreen();
-                mse::SoundMan::PlayNext();
-            }
-            if (event->key.key == SDL_SCANCODE_ESCAPE)
-            {
-                if (gsm.current->page == DTetris::GamePages::MainMenu)
+                case mse::KeyCode::Esc:
                 {
-                    this->Stop();
-                    return true;
-                } else {
-                    gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
-                    return true;
+                    if (gsm.current->page == DTetris::GamePages::MainMenu)
+                    {
+                        this->Stop();
+                        return true;
+                    } else {
+                        gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
+                        return true;
+                    }
+                    break;
                 }
             }
+
             game.keyPressed = true;
             return false;
 		};

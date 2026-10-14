@@ -145,6 +145,10 @@ public:
     mse::gui::Text* blocksHealing = nullptr;
     mse::gui::Text* blocksTreasure = nullptr;
     mse::gui::Text* turnNumber = nullptr;
+
+    mse::gui::Text* winMessage = nullptr;
+    mse::gui::Text* pauseMessage = nullptr;
+    mse::gui::Text* gameOverMessage = nullptr;
 };
 
 class CharacterUpdateUILayer : public mse::Layer

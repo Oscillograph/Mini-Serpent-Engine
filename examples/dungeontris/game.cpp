@@ -296,6 +296,7 @@ namespace DTetris
                 int index = j*width + i;
                 map_backend[index].coordinates.x = i;
                 map_backend[index].coordinates.y = j;
+                map_backend[index].remove = false;
                 map_backend[index].type = BlockType::None;
                 map_backend[index].color = {0, 0, 0};
                 
@@ -321,6 +322,7 @@ namespace DTetris
                 int index = j*width + i;
                 map_backend[index].coordinates.x = i;
                 map_backend[index].coordinates.y = j;
+                map_backend[index].remove = false;
 
                 if ((j == height-1) || (i == 0) || (i == width-1))
                 {
@@ -497,6 +499,17 @@ namespace mse
                             MSE_CORE_LOG("TetrisMapGUI: Move tetrimino Down");
                             DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
                             DTetris::tetrisEngineData.forceDownMovement = true;
+                            break;
+                        }
+
+                        case mse::KeyCode::_p:
+                        {
+                            if (DTetris::tetrisEngineData.state != DTetris::TetrisStates::Paused)
+                            {
+                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::Paused;
+                            } else {
+                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
+                            }
                             break;
                         }
                     }

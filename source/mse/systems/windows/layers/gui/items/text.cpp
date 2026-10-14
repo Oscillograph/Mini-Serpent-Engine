@@ -104,18 +104,21 @@ namespace mse
 		// general GUIItem interface
 		void Text::Display()
 		{
-			SDL_FRect destRect = {
-				(float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
-				(float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
-				(float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
-				(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
-			};
-			
-			SDL_Rect srcRect = {
-                0, 0, layerArea.z, layerArea.w
-            };
-			
-			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
+            if (isVisible)
+            {
+                SDL_FRect destRect = {
+                    (float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
+                    (float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
+                    (float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
+                    (float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
+                };
+
+                SDL_Rect srcRect = {
+                    0, 0, layerArea.z, layerArea.w
+                };
+
+                Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
+            }
 		}
         
         bool Text::HandleEvent(EventTypes eventType, SDL_Event* event)

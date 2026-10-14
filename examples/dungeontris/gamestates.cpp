@@ -723,189 +723,189 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
 
     if (!game.battleFinished)
     {
-        if ((localTime - lastLocalTime) >= DTetris::tetrisEngineData.gameSpeedMax) //game.config.turnLength)
+        if (!game.paused)
         {
-            if (DTetris::tetrisEngineData.forceDownMovement || (localTime - lastLocalTime) >= 200)
+            if ((localTime - lastLocalTime) >= DTetris::tetrisEngineData.gameSpeedMax) //game.config.turnLength)
             {
-                lastLocalTime = localTime;
-
-                // ###################################################################################
-                //                         BASIC TETRIS logic
-                // ###################################################################################
-                // 1. Pick tetrimino.
-                switch (DTetris::tetrisEngineData.state)
+                if (DTetris::tetrisEngineData.forceDownMovement || (localTime - lastLocalTime) >= 200)
                 {
-                    case DTetris::TetrisStates::Processing:
+                    lastLocalTime = localTime;
+
+                    // ###################################################################################
+                    //                         BASIC TETRIS logic
+                    // ###################################################################################
+                    // 1. Pick tetrimino.
+                    switch (DTetris::tetrisEngineData.state)
                     {
-                        if (DTetris::tetrisEngineData.justPlacedTetrimino)
-                        {
-                            DTetris::TetrisEngine_NewBlock();
-                        }
-
-                        if (DTetris::tetrisEngineData.rotateTetrimino)
-                        {
-                            if (DTetris::TetrisEngine_rotateAllowed(&tetrimino))
-                            {
-                                DTetris::TetrisEngine_Rotate(&tetrimino, DTetris::TetrisRotateDirection::Clockwise);
-                            }
-                            DTetris::tetrisEngineData.rotateTetrimino = false;
-                        }
-
-                        // 2. Check if can move tetrimino (and keep track of its movement counts).
-                        bool canMoveDown, canMoveSide = false;
-                        if (DTetris::tetrisEngineData.moveDirection != DTetris::TetrisMoveDirection::Down)
-                        {
-                            canMoveSide = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::tetrisEngineData.moveDirection);
-                        }
-                        canMoveDown = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::TetrisMoveDirection::Down);
-
-
-                        if ((!canMoveDown && !canMoveSide))
+                        case DTetris::TetrisStates::Processing:
                         {
                             if (DTetris::tetrisEngineData.justPlacedTetrimino)
                             {
-                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::GameOver;
-                            } else {
-                                // 3.2.1. Place the tetrimino.
-                                DTetris::TetrisEngine_AddBlock(&tetrimino);
-                                DTetris::tetrisEngineData.justPlacedTetrimino = true;
-                                DTetris::GameNextTurn(game);
-                            }
-                        } else {
-                            if (DTetris::tetrisEngineData.justPlacedTetrimino)
-                            {
-                                DTetris::tetrisEngineData.justPlacedTetrimino = false;
+                                DTetris::TetrisEngine_NewBlock();
                             }
 
-                            if (canMoveSide)
+                            if (DTetris::tetrisEngineData.rotateTetrimino)
                             {
-                                DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
-                                DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
-                            } else {
-                                DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
-                                DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
-                            }
-                        }
-
-                        // 4. Check for full lines.
-                        if (DTetris::tetrisEngineData.justPlacedTetrimino)
-                        {
-                            int actualWidth = tetrisMap.width - 2;
-                            int actualHeight = tetrisMap.height - 1;
-                            for (int y = 1; y < actualHeight; ++y)
-                            {
-                                int yFactor = y * tetrisMap.width;
-                                int filled = 0;
-                                for (int x = 1; x < tetrisMap.width - 1; ++x)
+                                if (DTetris::TetrisEngine_rotateAllowed(&tetrimino))
                                 {
-                                    if (tetrisMap.map[x + yFactor].type != DTetris::BlockType::None)
-                                    {
-                                        filled++;
-                                    }
+                                    DTetris::TetrisEngine_Rotate(&tetrimino, DTetris::TetrisRotateDirection::Clockwise);
+                                }
+                                DTetris::tetrisEngineData.rotateTetrimino = false;
+                            }
+
+                            // 2. Check if can move tetrimino (and keep track of its movement counts).
+                            bool canMoveDown, canMoveSide = false;
+                            if (DTetris::tetrisEngineData.moveDirection != DTetris::TetrisMoveDirection::Down)
+                            {
+                                canMoveSide = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                            }
+                            canMoveDown = DTetris::TetrisEngine_moveAllowed(&tetrimino, DTetris::TetrisMoveDirection::Down);
+
+
+                            if ((!canMoveDown && !canMoveSide))
+                            {
+                                if (DTetris::tetrisEngineData.justPlacedTetrimino)
+                                {
+                                    DTetris::tetrisEngineData.state = DTetris::TetrisStates::GameOver;
+                                } else {
+                                    // 3.2.1. Place the tetrimino.
+                                    DTetris::TetrisEngine_AddBlock(&tetrimino);
+                                    DTetris::tetrisEngineData.justPlacedTetrimino = true;
+                                    DTetris::GameNextTurn(game);
+                                }
+                            } else {
+                                if (DTetris::tetrisEngineData.justPlacedTetrimino)
+                                {
+                                    DTetris::tetrisEngineData.justPlacedTetrimino = false;
                                 }
 
-                                // 4.1. If a line is full, clear it.
-                                if (filled == actualWidth)
+                                if (canMoveSide)
                                 {
-                                    MSE_LOG("Here's a line filled: ", y);
+                                    DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
+                                } else {
+                                    DTetris::tetrisEngineData.moveDirection = DTetris::TetrisMoveDirection::Down;
+                                    DTetris::TetrisEngine_Move(&tetrimino, DTetris::tetrisEngineData.moveDirection);
+                                }
+                            }
+
+                            // 4. Check for full lines.
+                            if (DTetris::tetrisEngineData.justPlacedTetrimino)
+                            {
+                                int actualWidth = tetrisMap.width - 2;
+                                int actualHeight = tetrisMap.height - 1;
+                                for (int y = 1; y < actualHeight; ++y)
+                                {
+                                    int yFactor = y * tetrisMap.width;
+                                    int filled = 0;
                                     for (int x = 1; x < tetrisMap.width - 1; ++x)
                                     {
-                                        tetrisMap.map[x + yFactor].remove = true;
-                                        game.clearedBlocks[tetrisMap.map[x + yFactor].type]++;
+                                        if (tetrisMap.map[x + yFactor].type != DTetris::BlockType::None)
+                                        {
+                                            filled++;
+                                        }
                                     }
 
-                                    if (DTetris::tetrisEngineData.linesFilled.find(y) == DTetris::tetrisEngineData.linesFilled.end())
+                                    // 4.1. If a line is full, clear it.
+                                    if (filled == actualWidth)
                                     {
-                                        // register the newly empty line
-                                        DTetris::tetrisEngineData.linesFilled[y] = true;
-                                        DTetris::tetrisEngineData.removeLines = true;
+                                        MSE_LOG("Here's a line filled: ", y);
+                                        for (int x = 1; x < tetrisMap.width - 1; ++x)
+                                        {
+                                            tetrisMap.map[x + yFactor].remove = true;
+                                            game.clearedBlocks[tetrisMap.map[x + yFactor].type]++;
+                                        }
+
+                                        if (DTetris::tetrisEngineData.linesFilled.find(y) == DTetris::tetrisEngineData.linesFilled.end())
+                                        {
+                                            // register the newly empty line
+                                            DTetris::tetrisEngineData.linesFilled[y] = true;
+                                            DTetris::tetrisEngineData.removeLines = true;
+                                        }
                                     }
+                                }
+
+                                if (DTetris::tetrisEngineData.removeLines)
+                                {
+                                    // start the lines removal animation
+                                    DTetris::tetrisEngineData.animateLinesRemove = true;
+
+                                    DTetris::tetrisEngineData.state = DTetris::TetrisStates::ClearLines;
+                                    game.playerAttacks = true;
+
+                                    DTetris::tetrisEngineData.removeLines = false;
                                 }
                             }
 
-                            if (DTetris::tetrisEngineData.removeLines)
-                            {
-                                // start the lines removal animation
-                                DTetris::tetrisEngineData.animateLinesRemove = true;
-
-                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::ClearLines;
-                                game.playerAttacks = true;
-
-                                DTetris::tetrisEngineData.removeLines = false;
-                            }
+                            break;
                         }
-
-                        break;
-                    }
-                    case DTetris::TetrisStates::Paused:
-                    {
-                        break;
-                    }
-                    case DTetris::TetrisStates::GameOver:
-                    {
-                        game.battleFinished = true;
-                        break;
-                    }
-                    case DTetris::TetrisStates::ClearLines:
-                    {
-                        // 5. Check for registered empty lines.
-                        // 5.1. If a line is empty, move the line from the top of it to its place.
-                        if (!DTetris::tetrisEngineData.animateLinesRemove)
+                        case DTetris::TetrisStates::Paused:
                         {
-                            tetrisMap.ClearLines(DTetris::tetrisEngineData.linesFilled);
+                            break;
+                        }
+                        case DTetris::TetrisStates::GameOver:
+                        {
+                            game.battleFinished = true;
+                            break;
+                        }
+                        case DTetris::TetrisStates::ClearLines:
+                        {
+                            // 5. Check for registered empty lines.
+                            // 5.1. If a line is empty, move the line from the top of it to its place.
+                            if (!DTetris::tetrisEngineData.animateLinesRemove)
+                            {
+                                tetrisMap.ClearLines(DTetris::tetrisEngineData.linesFilled);
 
-                            DTetris::tetrisEngineData.linesFilled.clear();
+                                DTetris::tetrisEngineData.linesFilled.clear();
 
-                            // heal player character
-                            game.AccumulateHeal(game.playerCharacter);
-                            game.Heal(game.playerCharacter);
+                                // heal player character
+                                game.AccumulateHeal(game.playerCharacter);
+                                game.Heal(game.playerCharacter);
 
-                            DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
+                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
+                            }
+
+                            break;
+                        }
+                        case DTetris::TetrisStates::Win:
+                        {
+                            break;
+                        }
+                        case DTetris::TetrisStates::None:
+                        default:
+                        {
+                            break;
+                        }
+                    }
+
+
+                    // ###################################################################################
+                    //                         BASIC AUTOBATLER logic
+                    // ###################################################################################
+                    // swap roles
+
+                    if (game.turnNext && (DTetris::tetrisEngineData.state != DTetris::TetrisStates::Paused))
+                    {
+                        game.turnNext = false;
+
+                        if (game.playerAttacks)
+                        {
+                            game.AccumulateAttack(game.playerCharacter);
+                            game.AccumulateDefense(game.playerCharacter);
+                            game.AccumulateTreasure(game.playerCharacter);
+
+                            game.Attack(game.playerCharacter, game.npcCharacter, strForLogger);
+                            game.playerAttacks = false;
                         }
 
-                        break;
-                    }
-                    case DTetris::TetrisStates::Win:
-                    {
-                        break;
-                    }
-                    case DTetris::TetrisStates::None:
-                    default:
-                    {
-                        break;
-                    }
-                }
-
-
-                // ###################################################################################
-                //                         BASIC AUTOBATLER logic
-                // ###################################################################################
-                // swap roles
-
-                if (game.turnNext)
-                {
-                    game.turnNext = false;
-
-                    if (game.playerAttacks)
-                    {
-                        game.AccumulateAttack(game.playerCharacter);
-                        game.AccumulateDefense(game.playerCharacter);
-                        game.AccumulateTreasure(game.playerCharacter);
-
-                        game.Attack(game.playerCharacter, game.npcCharacter, strForLogger);
-                        game.playerAttacks = false;
-                    }
-
-                    if (game.turn % (10 - (int)roundf(game.npcCharacter.stats.agility)) == 0)
-                    {
-                        game.Attack(game.npcCharacter, game.playerCharacter, strForLogger);
+                        if (game.turn % (10 - (int)roundf(game.npcCharacter.stats.agility)) == 0)
+                        {
+                            game.Attack(game.npcCharacter, game.playerCharacter, strForLogger);
+                        }
                     }
                 }
             }
         }
-        // localTime = 0;
-        // localTime += 100;
-        // localtime += DTetris::tetrisEngineData.gameSpeed;
     } else {
         // end of the battle
         game.battleFinished = true;
