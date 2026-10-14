@@ -173,7 +173,34 @@ namespace DTetris
 		} else {
 			if (block->id == 3) // square
 			{
-				// do nothing
+				newBlock.resize(16);
+				for (int i = 0; i < 16; ++i)
+				{
+					newBlock[i].type = BlockType::None;
+				}
+
+				for (int x = 0; x < 4; ++x)
+				{
+					for (int y = 0; y < 4; ++y)
+					{
+						switch (direction)
+						{
+							case TetrisRotateDirection::Clockwise:
+							{
+								newBlock[x + 4*y].type = block->blocks[(3 - y) + 4*x].type;
+								break;
+							}
+							case TetrisRotateDirection::CounterClockwise:
+							{
+								newBlock[x + 4*y].type = block->blocks[y + 4*(3 - x)].type;
+								break;
+							}
+
+							default:
+							{}
+						}
+					}
+				}
 			} else { // other 3x3 blocks
 				newBlock.resize(16);
 				for (int i = 0; i < 16; ++i)
