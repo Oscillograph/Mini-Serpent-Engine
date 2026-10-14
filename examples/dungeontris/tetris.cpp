@@ -139,15 +139,15 @@ namespace DTetris
 	int TetrisEngine_Rotate(Tetrimino* block, TetrisRotateDirection direction)
 	{
 		std::vector<Block> newBlock;
-
-		if (block->id == 2) // |-block
+		newBlock.resize(16);
+		for (int i = 0; i < 16; ++i)
 		{
-			newBlock.resize(16);
-			for (int i = 0; i < 16; ++i)
-			{
-				newBlock[i].type = BlockType::None;
-			}
+			newBlock[i].type = BlockType::None;
+		}
 
+		if ((block->id == 2) || // |-block
+			(block->id == 3))   // square block
+		{
 			for (int x = 0; x < 4; ++x)
 			{
 				for (int y = 0; y < 4; ++y)
@@ -171,63 +171,26 @@ namespace DTetris
 				}
 			}
 		} else {
-			if (block->id == 3) // square
+			// other 3x3 blocks
+			for (int x = 0; x < 3; ++x)
 			{
-				newBlock.resize(16);
-				for (int i = 0; i < 16; ++i)
+				for (int y = 0; y < 3; ++y)
 				{
-					newBlock[i].type = BlockType::None;
-				}
-
-				for (int x = 0; x < 4; ++x)
-				{
-					for (int y = 0; y < 4; ++y)
+					switch (direction)
 					{
-						switch (direction)
+						case TetrisRotateDirection::Clockwise:
 						{
-							case TetrisRotateDirection::Clockwise:
-							{
-								newBlock[x + 4*y].type = block->blocks[(3 - y) + 4*x].type;
-								break;
-							}
-							case TetrisRotateDirection::CounterClockwise:
-							{
-								newBlock[x + 4*y].type = block->blocks[y + 4*(3 - x)].type;
-								break;
-							}
-
-							default:
-							{}
+							newBlock[x + 4*y].type = block->blocks[(2 - y) + 4*x].type;
+							break;
 						}
-					}
-				}
-			} else { // other 3x3 blocks
-				newBlock.resize(16);
-				for (int i = 0; i < 16; ++i)
-				{
-					newBlock[i].type = BlockType::None;
-				}
-
-				for (int x = 0; x < 3; ++x)
-				{
-					for (int y = 0; y < 3; ++y)
-					{
-						switch (direction)
+						case TetrisRotateDirection::CounterClockwise:
 						{
-							case TetrisRotateDirection::Clockwise:
-							{
-								newBlock[x + 4*y].type = block->blocks[(2 - y) + 4*x].type;
-								break;
-							}
-							case TetrisRotateDirection::CounterClockwise:
-							{
-								newBlock[x + 4*y].type = block->blocks[y + 4*(2 - x)].type;
-								break;
-							}
-
-							default:
-							{}
+							newBlock[x + 4*y].type = block->blocks[y + 4*(2 - x)].type;
+							break;
 						}
+
+						default:
+						{}
 					}
 				}
 			}
