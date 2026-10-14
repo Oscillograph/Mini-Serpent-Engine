@@ -57,7 +57,8 @@ namespace DTetris
         Paused		= 2,
         GameOver	= 3,
         ClearLines  = 4,
-        Win		    = 5,
+        Autobattle  = 5,
+        Win		    = 6,
     };
 
     enum class TetrisMoveDirection

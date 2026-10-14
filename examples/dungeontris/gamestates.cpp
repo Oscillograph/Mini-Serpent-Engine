@@ -835,6 +835,11 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
 
                                     DTetris::tetrisEngineData.removeLines = false;
                                 }
+
+                                if (game.turnNext)
+                                {
+                                    DTetris::tetrisEngineData.state = DTetris::TetrisStates::Autobattle;
+                                }
                             }
 
                             break;
@@ -862,8 +867,34 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                                 game.AccumulateHeal(game.playerCharacter);
                                 game.Heal(game.playerCharacter);
 
-                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
+                                DTetris::tetrisEngineData.state = DTetris::TetrisStates::Autobattle;
                             }
+
+                            break;
+                        }
+                        case DTetris::TetrisStates::Autobattle:
+                        {
+                            // ###################################################################################
+                            //                         BASIC AUTOBATLER logic
+                            // ###################################################################################
+                            game.turnNext = false;
+
+                            if (game.playerAttacks)
+                            {
+                                game.AccumulateAttack(game.playerCharacter);
+                                game.AccumulateDefense(game.playerCharacter);
+                                game.AccumulateTreasure(game.playerCharacter);
+
+                                game.Attack(game.playerCharacter, game.npcCharacter, strForLogger);
+                                game.playerAttacks = false;
+                            }
+
+                            if (game.turn % (10 - (int)roundf(game.npcCharacter.stats.agility)) == 0)
+                            {
+                                game.Attack(game.npcCharacter, game.playerCharacter, strForLogger);
+                            }
+
+                            DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
 
                             break;
                         }
@@ -877,38 +908,19 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                             break;
                         }
                     }
-
-
-                    // ###################################################################################
-                    //                         BASIC AUTOBATLER logic
-                    // ###################################################################################
-                    // swap roles
-
-                    if (game.turnNext && (DTetris::tetrisEngineData.state != DTetris::TetrisStates::Paused))
-                    {
-                        game.turnNext = false;
-
-                        if (game.playerAttacks)
-                        {
-                            game.AccumulateAttack(game.playerCharacter);
-                            game.AccumulateDefense(game.playerCharacter);
-                            game.AccumulateTreasure(game.playerCharacter);
-
-                            game.Attack(game.playerCharacter, game.npcCharacter, strForLogger);
-                            game.playerAttacks = false;
-                        }
-
-                        if (game.turn % (10 - (int)roundf(game.npcCharacter.stats.agility)) == 0)
-                        {
-                            game.Attack(game.npcCharacter, game.playerCharacter, strForLogger);
-                        }
-                    }
                 }
             }
         }
     } else {
         // end of the battle
         game.battleFinished = true;
+        if (game.playerCharacter.stats.health > 0.0)
+        {
+            DTetris::tetrisEngineData.state = DTetris::TetrisStates::Win;
+        } else {
+            DTetris::tetrisEngineData.state = DTetris::TetrisStates::GameOver;
+        }
+
         gsm.ChangeStateTo(DTetris::GamePages::ArenaAftermath, layer);
         localTime = 0;
         printf("Battle is finished.\n");

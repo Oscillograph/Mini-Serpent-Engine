@@ -72,7 +72,7 @@ namespace DTetris
                 Traits::StoneSkin,
                 {
                     Traits::StoneSkin,
-                    U"Каменная кожа",
+                    U"Кожа-камень",
                     U"ущерб снижается на значение выносливости"
                 }
             },
@@ -136,7 +136,7 @@ namespace DTetris
                 Traits::FireBreather,
                 {
                     Traits::FireBreather,
-                    U"Огненное дыхание",
+                    U"Огненный дых",
                     U"+3 к урону каждый третий ход"
                 }
             },
