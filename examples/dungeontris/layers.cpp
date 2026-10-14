@@ -1322,6 +1322,30 @@ void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
     }
 }
 
+ShopUILayer::ShopUILayer() : mse::Layer()
+{
+    MSE_LOG("Constructed a ShopUI layer");
+}
+
+ShopUILayer::~ShopUILayer()
+{
+    MSE_LOG("Destroyed a ShopUI layer");
+}
+
+void ShopUILayer::OnInit()
+{
+    mse::gui::Image* backgroundImage = (mse::gui::Image*)(AddElement(new mse::gui::Image(
+        this,
+        {0, 0, 320, 240},
+        "./data/img/background.png",
+        {0, 0, 320, 240},
+        {0, 0, 0, 255})));
+}
+
+void ShopUILayer::OnUpdate(mse::TimeType t)
+{}
+
+
 SettingsUILayer::SettingsUILayer() : mse::Layer()
 {
     MSE_LOG("Constructed a SettingsUI layer");

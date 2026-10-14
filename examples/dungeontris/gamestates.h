@@ -98,6 +98,15 @@ struct CharacterUpdatePageState : GameState
     virtual bool OnUpdate(mse::TimeType t = 0) override;
 };
 
+struct ShopPageState : GameState
+{
+    ShopPageState();
+    ~ShopPageState();
+    virtual bool OnEnter(mse::Layer* pass_layer = nullptr) override;
+    virtual bool OnExit(bool pass_layer = false) override;
+    virtual bool OnUpdate(mse::TimeType t = 0) override;
+};
+
 struct ArenaSetupPageState : GameState
 {
     ArenaSetupPageState();

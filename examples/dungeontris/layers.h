@@ -170,6 +170,16 @@ public:
     bool changeMade = false;
 };
 
+class ShopUILayer : public mse::Layer
+{
+public:
+    ShopUILayer();
+    ~ShopUILayer();
+
+    virtual void OnInit() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
+};
+
 class SettingsUILayer : public mse::Layer
 {
 public:

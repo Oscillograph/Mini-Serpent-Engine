@@ -32,6 +32,7 @@ public:
 //        gsm.states[DTetris::GamePages::CharacterLoad] = new CharacterLoadPageState();
 //        gsm.states[DTetris::GamePages::CharacterSave] = new CharacterSavePageState();
         gsm.states[DTetris::GamePages::CharacterUpdate] = new CharacterUpdatePageState();
+        // gsm.states[DTetris::GamePages::Shop] = new ShopPageState();
         gsm.states[DTetris::GamePages::ArenaSetup] = new ArenaSetupPageState();
         gsm.states[DTetris::GamePages::ArenaBattle] = new ArenaBattlePageState();
         gsm.states[DTetris::GamePages::ArenaAftermath] = new ArenaAftermathPageState;

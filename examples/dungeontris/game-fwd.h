@@ -88,6 +88,7 @@ namespace DTetris
         CharacterLoad,
         CharacterSave,
         CharacterUpdate,
+        Shop,
         ArenaSetup,
         ArenaBattle,
         ArenaAftermath,
