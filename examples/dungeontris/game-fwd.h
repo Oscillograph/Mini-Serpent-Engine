@@ -37,6 +37,45 @@ namespace DTetris
     };
     
     // ****************************************************************************************** //
+    //                               Tetris Types and Constants
+    // ****************************************************************************************** //
+    enum class BlockType
+    {
+        None,
+        Block,
+        Healing,
+        Treasure,
+        Attack,
+        Defense,
+        Wall,
+    };
+
+    enum class TetrisStates
+    {
+        None		= 0,
+        Processing	= 1,
+        Paused		= 2,
+        GameOver	= 3,
+        ClearLines  = 4,
+        Win		    = 5,
+    };
+
+    enum class TetrisMoveDirection
+    {
+        Down		= 0,
+        Left		= 1,
+        Right		= 2,
+        Up			= 3,
+    };
+
+    enum class TetrisRotateDirection
+    {
+        None                = 0,
+        Clockwise           = 1,
+        CounterClockwise    = 2,
+    };
+
+    // ****************************************************************************************** //
     //                             General Game Types and Constants
     // ****************************************************************************************** //
     enum class GamePages
@@ -176,6 +215,14 @@ namespace DTetris
         std::vector<Traits> traits;
         std::vector<Weapon> drop_list;
         Weapon weapon;
+
+        std::unordered_map<BlockType, int> blocks = {
+            {BlockType::Attack,     0},
+            {BlockType::Defense,    0},
+            {BlockType::Healing,    0},
+            {BlockType::Treasure,   0},
+            {BlockType::Block,      0}
+        };
     };
     
     struct Trait
@@ -218,17 +265,6 @@ namespace DTetris
         bool fullscreen = true;
         bool fastBattle = false;
         unsigned int turnLength = 500; // in milliseconds
-    };
-    
-    enum class BlockType
-    {
-        None,
-        Block,
-        Healing,
-        Treasure,
-        Attack,
-        Defence,
-        Wall,
     };
     
     struct Block
@@ -288,31 +324,6 @@ namespace DTetris
         void ClearLines(std::map<int, bool>& linesFilled);
     };
 
-    enum class TetrisStates
-    {
-        None		= 0,
-        Processing	= 1,
-        Paused		= 2,
-        GameOver	= 3,
-        ClearLines  = 4,
-        Win		    = 5,
-    };
-
-    enum class TetrisMoveDirection
-    {
-        Down		= 0,
-        Left		= 1,
-        Right		= 2,
-        Up			= 3,
-    };
-
-    enum class TetrisRotateDirection
-    {
-        None                = 0,
-        Clockwise           = 1,
-        CounterClockwise    = 2,
-    };
-
     struct TetrisEngineData
     {
         // Game speed formulae: 10ms*(gameSpeedMax - gameSpeed)
@@ -359,6 +370,13 @@ namespace DTetris
         int turn = 0;
         bool turnNext = false;
         bool playerAttacks = false;
+        std::unordered_map<BlockType, int> clearedBlocks = {
+            {BlockType::Attack,     0},
+            {BlockType::Defense,    0},
+            {BlockType::Healing,    0},
+            {BlockType::Treasure,   0},
+            {BlockType::Block,      0}
+        };
         
         Character playerCharacter;
         Character npcCharacter;
@@ -367,6 +385,14 @@ namespace DTetris
         Character* defender = nullptr;
         
 //        void GameLogic(GameDB& gameDB);
+        void Heal(Character& character);
+        void Attack(Character& attacker, Character& defender, std::stringstream& strForLogger);
+        void AccumulateAttack(Character& character);
+        void AccumulateHeal(Character& character);
+        void AccumulateDefense(Character& character);
+        void AccumulateTreasure(Character& character);
+        void AccumulateScore(Character& character);
+
     };
     
     GameDB& InitAutobattlerData();

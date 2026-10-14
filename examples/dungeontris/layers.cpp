@@ -726,6 +726,23 @@ void ArenaUILayer::OnInit()
 //                                        {63, 69, 13, 4}));
     
     // bottom line
+    AddElement(new mse::gui::Text(
+        this,
+        U"Ход:",
+        {30, 215, 45, 10},
+        {0, 0, 0, 255},
+        {255, 255, 255, 255},
+        1
+    ));
+    turnNumber = (mse::gui::Text*)AddElement(new mse::gui::Text(
+                    this,
+                    U"",
+                    {75, 215, 40, 10},
+                    {0, 0, 0, 255},
+                    {255, 255, 255, 255},
+                    1
+    ));
+
     mse::gui::Checkbox* fastBattleBtn = (mse::gui::Checkbox*)AddElement(new mse::gui::Checkbox(
                                         this, 
                                         {15, 215, 14, 13}, 
@@ -736,19 +753,6 @@ void ArenaUILayer::OnInit()
                                         {38, 88, 14, 13}, 
                                         {52, 88, 14, 13}, 
                                         {66, 88, 14, 13}));
-    fastBattleBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=] (SDL_Event* event)
-    {
-        game.config.turnLength = (game.config.fastBattle) ? 0 : 500;
-    };
-    
-    AddElement(new mse::gui::Text(
-                                        this, 
-                                        U"Быстрый бой", 
-                                        {30, 215, 85, 10}, 
-                                        {0, 0, 0, 255}, 
-                                        {255, 255, 255, 255},
-                                        1
-                                        ));
 
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
                   this, U"Продолжить", {32, 32, 32, 255}, {120, 215, 85, 13}, 
@@ -785,6 +789,12 @@ void ArenaUILayer::OnUpdate(mse::TimeType t)
     playerLife->ChangeText(utf8::utf8to32(playerLifeTextStream.str()));
     playerLifeTextStream.str("");
     playerLifeTextStream.clear();
+
+    std::stringstream turnNumberTextStream;
+    turnNumberTextStream << game.turn;
+    turnNumber->ChangeText(utf8::utf8to32(turnNumberTextStream.str()));
+    turnNumberTextStream.str("");
+    turnNumberTextStream.clear();
     
 //    std::u32string messages = U"";
 //    DTetris::MessageLogItem* item = game.UILogger.stack;

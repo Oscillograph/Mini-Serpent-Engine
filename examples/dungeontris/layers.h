@@ -135,8 +135,16 @@ public:
     mse::gui::Button* nextBtn = nullptr;
     mse::gui::Text* npcLife = nullptr;
     mse::gui::Text* playerLife = nullptr;
-    mse::gui::Text* npcStats = nullptr;
     mse::gui::TetrisMapGUI* tetrisMapGUI = nullptr;
+
+    mse::gui::Text* npcStatsEnd = nullptr;
+    mse::gui::Text* npcStatsStr = nullptr;
+    mse::gui::Text* npcStatsAgi = nullptr;
+    mse::gui::Text* blocksAttack = nullptr;
+    mse::gui::Text* blocksDefense = nullptr;
+    mse::gui::Text* blocksHealing = nullptr;
+    mse::gui::Text* blocksTreasure = nullptr;
+    mse::gui::Text* turnNumber = nullptr;
 };
 
 class CharacterUpdateUILayer : public mse::Layer

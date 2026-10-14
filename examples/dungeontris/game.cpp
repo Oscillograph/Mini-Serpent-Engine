@@ -13,6 +13,7 @@
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/platform/renderer/renderer.h>
 #include <mse/systems/resources/resource_manager.h>
+#include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/windows/window.h>
 
 #include <dungeontris/game-fwd.h> // DTetris::TetrisEngineData
@@ -89,7 +90,192 @@ namespace DTetris
             Pop();
         }
     }
-    
+
+    void Game::Heal(Character& character)
+    {
+        character.stats.health += character.blocks[DTetris::BlockType::Healing];
+        float realMaxHealth = character.level * (character.stats_max.health + character.stats_max.endurance);
+        if (character.stats.health > realMaxHealth)
+        {
+            character.stats.health = realMaxHealth;
+        }
+        character.blocks[DTetris::BlockType::Healing] = 0;
+    }
+
+    void Game::Attack(Character& attacker, Character& defender, std::stringstream& strForLogger)
+    {
+        float weaponDamage = attacker.weapon.damage;
+        float skillDamage = 0.0;
+        float totalDamage = 0.0;
+
+        printf("Turn %d: %s attacks.\n",
+               turn,
+               (char*)(attacker.name.c_str()));
+
+        // start of the turn
+        // calculate attack chance
+        int agi_sum = attacker.stats.agility + defender.stats.agility;
+        int dice = (std::rand() % agi_sum) + 1;
+        //                        printf("Rolled %d of %d\n", dice, agi_sum);
+        if (dice > defender.stats.agility)
+        {
+            // apply attacker's effects
+            for (DTetris::Traits trait : attacker.traits)
+            {
+                if (turn == 1)
+                {
+                    if (trait == DTetris::Traits::Rush)
+                    {
+                        weaponDamage = attacker.weapon.damage * 2;
+                        skillDamage = attacker.stats.strength * 2;
+                    }
+                }
+
+                if ((trait == DTetris::Traits::HiddenStrike) &&
+                    (attacker.stats.agility > defender.stats.agility))
+                {
+                    skillDamage += 1;
+                }
+
+                if (trait == DTetris::Traits::Poison)
+                {
+                    skillDamage += turn;
+                }
+
+                if (trait == DTetris::Traits::Rage)
+                {
+                    skillDamage = (turn < 4) ? (skillDamage + 2) : (skillDamage - 1);
+                }
+
+                if (trait == DTetris::Traits::FireBreather)
+                {
+                    skillDamage = ((turn % 3) == 0) ? skillDamage + 3 : skillDamage;
+                }
+            }
+
+            // apply defender's effects
+            for (Traits trait : defender.traits)
+            {
+                if ((trait == Traits::CuttingImmune) &&
+                    (attacker.weapon.type == DamageType::Cutting))
+                {
+                    weaponDamage = 0.0;
+                }
+
+                if ((trait == Traits::CrushingWeakness) &&
+                    (attacker.weapon.type == DamageType::Crushing))
+                {
+                    weaponDamage = weaponDamage * 2;
+                }
+            }
+
+            // apply removed blocks damage
+            skillDamage += attacker.blocks[BlockType::Attack];
+            attacker.blocks[BlockType::Attack] = 0;
+
+            // pre-calculate total damage
+            totalDamage = weaponDamage + skillDamage;
+
+            // apply defender's effects that affect total damage
+            for (Traits trait : defender.traits)
+            {
+                if (trait == Traits::StoneSkin)
+                {
+                    totalDamage -= defender.stats.endurance;
+                }
+
+                if ((trait == Traits::Shield) &&
+                    (defender.stats.strength > attacker.stats.strength))
+                {
+                    totalDamage -= 3;
+                }
+
+                // apply removed blocks defence
+                totalDamage -= defender.blocks[BlockType::Defense];
+                defender.blocks[BlockType::Defense] = 0;
+            }
+
+            if (totalDamage < 0.0)
+            {
+                totalDamage = 0.0;
+            }
+
+            // clash
+            defender.stats.health -= totalDamage;
+            printf("Turn %d: %s deals %.2f damage to %s, leaving %.2f health.\n",
+                   turn,
+                   (char*)(attacker.name.c_str()),
+                   totalDamage,
+                   (char*)(defender.name.c_str()),
+                   defender.stats.health);
+
+            strForLogger << "Ход " << turn << ": "
+            << utf8::utf32to8(attacker.name.c_str())
+            //                << "(" << game.attacker->stats.health << ")"
+            << " наносит " << totalDamage << " урона "
+            //                << utf8::utf32to8(game.defender->name.c_str())
+            //                << "(" << game.defender->stats.health << ")"
+            << "\n";
+
+            if (!config.fastBattle)
+            {
+                if (attacker.race == Races::Human)
+                {
+                    mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-sword-cut-fx.wav");
+                } else {
+                    mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-violent-sword-slice-sound-fx_D_minor.wav");
+                }
+            }
+            UILogger.Push(utf8::utf8to32(strForLogger.str()));
+        } else {
+            printf("Turn %d: %s misses!\n",
+                   turn,
+                   (char*)(attacker.name.c_str()));
+
+            strForLogger << "Ход " << turn << ": "
+            << utf8::utf32to8(attacker.name.c_str())
+            //                << "(" << game.attacker->stats.health << ")"
+            << " промахивается!\n";
+            if (!config.fastBattle)
+            {
+                mse::SoundMan::PlaySound("data/audio/sounds/samplefocus.com-short-knife-whoosh-fx.wav");
+            }
+            UILogger.Push(utf8::utf8to32(strForLogger.str()));
+        }
+
+        if (defender.stats.health <= 0.0)
+        {
+            battleFinished = true;
+        }
+    }
+
+    void Game::AccumulateAttack(Character& character)
+    {
+        character.blocks[BlockType::Attack] = clearedBlocks[BlockType::Attack];
+        clearedBlocks[BlockType::Attack] = 0;
+    }
+
+    void Game::AccumulateHeal(Character& character)
+    {
+        character.blocks[BlockType::Healing] = clearedBlocks[BlockType::Healing];
+        clearedBlocks[BlockType::Healing] = 0;
+    }
+
+    void Game::AccumulateDefense(Character& character)
+    {
+        character.blocks[BlockType::Defense] += clearedBlocks[BlockType::Defense];
+        clearedBlocks[BlockType::Defense] = 0;
+    }
+
+    void Game::AccumulateTreasure(Character& character)
+    {
+        character.blocks[BlockType::Treasure] += clearedBlocks[BlockType::Treasure];
+        clearedBlocks[BlockType::Treasure] = 0;
+    }
+
+    void Game::AccumulateScore(Character& character)
+    {}
+
     void TetrisMap::Resize(int w, int h)
     {
         width = w;
@@ -186,26 +372,28 @@ namespace DTetris
             }
         }
 
-        int actualHeight = height - 1;
         int moveUpCount = 0;
         int moveUpFactor = 0;
         int yFactor = 0;
 
-        for (int y = actualHeight; y > -1; --y)
+        for (int y = height - 1; y > -1; --y)
         {
             yFactor = y * width;
-            if (linesFilled.find(y) != linesFilled.end())
+            while (linesFilled.find(y - moveUpCount) != linesFilled.end())
             {
                 moveUpCount++;
+                MSE_LOG("TetrisMap::ClearLines - Found line to remove: ", y);
+                linesFilled.erase(y);
             }
 
             if ((y - moveUpCount) > 0)
             {
-                moveUpFactor = (y - moveUpCount) * width;
+                moveUpFactor = moveUpCount * width;
 
+                MSE_LOG("TetrisMap::ClearLines - y, moveUp: ", y, "; ", moveUpCount);
                 for (int x = 1; x < width - 1; ++x)
                 {
-                    map_backend[x + yFactor] = map[x + moveUpFactor];
+                    map_backend[x + yFactor] = map[x + yFactor - moveUpFactor];
                     map_backend[x + yFactor].remove = false;
                 }
             }
@@ -493,7 +681,7 @@ namespace mse
                     srcRect.h = 10;
                     break;
                 }
-                case DTetris::BlockType::Defence:
+                case DTetris::BlockType::Defense:
                 {
                     if (remove)
                     {

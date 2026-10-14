@@ -277,19 +277,19 @@ namespace DTetris
 				{
 					int blockType = rand() % 100;
 
-					if (blockType < 5)
+					if (blockType > 95)
 					{
 						tetrimino.blocks[i].type = DTetris::BlockType::Treasure;
 					} else {
-						if (blockType < 10)
+						if (blockType > 90)
 						{
 							tetrimino.blocks[i].type = DTetris::BlockType::Healing;
 						} else {
-							if (blockType < 30)
+							if (blockType > 80)
 							{
-								tetrimino.blocks[i].type = DTetris::BlockType::Defence;
+								tetrimino.blocks[i].type = DTetris::BlockType::Defense;
 							} else {
-								if (blockType < 40)
+								if (blockType > 70)
 								{
 									tetrimino.blocks[i].type = DTetris::BlockType::Attack;
 								} else {
