@@ -623,6 +623,74 @@ void ArenaUILayer::OnInit()
         }
         AddElement(new mse::gui::Image(this, {40, 90 - src.w, src.z, src.w}, "./data/img/screen-images.png", src, {0, 0, 0, 255}));
     }
+
+    AddElement(new mse::gui::Image(this, {260, 15, 13, 13}, "./data/img/screen-images.png", {168, 119, 13, 13}, {0, 0, 0, 255}));
+    AddElement(new mse::gui::Text(
+        this,
+        U"Ловкость",
+        {10, 120, 60, 10},
+        {0, 0, 0, 255},
+        {255, 196, 0, 255}));
+    npcStatsAgi = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"",
+        {70, 120, 20, 10},
+        {0, 0, 0, 255},
+        {255, 255, 255, 255})));
+    AddElement(new mse::gui::Text(
+        this,
+        U"Вынос-ть",
+        {10, 130, 60, 10},
+        {0, 0, 0, 255},
+        {255, 196, 0, 255}));
+    npcStatsEnd = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"",
+        {70, 130, 20, 10},
+        {0, 0, 0, 255},
+        {255, 255, 255, 255})));
+    AddElement(new mse::gui::Text(
+        this,
+        U"Сила",
+        {10, 140, 60, 10},
+        {0, 0, 0, 255},
+        {255, 196, 0, 255}));
+    npcStatsStr = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"",
+        {70, 140, 20, 10},
+        {0, 0, 0, 255},
+        {255, 255, 255, 255})));
+
+    std::stringstream statsContents;
+    statsContents << game.npcCharacter.stats.agility;
+    npcStatsAgi->ChangeText(utf8::utf8to32(statsContents.str()));
+    statsContents.str("");
+    statsContents.clear();
+    statsContents << game.npcCharacter.stats.strength;
+    npcStatsStr->ChangeText(utf8::utf8to32(statsContents.str()));
+    statsContents.str("");
+    statsContents.clear();
+    statsContents << game.npcCharacter.stats.endurance;
+    npcStatsEnd->ChangeText(utf8::utf8to32(statsContents.str()));
+    statsContents.str("");
+    statsContents.clear();
+
+    AddElement(new mse::gui::Text(
+        this,
+        U"Особенности:",
+        {10, 150, 90, 10},
+        {0, 0, 0, 0},
+        {255, 196, 0, 255}));
+    for (size_t i = 0; i < game.npcCharacter.traits.size(); ++i)
+    {
+        AddElement(new mse::gui::Text(
+            this,
+            gameDB.traits[game.npcCharacter.traits[i]].name,
+            {10, 160 + i*10, 90, 10},
+            {0, 0, 0, 0},
+            {255, 255, 255, 255}));
+    }
     
     // player life
     AddElement(new mse::gui::Image(this, {260, 15, 13, 13}, "./data/img/screen-images.png", {168, 119, 13, 13}, {0, 0, 0, 255}));
@@ -690,7 +758,36 @@ void ArenaUILayer::OnInit()
         
         AddElement(new mse::gui::Image(this, {250, 90 - src.w, src.z, src.w}, "./data/img/heroes.png", src, {0, 0, 0, 255}));
     }
-    
+
+    AddElement(new mse::gui::Image(this, {250, 120, 10, 10}, "./data/img/screen-images.png", {64, 11, 10, 10}, {0, 0, 0, 255}));
+    blocksAttack = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"",
+        {270, 120, 40, 10},
+        {0, 0, 0, 255},
+        {255, 255, 255, 255})));
+    AddElement(new mse::gui::Image(this, {250, 130, 10, 10}, "./data/img/screen-images.png", {84, 11, 10, 10}, {0, 0, 0, 255}));
+    blocksDefense = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"",
+        {270, 130, 40, 10},
+        {0, 0, 0, 255},
+        {255, 255, 255, 255})));
+    AddElement(new mse::gui::Image(this, {250, 140, 10, 10}, "./data/img/screen-images.png", {74, 11, 10, 10}, {0, 0, 0, 255}));
+    blocksHealing = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"",
+        {270, 140, 40, 10},
+        {0, 0, 0, 255},
+        {255, 255, 255, 255})));
+    AddElement(new mse::gui::Image(this, {250, 150, 10, 10}, "./data/img/screen-images.png", {14, 11, 10, 10}, {0, 0, 0, 255}));
+    blocksTreasure = (mse::gui::Text*)(AddElement(new mse::gui::Text(
+        this,
+        U"",
+        {270, 150, 40, 10},
+        {0, 0, 0, 255},
+        {255, 255, 255, 255})));
+
     // tetris map
     tetrisMapGUI = (mse::gui::TetrisMapGUI*)(AddElement(new mse::gui::TetrisMapGUI(
                        this,
@@ -703,27 +800,6 @@ void ArenaUILayer::OnInit()
 
     int elementId = this->GetElementId(tetrisMapGUI);
     this->elementInFocus = elementId;
-//    messageLog = (mse::gui::Text*)(AddElement(new mse::gui::Text(
-//                                                                 this, 
-//                                                                 U"", 
-//                                                                 {10, 90, 280, 120}, 
-//                                                                 {0, 64, 0, 255}, 
-//                                                                 {255, 255, 128, 255},
-//                                                                 1,
-//                                                                 true,
-//                                                                 {255, 196, 0, 255})));
-//    AddElement(new mse::gui::VScrollbar(
-//                                        this, 
-//                                        {290, 90, 13, 120}, 
-//                                        messageLog, 
-//                                        "./data/img/screen-images.png", 
-//                                        {0, 0, 0},
-//                                        {24, 49, 52, 12},
-//                                        {24, 74, 44, 10},
-//                                        {24, 61, 52, 12},
-//                                        {63, 61, 13, 4},
-//                                        {63, 65, 13, 4},
-//                                        {63, 69, 13, 4}));
     
     // bottom line
     AddElement(new mse::gui::Text(
@@ -742,17 +818,6 @@ void ArenaUILayer::OnInit()
                     {255, 255, 255, 255},
                     1
     ));
-
-    mse::gui::Checkbox* fastBattleBtn = (mse::gui::Checkbox*)AddElement(new mse::gui::Checkbox(
-                                        this, 
-                                        {15, 215, 14, 13}, 
-                                        "data/img/screen-images.png", 
-                                        {0, 0, 0}, 
-                                        &(game.config.fastBattle),
-                                        {24, 88, 14, 13}, 
-                                        {38, 88, 14, 13}, 
-                                        {52, 88, 14, 13}, 
-                                        {66, 88, 14, 13}));
 
     nextBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
                   this, U"Продолжить", {32, 32, 32, 255}, {120, 215, 85, 13}, 
@@ -778,40 +843,39 @@ void ArenaUILayer::OnInit()
 void ArenaUILayer::OnUpdate(mse::TimeType t)
 {
 //    std::u32string npcLifeTextContent = U"";
-    std::stringstream npcLifeTextStream;
-    npcLifeTextStream << game.npcCharacter.stats.health;
-    npcLife->ChangeText(utf8::utf8to32(npcLifeTextStream.str()));
-    npcLifeTextStream.str("");
-    npcLifeTextStream.clear();
+    std::stringstream tempStream;
+    tempStream << game.npcCharacter.stats.health;
+    npcLife->ChangeText(utf8::utf8to32(tempStream.str()));
+    tempStream.str("");
+    tempStream.clear();
     
-    std::stringstream playerLifeTextStream;
-    playerLifeTextStream << game.playerCharacter.stats.health;
-    playerLife->ChangeText(utf8::utf8to32(playerLifeTextStream.str()));
-    playerLifeTextStream.str("");
-    playerLifeTextStream.clear();
+    tempStream << game.playerCharacter.stats.health;
+    playerLife->ChangeText(utf8::utf8to32(tempStream.str()));
+    tempStream.str("");
+    tempStream.clear();
 
-    std::stringstream turnNumberTextStream;
-    turnNumberTextStream << game.turn;
-    turnNumber->ChangeText(utf8::utf8to32(turnNumberTextStream.str()));
-    turnNumberTextStream.str("");
-    turnNumberTextStream.clear();
+    tempStream << game.turn;
+    turnNumber->ChangeText(utf8::utf8to32(tempStream.str()));
+    tempStream.str("");
+    tempStream.clear();
     
-//    std::u32string messages = U"";
-//    DTetris::MessageLogItem* item = game.UILogger.stack;
-//    static bool needToUpdateText = false;
-//    while (item != nullptr)
-//    {
-//        needToUpdateText = true;
-//        messages += item->text;
-//        item = item->next;
-//    }
-//    item = nullptr;
-//    if (needToUpdateText)
-//    {
-//        messageLog->ChangeText(messages);
-//        MSE_LOG("Message Log text changed!")
-//    }
-    
+    tempStream << game.playerCharacter.blocks[DTetris::BlockType::Attack];
+    blocksAttack->ChangeText(utf8::utf8to32(tempStream.str()));
+    tempStream.str("");
+    tempStream.clear();
+    tempStream << game.playerCharacter.blocks[DTetris::BlockType::Defense];
+    blocksDefense->ChangeText(utf8::utf8to32(tempStream.str()));
+    tempStream.str("");
+    tempStream.clear();
+    tempStream << game.playerCharacter.blocks[DTetris::BlockType::Healing];
+    blocksHealing->ChangeText(utf8::utf8to32(tempStream.str()));
+    tempStream.str("");
+    tempStream.clear();
+    tempStream << game.playerCharacter.blocks[DTetris::BlockType::Treasure];
+    blocksTreasure->ChangeText(utf8::utf8to32(tempStream.str()));
+    tempStream.str("");
+    tempStream.clear();
+
     if ((game.battleFinished) && !(nextBtn->isEnabled))
     {
         nextBtn->Enable();
