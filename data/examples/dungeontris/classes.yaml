@@ -1,0 +1,14 @@
+# data/classes.yaml  ->  DTetris::LoadClasses()  (data-loader.cpp:278)
+#
+# Entries are keyed by class_hardcoded, so order here does not matter.
+#
+# class_hardcoded (Classes): 0=None 1=Rogue 2=Warrior 3=Barbarian
+
+- class_hardcoded: 0
+  name: Нет
+- class_hardcoded: 1
+  name: Разбойник
+- class_hardcoded: 2
+  name: Воин
+- class_hardcoded: 3
+  name: Варвар

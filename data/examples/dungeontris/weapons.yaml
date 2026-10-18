@@ -1,0 +1,73 @@
+# data/weapons.yaml  ->  DTetris::LoadWeapons()  (data-loader.cpp:158)
+#
+# IMPORTANT: a weapon's ID is its POSITION in this list (0-based),
+#            because the loader does gamedb.weapons[i] = entry i.
+#            characters.yaml refers to weapons by that position.
+#
+# damage_type : 0=None 1=Cutting 2=Crushing 3=Piercing 4=Divine
+# sprite      : 0=None 1=Fist 2=Dagger 3=Sword 4=Axe 5=Club 6=Spear 7=LegendarySword 8=MaximGun
+
+# ids 0-7: player collectible
+- name: Кулак
+  damage: 0
+  damage_type: 0
+  sprite: 1
+- name: Кастет
+  damage: 1
+  damage_type: 0
+  sprite: 1
+- name: Кинжал
+  damage: 2
+  damage_type: 3
+  sprite: 2
+- name: Меч
+  damage: 3
+  damage_type: 1
+  sprite: 3
+- name: Дубина
+  damage: 3
+  damage_type: 2
+  sprite: 5
+- name: Копьё
+  damage: 3
+  damage_type: 3
+  sprite: 6
+- name: Топор
+  damage: 4
+  damage_type: 1
+  sprite: 4
+- name: Легендарный Меч
+  damage: 10
+  damage_type: 1
+  sprite: 7
+
+# id 8: filler. Your original hardcoded table had no id 8, but list positions
+# are contiguous, so this slot must exist to keep npc weapon ids 9-13 unchanged.
+- name: Сломанный обломок
+  damage: 0
+  damage_type: 0
+  sprite: 0
+
+# ids 9-12: npc weapons
+- name: Шип
+  damage: 1
+  damage_type: 0
+  sprite: 0
+- name: Сгнивший меч
+  damage: 2
+  damage_type: 0
+  sprite: 0
+- name: Кадило
+  damage: 3
+  damage_type: 0
+  sprite: 0
+- name: Клык и коготь
+  damage: 4
+  damage_type: 0
+  sprite: 0
+
+# id 13: easter egg
+- name: Пулемёт Максим
+  damage: 100
+  damage_type: 4
+  sprite: 8

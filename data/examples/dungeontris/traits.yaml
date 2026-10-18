@@ -1,0 +1,44 @@
+# data/traits.yaml  ->  DTetris::LoadTraits()  (data-loader.cpp:224)
+#
+# Entries are keyed by type_hardcoded, so order here does not matter.
+#
+# type_hardcoded (Traits): 0=Rush 1=Rage 2=HiddenStrike 3=Shield
+#                          4=CrushingWeakness 5=StoneSkin 6=Agile 7=Strong
+#                          8=Survivor 9=CuttingImmune 10=Poison 11=FireBreather
+
+- type_hardcoded: 0
+  name: Рывок
+  description: удвоенный урон в первый ход
+- type_hardcoded: 1
+  name: Ярость
+  description: +2 к урону первые три хода, -1 к урону во все остальные
+- type_hardcoded: 2
+  name: Скрытый удар
+  description: +1 к урону, если ловчее цели
+- type_hardcoded: 3
+  name: Щит
+  description: -3 к ущербу, если сильнее цели
+- type_hardcoded: 4
+  name: Страх дубин
+  description: двойной ущерб от дробящего оружия
+- type_hardcoded: 5
+  name: Толстокожий
+  description: ущерб снижается на значение выносливости
+- type_hardcoded: 6
+  name: Ловкач
+  description: +1 к ловкости
+- type_hardcoded: 7
+  name: Силач
+  description: +1 к силе
+- type_hardcoded: 8
+  name: Выживальщик
+  description: +1 к выносливости
+- type_hardcoded: 9
+  name: Не режется
+  description: иммунитет к режущему оружию
+- type_hardcoded: 10
+  name: Яд
+  description: +N к урону, где N - номер хода
+- type_hardcoded: 11
+  name: Огненный дых
+  description: +3 к урону каждый третий ход
