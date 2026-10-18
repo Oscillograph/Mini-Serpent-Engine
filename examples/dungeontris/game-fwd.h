@@ -100,7 +100,7 @@ namespace DTetris
         Exit
     };
 
-    enum class Races
+    enum class Races : int
     {
         None,
         Human,
@@ -112,7 +112,7 @@ namespace DTetris
         Dragon
     };
 
-    enum class Classes
+    enum class Classes : int
     {
         None,
         Rogue,
@@ -126,7 +126,7 @@ namespace DTetris
         int level = 0;
     };
 
-    enum class DamageType
+    enum class DamageType : int
     {
         None,
         Cutting,
@@ -135,7 +135,7 @@ namespace DTetris
         Divine,
     };
     
-    enum class WeaponSprite
+    enum class WeaponSprite : int
     {
         None,
         Fist,
@@ -179,7 +179,7 @@ namespace DTetris
 
     };
 
-    enum class Traits
+    enum class Traits : int
     {
         // start of the battle
         Rush, // x2 weapon damage at the first turn

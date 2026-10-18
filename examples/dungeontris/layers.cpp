@@ -1292,15 +1292,15 @@ void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
         }
         
         std::stringstream strstream;
-        strstream << 
+        strstream <<
         "Уровень:    " << game.playerCharacter.level <<
-        "\nКласс:      " << utf8::utf32to8(main_class.c_str()) << " (" << game.playerCharacter.main_class.level << ")" << 
+        "\nКласс:      " << utf8::utf32to8(main_class.c_str()) << " (" << game.playerCharacter.main_class.level << ")" <<
         "\nПодкласс: " << utf8::utf32to8(sub_class.c_str()) << " (" << game.playerCharacter.sub_class.level << ")" <<
         "\nЗдоровье: " << game.playerCharacter.stats.health <<
         "\nСила:     " << game.playerCharacter.stats.strength <<
         "\nЛовкость: " << game.playerCharacter.stats.agility <<
         "\nВыносливость: " << game.playerCharacter.stats.endurance <<
-        "\nОружие: " << utf8::utf32to8(game.inputWeapon.name.c_str()) << 
+        "\nОружие: " << utf8::utf32to8(game.inputWeapon.name.c_str()) <<
                    "\n          (урон " << (int)(roundf(game.inputWeapon.damage));
         strstream << ", " << utf8::utf32to8(gameDB.damageTypes[game.inputWeapon.type].name);
         strstream << ")" <<

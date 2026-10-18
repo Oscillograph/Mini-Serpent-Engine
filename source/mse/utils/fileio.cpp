@@ -19,9 +19,11 @@ namespace mse
                 {
                     output += (lineRead + "\n");
                 }
+
+                printf("FileIO: Read file %s\n", filename.c_str());
             } else {
 //                MSE_CORE_ERROR("Couldn't open file: {0}", filename);
-                printf("Couldn't open file: %s", filename.c_str());
+                printf("Couldn't open file: %s\n", filename.c_str());
             }
         }
         
@@ -38,10 +40,11 @@ namespace mse
             {
                 oFile << text;
                 oFile.close();
+                printf("FileIO: Wrote in file %s\n", filename.c_str());
                 return true;
             } else {
 //                MSE_CORE_ERROR("Couldn't open file: {0}", filename);
-                printf("Couldn't open file: %s", filename.c_str());
+                printf("Couldn't open file: %s\n", filename.c_str());
             }
         }
         return false;

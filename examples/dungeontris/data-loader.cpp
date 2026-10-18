@@ -1,3 +1,4 @@
+#include "utf8/cpp17.h"
 #include <mse/core.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/data-loader.h>
@@ -140,16 +141,18 @@ namespace DTetris
                     }
                 };
 
-                for (size_t i = 0; i < data[i]["traits"].size(); ++i)
+                for (size_t j = 0; j < data[i]["traits"].size(); ++j)
                 {
-                    gamedb.characters[i].traits.push_back(data[i]["traits"].as<Traits>());
+                    gamedb.characters[i].traits.push_back(data[i]["traits"][j].as<Traits>());
                 }
 
-                for (size_t i = 0; i < data[i]["drops"].size(); ++i)
+                for (size_t j = 0; j < data[i]["drops"].size(); ++j)
                 {
-                    gamedb.characters[i].drop_list.push_back(gamedb.weapons[data[i]["weapon"].as<int>()]);
+                    gamedb.characters[i].drop_list.push_back(gamedb.weapons[data[i]["drops"][j].as<int>()]);
                 }
             }
+
+            return true;
         }
 
         return false;
@@ -181,6 +184,8 @@ namespace DTetris
                     data[i]["sprite"].as<WeaponSprite>()
                 };
             }
+
+            return true;
         }
 
         return false;
@@ -209,13 +214,15 @@ namespace DTetris
                 gamedb.armors[i] =
                 {
                     {utf8::utf8to32(data[i]["name"].as<std::string>())},
-                    data[i]["damage_cutting"].as<float>(),
-                    data[i]["damage_crushing"].as<float>(),
-                    data[i]["damage_piercing"].as<float>(),
-                    data[i]["damage_skill"].as<float>(),
-                    data[i]["damage_stats"].as<float>(),
+                    data[i]["defense_cutting"].as<float>(),
+                    data[i]["defense_crushing"].as<float>(),
+                    data[i]["defense_piercing"].as<float>(),
+                    data[i]["defense_skill"].as<float>(),
+                    data[i]["defense_stats"].as<float>(),
                 };
             }
+
+            return true;
         }
 
         return false;
@@ -244,6 +251,36 @@ namespace DTetris
                     utf8::utf8to32(data[i]["description"].as<std::string>())
                 };
             }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    bool LoadDamageTypes(GameDB& gamedb, const std::string& filename)
+    {
+        std::string yamlRawText = mse::FileIO::GetRawText(filename);
+        YAML::Node data = YAML::Load(yamlRawText);
+
+        // fill gamedb.traits
+        if (data.size() > 0)
+        {
+            for (size_t i = 0; i < data.size(); ++i)
+            {
+                if (!data[i]["name"] ||
+                    !data[i]["type_hardcoded"])
+                {
+                    return false;
+                }
+
+                gamedb.damageTypes[data[i]["type_hardcoded"].as<DamageType>()] = {
+                    data[i]["type_hardcoded"].as<DamageType>(),
+                    utf8::utf8to32(data[i]["name"].as<std::string>())
+                };
+            }
+
+            return true;
         }
 
         return false;
@@ -270,6 +307,8 @@ namespace DTetris
                     utf8::utf8to32(data[i]["name"].as<std::string>())
                 };
             }
+
+            return true;
         }
 
         return false;

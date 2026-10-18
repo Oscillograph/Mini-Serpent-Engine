@@ -8,90 +8,90 @@
 namespace YAML 
 {
     // custom types
-       template<>
-       struct convert<DTetris::Races>
-       {
-           static Node encode(const DTetris::Races& rhs)
-           {
-               Node node;
-               node.push_back((int)rhs);
-               return node;
-           }
+    template<>
+    struct convert<DTetris::Races>
+    {
+        static Node encode(const DTetris::Races& rhs)
+        {
+            Node node;
+            node.push_back((int)rhs);
+            return node;
+        }
 
-           static bool decode(const Node& node, DTetris::Races& rhs)
-           {
-               rhs = static_cast<DTetris::Races>(node.as<int>());
-               return true;
-           }
-       };
+        static bool decode(const Node& node, DTetris::Races& rhs)
+        {
+            rhs = static_cast<DTetris::Races>(node.as<int>());
+            return true;
+        }
+    };
 
-       template<>
-       struct convert<DTetris::Traits>
-       {
-           static Node encode(const DTetris::Traits& rhs)
-           {
-               Node node;
-               node.push_back((int)rhs);
-               return node;
-           }
+    template<>
+    struct convert<DTetris::Traits>
+    {
+        static Node encode(const DTetris::Traits& rhs)
+        {
+            Node node;
+            node.push_back((int)rhs);
+            return node;
+        }
 
-           static bool decode(const Node& node, DTetris::Traits& rhs)
-           {
-               rhs = static_cast<DTetris::Traits>(node.as<int>());
-               return true;
-           }
-       };
+        static bool decode(const Node& node, DTetris::Traits& rhs)
+        {
+            rhs = static_cast<DTetris::Traits>(node.as<int>());
+            return true;
+        }
+    };
 
-       template<>
-       struct convert<DTetris::WeaponSprite>
-       {
-           static Node encode(const DTetris::WeaponSprite& rhs)
-           {
-               Node node;
-               node.push_back((int)rhs);
-               return node;
-           }
+    template<>
+    struct convert<DTetris::WeaponSprite>
+    {
+        static Node encode(const DTetris::WeaponSprite& rhs)
+        {
+            Node node;
+            node.push_back((int)rhs);
+            return node;
+        }
 
-           static bool decode(const Node& node, DTetris::WeaponSprite& rhs)
-           {
-               rhs = static_cast<DTetris::WeaponSprite>(node.as<int>());
-               return true;
-           }
-       };
+        static bool decode(const Node& node, DTetris::WeaponSprite& rhs)
+        {
+            rhs = static_cast<DTetris::WeaponSprite>(node.as<int>());
+            return true;
+        }
+    };
 
-       template<>
-       struct convert<DTetris::DamageType>
-       {
-           static Node encode(const DTetris::DamageType& rhs)
-           {
-               Node node;
-               node.push_back((int)rhs);
-               return node;
-           }
+    template<>
+    struct convert<DTetris::DamageType>
+    {
+        static Node encode(const DTetris::DamageType& rhs)
+        {
+            Node node;
+            node.push_back((int)rhs);
+            return node;
+        }
 
-           static bool decode(const Node& node, DTetris::DamageType& rhs)
-           {
-               rhs = static_cast<DTetris::DamageType>(node.as<int>());
-               return true;
-           }
-       };
+        static bool decode(const Node& node, DTetris::DamageType& rhs)
+        {
+            rhs = static_cast<DTetris::DamageType>(node.as<int>());
+            return true;
+        }
+    };
 
-       template<>
-       struct convert<DTetris::Classes>
-       {
-           static Node encode(const DTetris::Classes& rhs)
-           {
-               Node node;
-               node.push_back((int)rhs);
-               return node;
-           }
+    template<>
+    struct convert<DTetris::Classes>
+    {
+        static Node encode(const DTetris::Classes& rhs)
+        {
+            Node node;
+            node.push_back((int)rhs);
+            return node;
+        }
 
-           static bool decode(const Node& node, DTetris::Classes& rhs)
-           {
-               rhs = static_cast<DTetris::Classes>(node.as<int>());
-               return true;
-           }
-       };
+        static bool decode(const Node& node, DTetris::Classes& rhs)
+        {
+            rhs = static_cast<DTetris::Classes>(node.as<int>());
+            return true;
+        }
+    };
 //    template<>
 //    struct convert<glm::vec3> 
 //    {
@@ -170,10 +170,11 @@ namespace DTetris
     void SaveHighScores(const HighScoresDB& highscores, const std::string& filename = "data/highscores.yaml");
 
     bool LoadWeapons(GameDB& gamedb, const std::string& filename = "data/weapons.yaml");
-    bool LoadArmors(GameDB& gamedb, const std::string& filename = "data/items.yaml");
-    bool LoadTraits(GameDB& gamedb, const std::string& filename = "data/monsters.yaml");
+    bool LoadArmors(GameDB& gamedb, const std::string& filename = "data/armors.yaml");
+    bool LoadTraits(GameDB& gamedb, const std::string& filename = "data/traits.yaml");
+    bool LoadDamageTypes(GameDB& gamedb, const std::string& filename = "data/damagetypes.yaml");
     bool LoadClasses(GameDB& gamedb, const std::string& filename = "data/classes.yaml");
-    bool LoadCharacters(GameDB& gamedb, const std::string& filename = "data/monsters.yaml");
+    bool LoadCharacters(GameDB& gamedb, const std::string& filename = "data/characters.yaml");
 }
 
 #endif
