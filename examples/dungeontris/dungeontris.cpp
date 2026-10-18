@@ -12,7 +12,7 @@
 //                                    SCENES (do I need one?)
 // ********************************************************************************************** //
 
-DTetris::GameDB gameDB = DTetris::InitAutobattlerData();
+DTetris::GameDB gameDB = DTetris::InitGameData();
 DTetris::Game game;
 DTetris::TetriminoTemplatesDB tetriminoDB = DTetris::InitTetriminoDB();
 DTetris::Tetrimino tetrimino;

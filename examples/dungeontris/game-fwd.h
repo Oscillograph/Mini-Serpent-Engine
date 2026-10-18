@@ -399,7 +399,7 @@ namespace DTetris
 
     };
     
-    GameDB& InitAutobattlerData();
+    GameDB& InitGameData();
     TetriminoTemplatesDB& InitTetriminoDB();
     void GameNextTurn(Game& game);
 }
