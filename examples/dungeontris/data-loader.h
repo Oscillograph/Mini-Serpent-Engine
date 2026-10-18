@@ -8,6 +8,39 @@
 namespace YAML 
 {
     // custom types
+       template<>
+       struct convert<DTetris::Races>
+       {
+           static Node encode(const DTetris::Races& rhs)
+           {
+               Node node;
+               node.push_back((int)rhs);
+               return node;
+           }
+
+           static bool decode(const Node& node, DTetris::Races& rhs)
+           {
+               rhs = static_cast<DTetris::Races>(node.as<int>());
+               return true;
+           }
+       };
+
+       template<>
+       struct convert<DTetris::Traits>
+       {
+           static Node encode(const DTetris::Traits& rhs)
+           {
+               Node node;
+               node.push_back((int)rhs);
+               return node;
+           }
+
+           static bool decode(const Node& node, DTetris::Traits& rhs)
+           {
+               rhs = static_cast<DTetris::Traits>(node.as<int>());
+               return true;
+           }
+       };
 //    template<>
 //    struct convert<glm::vec3> 
 //    {
@@ -84,6 +117,12 @@ namespace DTetris
     void SaveConfig(const GameConfig& config, const std::string& filename = "data/config.yaml");
     bool LoadHighScores(HighScoresDB& highscores, const std::string filename = "data/highscores.yaml");
     void SaveHighScores(const HighScoresDB& highscores, const std::string& filename = "data/highscores.yaml");
+
+    bool LoadCharacters(GameDB& gamedb, const std::string& filename = "data/monsters.yaml");
+    bool LoadWeapons(GameDB& gamedb, const std::string& filename = "data/weapons.yaml");
+    bool LoadArmors(GameDB& gamedb, const std::string& filename = "data/items.yaml");
+    bool LoadTraits(GameDB& gamedb, const std::string& filename = "data/monsters.yaml");
+    bool LoadClasses(GameDB& gamedb, const std::string& filename = "data/classes.yaml");
 }
 
 #endif

@@ -888,7 +888,7 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                                 game.playerAttacks = false;
                             }
 
-                            if (game.turn % (10 - (int)roundf(game.npcCharacter.stats.agility)) == 0)
+                            if (game.turn % (7 - (int)roundf(game.npcCharacter.stats.agility)) == 0)
                             {
                                 game.Attack(game.npcCharacter, game.playerCharacter, strForLogger);
                             }

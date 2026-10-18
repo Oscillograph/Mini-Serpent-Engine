@@ -1,3 +1,5 @@
+#include "dungeontris/game-fwd.h"
+#include "utf8.h"
 #include <mse/core.h>
 #include <dungeontris/data-loader.h>
 
@@ -87,4 +89,146 @@ namespace DTetris
     
     void SaveHighScores(const HighScoresDB& highscores, const std::string& filename)
     {}
+
+    bool LoadCharacters(GameDB& gamedb, const std::string& filename)
+    {
+        std::string yamlRawText = mse::FileIO::GetRawText(filename);
+        YAML::Node data = YAML::Load(yamlRawText);
+
+        if (data.size() > 0)
+        {
+            // fill gamedb.characters
+            for (size_t i = 0; i < data.size(); ++i)
+            {
+                if (!data[i]["name"] ||
+                    !data[i]["race"] ||
+                    !data[i]["level"] ||
+                    !data[i]["stats_max"] ||
+                    !data[i]["traits"] ||
+                    !data[i]["drops"] ||
+                    !data[i]["weapon"])
+                {
+                    return false;
+                }
+
+                gamedb.characters[i] =
+                {
+                    data[i]["level"].as<size_t>(),
+                    utf8::utf8to32(data[i]["name"].as<std::string>()),
+                    data[i]["race"].as<Races>(),
+                    {
+                        data[i]["stats_max"][0].as<float>(),  // health
+                        data[i]["stats_max"][1].as<float>(),  // strength
+                        data[i]["stats_max"][2].as<float>(),  // agility
+                        data[i]["stats_max"][3].as<float>()   // endurance
+                    },
+                    {
+                        data[i]["stats_max"][0].as<float>(),  // health
+                        data[i]["stats_max"][1].as<float>(),  // strength
+                        data[i]["stats_max"][2].as<float>(),  // agility
+                        data[i]["stats_max"][3].as<float>()   // endurance
+                    },
+                    {Classes::None, 0},
+                    {Classes::None, 0},
+                    {},
+                    {},
+                    gamedb.weapons[data[i]["weapon"].as<int>()],
+                    {
+                        {BlockType::Attack,     0},
+                        {BlockType::Defense,    0},
+                        {BlockType::Healing,    0},
+                        {BlockType::Treasure,   0},
+                        {BlockType::Block,      0}
+                    }
+                };
+
+                for (size_t i = 0; i < data[i]["traits"].size(); ++i)
+                {
+                    gamedb.characters[i].traits.push_back(data[i]["traits"].as<Traits>());
+                }
+
+                for (size_t i = 0; i < data[i]["drops"].size(); ++i)
+                {
+                    gamedb.characters[i].drop_list.push_back(gamedb.weapons[data[i]["weapon"].as<int>()]);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool LoadWeapons(GameDB& gamedb, const std::string& filename)
+    {
+        std::string yamlRawText = mse::FileIO::GetRawText(filename);
+        YAML::Node data = YAML::Load(yamlRawText);
+
+        // if the file is broken
+        if (!data["name"] ||
+            !data["damage"] ||
+            !data["damage_type"] ||
+            !data["sprite"])
+        {
+            return false;
+        }
+
+        // fill gamedb.weapons
+
+        return false;
+    }
+
+    bool LoadArmors(GameDB& gamedb, const std::string& filename)
+    {
+        std::string yamlRawText = mse::FileIO::GetRawText(filename);
+        YAML::Node data = YAML::Load(yamlRawText);
+
+        // if the file is broken
+        if (!data["name"] ||
+            !data["defense_cutting"] ||
+            !data["defense_crushing"] ||
+            !data["defense_piercing"] ||
+            !data["defense_skill"] ||
+            !data["defense_stats"])
+        {
+            return false;
+        }
+
+        // fill gamedb.armors
+
+        return false;
+    }
+
+    bool LoadTraits(GameDB& gamedb, const std::string& filename)
+    {
+        std::string yamlRawText = mse::FileIO::GetRawText(filename);
+        YAML::Node data = YAML::Load(yamlRawText);
+
+        // if the file is broken
+        if (!data["name"] ||
+            !data["type_hardcoded"] ||
+            !data["description"])
+        {
+            return false;
+        }
+
+        // fill gamedb.traits
+
+        return false;
+    }
+
+    bool LoadClasses(GameDB& gamedb, const std::string& filename)
+    {
+        std::string yamlRawText = mse::FileIO::GetRawText(filename);
+        YAML::Node data = YAML::Load(yamlRawText);
+
+        // if the file is broken
+        if (!data["name"] ||
+            !data["class_hardcoded"])
+        {
+            return false;
+        }
+
+        // fill gamedb.classes
+
+        return false;
+    }
 }

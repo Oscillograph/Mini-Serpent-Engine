@@ -250,6 +250,7 @@ namespace DTetris
     {
         std::unordered_map<size_t, Weapon> weapons;
         std::unordered_map<DamageType, DamageTypeName> damageTypes;
+        std::unordered_map<size_t, Armor> armors;
         std::unordered_map<Traits, Trait> traits;
         std::unordered_map<Classes, CharacterClass> classes;
         std::unordered_map<int, Character> characters;

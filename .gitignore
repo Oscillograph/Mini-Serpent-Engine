@@ -6,6 +6,7 @@
 .clang-format
 .cproject
 .project
+pvs.sh
 AGENTS.md
 /.cache
 /backups
