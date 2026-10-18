@@ -41,6 +41,57 @@ namespace YAML
                return true;
            }
        };
+
+       template<>
+       struct convert<DTetris::WeaponSprite>
+       {
+           static Node encode(const DTetris::WeaponSprite& rhs)
+           {
+               Node node;
+               node.push_back((int)rhs);
+               return node;
+           }
+
+           static bool decode(const Node& node, DTetris::WeaponSprite& rhs)
+           {
+               rhs = static_cast<DTetris::WeaponSprite>(node.as<int>());
+               return true;
+           }
+       };
+
+       template<>
+       struct convert<DTetris::DamageType>
+       {
+           static Node encode(const DTetris::DamageType& rhs)
+           {
+               Node node;
+               node.push_back((int)rhs);
+               return node;
+           }
+
+           static bool decode(const Node& node, DTetris::DamageType& rhs)
+           {
+               rhs = static_cast<DTetris::DamageType>(node.as<int>());
+               return true;
+           }
+       };
+
+       template<>
+       struct convert<DTetris::Classes>
+       {
+           static Node encode(const DTetris::Classes& rhs)
+           {
+               Node node;
+               node.push_back((int)rhs);
+               return node;
+           }
+
+           static bool decode(const Node& node, DTetris::Classes& rhs)
+           {
+               rhs = static_cast<DTetris::Classes>(node.as<int>());
+               return true;
+           }
+       };
 //    template<>
 //    struct convert<glm::vec3> 
 //    {
@@ -118,11 +169,11 @@ namespace DTetris
     bool LoadHighScores(HighScoresDB& highscores, const std::string filename = "data/highscores.yaml");
     void SaveHighScores(const HighScoresDB& highscores, const std::string& filename = "data/highscores.yaml");
 
-    bool LoadCharacters(GameDB& gamedb, const std::string& filename = "data/monsters.yaml");
     bool LoadWeapons(GameDB& gamedb, const std::string& filename = "data/weapons.yaml");
     bool LoadArmors(GameDB& gamedb, const std::string& filename = "data/items.yaml");
     bool LoadTraits(GameDB& gamedb, const std::string& filename = "data/monsters.yaml");
     bool LoadClasses(GameDB& gamedb, const std::string& filename = "data/classes.yaml");
+    bool LoadCharacters(GameDB& gamedb, const std::string& filename = "data/monsters.yaml");
 }
 
 #endif

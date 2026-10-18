@@ -1,10 +1,8 @@
-#include "dungeontris/game-fwd.h"
-#include "utf8.h"
 #include <mse/core.h>
+#include <dungeontris/game-fwd.h>
 #include <dungeontris/data-loader.h>
 
 #include <yaml-cpp/yaml.h>
-#include <mse/utils/fileio.h>
 
 /* ============================================================================================== */
 /*                                 YAML ENCODE/DECODE                                             */
@@ -162,16 +160,28 @@ namespace DTetris
         std::string yamlRawText = mse::FileIO::GetRawText(filename);
         YAML::Node data = YAML::Load(yamlRawText);
 
-        // if the file is broken
-        if (!data["name"] ||
-            !data["damage"] ||
-            !data["damage_type"] ||
-            !data["sprite"])
+        if (data.size() > 0)
         {
-            return false;
-        }
+            // fill gamedb.weapons
+            for (size_t i = 0; i < data.size(); ++i)
+            {
+                if (!data[i]["name"] ||
+                    !data[i]["damage"] ||
+                    !data[i]["damage_type"] ||
+                    !data[i]["sprite"])
+                {
+                    return false;
+                }
 
-        // fill gamedb.weapons
+                gamedb.weapons[i] =
+                {
+                    {utf8::utf8to32(data[i]["name"].as<std::string>())},
+                    data[i]["damage"].as<int>(),
+                    data[i]["damage_type"].as<DamageType>(),
+                    data[i]["sprite"].as<WeaponSprite>()
+                };
+            }
+        }
 
         return false;
     }
@@ -181,18 +191,32 @@ namespace DTetris
         std::string yamlRawText = mse::FileIO::GetRawText(filename);
         YAML::Node data = YAML::Load(yamlRawText);
 
-        // if the file is broken
-        if (!data["name"] ||
-            !data["defense_cutting"] ||
-            !data["defense_crushing"] ||
-            !data["defense_piercing"] ||
-            !data["defense_skill"] ||
-            !data["defense_stats"])
-        {
-            return false;
-        }
-
         // fill gamedb.armors
+        if (data.size() > 0)
+        {
+            for (size_t i = 0; i < data.size(); ++i)
+            {
+                if (!data[i]["name"] ||
+                    !data[i]["defense_cutting"] ||
+                    !data[i]["defense_crushing"] ||
+                    !data[i]["defense_piercing"] ||
+                    !data[i]["defense_skill"] ||
+                    !data[i]["defense_stats"])
+                {
+                    return false;
+                }
+
+                gamedb.armors[i] =
+                {
+                    {utf8::utf8to32(data[i]["name"].as<std::string>())},
+                    data[i]["damage_cutting"].as<float>(),
+                    data[i]["damage_crushing"].as<float>(),
+                    data[i]["damage_piercing"].as<float>(),
+                    data[i]["damage_skill"].as<float>(),
+                    data[i]["damage_stats"].as<float>(),
+                };
+            }
+        }
 
         return false;
     }
@@ -202,15 +226,25 @@ namespace DTetris
         std::string yamlRawText = mse::FileIO::GetRawText(filename);
         YAML::Node data = YAML::Load(yamlRawText);
 
-        // if the file is broken
-        if (!data["name"] ||
-            !data["type_hardcoded"] ||
-            !data["description"])
-        {
-            return false;
-        }
-
         // fill gamedb.traits
+        if (data.size() > 0)
+        {
+            for (size_t i = 0; i < data.size(); ++i)
+            {
+                if (!data[i]["name"] ||
+                    !data[i]["type_hardcoded"] ||
+                    !data[i]["description"])
+                {
+                    return false;
+                }
+
+                gamedb.traits[data[i]["type_hardcoded"].as<Traits>()] = {
+                    data[i]["type_hardcoded"].as<Traits>(),
+                    utf8::utf8to32(data[i]["name"].as<std::string>()),
+                    utf8::utf8to32(data[i]["description"].as<std::string>())
+                };
+            }
+        }
 
         return false;
     }
@@ -220,14 +254,23 @@ namespace DTetris
         std::string yamlRawText = mse::FileIO::GetRawText(filename);
         YAML::Node data = YAML::Load(yamlRawText);
 
-        // if the file is broken
-        if (!data["name"] ||
-            !data["class_hardcoded"])
-        {
-            return false;
-        }
-
         // fill gamedb.classes
+        if (data.size() > 0)
+        {
+            for (size_t i = 0; i < data.size(); ++i)
+            {
+                if (!data[i]["name"] ||
+                    !data[i]["class_hardcoded"])
+                {
+                    return false;
+                }
+
+                gamedb.classes[data[i]["class_hardcoded"].as<Classes>()] = {
+                    data[i]["class_hardcoded"].as<Classes>(),
+                    utf8::utf8to32(data[i]["name"].as<std::string>())
+                };
+            }
+        }
 
         return false;
     }

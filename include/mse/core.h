@@ -7,6 +7,7 @@
 // independent engine systems
 #include <mse/utils/utils.h>
 #include <mse/utils/logger.h>
+#include <mse/utils/fileio.h>
 
 // systems
 
