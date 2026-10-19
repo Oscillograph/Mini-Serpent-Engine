@@ -1,9 +1,11 @@
+#include "mse/systems/ecs/components.h"
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/layers/layer_manager.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/events/events.h>
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/layers/gui/gui.h>
+#include <mse/systems/ecs/components.h>
 
 namespace mse
 {
@@ -88,10 +90,37 @@ namespace mse
 	{
 		OnDisplay();
 		
-		for(const std::pair<int, GUIItem*>& element : m_elements)
+		for(const std::pair<int, GUIItem*> element : m_elements)
 		{
 			if (element.second != nullptr)
 			{
+				// update animation
+				if (element.second->m_animations != nullptr)
+				{
+					AnimationComponent& animationComponent = *(element.second->m_animations);
+					AnimationFrames* frameset = animationComponent.frames[animationComponent.currentAnimation];
+
+					if (!animationComponent.paused)
+					{
+						uint64_t timeNow = Platform::GetTimeMs();
+						if ((timeNow - animationComponent.timeBefore) >= frameset->timeBetweenFrames)
+						{
+							animationComponent.timeBefore = timeNow;
+							animationComponent.currentFrame++;
+							if (animationComponent.currentFrame == animationComponent.framesTotal){
+								if (frameset->loop)
+								{
+									animationComponent.currentFrame = 0;
+								} else {
+									animationComponent.currentFrame--;
+									animationComponent.stopped = true;
+								}
+							}
+						}
+					}
+				}
+
+				// display
 				element.second->Display();
 			}
 		}
@@ -137,6 +166,8 @@ namespace mse
 //					}
 //					break;
 //				}
+				default:
+				{}
 			}
 		} else {
 			if (m_elements.find(elementId) != m_elements.end())
@@ -193,6 +224,8 @@ namespace mse
                         return m_elements[elementId]->HandleEvent(EventTypes::GUIItemMouseOut, event);
                         break;
                     }
+					default:
+					{}
 				}
 			}
 		}
@@ -215,6 +248,8 @@ namespace mse
 							return m_elements[elementId]->HandleEvent(EventTypes::KeyUp, event);
 							break;
 						}
+						default:
+						{}
 					}
 				}
 			}

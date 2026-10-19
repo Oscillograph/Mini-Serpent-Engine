@@ -241,7 +241,7 @@ namespace mse
 		stopped = false;
 		currentAnimation = EntityStates::IDLE;
 		currentFrame = 0;
-		timeBefore = SDL_GetTicks();
+		timeBefore = Platform::GetTimeMs();
 		framesTotal = 0;
 	};
 	
