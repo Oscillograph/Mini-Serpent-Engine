@@ -5,8 +5,12 @@
 #include <mse/systems/windows/layers/gui/guitypes.h>
 #include <mse/systems/platform/events/events.h>
 
+
+
 namespace mse
 {	
+	struct AnimationComponent;
+
 	// base class for all GUI elements
 	class GUIItem
 	{
@@ -42,10 +46,11 @@ namespace mse
 		// flags
 		bool isEnabled = true;
 		bool isVisible = true;
-		
+
+		AnimationComponent* m_animations = nullptr;
 	private:
 		static int m_idNext; // all elements registered in program runtime
-		
+
 	protected:
 		std::string m_elementName = "";
 		Resource* m_texture = nullptr;

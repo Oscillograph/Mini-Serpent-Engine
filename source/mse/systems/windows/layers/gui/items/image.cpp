@@ -9,6 +9,7 @@
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/layers/layer_manager.h>
 #include <mse/systems/resources/resource_manager.h>
+#include <mse/systems/ecs/components.h>
 
 namespace mse
 {
@@ -75,8 +76,8 @@ namespace mse
                 SDL_Rect sourceRect;
                 SDL_FRect destRect;
                 
-                sourceRect = {sourceArea.x, sourceArea.y, sourceArea.z, sourceArea.w};
-                destRect = {0, 0, layerArea.z, layerArea.w};
+                sourceRect = {(int)sourceArea.x, (int)sourceArea.y, (int)sourceArea.z, (int)sourceArea.w};
+                destRect = {0, 0, (float)layerArea.z, (float)layerArea.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -123,7 +124,19 @@ namespace mse
                     (float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
                 };
                 
-                SDL_Rect srcRect = {0, 0, layerArea.z, layerArea.w};
+                SDL_Rect srcRect;
+
+                if (m_animations != nullptr)
+                {
+                    srcRect.x = m_animations->frames[m_animations->currentAnimation]->begin.x +
+                                m_animations->currentFrame * m_animations->frames[m_animations->currentAnimation]->width;
+                    srcRect.y = m_animations->frames[m_animations->currentAnimation]->begin.y +
+                                m_animations->currentFrame * m_animations->frames[m_animations->currentAnimation]->height;
+                    srcRect.w = m_animations->frames[m_animations->currentAnimation]->width;
+                    srcRect.h = m_animations->frames[m_animations->currentAnimation]->height;
+                } else {
+                    srcRect = {0, 0, layerArea.z, layerArea.w};
+                }
                 
     			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
 			}
@@ -185,19 +198,19 @@ namespace mse
                 SDL_FRect destRect;
                 
                 // top part
-                sourceRect = {sourceTop.x, sourceTop.y, sourceTop.z, sourceTop.w};
-                destRect = {0, 0, sourceTop.z, sourceTop.w};
+                sourceRect = {(int)sourceTop.x, (int)sourceTop.y, (int)sourceTop.z, (int)sourceTop.w};
+                destRect = {0, 0, (float)sourceTop.z, (float)sourceTop.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 
                 // middle part
-                sourceRect = {sourceMid.x, sourceMid.y, sourceMid.z, 1};
+                sourceRect = {(int)sourceMid.x, (int)sourceMid.y, (int)sourceMid.z, 1};
                 int middleHeight = layerArea.w - sourceTop.w - sourceBottom.w;
                 for (int k = 0; k < middleHeight; ++k)
                 {
-                    destRect = {0, sourceTop.w + k, sourceMid.z, 1};
+                    destRect = {0, (float)(sourceTop.w + k), (float)sourceMid.z, 1};
                     Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                                  (Texture*)(m_spriteList->data),
                                                  &destRect,
@@ -205,8 +218,8 @@ namespace mse
                 }
                 
                 // bottom part
-                sourceRect = {sourceBottom.x, sourceBottom.y, sourceBottom.z, sourceBottom.w};
-                destRect = {0, sourceTop.w + middleHeight, sourceBottom.z, sourceBottom.w};
+                sourceRect = {(int)sourceBottom.x, (int)sourceBottom.y, (int)sourceBottom.z, (int)sourceBottom.w};
+                destRect = {0, (float)(sourceTop.w + middleHeight), (float)sourceBottom.z, (float)sourceBottom.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -253,8 +266,20 @@ namespace mse
                     (float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
                 };
                 
-                SDL_Rect srcRect = {0, 0, layerArea.z, layerArea.w};
-                
+                SDL_Rect srcRect;
+
+                if (m_animations != nullptr)
+                {
+                    srcRect.x = m_animations->frames[m_animations->currentAnimation]->begin.x +
+                    m_animations->currentFrame * m_animations->frames[m_animations->currentAnimation]->width;
+                    srcRect.y = m_animations->frames[m_animations->currentAnimation]->begin.y +
+                    m_animations->currentFrame * m_animations->frames[m_animations->currentAnimation]->height;
+                    srcRect.w = m_animations->frames[m_animations->currentAnimation]->width;
+                    srcRect.h = m_animations->frames[m_animations->currentAnimation]->height;
+                } else {
+                    srcRect = {0, 0, layerArea.z, layerArea.w};
+                }
+
                 Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
             }
         }
@@ -320,19 +345,19 @@ namespace mse
                 SDL_FRect destRect;
                 
                 // left part
-                sourceRect = {sourceLeft.x, sourceLeft.y, sourceLeft.z, sourceLeft.w};
-                destRect = {0, 0, sourceLeft.z, sourceLeft.w};
+                sourceRect = {(int)sourceLeft.x, (int)sourceLeft.y, (int)sourceLeft.z, (int)sourceLeft.w};
+                destRect = {0, 0, (float)sourceLeft.z, (float)sourceLeft.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 
                 // middle part
-                sourceRect = {sourceMid.x, sourceMid.y, 1, sourceMid.w};
+                sourceRect = {(int)sourceMid.x, (int)sourceMid.y, 1, (int)sourceMid.w};
                 int middleWidth = layerArea.z - sourceLeft.z - sourceRight.z;
                 for (int k = 0; k < middleWidth; ++k)
                 {
-                    destRect = {sourceLeft.z + k, 0, 1, sourceMid.w};
+                    destRect = {(float)(sourceLeft.z + k), 0, 1, (float)sourceMid.w};
                     Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                                  (Texture*)(m_spriteList->data),
                                                  &destRect,
@@ -340,8 +365,8 @@ namespace mse
                 }
                 
                 // right part
-                sourceRect = {sourceRight.x, sourceRight.y, sourceRight.z, sourceRight.w};
-                destRect = {sourceLeft.z + middleWidth, 0, sourceRight.z, sourceRight.w};
+                sourceRect = {(int)sourceRight.x, (int)sourceRight.y, (int)sourceRight.z, (int)sourceRight.w};
+                destRect = {(float)(sourceLeft.z + middleWidth), 0, (float)sourceRight.z, (float)sourceRight.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -388,7 +413,19 @@ namespace mse
                     (float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
                 };
                 
-                SDL_Rect srcRect = {0, 0, layerArea.z, layerArea.w};
+                SDL_Rect srcRect;
+
+                if (m_animations != nullptr)
+                {
+                    srcRect.x = m_animations->frames[m_animations->currentAnimation]->begin.x +
+                    m_animations->currentFrame * m_animations->frames[m_animations->currentAnimation]->width;
+                    srcRect.y = m_animations->frames[m_animations->currentAnimation]->begin.y +
+                    m_animations->currentFrame * m_animations->frames[m_animations->currentAnimation]->height;
+                    srcRect.w = m_animations->frames[m_animations->currentAnimation]->width;
+                    srcRect.h = m_animations->frames[m_animations->currentAnimation]->height;
+                } else {
+                    srcRect = {0, 0, layerArea.z, layerArea.w};
+                }
                 
                 Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
             }

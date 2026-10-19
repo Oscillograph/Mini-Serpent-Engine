@@ -239,8 +239,8 @@ namespace DTetris
 			case 1:
 			{
 				// Brick Game mode
-				// setSize = 16; // without "+"
-				setSize = 17;
+				setSize = 16; // without "+"
+				// setSize = 17;
 				break;
 			}
 
@@ -248,8 +248,8 @@ namespace DTetris
 			default:
 			{
 				// Brick Game mode
-				// setSize = 16; // without "+"
-				setSize = 17;
+				setSize = 16; // without "+"
+				// setSize = 17;
 				break;
 			}
 		}

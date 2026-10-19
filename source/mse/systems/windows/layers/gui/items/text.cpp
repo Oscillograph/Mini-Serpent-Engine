@@ -104,7 +104,7 @@ namespace mse
 		// general GUIItem interface
 		void Text::Display()
 		{
-            if (isVisible)
+            if (isEnabled && isVisible)
             {
                 SDL_FRect destRect = {
                     (float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
