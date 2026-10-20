@@ -14,7 +14,8 @@
 #include <mse/systems/windows/layers/gui/items/image.h>
 #include <mse/systems/windows/layers/gui/items/checkbox.h>
 #include <mse/systems/windows/layers/gui/items/slider.h>
-#include <mse/systems/windows/layers/gui/items/input_int.h>
+#include <mse/systems/windows/layers/gui/items/input_int.h> // TODO: input integers
+#include <mse/systems/windows/layers/gui/items/hint.h> // TODO: floating hints
 
 namespace mse
 {

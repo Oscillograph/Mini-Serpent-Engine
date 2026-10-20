@@ -87,7 +87,7 @@ namespace mse
 	};
 	
 	SpriteComponent::SpriteComponent(Texture* value, glm::vec2 _clip)
-	: texture(value), tilingFactor(glm::vec2(0.0f)), clip(_clip)
+	: texture(value), clip(_clip), tilingFactor(glm::vec2(0.0f))
 	{
 	};
 	

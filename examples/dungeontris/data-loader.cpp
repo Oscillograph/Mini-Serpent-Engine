@@ -171,7 +171,8 @@ namespace DTetris
                 if (!data[i]["name"] ||
                     !data[i]["damage"] ||
                     !data[i]["damage_type"] ||
-                    !data[i]["sprite"])
+                    !data[i]["sprite"] ||
+                    !data[i]["cost"])
                 {
                     return false;
                 }
@@ -181,7 +182,8 @@ namespace DTetris
                     {utf8::utf8to32(data[i]["name"].as<std::string>())},
                     data[i]["damage"].as<int>(),
                     data[i]["damage_type"].as<DamageType>(),
-                    data[i]["sprite"].as<WeaponSprite>()
+                    data[i]["sprite"].as<WeaponSprite>(),
+                    data[i]["cost"].as<int>()
                 };
             }
 
@@ -206,7 +208,8 @@ namespace DTetris
                     !data[i]["defense_crushing"] ||
                     !data[i]["defense_piercing"] ||
                     !data[i]["defense_skill"] ||
-                    !data[i]["defense_stats"])
+                    !data[i]["defense_stats"] ||
+                    !data[i]["cost"])
                 {
                     return false;
                 }
@@ -219,6 +222,7 @@ namespace DTetris
                     data[i]["defense_piercing"].as<float>(),
                     data[i]["defense_skill"].as<float>(),
                     data[i]["defense_stats"].as<float>(),
+                    data[i]["cost"].as<int>()
                 };
             }
 
@@ -240,7 +244,8 @@ namespace DTetris
             {
                 if (!data[i]["name"] ||
                     !data[i]["type_hardcoded"] ||
-                    !data[i]["description"])
+                    !data[i]["description"] ||
+                    !data[i]["cost"])
                 {
                     return false;
                 }
@@ -248,7 +253,8 @@ namespace DTetris
                 gamedb.traits[data[i]["type_hardcoded"].as<Traits>()] = {
                     data[i]["type_hardcoded"].as<Traits>(),
                     utf8::utf8to32(data[i]["name"].as<std::string>()),
-                    utf8::utf8to32(data[i]["description"].as<std::string>())
+                    utf8::utf8to32(data[i]["description"].as<std::string>()),
+                    data[i]["cost"].as<int>()
                 };
             }
 

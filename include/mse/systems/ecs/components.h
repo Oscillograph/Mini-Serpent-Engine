@@ -9,7 +9,7 @@
 #include <mse/systems/ecs/components/states.h>
 #include <mse/systems/ecs/entity.h>
 
-#include <initializer_list>
+// #include <initializer_list>
 
 // special systems
 // #include <mse/vendor/box2d/box2d.h>

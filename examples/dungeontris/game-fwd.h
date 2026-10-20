@@ -2,7 +2,7 @@
 #define DUNGEONTRIS_AUTOBATTLER_GAME_FWD_H
 
 //#include <mse/mse.h>
-#include <cmath>
+// #include <cmath>
 #include <string>
 #include <vector>
 #include <map>
@@ -166,6 +166,7 @@ namespace DTetris
         int damage = 0;
         DamageType type = DamageType::None;
         WeaponSprite sprite = WeaponSprite::None;
+        int cost = 0;
     };
 
     struct Armor : Item
@@ -176,6 +177,7 @@ namespace DTetris
         float weapon_defence_pierceing = 0.0;
         float skill_defence = 0.0;
         float stats_defence = 0.0;
+        int cost = 0;
 
     };
 
@@ -232,6 +234,7 @@ namespace DTetris
         Traits type;
         std::u32string name = U"";
         std::u32string description = U"";
+        int cost = 0;
     };
     
     struct CharacterClass
