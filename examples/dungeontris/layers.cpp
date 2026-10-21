@@ -1,10 +1,12 @@
 #ifndef DUNGEONTRIS_LAYERS_CPP
 #define DUNGEONTRIS_LAYERS_CPP
 
-#include "dungeontris/tetris.h"
-#include "mse/systems/platform/events/events.h"
-#include "mse/systems/platform/input/input.h"
+#include <mse/utils/logger.h>
+#include <mse/systems/platform/events/events.h>
+#include <mse/systems/platform/input/input.h>
+#include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/platform/audio/soundman.h>
+#include <mse/systems/windows/layers/gui/gui.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/gamestates.h>
@@ -212,7 +214,22 @@ void CharacterCreateUILayer::OnInit()
     std::u32string stats; // stats text gui content
     std::stringstream strstream; // buffer to add numbers
     
-    AddElement(new mse::gui::Image(this, {40, 60, 34, 64}, "./data/img/heroes.png", {102, 0, 34, 64}, {0, 0, 0, 255}));
+    hintText = (mse::gui::Hint*)(AddElement(
+        new mse::gui::Hint(
+            this,
+            nullptr,
+            U"Это подсказка",
+            {0, 0, 100, 50},
+            {64, 32, 32, 255},
+            {218, 218, 255, 255},
+            nullptr,
+            1,
+            true,
+            {255, 255, 255, 255})));
+    mse::GUIItem* img = AddElement(new mse::gui::Image(this, {40, 60, 34, 64}, "./data/img/heroes.png", {102, 0, 34, 64}, {0, 0, 0, 255}));
+    hintText->BindTo(img);
+
+
     str = std::rand() % 3 + 1;
     agi = std::rand() % 3 + 1;
     end = std::rand() % 3 + 1;

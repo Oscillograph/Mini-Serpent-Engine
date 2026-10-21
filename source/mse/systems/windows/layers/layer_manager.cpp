@@ -126,16 +126,19 @@ namespace mse
 					int y_screen, y_mask = 0;
 					for (std::pair<int, GUIItem*> item : layer->GetElements())
 					{
-						for (x_screen = item.second->layerArea.x, x_mask = 0;
-							(x_screen < item.second->layerArea.x + item.second->layerArea.z) && (x_screen < winWidth);
-							++x_screen, ++x_mask)
+						if (item.second->layerMask.size() > 0)
 						{
-							for (y_screen = item.second->layerArea.y, y_mask = 0;
-								(y_screen < item.second->layerArea.y + item.second->layerArea.w) && (y_screen < winHeight);
-								++y_screen, ++y_mask)
+							for (x_screen = item.second->layerArea.x, x_mask = 0;
+								(x_screen < item.second->layerArea.x + item.second->layerArea.z) && (x_screen < winWidth);
+								 ++x_screen, ++x_mask)
 							{
-//								MSE_CORE_LOG("x_screen=", x_screen, "; y_screen=", y_screen, "; x_mask=", x_mask, "; y_mask=", y_mask);
-								m_screen[x_screen + y_screen * winWidth] = item.second->layerMask[x_mask + y_mask];
+								for (y_screen = item.second->layerArea.y, y_mask = 0;
+									 (y_screen < item.second->layerArea.y + item.second->layerArea.w) && (y_screen < winHeight);
+									 ++y_screen, ++y_mask)
+								{
+//									MSE_CORE_LOG("x_screen=", x_screen, "; y_screen=", y_screen, "; x_mask=", x_mask, "; y_mask=", y_mask);
+									m_screen[x_screen + y_screen * winWidth] = item.second->layerMask[x_mask + y_mask];
+								}
 							}
 						}
 					}
