@@ -16,6 +16,7 @@ extern DTetris::GameDB gameDB;
 extern DTetris::Game game;
 extern DTetris::TetrisMap tetrisMap;
 extern GameStateMachine gsm;
+extern DTetris::TetrisEngineData DTetris::tetrisEngineData;
 
 void GameLogo(mse::Layer* layer)
 {
@@ -210,53 +211,85 @@ void CharacterCreateUILayer::OnInit()
 {
     GameLogo(this);
     
-    int str, agi, end = 0; // stats for characters
+    float str, agi, end, health = 0.0f; // stats for characters
     std::u32string stats; // stats text gui content
     std::stringstream strstream; // buffer to add numbers
     
-    mse::gui::Hint* hintText = (mse::gui::Hint*)(AddElement(
+    mse::gui::Hint* hintText1 = (mse::gui::Hint*)(AddElement(
         new mse::gui::Hint(
             this,
             nullptr,
-            U"",
-            {0, 0, 110, 90},
+            U"Разбойник",
+            {0, 0, 110, 12},
             {64, 32, 32, 255},
             {218, 218, 255, 255},
             nullptr,
             1,
             true,
             {255, 255, 255, 255})));
-    mse::GUIItem* img = AddElement(new mse::gui::Image(this, {40, 60, 34, 64}, "./data/img/heroes.png", {102, 0, 34, 64}, {0, 0, 0, 255}));
-    hintText->BindTo(img);
+    mse::gui::Hint* hintText2 = (mse::gui::Hint*)(AddElement(
+        new mse::gui::Hint(
+            this,
+            nullptr,
+            U"Воин",
+            {0, 0, 110, 12},
+            {64, 32, 32, 255},
+            {218, 218, 255, 255},
+            nullptr,
+            1,
+            true,
+            {255, 255, 255, 255})));
+    mse::gui::Hint* hintText3 = (mse::gui::Hint*)(AddElement(
+        new mse::gui::Hint(
+            this,
+            nullptr,
+            U"Варвар",
+            {0, 0, 110, 12},
+            {64, 32, 32, 255},
+            {218, 218, 255, 255},
+            nullptr,
+            1,
+            true,
+            {255, 255, 255, 255})));
+    img = AddElement(new mse::gui::Image(this, {40, 60, 34, 64}, "./data/img/heroes.png", {102, 0, 34, 64}, {0, 0, 0, 255}));
+    hintText1->BindTo(img);
 
-
-    str = std::rand() % 3 + 1;
-    agi = std::rand() % 3 + 1;
-    end = std::rand() % 3 + 1;
+    health = gameDB.classes[DTetris::Classes::Rogue].health;
+    str = gameDB.classes[DTetris::Classes::Rogue].strength;
+    agi = gameDB.classes[DTetris::Classes::Rogue].agility;
+    end = gameDB.classes[DTetris::Classes::Rogue].endurance;
     rogueStatsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"", {10, 125, 100, 50}, {0, 0, 0, 255}, {255, 255, 255, 255})));
-    strstream << "> Разбойник <\n\nСтаты:\n" <<
-    "здоровье:  " << 4 <<
-    "\nсила:      " << str <<
-    "\nловкость:  " << agi <<
-    "\nвыносливость: " << end <<
-    "\nПерк:\n -" << utf8::utf32to8(gameDB.traits[DTetris::Traits::HiddenStrike].name);
+    strstream <<
+    "Здоровье:  " << health <<
+    "\nСила:      " << str <<
+    "\nЛовкость:  " << agi <<
+    "\nВынос-ть: " << end <<
+    "\nПерк:\n" << utf8::utf32to8(gameDB.traits[DTetris::Traits::HiddenStrike].name);
     stats = utf8::utf8to32(strstream.str());
-    hintText->ChangeText(stats);
+    rogueStatsBox->ChangeText(stats);
     strstream.str("");
     strstream.clear();
     mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {32, 32, 32, 255}, {20, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassRogueBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
         game.inputClass = DTetris::Classes::Rogue;
-        game.inputStats = {4, (float)str, (float)agi, (float)end};
+        game.inputStats = {
+            gameDB.classes[DTetris::Classes::Rogue].health,
+            gameDB.classes[DTetris::Classes::Rogue].strength,
+            gameDB.classes[DTetris::Classes::Rogue].agility,
+            gameDB.classes[DTetris::Classes::Rogue].endurance
+        };
     };
-    
-    AddElement(new mse::gui::Image(this, {140, 60, 34, 64}, "./data/img/heroes.png", {0, 128, 34, 64}, {0, 0, 0, 255}));
-    str = std::rand() % 3 + 1;
-    agi = std::rand() % 3 + 1;
-    end = std::rand() % 3 + 1;
+
+    img = AddElement(new mse::gui::Image(this, {140, 60, 34, 64}, "./data/img/heroes.png", {0, 128, 34, 64}, {0, 0, 0, 255}));
+    hintText2->BindTo(img);
+
+    health = gameDB.classes[DTetris::Classes::Warrior].health;
+    str = gameDB.classes[DTetris::Classes::Warrior].strength;
+    agi = gameDB.classes[DTetris::Classes::Warrior].agility;
+    end = gameDB.classes[DTetris::Classes::Warrior].endurance;
     warriorStatsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"", {110, 125, 100, 50}, {0, 0, 0, 255}, {255, 255, 255, 255})));
     strstream << 
-    "Здоровье: " << 5 <<
+    "Здоровье: " << health <<
     "\nСила:     " << str <<
     "\nЛовкость: " << agi <<
     "\nВыносл-ть: " << end <<
@@ -268,16 +301,24 @@ void CharacterCreateUILayer::OnInit()
     mse::gui::Button* ClassWarriorBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"   Воин", {32, 32, 32, 255}, {120, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassWarriorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
         game.inputClass = DTetris::Classes::Warrior;
-        game.inputStats = {5, (float)str, (float)agi, (float)end};
+        game.inputStats = {
+            gameDB.classes[DTetris::Classes::Warrior].health,
+            gameDB.classes[DTetris::Classes::Warrior].strength,
+            gameDB.classes[DTetris::Classes::Warrior].agility,
+            gameDB.classes[DTetris::Classes::Warrior].endurance
+        };
     };
     
-    AddElement(new mse::gui::Image(this, {240, 60, 34, 64}, "./data/img/heroes.png", {68, 64, 34, 64}, {0, 0, 0, 255}));
-    str = std::rand() % 3 + 1;
-    agi = std::rand() % 3 + 1;
-    end = std::rand() % 3 + 1;
+    img = AddElement(new mse::gui::Image(this, {240, 60, 34, 64}, "./data/img/heroes.png", {68, 64, 34, 64}, {0, 0, 0, 255}));
+    hintText3->BindTo(img);
+
+    health = gameDB.classes[DTetris::Classes::Barbarian].health;
+    str = gameDB.classes[DTetris::Classes::Barbarian].strength;
+    agi = gameDB.classes[DTetris::Classes::Barbarian].agility;
+    end = gameDB.classes[DTetris::Classes::Barbarian].endurance;
     barbarianStatsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"", {210, 125, 100, 50}, {0, 0, 0, 255}, {255, 255, 255, 255})));
     strstream << 
-    "Здоровье: " << 6 <<
+    "Здоровье: " << health <<
     "\nСила:     " << str <<
     "\nЛовкость: " << agi <<
     "\nВыносл-ть: " << end <<
@@ -289,7 +330,12 @@ void CharacterCreateUILayer::OnInit()
     mse::gui::Button* ClassBarbarianBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"  Варвар", {32, 32, 32, 255}, {220, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     ClassBarbarianBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [=](SDL_Event* event){
         game.inputClass = DTetris::Classes::Barbarian;
-        game.inputStats = {6, (float)str, (float)agi, (float)end};
+        game.inputStats = {
+            gameDB.classes[DTetris::Classes::Barbarian].health,
+            gameDB.classes[DTetris::Classes::Barbarian].strength,
+            gameDB.classes[DTetris::Classes::Barbarian].agility,
+            gameDB.classes[DTetris::Classes::Barbarian].endurance
+        };
     };
     
     mse::gui::Button* mainMenuBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"<< Назад", {32, 32, 32, 255}, {120, 215, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));

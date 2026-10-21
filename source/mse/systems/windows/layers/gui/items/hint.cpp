@@ -215,23 +215,24 @@ namespace mse
 				(int)roundf(event->motion.y / windowUser->GetScale().y)
 			};
 
-			if (windowUser->GetPrefs().width > correctMousePos.x + m_parent->layerArea.z + 2)
+			if (windowUser->GetPrefs().width > correctMousePos.x + hintText->layerArea.z + 2)
 			{
 				hintText->layerArea.x = correctMousePos.x + 2;
 			} else {
-				hintText->layerArea.x = correctMousePos.x - m_parent->layerArea.z - 2;
+				hintText->layerArea.x = correctMousePos.x - hintText->layerArea.z - 2;
 			}
+			MSE_LOG("Width: ", windowUser->GetPrefs().width, "; Mouse.x: ", correctMousePos.x, "; Hint.x: ", hintText->layerArea.x, "; x_original: ", correctMousePos.x + m_parent->layerArea.z + 2);
 			if (hintText->layerArea.x < 0)
 			{
 				hintText->layerArea.x = 0;
 			}
 			layerArea.x = hintText->layerArea.x;
 
-			if (windowUser->GetPrefs().height > correctMousePos.y + m_parent->layerArea.w + 2)
+			if (windowUser->GetPrefs().height > correctMousePos.y + hintText->layerArea.w + 2)
 			{
 				hintText->layerArea.y = correctMousePos.y + 2;
 			} else {
-				hintText->layerArea.y = correctMousePos.y - m_parent->layerArea.w - 2;
+				hintText->layerArea.y = correctMousePos.y - hintText->layerArea.w - 2;
 			}
 			if (hintText->layerArea.y < 0)
 			{

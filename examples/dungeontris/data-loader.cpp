@@ -303,14 +303,22 @@ namespace DTetris
             for (size_t i = 0; i < data.size(); ++i)
             {
                 if (!data[i]["name"] ||
-                    !data[i]["class_hardcoded"])
+                    !data[i]["class_hardcoded"] ||
+                    !data[i]["health"] ||
+                    !data[i]["strength"] ||
+                    !data[i]["agility"] ||
+                    !data[i]["endurance"])
                 {
                     return false;
                 }
 
                 gamedb.classes[data[i]["class_hardcoded"].as<Classes>()] = {
                     data[i]["class_hardcoded"].as<Classes>(),
-                    utf8::utf8to32(data[i]["name"].as<std::string>())
+                    utf8::utf8to32(data[i]["name"].as<std::string>()),
+                    data[i]["health"].as<float>(),
+                    data[i]["strength"].as<float>(),
+                    data[i]["agility"].as<float>(),
+                    data[i]["endurance"].as<float>()
                 };
             }
 

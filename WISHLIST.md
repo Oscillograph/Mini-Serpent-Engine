@@ -12,10 +12,14 @@
 - support background sprite animations
 - support visual fx
 - Buttons support icons along with text labels
+- ButtonImages - like <button><img /></button> in HTML
 
 ### Low priority
 ## Layers System
 - ECS for elements to make animations and events handling easier
+
+## GUI System
+- layout based on a markup language to load from file
 
 ## Font Engine: 
 - support TTF
@@ -30,3 +34,8 @@
 
 ## Controls System:
 - Command pattern to make it easier to setup preferences
+
+## Build
+- Crossplatform: Windows + Linux (I got no Mac)
+- -Wpedantic friendly
+- -fsanitize=address friendly

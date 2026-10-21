@@ -49,7 +49,7 @@ public:
     virtual void OnUpdate(mse::TimeType t = 0) override;
     
     // mse::gui::Hint* hintText = nullptr;
-    // mse::GUIItem* img = nullptr;
+    mse::GUIItem* img = nullptr;
 
     mse::gui::Text* rogueStatsBox = nullptr;
     mse::gui::Text* warriorStatsBox = nullptr;

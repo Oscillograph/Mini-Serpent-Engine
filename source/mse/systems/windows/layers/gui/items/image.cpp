@@ -142,6 +142,15 @@ namespace mse
 			}
 		}
         
+        // unique Image interface
+        void Image::ChangeSourceArea(const glm::uvec4& sourceArea)
+        {
+            m_sourceArea.x = sourceArea.x;
+            m_sourceArea.y = sourceArea.y;
+            m_sourceArea.z = sourceArea.z;
+            m_sourceArea.w = sourceArea.w;
+        }
+
         
         /*========================================================================================*/
         /*                                     VImageTemplate                                     */

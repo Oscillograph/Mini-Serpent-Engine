@@ -117,7 +117,8 @@ namespace DTetris
         None,
         Rogue,
         Warrior,
-        Barbarian
+        Barbarian,
+        Monk
     };
 
     struct Class
@@ -241,6 +242,10 @@ namespace DTetris
     {
         Classes type;
         std::u32string name = U"";
+        float health = 0.0f;
+        float strength = 0.0f;
+        float agility = 0.0f;
+        float endurance = 0.0f;
     };
     
     struct DamageTypeName
@@ -336,7 +341,7 @@ namespace DTetris
         unsigned int gameSpeed = 1;
         unsigned int gameSpeedMax = 25;
         uint32_t gameTimer = 0;
-        int gameDifficulty = 2; // 0 means A, 1 means B, 2 means C
+        int gameDifficulty = 1; // 0 means A, 1 means C-, 2 means C
         int playerScore = 0;
         bool rotateTetrimino = false;
         bool justPlacedTetrimino = false;
