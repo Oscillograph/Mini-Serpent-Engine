@@ -1,0 +1,31 @@
+# data/armors.yaml  ->  DTetris::LoadArmors()  (data-loader.cpp:189)
+#
+# IMPORTANT: a armor's ID is its POSITION in this list (0-based),
+#            because the loader does gamedb.armors[i] = entry i.
+#
+# Requires a loader fix first: the key check (lines 200-204) wants
+# "defense_*" but the reads (lines 212-216) ask for "damage_*",
+# which throws on a missing key. Rename the reads to "defense_*".
+# Also give all five floats the same key names here.
+
+- name: Кожаный доспех
+  defense_cutting: 1.0
+  defense_crushing: 0.5
+  defense_piercing: 1.0
+  defense_skill: 0.0
+  defense_stats: 0.0
+  cost: 5
+- name: Кольчуга
+  defense_cutting: 2.0
+  defense_crushing: 1.0
+  defense_piercing: 1.5
+  defense_skill: 0.5
+  defense_stats: 0.5
+  cost: 9
+- name: Латы
+  defense_cutting: 3.0
+  defense_crushing: 2.0
+  defense_piercing: 1.0
+  defense_skill: 1.0
+  defense_stats: 1.0
+  cost: 15

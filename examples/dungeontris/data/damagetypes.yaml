@@ -1,0 +1,16 @@
+# data/damagetypes.yaml  ->  DTetris::LoadDamageTypes()  (data-loader.cpp:252)
+#
+# Entries are keyed by type_hardcoded, so order here does not matter.
+#
+# type_hardcoded (DamageType): 0=None 1=Cutting 2=Crushing 3=Piercing 4=Divine
+
+- type_hardcoded: 0
+  name: Нет
+- type_hardcoded: 1
+  name: режущий
+- type_hardcoded: 2
+  name: дробящий
+- type_hardcoded: 3
+  name: колющий
+- type_hardcoded: 4
+  name: божественный
