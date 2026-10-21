@@ -60,15 +60,6 @@ namespace mse
 				borderColor);
 			hintText->isVisible = false;
 
-			layerMask.resize(area.z * area.w);
-			for (int x = 0; x < area.z; ++x)
-			{
-				for (int y = 0; y < area.w; ++y)
-				{
-					layerMask[x + y*area.z] = id;
-				}
-			}
-
 			BindTo(parent);
 
 			// controller
@@ -118,6 +109,11 @@ namespace mse
 		}
 
 		// unique Hint interface
+		void Hint::ChangeText(const std::u32string& text)
+		{
+			hintText->ChangeText(text);
+		}
+
 		void Hint::BindTo(GUIItem* parent)
 		{
 			UnBind();

@@ -214,12 +214,12 @@ void CharacterCreateUILayer::OnInit()
     std::u32string stats; // stats text gui content
     std::stringstream strstream; // buffer to add numbers
     
-    hintText = (mse::gui::Hint*)(AddElement(
+    mse::gui::Hint* hintText = (mse::gui::Hint*)(AddElement(
         new mse::gui::Hint(
             this,
             nullptr,
-            U"Это подсказка",
-            {0, 0, 100, 50},
+            U"",
+            {0, 0, 110, 90},
             {64, 32, 32, 255},
             {218, 218, 255, 255},
             nullptr,
@@ -234,14 +234,14 @@ void CharacterCreateUILayer::OnInit()
     agi = std::rand() % 3 + 1;
     end = std::rand() % 3 + 1;
     rogueStatsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"", {10, 125, 100, 50}, {0, 0, 0, 255}, {255, 255, 255, 255})));
-    strstream << 
-    "Здоровье: " << 4 <<
-    "\nСила:     " << str <<
-    "\nЛовкость: " << agi <<
-    "\nВыносл-ть: " << end <<
-    "\n" << utf8::utf32to8(gameDB.traits[DTetris::Traits::HiddenStrike].name);
+    strstream << "> Разбойник <\n\nСтаты:\n" <<
+    "здоровье:  " << 4 <<
+    "\nсила:      " << str <<
+    "\nловкость:  " << agi <<
+    "\nвыносливость: " << end <<
+    "\nПерк:\n -" << utf8::utf32to8(gameDB.traits[DTetris::Traits::HiddenStrike].name);
     stats = utf8::utf8to32(strstream.str());
-    rogueStatsBox->ChangeText(stats);
+    hintText->ChangeText(stats);
     strstream.str("");
     strstream.clear();
     mse::gui::Button* ClassRogueBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Разбойник", {32, 32, 32, 255}, {20, 180, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));

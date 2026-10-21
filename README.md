@@ -15,7 +15,7 @@ Currently MSE has:
 + Sound management system which doesn't plot allocated memory structure yet and isn't very cooperative with Resource manager;
 + Individual Layer manegement system per window;
 + Layers which are attached to windows by the engine user's design and can have graphical user interface (GUI) items which have their own editable callbacks;
-+ GUI items (Canvas, generic button, slider (vertical and horizontal), textbox, checkbox);
++ GUI items (Canvas, button, image, slider (vertical and horizontal), text, hint, scrollbars, checkbox);
 + Application class itself;
 + Bitmap fonts support (if the font was not developed specifically for MSE, the alphabet might need to be hardcoded though).
 

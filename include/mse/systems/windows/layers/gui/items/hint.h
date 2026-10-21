@@ -47,13 +47,13 @@ namespace mse
 			// bool showBorder = false;
 			// std::vector<GUIItem> elements = {};
 
-			Text* hintText = nullptr;
-
+			void ChangeText(const std::u32string& text);
 			void BindTo(GUIItem* parent);
 			void UnBind(bool die = false);
 
 		protected:
 			void MoveHintText(SDL_Event* event);
+			Text* hintText = nullptr;
 
 			std::unordered_map<EventTypes, func> parent_callbacks = {};
 			GUIItem* m_parent = nullptr;
