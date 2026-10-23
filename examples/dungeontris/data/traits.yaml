@@ -9,11 +9,11 @@
 - type_hardcoded: 0
   name: Рывок
   description: удвоенный урон в первый ход
-  cost: 15
+  cost: 0
 - type_hardcoded: 1
   name: Ярость
   description: +2 к урону первые три хода, -1 к урону во все остальные
-  cost: 15
+  cost: 0
 - type_hardcoded: 2
   name: Скрытый удар
   description: +1 к урону, если ловчее цели
@@ -54,3 +54,15 @@
   name: Огненный дых
   description: +3 к урону каждый третий ход
   cost: 45
+- type_hardcoded: 12
+  name: Медитация
+  description: восстанавливает 1 здоровья каждые 10 ходов
+  cost: 20
+- type_hardcoded: 13
+  name: Печать хаоса
+  description: +1 к каждому стату за каждую выигранную битву (максимум +5). Финальный босс - не дракон.
+  cost: 90
+- type_hardcoded: 14
+  name: Школа Бобра
+  description: удваивает накопленные богатства после каждого боя
+  cost: 0

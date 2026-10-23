@@ -3,7 +3,7 @@
 # IMPORTANT: a character's ID is its POSITION in this list (0-based),
 #            because the loader does gamedb.characters[i] = entry i.
 #
-# race       : 0=None 1=Human 2=Goblin 3=Skeleton 4=Slime 5=Ghost 6=Golem 7=Dragon
+# race       : 0=None 1=Human 2=Goblin 3=Skeleton 4=Slime 5=Ghost 6=Golem 7=Dragon 8=OldGod
 # stats_max  : [health, strength, agility, endurance]  (exactly 4 values;
 #              the loader also copies them into the battle stats)
 # traits     : list of Traits ids (see traits.yaml)
@@ -54,5 +54,12 @@
   race: 7
   stats_max: [30, 3, 3, 3]
   traits: [11]
+  drops: [7]
+  weapon: 12
+- name: К'лигхан
+  level: 3
+  race: 8
+  stats_max: [300, 6, 6, 6]
+  traits: [11, 5, 0]
   drops: [7]
   weapon: 12

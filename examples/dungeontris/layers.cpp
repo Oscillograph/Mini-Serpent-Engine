@@ -644,7 +644,7 @@ void ArenaUILayer::OnInit()
     npcLife = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                                                               this, 
                                                               U"", 
-                                                              {35, 15, 20, 10}, 
+                                                              {35, 15, 40, 10},
                                                               {0, 0, 0, 255}, 
                                                               {255, 196, 0, 255})));
     // npc character
@@ -760,7 +760,7 @@ void ArenaUILayer::OnInit()
     playerLife = (mse::gui::Text*)(AddElement(new mse::gui::Text(
                                                                  this, 
                                                                  U"", 
-                                                                 {275, 15, 20, 10}, 
+                                                                 {275, 15, 40, 10},
                                                                  {0, 0, 0, 255}, 
                                                                  {255, 196, 0, 255})));
     // player character

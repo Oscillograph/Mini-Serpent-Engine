@@ -109,7 +109,8 @@ namespace DTetris
         Slime,
         Ghost,
         Golem,
-        Dragon
+        Dragon,
+        OldGod
     };
 
     enum class Classes : int
@@ -118,7 +119,9 @@ namespace DTetris
         Rogue,
         Warrior,
         Barbarian,
-        Monk
+        Monk,
+        Cultist,
+        Witcher
     };
 
     struct Class
@@ -185,26 +188,29 @@ namespace DTetris
     enum class Traits : int
     {
         // start of the battle
-        Rush, // x2 weapon damage at the first turn
-        Rage, // +2 to damage dealt during first 3 turns; -1 to damage dealt during the rest of the battle
+        Rush                = 0, // x2 weapon damage at the first turn
+        Rage                = 1, // +2 to damage dealt during first 3 turns; -1 to damage dealt during the rest of the battle
 
         // conditional buffs
-        HiddenStrike, // +1 to damage dealt if attacker's agility is bigger than defender's
-        Shield, // -3 to damage received if strength of the defender is bigger than of the attacker
+        HiddenStrike        = 2, // +1 to damage dealt if attacker's agility is bigger than defender's
+        Shield              = 3, // -3 to damage received if strength of the defender is bigger than of the attacker
 
         // conditional debuffs
-        CrushingWeakness, // x2 to damage received if the attacker's weapon is crushing
+        CrushingWeakness    = 4, // x2 to damage received if the attacker's weapon is crushing
 
         // Passive
-        StoneSkin, // damage received is reduced by the endurance value
-        Agile, // +1 to agility
-        Strong, // +1 to strength
-        Survivor, // +1 to endurance
-        CuttingImmune, // immune to cutting weapon damage
+        StoneSkin           = 5, // damage received is reduced by the endurance value
+        Agile               = 6, // +1 to agility
+        Strong              = 7, // +1 to strength
+        Survivor            = 8, // +1 to endurance
+        CuttingImmune       = 9, // immune to cutting weapon damage
+        MarkOfChaos         = 13, // +1 to every stat for each battle won (up to 6/6/6)
+        SchoolOfBeaver      = 14, // multiply treasures in bank by 2 after each battle
 
         // turn-dependent
-        Poison, // damage dealt is increased on each turn based on arithmetic progression
-        FireBreather, // +3 damage by fire every third turn
+        Poison              = 10, // damage dealt is increased on each turn based on arithmetic progression
+        FireBreather        = 11, // +3 damage by fire every third turn
+        Meditation          = 12, // heals by 1 every tenth turn
     };
 
     // struct both for playable and non-playable character
@@ -216,7 +222,7 @@ namespace DTetris
         CharacterStats stats_max;
         CharacterStats stats; // during battle
         Class main_class = {Classes::None, 0};
-        Class sub_class = {Classes::None, 0};
+        Class sub_class = {Classes::None, 0}; // TODO: remove subclasses mechanic
         std::vector<Traits> traits;
         std::vector<Weapon> drop_list;
         Weapon weapon;
@@ -374,6 +380,9 @@ namespace DTetris
         bool battleJustStarted = false;
         bool battleJustFinished = false;
         bool battleFinished = false;
+
+        std::unordered_map<Traits, bool> shop_traits = {};
+        std::unordered_map<WeaponSprite, bool> shop_weapons = {};
         
         bool keyPressed = false;
         

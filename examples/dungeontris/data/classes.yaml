@@ -34,3 +34,15 @@
   strength: 0
   agility: 2
   endurance: 4
+- class_hardcoded: 5
+  name: Культист
+  health: 4
+  strength: 1
+  agility: 1
+  endurance: 1
+- class_hardcoded: 6
+  name: Ведьмак
+  health: 5
+  strength: 0
+  agility: 4
+  endurance: 2
