@@ -111,7 +111,12 @@ namespace mse
 		// unique Hint interface
 		void Hint::ChangeText(const std::u32string& text)
 		{
-			hintText->ChangeText(text);
+			if (hintText)
+			{
+				hintText->ChangeText(text);
+			} else {
+				MSE_LOG("Hint: no hintText initialized.");
+			}
 		}
 
 		void Hint::BindTo(GUIItem* parent)
@@ -120,6 +125,7 @@ namespace mse
 
 			if (parent)
 			{
+				// store original parent's callbacks to call'em later
 				m_parent = parent;
 
 				if (m_parent->callbacks.find(mse::EventTypes::GUIItemMouseOver) != m_parent->callbacks.end())
@@ -135,9 +141,12 @@ namespace mse
 					parent_callbacks[mse::EventTypes::GUIItemMouseOut] = m_parent->callbacks[mse::EventTypes::GUIItemMouseOut];
 				}
 
+				// override parent's callbacks
 				parent->callbacks[mse::EventTypes::GUIItemMouseOver] = [&](SDL_Event* event)
 				{
 					MoveHintText(event);
+
+					MSE_LOG("OVER");
 
 					if (!hintText->isVisible)
 					{
@@ -154,6 +163,8 @@ namespace mse
 				{
 					MoveHintText(event);
 
+					MSE_LOG("MOVE");
+
 					if (!hintText->isVisible)
 					{
 						hintText->isVisible = true;
@@ -168,6 +179,8 @@ namespace mse
 				parent->callbacks[mse::EventTypes::GUIItemMouseOut] = [&](SDL_Event* event)
 				{
 					MoveHintText(event);
+
+					MSE_LOG("OUT");
 
 					if (hintText->isVisible)
 					{
@@ -221,7 +234,7 @@ namespace mse
 			} else {
 				hintText->layerArea.x = correctMousePos.x - hintText->layerArea.z - 2;
 			}
-			MSE_LOG("Width: ", windowUser->GetPrefs().width, "; Mouse.x: ", correctMousePos.x, "; Hint.x: ", hintText->layerArea.x, "; x_original: ", correctMousePos.x + m_parent->layerArea.z + 2);
+
 			if (hintText->layerArea.x < 0)
 			{
 				hintText->layerArea.x = 0;
@@ -234,6 +247,7 @@ namespace mse
 			} else {
 				hintText->layerArea.y = correctMousePos.y - hintText->layerArea.w - 2;
 			}
+
 			if (hintText->layerArea.y < 0)
 			{
 				hintText->layerArea.y = 0;

@@ -121,11 +121,6 @@ namespace mse
             }
 		}
         
-        bool Text::HandleEvent(EventTypes eventType, SDL_Event* event)
-        {
-            return false;
-        }
-        
         void Text::ChangeText(const std::u32string& text)
         {
             m_text = text;
@@ -140,11 +135,20 @@ namespace mse
             // background
             if ((m_backgroundColor.w > 0) && (layerArea.z > 2) && (layerArea.w > 2))
             {
-                Renderer::SurfaceDrawRectFilled(
-                                                (Texture*)(m_texture->data),
-                                                {0 + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
-                                                {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
-                                                );
+                if (showBorder)
+                {
+                    Renderer::SurfaceDrawRectFilled(
+                        (Texture*)(m_texture->data),
+                        {1, 1, layerArea.z - 2, layerArea.w - 2},
+                        {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+                    );
+                } else {
+                    Renderer::SurfaceDrawRectFilled(
+                        (Texture*)(m_texture->data),
+                        {0, 0, layerArea.z - 1, layerArea.w - 1},
+                        {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+                    );
+                }
             }
             
             // bitmap font
@@ -165,7 +169,7 @@ namespace mse
             
             // draw text itself
             std::pair<int, int> scrollWH = mse::Renderer::SurfaceDrawText(
-                                           (Texture*)(m_texture->data), 
+                                           (Texture*)(m_texture->data),
                                            {m_scrollXY.x + 2, m_scrollXY.y + 2, layerArea.z, layerArea.w}, 	// where to
                                            m_pxSize,			// pixel size
                                            m_text, 			// text content

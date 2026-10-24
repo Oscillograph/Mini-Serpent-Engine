@@ -302,12 +302,14 @@ namespace DTetris
         {
             for (size_t i = 0; i < data.size(); ++i)
             {
-                if (!data[i]["name"] ||
-                    !data[i]["class_hardcoded"] ||
+                if (!data[i]["class_hardcoded"] ||
+                    !data[i]["name"] ||
                     !data[i]["health"] ||
                     !data[i]["strength"] ||
                     !data[i]["agility"] ||
-                    !data[i]["endurance"])
+                    !data[i]["endurance"] ||
+                    !data[i]["tips"] ||
+                    !data[i]["starting_trait"])
                 {
                     return false;
                 }
@@ -318,7 +320,9 @@ namespace DTetris
                     data[i]["health"].as<float>(),
                     data[i]["strength"].as<float>(),
                     data[i]["agility"].as<float>(),
-                    data[i]["endurance"].as<float>()
+                    data[i]["endurance"].as<float>(),
+                    utf8::utf8to32(data[i]["tips"].as<std::string>()),
+                    data[i]["starting_trait"].as<Traits>(),
                 };
             }
 

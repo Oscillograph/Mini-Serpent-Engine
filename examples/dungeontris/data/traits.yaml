@@ -1,68 +1,89 @@
 # data/traits.yaml  ->  DTetris::LoadTraits()  (data-loader.cpp:224)
 #
 # Entries are keyed by type_hardcoded, so order here does not matter.
-#
-# type_hardcoded (Traits): 0=Rush 1=Rage 2=HiddenStrike 3=Shield
-#                          4=CrushingWeakness 5=StoneSkin 6=Agile 7=Strong
-#                          8=Survivor 9=CuttingImmune 10=Poison 11=FireBreather
 
 - type_hardcoded: 0
-  name: Рывок
-  description: удвоенный урон в первый ход
+  name: Ничего
+  description: Ничего
   cost: 0
 - type_hardcoded: 1
-  name: Ярость
-  description: +2 к урону первые три хода, -1 к урону во все остальные
+  name: Рывок
+  description: |
+    удвоенный урон в первый ход
   cost: 0
 - type_hardcoded: 2
-  name: Скрытый удар
-  description: +1 к урону, если ловчее цели
-  cost: 20
+  name: Ярость
+  description: |
+    +2 к урону первые три хода,
+    -1 к урону во все остальные
+  cost: 0
 - type_hardcoded: 3
-  name: Щит
-  description: -3 к ущербу, если сильнее цели
-  cost: 25
+  name: Скрытый удар
+  description: |
+    +1 к урону, если ловчее цели
+  cost: 20
 - type_hardcoded: 4
-  name: Страх дубин
-  description: двойной ущерб от дробящего оружия
-  cost: 1
+  name: Щит
+  description: |
+    -3 к ущербу, если сильнее цели
+  cost: 25
 - type_hardcoded: 5
-  name: Толстокожий
-  description: ущерб снижается на значение выносливости
-  cost: 45
+  name: Страх дубин
+  description: |
+    получает двойной урон
+    от дробящего оружия
+  cost: 1
 - type_hardcoded: 6
-  name: Ловкач
-  description: +1 к ловкости
-  cost: 10
+  name: Толстокожий
+  description: |
+    ущерб снижается на значение 
+    выносливости
+  cost: 45
 - type_hardcoded: 7
-  name: Силач
-  description: +1 к силе
+  name: Ловкач
+  description: |
+    +1 к ловкости
   cost: 10
 - type_hardcoded: 8
-  name: Выживальщик
-  description: +1 к выносливости
+  name: Силач
+  description: |
+    +1 к силе
   cost: 10
 - type_hardcoded: 9
-  name: Не режется
-  description: иммунитет к режущему оружию
-  cost: 25
+  name: Выживальщик
+  description: |
+    +1 к выносливости
+  cost: 10
 - type_hardcoded: 10
-  name: Яд
-  description: +N к урону, где N - номер хода
-  cost: 45
+  name: Не режется
+  description: |
+    иммунитет к режущему оружию
+  cost: 25
 - type_hardcoded: 11
-  name: Огненный дых
-  description: +3 к урону каждый третий ход
+  name: Яд
+  description: |
+    +N к урону, где N - номер хода
   cost: 45
 - type_hardcoded: 12
-  name: Медитация
-  description: восстанавливает 1 здоровья каждые 10 ходов
-  cost: 20
+  name: Огненный дых
+  description: |
+    +3 к урону каждый третий ход
+  cost: 45
 - type_hardcoded: 13
-  name: Печать хаоса
-  description: +1 к каждому стату за каждую выигранную битву (максимум +5). Финальный босс - не дракон.
-  cost: 90
+  name: Медитация
+  description: |
+    лечит 1 здоровья каждые 10
+    ходов
+  cost: 20
 - type_hardcoded: 14
+  name: Печать хаоса
+  description: |
+    +1 ко всем статам за каждую победу (максимум +5).
+    Финальный босс - не дракон.
+  cost: 90
+- type_hardcoded: 15
   name: Школа Бобра
-  description: удваивает накопленные богатства после каждого боя
+  description: |
+    удваивает запасы золота
+    после каждого боя
   cost: 0

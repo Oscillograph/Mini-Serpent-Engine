@@ -194,6 +194,9 @@ bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
     game.battleJustStarted = false;
     game.battleJustFinished = false;
     game.inputClass = DTetris::Classes::None;
+
+    game.shop_traits.clear();
+    game.shop_weapons.clear();
     
     return true;
 }
@@ -269,7 +272,7 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
         
         game.inputClass = DTetris::Classes::None;
         
-        gsm.ChangeStateTo(DTetris::GamePages::ArenaSetup);
+        // gsm.ChangeStateTo(DTetris::GamePages::ArenaSetup);
     }
     
     return true;

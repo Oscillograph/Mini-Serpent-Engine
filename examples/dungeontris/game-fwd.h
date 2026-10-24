@@ -187,30 +187,32 @@ namespace DTetris
 
     enum class Traits : int
     {
+        None                = 0,
+
         // start of the battle
-        Rush                = 0, // x2 weapon damage at the first turn
-        Rage                = 1, // +2 to damage dealt during first 3 turns; -1 to damage dealt during the rest of the battle
+        Rush                = 1, // x2 weapon damage at the first turn
+        Rage                = 2, // +2 to damage dealt during first 3 turns; -1 to damage dealt during the rest of the battle
 
         // conditional buffs
-        HiddenStrike        = 2, // +1 to damage dealt if attacker's agility is bigger than defender's
-        Shield              = 3, // -3 to damage received if strength of the defender is bigger than of the attacker
+        HiddenStrike        = 3, // +1 to damage dealt if attacker's agility is bigger than defender's
+        Shield              = 4, // -3 to damage received if strength of the defender is bigger than of the attacker
 
         // conditional debuffs
-        CrushingWeakness    = 4, // x2 to damage received if the attacker's weapon is crushing
+        CrushingWeakness    = 5, // x2 to damage received if the attacker's weapon is crushing
 
         // Passive
-        StoneSkin           = 5, // damage received is reduced by the endurance value
-        Agile               = 6, // +1 to agility
-        Strong              = 7, // +1 to strength
-        Survivor            = 8, // +1 to endurance
-        CuttingImmune       = 9, // immune to cutting weapon damage
-        MarkOfChaos         = 13, // +1 to every stat for each battle won (up to 6/6/6)
-        SchoolOfBeaver      = 14, // multiply treasures in bank by 2 after each battle
+        StoneSkin           = 6, // damage received is reduced by the endurance value
+        Agile               = 7, // +1 to agility
+        Strong              = 8, // +1 to strength
+        Survivor            = 9, // +1 to endurance
+        CuttingImmune       = 10, // immune to cutting weapon damage
+        MarkOfChaos         = 14, // +1 to every stat for each battle won (up to 6/6/6)
+        SchoolOfBeaver      = 15, // multiply treasures in bank by 2 after each battle
 
         // turn-dependent
-        Poison              = 10, // damage dealt is increased on each turn based on arithmetic progression
-        FireBreather        = 11, // +3 damage by fire every third turn
-        Meditation          = 12, // heals by 1 every tenth turn
+        Poison              = 11, // damage dealt is increased on each turn based on arithmetic progression
+        FireBreather        = 12, // +3 damage by fire every third turn
+        Meditation          = 13, // heals by 1 every tenth turn
     };
 
     // struct both for playable and non-playable character
@@ -252,6 +254,8 @@ namespace DTetris
         float strength = 0.0f;
         float agility = 0.0f;
         float endurance = 0.0f;
+        std::u32string tips = U"";
+        Traits startingTrait;
     };
     
     struct DamageTypeName
@@ -385,6 +389,7 @@ namespace DTetris
         std::unordered_map<WeaponSprite, bool> shop_weapons = {};
         
         bool keyPressed = false;
+        bool hardcoreTetrisMod = false;
         
         int battleCounter = 0;
         int turn = 0;

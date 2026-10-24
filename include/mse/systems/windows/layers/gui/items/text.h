@@ -19,7 +19,7 @@ namespace mse
 			
 			// general GUIItem interface
 			virtual void Display() override;
-			virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
+			// virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
 
             // unique Text interface
             void ChangeText(const std::u32string& text);

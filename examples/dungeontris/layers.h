@@ -1,7 +1,7 @@
 #ifndef DUNGEONTRIS_AUTOBATTLER_LAYERS_H
 #define DUNGEONTRIS_AUTOBATTLER_LAYERS_H
 
-#include "mse/systems/resources/resource_manager.h"
+#include <mse/systems/resources/resource_manager.h>
 #include <dungeontris/game-fwd.h>
 
 #include <mse/systems/windows/layers/layer.h>
@@ -48,12 +48,18 @@ public:
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
     
-    // mse::gui::Hint* hintText = nullptr;
-    mse::GUIItem* img = nullptr;
+    mse::gui::Hint* classTraitHint = nullptr;
 
-    mse::gui::Text* rogueStatsBox = nullptr;
-    mse::gui::Text* warriorStatsBox = nullptr;
-    mse::gui::Text* barbarianStatsBox = nullptr;
+    mse::gui::Image* classAvatarPreviewImage = nullptr;
+
+    mse::gui::Text* classNameTextBox = nullptr;
+    mse::gui::Text* classStatsTextBox = nullptr;
+    mse::gui::Text* classStatsValuesBox = nullptr;
+    mse::gui::Text* classTraitTextBox = nullptr;
+    mse::gui::Text* classTipsBox = nullptr;
+
+    void UpdateClassStats();
+    void UpdateClassTips();
 };
 
 class CharacterLoadUILayer : public mse::Layer

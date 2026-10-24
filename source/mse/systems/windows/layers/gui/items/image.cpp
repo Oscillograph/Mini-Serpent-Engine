@@ -149,6 +149,29 @@ namespace mse
             m_sourceArea.y = sourceArea.y;
             m_sourceArea.z = sourceArea.z;
             m_sourceArea.w = sourceArea.w;
+
+            // clear texture if exists
+            if (m_texture)
+            {
+                Renderer::SurfaceDrawRectFilled(
+                    (Texture*)(m_texture->data),
+                                                {0, 0, layerArea.z, layerArea.w},
+                                                {0, 0, 0, 255}
+                );
+
+                // from where and where to draw
+                SDL_Rect sourceRect;
+                SDL_FRect destRect;
+
+                sourceRect = {(int)sourceArea.x, (int)sourceArea.y, (int)sourceArea.z, (int)sourceArea.w};
+                destRect = {0, 0, (float)layerArea.z, (float)layerArea.w};
+                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+                                             (Texture*)(m_spriteList->data),
+                                             &destRect,
+                                             &sourceRect);
+
+                ((Texture*)(m_texture->data))->Update();
+            }
         }
 
         
