@@ -1056,9 +1056,48 @@ void ArenaUILayer::OnInit()
                                                                  {255, 196, 0, 255})));
     // player character
     {
-        glm::uvec4 src = game.playerCharacter.sprite_whole_area;
+        glm::uvec4 character_src = game.playerCharacter.sprite_whole_area;
+        glm::uvec4 handle_src = game.playerCharacter.sprite_handle_area;
+        glm::uvec4 head_src = game.playerCharacter.sprite_head_area;
+        glm::uvec4 head_special_src = game.playerCharacter.sprite_head_special_area;
+        glm::uvec4 weapon_src = game.playerCharacter.weapon.sourceArea;
+        glm::uvec4 weapon_handle_src = game.playerCharacter.weapon.sourceHandleArea;
+
+        glm::ivec2 handle_delta_src = {
+            ((int)weapon_src.x - (int)weapon_handle_src.x) - ((int)character_src.x - (int)handle_src.x),
+            ((int)weapon_src.y - (int)weapon_handle_src.y) - ((int)character_src.y - (int)handle_src.y)
+        };
+        MSE_LOG("Character: ", 250, "; ", 90 - character_src.w);
+        MSE_LOG("WeaponSrc: ", weapon_src.x, "; ", weapon_src.y);
+        MSE_LOG("WeaponHandle: ", weapon_handle_src.x, "; ", weapon_handle_src.y);
+        MSE_LOG("HandleDelta: ", handle_delta_src.x, "; ", handle_delta_src.y);
+        MSE_LOG("Weapon: ", utf8::utf32to8(game.playerCharacter.weapon.name.c_str()));
+
+
+        if (game.playerCharacter.weapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
+        {
+            if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
+            {
+                weapon_src.x = weapon_src.x + static_cast<int>(game.playerCharacter.main_class.type) * weapon_src.z;
+                weapon_handle_src.x = weapon_handle_src.x + static_cast<int>(game.playerCharacter.main_class.type) * weapon_handle_src.z;
+            }
+        }
         
-        AddElement(new mse::gui::Image(this, {250, 90 - src.w, src.z, src.w}, "./data/img/screen-images.png", src, {0, 0, 0, 255}));
+        // weapon
+        AddElement(new mse::gui::Image(
+            this,
+            {250 + handle_delta_src.x, 90 - character_src.w + handle_delta_src.y, weapon_src.z, weapon_src.w},
+            "./data/img/screen-images.png",
+            weapon_src,
+            {0, 0, 0, 255}));
+
+        // character
+        AddElement(new mse::gui::Image(
+            this,
+            {250, 90 - character_src.w, character_src.z, character_src.w},
+            "./data/img/screen-images.png",
+            character_src,
+            {0, 0, 0, 255}));
     }
 
     AddElement(new mse::gui::Image(this, {250, 120, 10, 10}, "./data/img/screen-images.png", {64, 11, 10, 10}, {0, 0, 0, 255}));
@@ -1505,6 +1544,9 @@ void CharacterUpdateUILayer::OnInit()
         game.inputWeapon.type = weapon->type;
         game.inputWeapon.damage = weapon->damage;
         game.inputWeapon.sprite = weapon->sprite;
+        game.inputWeapon.cost = weapon->cost;
+        game.inputWeapon.sourceArea = weapon->sourceArea;
+        game.inputWeapon.sourceHandleArea = weapon->sourceHandleArea;
         changeMade = true;
         
         keepSameWeaponBtn->Enable();

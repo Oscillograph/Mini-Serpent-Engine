@@ -16,6 +16,7 @@
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
   tips: Ничего
+
 - class_hardcoded: 1
   name: Разбойник
   health: 4
@@ -23,8 +24,8 @@
   agility: 3
   endurance: 2
   starting_trait: 3
-  sprite_whole_area: [100, 173, 33, 50]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [99, 173, 33, 50]
+  sprite_handle_area: [100, 185, 3, 5]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
   tips: | 
@@ -32,6 +33,7 @@
     Уязвим перед противниками,
     полагающимися на один
     сокрушительный удар.
+
 - class_hardcoded: 2
   name: Воин
   health: 5
@@ -40,12 +42,13 @@
   endurance: 2
   starting_trait: 1
   sprite_whole_area: [133, 173, 33, 50]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_handle_area: [134, 185, 3, 5]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
   tips: | 
     Полагается на силу и щит.
     Уязвим перед ловкачами.
+
 - class_hardcoded: 3
   name: Варвар
   health: 6
@@ -53,13 +56,14 @@
   agility: 1
   endurance: 3
   starting_trait: 2
-  sprite_whole_area: [166, 171, 33, 52]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [167, 171, 33, 52]
+  sprite_handle_area: [168, 185, 3, 5]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
   tips: | 
     Вынослив и безбашен.
     Лучше не затягивать бой.
+
 - class_hardcoded: 4
   name: Монах
   health: 6
@@ -76,6 +80,7 @@
     Не носит оружие, полагается
     на специальные атаки.
     Может развить три навыка.
+
 - class_hardcoded: 5
   name: Культист
   health: 4
@@ -83,14 +88,15 @@
   agility: 1
   endurance: 1
   starting_trait: 14
-  sprite_whole_area: [337, 172, 30, 50]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [338, 172, 30, 50]
+  sprite_handle_area: [339, 184, 3, 5]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
   tips: |
     Носит Печать Хаоса, которая
     придаёт сил с каждым боем.
     Однако, у всего есть цена.
+
 - class_hardcoded: 6
   name: Ведьмак
   health: 5
@@ -98,8 +104,8 @@
   agility: 4
   endurance: 2
   starting_trait: 15
-  sprite_whole_area: [390, 170, 26, 50]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [391, 171, 25, 51]
+  sprite_handle_area: [391, 185, 3, 5]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
   tips: |

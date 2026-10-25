@@ -437,10 +437,7 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
     if (game.playerCharacterUpdated)
     {
         // change weapon
-        game.playerCharacter.weapon.name = game.inputWeapon.name;
-        game.playerCharacter.weapon.type = game.inputWeapon.type;
-        game.playerCharacter.weapon.damage = game.inputWeapon.damage;
-        game.playerCharacter.weapon.sprite = game.inputWeapon.sprite;
+        game.playerCharacter.weapon = game.inputWeapon;
         
         // update traits
         if ((game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level) < gameDB.level_max)

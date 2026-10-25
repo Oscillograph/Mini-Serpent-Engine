@@ -27,41 +27,45 @@
   damage: 2
   damage_type: 3
   sprite_type: 2
-  sprite_whole_area: [0, 0, 0, 0]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [277, 205, 9, 18]
+  sprite_handle_area: [280, 223, 3, 5]
   cost: 5
 - name: Меч
   damage: 3
   damage_type: 1
   sprite_type: 3
-  sprite_whole_area: [0, 0, 0, 0]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [291, 197, 9, 26]
+  sprite_handle_area: [294, 223, 3, 5]
   cost: 7
 - name: Дубина
   damage: 3
   damage_type: 2
   sprite_type: 5
-  sprite_whole_area: [0, 0, 0, 0]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [281, 160, 8, 30]
+  sprite_handle_area: [284, 182, 3, 5]
   cost: 8
 - name: Копьё
   damage: 3
   damage_type: 3
   sprite_type: 6
+  sprite_whole_area: [268, 160, 9, 61]
+  sprite_handle_area: [271, 187, 3, 5]
   cost: 8
 - name: Топор
   damage: 4
   damage_type: 1
   sprite_type: 4
-  sprite_whole_area: [0, 0, 0, 0]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [292, 160, 12, 31]
+  sprite_handle_area: [294, 182, 3, 5]
   cost: 9
+  
+# sprite_whole_area is actually 3x size: the sprite is taken by 288 + i*4 where i is the id of a class. Monk can't equip.
 - name: Легендарный Меч
   damage: 10
   damage_type: 1
   sprite_type: 7
-  sprite_whole_area: [0, 0, 0, 0]
-  sprite_handle_area: [0, 0, 0, 0]
+  sprite_whole_area: [288, 127, 4, 26]
+  sprite_handle_area: [289, 153, 3, 5]
   cost: 20
 
 # id 8: filler. 
