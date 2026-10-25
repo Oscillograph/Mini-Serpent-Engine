@@ -146,8 +146,6 @@ namespace mse
 				{
 					MoveHintText(event);
 
-					MSE_LOG("OVER");
-
 					if (!hintText->isVisible)
 					{
 						hintText->isVisible = true;
@@ -163,8 +161,6 @@ namespace mse
 				{
 					MoveHintText(event);
 
-					MSE_LOG("MOVE");
-
 					if (!hintText->isVisible)
 					{
 						hintText->isVisible = true;
@@ -179,8 +175,6 @@ namespace mse
 				parent->callbacks[mse::EventTypes::GUIItemMouseOut] = [&](SDL_Event* event)
 				{
 					MoveHintText(event);
-
-					MSE_LOG("OUT");
 
 					if (hintText->isVisible)
 					{

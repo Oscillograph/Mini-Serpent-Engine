@@ -135,10 +135,10 @@ namespace DTetris
                     {Classes::None, 0},
                     {}, // traits - filled later
                     {}, // drops - filled later
-                    data[i]["sprite_whole_area"].as<glm::ivec4>(), // whole sprite
-                    data[i]["sprite_handle_area"].as<glm::ivec4>(), // handle area on the whole sprite
-                    data[i]["sprite_head_area"].as<glm::ivec4>(), // head area on the whole sprite
-                    data[i]["sprite_head_special_area"].as<glm::ivec4>(), // special head
+                    data[i]["sprite_whole_area"].as<glm::uvec4>(), // whole sprite
+                    data[i]["sprite_handle_area"].as<glm::uvec4>(), // handle area on the whole sprite
+                    data[i]["sprite_head_area"].as<glm::uvec4>(), // head area on the whole sprite
+                    data[i]["sprite_head_special_area"].as<glm::uvec4>(), // special head
                     gamedb.weapons[data[i]["weapon"].as<int>()],
                     {
                         {BlockType::Attack,     0},
@@ -193,8 +193,8 @@ namespace DTetris
                     data[i]["damage"].as<int>(),
                     data[i]["damage_type"].as<DamageType>(),
                     data[i]["sprite_type"].as<WeaponSpriteType>(),
-                    data[i]["sprite_whole_area"].as<glm::ivec4>(),
-                    data[i]["sprite_handle_area"].as<glm::ivec4>(),
+                    data[i]["sprite_whole_area"].as<glm::uvec4>(),
+                    data[i]["sprite_handle_area"].as<glm::uvec4>(),
                     data[i]["cost"].as<int>()
                 };
             }
@@ -339,10 +339,10 @@ namespace DTetris
                     data[i]["endurance"].as<float>(),
                     utf8::utf8to32(data[i]["tips"].as<std::string>()),
                     data[i]["starting_trait"].as<Traits>(),
-                    data[i]["sprite_whole_area"].as<glm::ivec4>(), // whole sprite
-                    data[i]["sprite_handle_area"].as<glm::ivec4>(), // handle area on the whole sprite
-                    data[i]["sprite_head_area"].as<glm::ivec4>(), // head area on the whole sprite
-                    data[i]["sprite_head_special_area"].as<glm::ivec4>(), // special head
+                    data[i]["sprite_whole_area"].as<glm::uvec4>(), // whole sprite
+                    data[i]["sprite_handle_area"].as<glm::uvec4>(), // handle area on the whole sprite
+                    data[i]["sprite_head_area"].as<glm::uvec4>(), // head area on the whole sprite
+                    data[i]["sprite_head_special_area"].as<glm::uvec4>(), // special head
                 };
             }
 

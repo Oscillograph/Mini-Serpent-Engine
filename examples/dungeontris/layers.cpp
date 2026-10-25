@@ -1056,61 +1056,9 @@ void ArenaUILayer::OnInit()
                                                                  {255, 196, 0, 255})));
     // player character
     {
-        glm::uvec4 src = {0, 0, 34, 64};
-        switch (game.playerCharacter.main_class.type)
-        {
-            case DTetris::Classes::Rogue:
-            {
-                src.y = 0;
-                break;
-            }
-            case DTetris::Classes::Warrior:
-            {
-                src.y = 128;
-                break;
-            }
-            case DTetris::Classes::Barbarian:
-            {
-                src.y = 64;
-                break;
-            }
-        }
+        glm::uvec4 src = game.playerCharacter.sprite_whole_area;
         
-        switch (game.playerCharacter.weapon.sprite)
-        {
-            case DTetris::WeaponSpriteType::Dagger:
-            {
-                src.x = 102;
-                break;
-            }
-            case DTetris::WeaponSpriteType::Sword:
-            {
-                src.x = 0;
-                break;
-            }
-            case DTetris::WeaponSpriteType::Spear:
-            {
-                src.x = 34;
-                break;
-            }
-            case DTetris::WeaponSpriteType::Club:
-            {
-                src.x = 68;
-                break;
-            }
-            case DTetris::WeaponSpriteType::Axe:
-            {
-                src.x = 136;
-                break;
-            }
-            case DTetris::WeaponSpriteType::LegendarySword:
-            {
-                src.x = 170;
-                break;
-            }
-        }
-        
-        AddElement(new mse::gui::Image(this, {250, 90 - src.w, src.z, src.w}, "./data/img/heroes.png", src, {0, 0, 0, 255}));
+        AddElement(new mse::gui::Image(this, {250, 90 - src.w, src.z, src.w}, "./data/img/screen-images.png", src, {0, 0, 0, 255}));
     }
 
     AddElement(new mse::gui::Image(this, {250, 120, 10, 10}, "./data/img/screen-images.png", {64, 11, 10, 10}, {0, 0, 0, 255}));

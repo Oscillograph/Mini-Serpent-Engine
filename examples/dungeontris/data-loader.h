@@ -94,9 +94,9 @@ namespace YAML
     };
 
     template<>
-    struct convert<glm::ivec4>
+    struct convert<glm::uvec4>
     {
-        static Node encode(const glm::ivec4& rhs)
+        static Node encode(const glm::uvec4& rhs)
         {
             Node node;
             node.push_back(rhs.x);
@@ -106,16 +106,16 @@ namespace YAML
             return node;
         }
 
-        static bool decode(const Node& node, glm::ivec4& rhs)
+        static bool decode(const Node& node, glm::uvec4& rhs)
         {
             if (!node.IsSequence() || (node.size() != 4))
             {
                 return false;
             }
-            rhs.x = node[0].as<int>();
-            rhs.y = node[1].as<int>();
-            rhs.z = node[2].as<int>();
-            rhs.z = node[3].as<int>();
+            rhs.x = node[0].as<glm::uint>();
+            rhs.y = node[1].as<glm::uint>();
+            rhs.z = node[2].as<glm::uint>();
+            rhs.w = node[3].as<glm::uint>();
             return true;
         }
     };

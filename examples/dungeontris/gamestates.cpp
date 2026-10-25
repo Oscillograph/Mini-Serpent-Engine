@@ -272,12 +272,13 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
             {DTetris::Classes::None, 0},    // sub class
             {game.inputTrait},                    // traits
             {},  // drop
-            {}, // sprite_whole_area
-            {}, // sprite_handle_area
-            {}, // sprite_head_area
-            {}, // sprite_head_special_area
+            gameDB.classes[game.inputClass].sprite_whole_area, // sprite_whole_area
+            gameDB.classes[game.inputClass].sprite_handle_area, // sprite_handle_area
+            gameDB.classes[game.inputClass].sprite_head_area, // sprite_head_area
+            gameDB.classes[game.inputClass].sprite_head_special_area, // sprite_head_special_area
             game.inputWeapon   // weapon
         };
+
         printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n", 
                (char*)(game.playerCharacter.name.c_str()),
                game.playerCharacter.stats.health,
