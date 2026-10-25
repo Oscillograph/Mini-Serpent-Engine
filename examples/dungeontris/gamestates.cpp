@@ -237,6 +237,24 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
                 game.inputWeapon = gameDB.weapons[4];
                 break;
             }
+        case DTetris::Classes::Monk:
+        {
+            game.inputTrait = DTetris::Traits::Meditation;
+            game.inputWeapon = gameDB.weapons[0];
+            break;
+        }
+        case DTetris::Classes::Cultist:
+        {
+            game.inputTrait = DTetris::Traits::MarkOfChaos;
+            game.inputWeapon = gameDB.weapons[0];
+            break;
+        }
+        case DTetris::Classes::Witcher:
+        {
+            game.inputTrait = DTetris::Traits::SchoolOfBeaver;
+            game.inputWeapon = gameDB.weapons[3];
+            break;
+        }
         default:
             {
                 printf("can't create player character: undefined class\n");
@@ -254,6 +272,10 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
             {DTetris::Classes::None, 0},    // sub class
             {game.inputTrait},                    // traits
             {},  // drop
+            {}, // sprite_whole_area
+            {}, // sprite_handle_area
+            {}, // sprite_head_area
+            {}, // sprite_head_special_area
             game.inputWeapon   // weapon
         };
         printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n", 

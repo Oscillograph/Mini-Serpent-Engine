@@ -5,82 +5,109 @@
 #            characters.yaml refers to weapons by that position.
 #
 # damage_type : 0=None 1=Cutting 2=Crushing 3=Piercing 4=Divine
-# sprite      : 0=None 1=Fist 2=Dagger 3=Sword 4=Axe 5=Club 6=Spear 7=LegendarySword 8=MaximGun
+# sprite_type      : 0=None 1=Fist 2=Dagger 3=Sword 4=Axe 5=Club 6=Spear 7=LegendarySword 8=MaximGun
+# sprite_whole_area and sprite_handle_area refer to screen-images.png file
 
 # ids 0-7: player collectible
 - name: Кулак
   damage: 0
   damage_type: 0
-  sprite: 1
+  sprite_type: 1
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 1
 - name: Кастет
   damage: 1
   damage_type: 0
-  sprite: 1
+  sprite_type: 1
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 3
 - name: Кинжал
   damage: 2
   damage_type: 3
-  sprite: 2
+  sprite_type: 2
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 5
 - name: Меч
   damage: 3
   damage_type: 1
-  sprite: 3
+  sprite_type: 3
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 7
 - name: Дубина
   damage: 3
   damage_type: 2
-  sprite: 5
+  sprite_type: 5
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 8
 - name: Копьё
   damage: 3
   damage_type: 3
-  sprite: 6
+  sprite_type: 6
   cost: 8
 - name: Топор
   damage: 4
   damage_type: 1
-  sprite: 4
+  sprite_type: 4
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 9
 - name: Легендарный Меч
   damage: 10
   damage_type: 1
-  sprite: 7
+  sprite_type: 7
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 20
 
 # id 8: filler. 
 - name: Сломанный обломок
   damage: 0
   damage_type: 0
-  sprite: 0
+  sprite_type: 0
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 0
 
 # ids 9-12: npc weapons
 - name: Шип
   damage: 1
   damage_type: 0
-  sprite: 0
+  sprite_type: 0
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 1
 - name: Сгнивший меч
   damage: 2
   damage_type: 0
-  sprite: 0
+  sprite_type: 0
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 2
 - name: Кадило
   damage: 3
   damage_type: 0
-  sprite: 0
+  sprite_type: 0
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 7
 - name: Клык и коготь
   damage: 4
   damage_type: 0
-  sprite: 0
+  sprite_type: 0
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 9
 
 # id 13: easter egg
 - name: Пулемёт Максим
   damage: 100
   damage_type: 4
-  sprite: 8
+  sprite_type: 8
+  sprite_whole_area: [0, 0, 0, 0]
+  sprite_handle_area: [0, 0, 0, 0]
   cost: 999

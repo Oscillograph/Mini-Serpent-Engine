@@ -105,6 +105,10 @@ namespace DTetris
                     !data[i]["stats_max"] ||
                     !data[i]["traits"] ||
                     !data[i]["drops"] ||
+                    !data[i]["sprite_whole_area"] ||
+                    !data[i]["sprite_handle_area"] ||
+                    !data[i]["sprite_head_area"] ||
+                    !data[i]["sprite_head_special_area"] ||
                     !data[i]["weapon"])
                 {
                     return false;
@@ -129,8 +133,12 @@ namespace DTetris
                     },
                     {Classes::None, 0},
                     {Classes::None, 0},
-                    {},
-                    {},
+                    {}, // traits - filled later
+                    {}, // drops - filled later
+                    data[i]["sprite_whole_area"].as<glm::ivec4>(), // whole sprite
+                    data[i]["sprite_handle_area"].as<glm::ivec4>(), // handle area on the whole sprite
+                    data[i]["sprite_head_area"].as<glm::ivec4>(), // head area on the whole sprite
+                    data[i]["sprite_head_special_area"].as<glm::ivec4>(), // special head
                     gamedb.weapons[data[i]["weapon"].as<int>()],
                     {
                         {BlockType::Attack,     0},
@@ -171,7 +179,9 @@ namespace DTetris
                 if (!data[i]["name"] ||
                     !data[i]["damage"] ||
                     !data[i]["damage_type"] ||
-                    !data[i]["sprite"] ||
+                    !data[i]["sprite_type"] ||
+                    !data[i]["sprite_whole_area"] ||
+                    !data[i]["sprite_handle_area"] ||
                     !data[i]["cost"])
                 {
                     return false;
@@ -182,7 +192,9 @@ namespace DTetris
                     {utf8::utf8to32(data[i]["name"].as<std::string>())},
                     data[i]["damage"].as<int>(),
                     data[i]["damage_type"].as<DamageType>(),
-                    data[i]["sprite"].as<WeaponSprite>(),
+                    data[i]["sprite_type"].as<WeaponSpriteType>(),
+                    data[i]["sprite_whole_area"].as<glm::ivec4>(),
+                    data[i]["sprite_handle_area"].as<glm::ivec4>(),
                     data[i]["cost"].as<int>()
                 };
             }
@@ -309,7 +321,11 @@ namespace DTetris
                     !data[i]["agility"] ||
                     !data[i]["endurance"] ||
                     !data[i]["tips"] ||
-                    !data[i]["starting_trait"])
+                    !data[i]["starting_trait"] ||
+                    !data[i]["sprite_whole_area"] ||
+                    !data[i]["sprite_handle_area"] ||
+                    !data[i]["sprite_head_area"] ||
+                    !data[i]["sprite_head_special_area"])
                 {
                     return false;
                 }
@@ -323,6 +339,10 @@ namespace DTetris
                     data[i]["endurance"].as<float>(),
                     utf8::utf8to32(data[i]["tips"].as<std::string>()),
                     data[i]["starting_trait"].as<Traits>(),
+                    data[i]["sprite_whole_area"].as<glm::ivec4>(), // whole sprite
+                    data[i]["sprite_handle_area"].as<glm::ivec4>(), // handle area on the whole sprite
+                    data[i]["sprite_head_area"].as<glm::ivec4>(), // head area on the whole sprite
+                    data[i]["sprite_head_special_area"].as<glm::ivec4>(), // special head
                 };
             }
 

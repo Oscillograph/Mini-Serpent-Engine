@@ -139,7 +139,7 @@ namespace DTetris
         Divine,
     };
     
-    enum class WeaponSprite : int
+    enum class WeaponSpriteType : int
     {
         None,
         Fist,
@@ -169,7 +169,9 @@ namespace DTetris
     {
         int damage = 0;
         DamageType type = DamageType::None;
-        WeaponSprite sprite = WeaponSprite::None;
+        WeaponSpriteType sprite = WeaponSpriteType::None;
+        glm::ivec4 sourceArea = {0, 0, 0, 0}; // the whole sprite area
+        glm::ivec4 sourceHandleArea = {0, 0, 0, 0}; // where the handle is on that whole area
         int cost = 0;
     };
 
@@ -227,6 +229,10 @@ namespace DTetris
         Class sub_class = {Classes::None, 0}; // TODO: remove subclasses mechanic
         std::vector<Traits> traits;
         std::vector<Weapon> drop_list;
+        glm::ivec4 sprite_whole_area = {0, 0, 0, 0};
+        glm::ivec4 sprite_handle_area = {0, 0, 0, 0};
+        glm::ivec4 sprite_head_area = {0, 0, 0, 0};
+        glm::ivec4 sprite_head_special_area = {0, 0, 0, 0};
         Weapon weapon;
 
         std::unordered_map<BlockType, int> blocks = {
@@ -256,6 +262,10 @@ namespace DTetris
         float endurance = 0.0f;
         std::u32string tips = U"";
         Traits startingTrait;
+        glm::ivec4 sprite_whole_area = {0, 0, 0, 0};
+        glm::ivec4 sprite_handle_area = {0, 0, 0, 0};
+        glm::ivec4 sprite_head_area = {0, 0, 0, 0};
+        glm::ivec4 sprite_head_special_area = {0, 0, 0, 0};
     };
     
     struct DamageTypeName
@@ -386,7 +396,7 @@ namespace DTetris
         bool battleFinished = false;
 
         std::unordered_map<Traits, bool> shop_traits = {};
-        std::unordered_map<WeaponSprite, bool> shop_weapons = {};
+        std::unordered_map<WeaponSpriteType, bool> shop_weapons = {};
         
         bool keyPressed = false;
         bool hardcoreTetrisMod = false;

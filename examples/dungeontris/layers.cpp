@@ -1078,32 +1078,32 @@ void ArenaUILayer::OnInit()
         
         switch (game.playerCharacter.weapon.sprite)
         {
-            case DTetris::WeaponSprite::Dagger:
+            case DTetris::WeaponSpriteType::Dagger:
             {
                 src.x = 102;
                 break;
             }
-            case DTetris::WeaponSprite::Sword:
+            case DTetris::WeaponSpriteType::Sword:
             {
                 src.x = 0;
                 break;
             }
-            case DTetris::WeaponSprite::Spear:
+            case DTetris::WeaponSpriteType::Spear:
             {
                 src.x = 34;
                 break;
             }
-            case DTetris::WeaponSprite::Club:
+            case DTetris::WeaponSpriteType::Club:
             {
                 src.x = 68;
                 break;
             }
-            case DTetris::WeaponSprite::Axe:
+            case DTetris::WeaponSpriteType::Axe:
             {
                 src.x = 136;
                 break;
             }
-            case DTetris::WeaponSprite::LegendarySword:
+            case DTetris::WeaponSpriteType::LegendarySword:
             {
                 src.x = 170;
                 break;
@@ -1471,32 +1471,32 @@ void CharacterUpdateUILayer::OnInit()
     
     switch (game.playerCharacter.weapon.sprite)
     {
-        case DTetris::WeaponSprite::Dagger:
+        case DTetris::WeaponSpriteType::Dagger:
         {
             srcKeep.x = 102;
             break;
         }
-        case DTetris::WeaponSprite::Sword:
+        case DTetris::WeaponSpriteType::Sword:
         {
             srcKeep.x = 0;
             break;
         }
-        case DTetris::WeaponSprite::Spear:
+        case DTetris::WeaponSpriteType::Spear:
         {
             srcKeep.x = 34;
             break;
         }
-        case DTetris::WeaponSprite::Club:
+        case DTetris::WeaponSpriteType::Club:
         {
             srcKeep.x = 68;
             break;
         }
-        case DTetris::WeaponSprite::Axe:
+        case DTetris::WeaponSpriteType::Axe:
         {
             srcKeep.x = 136;
             break;
         }
-        case DTetris::WeaponSprite::LegendarySword:
+        case DTetris::WeaponSpriteType::LegendarySword:
         {
             srcKeep.x = 170;
             break;
@@ -1505,32 +1505,32 @@ void CharacterUpdateUILayer::OnInit()
     
     switch ((&(game.npcCharacter.drop_list[0]))->sprite)
     {
-        case DTetris::WeaponSprite::Dagger:
+        case DTetris::WeaponSpriteType::Dagger:
         {
             srcNew.x = 102;
             break;
         }
-        case DTetris::WeaponSprite::Sword:
+        case DTetris::WeaponSpriteType::Sword:
         {
             srcNew.x = 0;
             break;
         }
-        case DTetris::WeaponSprite::Spear:
+        case DTetris::WeaponSpriteType::Spear:
         {
             srcNew.x = 34;
             break;
         }
-        case DTetris::WeaponSprite::Club:
+        case DTetris::WeaponSpriteType::Club:
         {
             srcNew.x = 68;
             break;
         }
-        case DTetris::WeaponSprite::Axe:
+        case DTetris::WeaponSpriteType::Axe:
         {
             srcNew.x = 136;
             break;
         }
-        case DTetris::WeaponSprite::LegendarySword:
+        case DTetris::WeaponSpriteType::LegendarySword:
         {
             srcNew.x = 170;
             break;

@@ -43,18 +43,18 @@ namespace YAML
     };
 
     template<>
-    struct convert<DTetris::WeaponSprite>
+    struct convert<DTetris::WeaponSpriteType>
     {
-        static Node encode(const DTetris::WeaponSprite& rhs)
+        static Node encode(const DTetris::WeaponSpriteType& rhs)
         {
             Node node;
             node.push_back((int)rhs);
             return node;
         }
 
-        static bool decode(const Node& node, DTetris::WeaponSprite& rhs)
+        static bool decode(const Node& node, DTetris::WeaponSpriteType& rhs)
         {
-            rhs = static_cast<DTetris::WeaponSprite>(node.as<int>());
+            rhs = static_cast<DTetris::WeaponSpriteType>(node.as<int>());
             return true;
         }
     };
@@ -92,30 +92,33 @@ namespace YAML
             return true;
         }
     };
-//    template<>
-//    struct convert<glm::vec3> 
-//    {
-//        static Node encode(const glm::vec3& rhs) 
-//        {
-//            Node node;
-//            node.push_back(rhs.x);
-//            node.push_back(rhs.y);
-//            node.push_back(rhs.z);
-//            return node;
-//        }
-//        
-//        static bool decode(const Node& node, glm::vec3& rhs) 
-//        {
-//            if (!node.IsSequence() || (node.size() != 3))
-//            {
-//                return false;
-//            }
-//            rhs.x = node[0].as<float>();
-//            rhs.y = node[1].as<float>();
-//            rhs.z = node[2].as<float>();
-//            return true;
-//        }
-//    };
+
+    template<>
+    struct convert<glm::ivec4>
+    {
+        static Node encode(const glm::ivec4& rhs)
+        {
+            Node node;
+            node.push_back(rhs.x);
+            node.push_back(rhs.y);
+            node.push_back(rhs.z);
+            node.push_back(rhs.w);
+            return node;
+        }
+
+        static bool decode(const Node& node, glm::ivec4& rhs)
+        {
+            if (!node.IsSequence() || (node.size() != 4))
+            {
+                return false;
+            }
+            rhs.x = node[0].as<int>();
+            rhs.y = node[1].as<int>();
+            rhs.z = node[2].as<int>();
+            rhs.z = node[3].as<int>();
+            return true;
+        }
+    };
 //    
 //    template<>
 //    struct convert<glm::vec4> 
