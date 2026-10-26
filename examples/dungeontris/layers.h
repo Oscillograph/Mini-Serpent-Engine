@@ -3,6 +3,7 @@
 
 #include <mse/systems/resources/resource_manager.h>
 #include <dungeontris/game-fwd.h>
+#include <dungeontris/gamestates.h>
 
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/layers/layer_manager.h>
@@ -78,6 +79,39 @@ public:
     CharacterSaveUILayer();
     ~CharacterSaveUILayer();
     
+    virtual void OnInit() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
+};
+
+class CharacterUpdateUILayer : public mse::Layer
+{
+public:
+    CharacterUpdateUILayer();
+    ~CharacterUpdateUILayer();
+
+    virtual void OnInit() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
+
+    mse::gui::Button* classRogueBtn = nullptr;
+    mse::gui::Button* classWarriorBtn = nullptr;
+    mse::gui::Button* classBarbarianBtn = nullptr;
+    mse::gui::Button* keepSameWeaponBtn = nullptr;
+    mse::gui::Button* pickDroppedWeaponBtn = nullptr;
+
+    mse::gui::Text* statsBox = nullptr;
+    bool changeMade = false;
+
+
+    int shopSlot = 0; // 1 - weapon or trait; 2 - trait; 3 - trait
+    mse::Layer* shopLayer = nullptr;
+};
+
+class ShopUILayer : public mse::Layer
+{
+public:
+    ShopUILayer();
+    ~ShopUILayer();
+
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
 };
@@ -159,35 +193,6 @@ public:
     mse::gui::Text* winMessage = nullptr;
     mse::gui::Text* pauseMessage = nullptr;
     mse::gui::Text* gameOverMessage = nullptr;
-};
-
-class CharacterUpdateUILayer : public mse::Layer
-{
-public:
-    CharacterUpdateUILayer();
-    ~CharacterUpdateUILayer();
-    
-    virtual void OnInit() override;
-    virtual void OnUpdate(mse::TimeType t = 0) override;
-    
-    mse::gui::Button* classRogueBtn = nullptr;
-    mse::gui::Button* classWarriorBtn = nullptr;
-    mse::gui::Button* classBarbarianBtn = nullptr;
-    mse::gui::Button* keepSameWeaponBtn = nullptr;
-    mse::gui::Button* pickDroppedWeaponBtn = nullptr;
-    
-    mse::gui::Text* statsBox = nullptr;
-    bool changeMade = false;
-};
-
-class ShopUILayer : public mse::Layer
-{
-public:
-    ShopUILayer();
-    ~ShopUILayer();
-
-    virtual void OnInit() override;
-    virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
 class SettingsUILayer : public mse::Layer

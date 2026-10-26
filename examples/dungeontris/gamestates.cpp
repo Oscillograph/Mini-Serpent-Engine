@@ -413,6 +413,7 @@ bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
         }
     } else {
         layer = new CharacterUpdateUILayer();
+        ((CharacterUpdateUILayer*)layer)->shopLayer = new ShopUILayer();
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     }
     MSE_LOG("CharacterUpdatePageState OnEnter...done");

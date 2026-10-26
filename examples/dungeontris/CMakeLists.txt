@@ -10,7 +10,8 @@ add_executable(dungeontris
     game.cpp
     gamestates.cpp
     layers.cpp
-    tetris.cpp)
+    tetris.cpp
+    gui.cpp)
 target_include_directories(dungeontris PUBLIC ${MSE_BASE_SOURCE_DIR}/examples)
 target_compile_options(dungeontris PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
 target_link_libraries(dungeontris PUBLIC
