@@ -16,7 +16,7 @@ namespace mse
 		
 		void Init();
 		
-		void Attach(Layer* layer);
+		void Attach(Layer* layer, bool modal = false);
 		void Detach(Layer* layer);
 		inline std::vector<Layer*>& GetLayers() { return m_layers; }
 		
@@ -31,7 +31,8 @@ namespace mse
 	private:
 		friend Layer;
 		
-		std::vector<Layer*> m_layers;
+		std::vector<Layer*> m_layers = {};
+		std::list<Layer*> m_modal_layers = {};
 		int m_layerInsertIndex;
 		std::vector<int> m_screen = {};
 		Window* m_window;

@@ -27,7 +27,7 @@ namespace mse
 		m_layerInsertIndex = 0;
 	}
 	
-	void LayerManager::Attach(Layer* layer)
+	void LayerManager::Attach(Layer* layer, bool modal)
 	{
 		if (layer != nullptr)
 		{
@@ -38,6 +38,11 @@ namespace mse
 				layer->Attach(m_window);
 				layer->Init();
 				m_layerInsertIndex++;
+
+				if (modal)
+				{
+					m_modal_layers.push_back(layer);
+				}
 				MSE_CORE_LOG("Layer manager: attached a layer");
 				return;
 			} else {
@@ -59,6 +64,12 @@ namespace mse
 				layer->Detach();
 				delete layer;
 				m_layerInsertIndex--;
+
+				auto it_modal = std::find(m_modal_layers.begin(), m_modal_layers.end(), layer);
+				if (it_modal != m_modal_layers.end())
+				{
+					m_modal_layers.erase(it_modal);
+				}
 				MSE_CORE_LOG("Layer manager: detached a layer");
 			} else {
 				MSE_CORE_ERROR("Layer manager: cannot find the layer to detach");
@@ -98,6 +109,16 @@ namespace mse
 //                printf("%d -- event sent...", elementId);
 				handled = m_layers[i]->HandleEvent(eventType, event, (elementId == -1) ? m_layers[i]->elementInFocus : elementId);
 //                printf("... event handled.\n");
+
+				auto it = std::find(m_modal_layers.begin(), m_modal_layers.end(), m_layers[i]);
+				if (it != m_modal_layers.end())
+				{
+					if (!handled)
+					{
+						MSE_CORE_LOG("LayerManager:: Modal layer requires action.");
+					}
+					handled = true;
+				}
 			}
 		}
 		

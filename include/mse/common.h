@@ -8,6 +8,7 @@
 #include <string> // logger
 #include <sstream> // logger
 #include <vector> // WindowManager
+#include <list> // LayerManager
 #include <algorithm> // std::find()
 #include <unordered_map> // resource manager
 #include <fstream> // resource manager
