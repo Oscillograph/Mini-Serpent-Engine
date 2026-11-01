@@ -43,41 +43,43 @@ namespace mse
     {
         switch (type)
         {
-        case ResourceType::Sound:
+			case ResourceType::Sound:
             {
                 delete (Sound*)data;
                 break;
             }
-        case ResourceType::Track:
+			case ResourceType::Track:
             {
                 delete (Track*)data;
                 break;
             }
-        case ResourceType::Texture:
+			case ResourceType::Texture:
             {
                 delete (Texture*)data;
                 break;
             }
-        case ResourceType::Text_Plain:
+			case ResourceType::Text_Plain:
             {
                 delete (Data::Text*)data;
                 break;
             }
-        case ResourceType::FontBitmap:
+			case ResourceType::FontBitmap:
             {
                 delete (FontBitmap*)data;
                 break;
             }
-        case ResourceType::FontTrueType:
+			case ResourceType::FontTrueType:
             {
                 delete (FontTrueType*)data;
                 break;
             }
-        case ResourceType::Cursor:
+			case ResourceType::Cursor:
             {
                 delete (Cursor*)data;
                 break;
             }
+			default:
+			{}
         }
     }
 	
@@ -115,7 +117,7 @@ namespace mse
 					char* buffer = new char[1024];
 					if (m_FileInput.good())
 					{
-						if (m_FileInput.rdstate() && std::ifstream::eofbit)
+						if (m_FileInput.rdstate() & std::ifstream::eofbit)
 							MSE_CORE_LOG("- end of file reached somehow.");
 						while (!m_FileInput.eof())
 						{
@@ -324,7 +326,7 @@ namespace mse
 				);
 			
 			// TODO: monitor layers among users
-			resource->data = new Texture(path, user->GetRenderer()->GetActiveRenderer(), {colorKey.x, colorKey.y, colorKey.z});
+			resource->data = new Texture(path, user->GetRenderer()->GetActiveRenderer(), {(int)colorKey.x, (int)colorKey.y, (int)colorKey.z});
 			
 			m_Cache[type][path] = resource;
 		}
@@ -385,7 +387,7 @@ namespace mse
                                                                         32,
                                                                         {0, 0, 0, 0});
             SDL_FRect cursorDestRect = {0, 0, 32, 32};
-            SDL_Rect cursorSrcRect = {clip.x, clip.y, clip.z, clip.w};
+            SDL_Rect cursorSrcRect = {(int)clip.x, (int)clip.y, (int)clip.z, (int)clip.w};
             mse::Renderer::SurfaceDrawTexture((mse::Texture*)(cursorTexture->data), (mse::Texture*)(sourceTexture->data), &cursorDestRect, &cursorSrcRect);
             resource->data = new Cursor(cursorTexture, user, hotX, hotY);
 //			MSE_CORE_LOG("Resource Manager: registering a user...");

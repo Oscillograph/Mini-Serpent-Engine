@@ -1,4 +1,4 @@
-#include <charconv>
+// #include <charconv>
 #include <mse/systems/windows/layers/gui/items/input_int.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/rendererAPI.h>
@@ -87,9 +87,9 @@ namespace mse
 
 			// prepare layer mask for the element
 			layerMask.resize(area.z * area.w);
-			for (int x = 0; x < area.z; ++x)
+			for (size_t x = 0; x < area.z; ++x)
 			{
-				for (int y = 0; y < area.w; ++y)
+				for (size_t y = 0; y < area.w; ++y)
 				{
 					layerMask[x + y*area.z] = id;
 				}
@@ -379,11 +379,12 @@ namespace mse
 			{
 				inputItemText.append(U"-");
 			}
-			for (int i = 0; i < m_length; ++i)
+			for (size_t i = 0; i < m_length; ++i)
 			{
 				if (m_digits[i] >= 0)
 				{
-					inputItemText.append((char32_t*)(U'0' + m_digits[i]));
+					char32_t symbol = U'0' + m_digits[i];
+					inputItemText.append(&symbol);
 				}
 			}
 
@@ -404,33 +405,33 @@ namespace mse
 			Renderer::SurfaceDrawRectFilled(
 				(Texture*)(m_texture->data),
 				{0, 0, layerArea.z, layerArea.w},
-				{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+				{(Uint8)m_backgroundColor.x, (Uint8)m_backgroundColor.y, (Uint8)m_backgroundColor.z, (Uint8)m_backgroundColor.w}
 			);
 
 			// hover state
 			Renderer::SurfaceDrawRectFilled(
 				(Texture*)(m_texture->data),
 				{layerArea.z, 0, layerArea.z, layerArea.w},
-				{255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+				{(Uint8)(255 - m_backgroundColor.x), (Uint8)(255 - m_backgroundColor.y), (Uint8)(255 - m_backgroundColor.z), (Uint8)m_backgroundColor.w}
 			);
 			Renderer::SurfaceDrawRectFilled(
 				(Texture*)(m_texture->data),
 				{layerArea.z + 1, 1, layerArea.z - 2, layerArea.w - 2},
-				{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+				{(Uint8)m_backgroundColor.x, (Uint8)m_backgroundColor.y, (Uint8)m_backgroundColor.z, (Uint8)m_backgroundColor.w}
 			);
 
 			// focused state
 			Renderer::SurfaceDrawRectFilled(
 				(Texture*)(m_texture->data),
 				{layerArea.z * 2, 0, layerArea.z, layerArea.w},
-				{255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+				{(Uint8)(255 - m_backgroundColor.x), (Uint8)(255 - m_backgroundColor.y), (Uint8)(255 - m_backgroundColor.z), (Uint8)m_backgroundColor.w}
 			);
 
 			// disabled state
 			Renderer::SurfaceDrawRectFilled(
 				(Texture*)(m_texture->data),
 				{layerArea.z * 3, 0, layerArea.z, layerArea.w},
-				{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w / 2}
+				{(Uint8)m_backgroundColor.x, (Uint8)m_backgroundColor.y, (Uint8)m_backgroundColor.z, (Uint8)(m_backgroundColor.w / 2)}
 			);
 
 			((Texture*)(m_texture->data))->Update();

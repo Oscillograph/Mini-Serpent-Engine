@@ -45,9 +45,9 @@ namespace mse
             m_textItem = textItem;
 			
 			layerMask.resize(area.z * area.w);
-			for (int x = 0; x < area.z; ++x)
+			for (size_t x = 0; x < area.z; ++x)
 			{
-				for (int y = 0; y < area.w; ++y)
+				for (size_t y = 0; y < area.w; ++y)
 				{
 					layerMask[x + y*area.z] = id;
 				}
@@ -89,11 +89,11 @@ namespace mse
                     int yrelPixels = (int)roundf((float)areaPercentage * m_sliderPanel->layerArea.w);
                     
                     m_BtnBall->layerArea.y += yrelPixels;
-                    if (m_BtnBall->layerArea.y < (area.y + btnUp.w + 1))
+                    if (m_BtnBall->layerArea.y < (int)(area.y + btnUp.w + 1))
                     {
                         m_BtnBall->layerArea.y = area.y + btnUp.w + 1;
                     }
-                    if (m_BtnBall->layerArea.y > (area.y + area.w - btnDown.w - btnUp.w + 1))
+                    if (m_BtnBall->layerArea.y > (int)(area.y + area.w - btnDown.w - btnUp.w + 1))
                     {
                         m_BtnBall->layerArea.y = area.y + area.w - btnDown.w - btnUp.w + 1;
                     }
@@ -138,11 +138,11 @@ namespace mse
                                 m_BtnBall->layerArea.y = area.y + btnUp.w + 1 + width3 * scrolled_percentage.second;
                             }
 
-                            if (m_BtnBall->layerArea.y < (area.y + btnUp.w + 1))
+                            if (m_BtnBall->layerArea.y < (int)(area.y + btnUp.w + 1))
                             {
                                 m_BtnBall->layerArea.y = area.y + btnUp.w + 1;
                             }
-                            if (m_BtnBall->layerArea.y > (area.y + area.w - btnUp.w - btnBall.w - 1))
+                            if (m_BtnBall->layerArea.y > (int)(area.y + area.w - btnUp.w - btnBall.w - 1))
                             {
                                 m_BtnBall->layerArea.y = area.y + area.w - btnUp.w - btnBall.w - 1;
                             }
@@ -200,11 +200,11 @@ namespace mse
                     int yrelPixels = (int)roundf((float)areaPercentage * m_sliderPanel->layerArea.w);
                     
                     m_BtnBall->layerArea.y += yrelPixels;
-                    if (m_BtnBall->layerArea.y < (area.y + btnUp.w + 1))
+                    if (m_BtnBall->layerArea.y < (int)(area.y + btnUp.w + 1))
                     {
                         m_BtnBall->layerArea.y = area.y + btnUp.w + 1;
                     }
-                    if (m_BtnBall->layerArea.y > (area.y + area.w - btnDown.w - btnUp.w + 1))
+                    if (m_BtnBall->layerArea.y > (int)(area.y + area.w - btnDown.w - btnUp.w + 1))
                     {
                         m_BtnBall->layerArea.y = area.y + area.w - btnDown.w - btnUp.w + 1;
                     }
@@ -265,9 +265,9 @@ namespace mse
             m_textItem = textItem;
             
             layerMask.resize(area.z * area.w);
-            for (int x = 0; x < area.z; ++x)
+            for (size_t x = 0; x < area.z; ++x)
             {
-                for (int y = 0; y < area.w; ++y)
+                for (size_t y = 0; y < area.w; ++y)
                 {
                     layerMask[x + y*area.z] = id;
                 }
@@ -310,11 +310,11 @@ namespace mse
                     int xrelPixels = (int)roundf((float)areaPercentage * m_sliderPanel->layerArea.z);
                     
                     m_BtnBall->layerArea.x += xrelPixels;
-                    if (m_BtnBall->layerArea.x < (area.x + btnUpWidth + 1))
+                    if (m_BtnBall->layerArea.x < (int)(area.x + btnUpWidth + 1))
                     {
                         m_BtnBall->layerArea.x = area.x + btnUpWidth + 1;
                     }
-                    if (m_BtnBall->layerArea.x > (area.x + area.z - btnDown.z / 4 - btnUpWidth + 1))
+                    if (m_BtnBall->layerArea.x > (int)(area.x + area.z - btnDown.z / 4 - btnUpWidth + 1))
                     {
                         m_BtnBall->layerArea.x = area.x + area.z - btnDown.z / 4 - btnUpWidth + 1;
                     }
@@ -361,11 +361,11 @@ namespace mse
                                 m_BtnBall->layerArea.x = area.x + btnUp.z + 1 + width3 * scrolled_percentage.first;
                             }
                             
-                            if (m_BtnBall->layerArea.x < (area.x + btnUpWidth + 1))
+                            if (m_BtnBall->layerArea.x < (int)(area.x + btnUpWidth + 1))
                             {
                                 m_BtnBall->layerArea.x = area.x + btnUpWidth + 1;
                             }
-                            if (m_BtnBall->layerArea.x > (area.x + area.z - btnDown.z / 4 - btnUpWidth + 1))
+                            if (m_BtnBall->layerArea.x > (int)(area.x + area.z - btnDown.z / 4 - btnUpWidth + 1))
                             {
                                 m_BtnBall->layerArea.x = area.x + area.z - btnDown.z / 4 - btnUpWidth + 1;
                             }
@@ -426,11 +426,11 @@ namespace mse
                     int xrelPixels = (int)roundf((float)areaPercentage * m_sliderPanel->layerArea.z);
                     
                     m_BtnBall->layerArea.x += xrelPixels;
-                    if (m_BtnBall->layerArea.x < (area.x + btnUpWidth + 1))
+                    if (m_BtnBall->layerArea.x < (int)(area.x + btnUpWidth + 1))
                     {
                         m_BtnBall->layerArea.x = area.x + btnUpWidth + 1;
                     }
-                    if (m_BtnBall->layerArea.x > (area.x + area.z - btnDownWidth - btnUpWidth + 1))
+                    if (m_BtnBall->layerArea.x > (int)(area.x + area.z - btnDownWidth - btnUpWidth + 1))
                     {
                         m_BtnBall->layerArea.x = area.x + area.z - btnDownWidth - btnUpWidth + 1;
                     }

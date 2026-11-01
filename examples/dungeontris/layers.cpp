@@ -1160,6 +1160,13 @@ void ArenaUILayer::OnInit()
                 src = {0, 0, 34, 64};
                 break;
             }
+            case DTetris::Races::Human:
+            {
+                break;
+            }
+            default:
+            {
+            }
         }
         AddElement(new mse::gui::Image(this, {40, 90 - src.w, src.z, src.w}, "./data/img/screen-images.png", src, {0, 0, 0, 255}));
     }

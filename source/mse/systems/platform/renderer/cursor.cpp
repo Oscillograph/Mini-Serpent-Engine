@@ -4,7 +4,7 @@
 namespace mse
 {
     Cursor::Cursor(Resource* texture, Window* user, int hotX, int hotY)
-    : m_texture(texture), m_window(user)
+    : m_window(user), m_texture(texture)
     {
         Texture* cursorTexture = (Texture*)(m_texture->data);
         m_Cursor = SDL_CreateColorCursor(cursorTexture->GetSurface(), hotX, hotY);

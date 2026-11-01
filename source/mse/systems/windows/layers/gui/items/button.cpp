@@ -46,9 +46,9 @@ namespace mse
             if (layer != nullptr)
             {
                 layerMask.resize(area.z * area.w);
-                for (int x = 0; x < area.z; ++x)
+                for (size_t x = 0; x < area.z; ++x)
                 {
-                    for (int y = 0; y < area.w; ++y)
+                    for (size_t y = 0; y < area.w; ++y)
                     {
                         layerMask[x + y*area.z] = id;
                     }
@@ -72,29 +72,29 @@ namespace mse
                 MSE_CORE_LOG("Button: texture obtained");
                 
                 // still button
-                SDL_FRect destRect = {0, 0, layerArea.z, layerArea.w};
-                SDL_Rect sourceRect = {sourceStill.x, sourceStill.y, sourceStill.z, sourceStill.w};
+                SDL_FRect destRect = {0, 0, (float)layerArea.z, (float)layerArea.w};
+                SDL_Rect sourceRect = {(int)sourceStill.x, (int)sourceStill.y, (int)sourceStill.z, (int)sourceStill.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 // hover button
-                destRect = {layerArea.z, 0, layerArea.z, layerArea.w};
-                sourceRect = {sourceHover.x, sourceHover.y, sourceHover.z, sourceHover.w};
+                destRect = {(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+                sourceRect = {(int)sourceHover.x, (int)sourceHover.y, (int)sourceHover.z, (int)sourceHover.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 // pressed button
-                destRect = {2*layerArea.z, 0, layerArea.z, layerArea.w};
-                sourceRect = {sourcePressed.x, sourcePressed.y, sourcePressed.z, sourcePressed.w};
+                destRect = {2*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+                sourceRect = {(int)sourcePressed.x, (int)sourcePressed.y, (int)sourcePressed.z, (int)sourcePressed.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 // disabled button
-                destRect = {3*layerArea.z, 0, layerArea.z, layerArea.w};
-                sourceRect = {sourceDisabled.x, sourceDisabled.y, sourceDisabled.z, sourceDisabled.w};
+                destRect = {3*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+                sourceRect = {(int)sourceDisabled.x, (int)sourceDisabled.y, (int)sourceDisabled.z, (int)sourceDisabled.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -133,9 +133,9 @@ namespace mse
 			m_textColor = color;
 			
 			layerMask.resize(area.z * area.w);
-			for (int x = 0; x < area.z; ++x)
+			for (size_t x = 0; x < area.z; ++x)
 			{
-				for (int y = 0; y < area.w; ++y)
+				for (size_t y = 0; y < area.w; ++y)
 				{
 					layerMask[x + y*area.z] = id;
 				}
@@ -163,7 +163,7 @@ namespace mse
 				Renderer::SurfaceDrawRectFilled(
 					(Texture*)(m_texture->data),
 					{0, 0, layerArea.z, layerArea.w}, 
-					{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+					{(Uint8)m_backgroundColor.x, (Uint8)m_backgroundColor.y, (Uint8)m_backgroundColor.z, (Uint8)m_backgroundColor.w}
 					);
 				mse::Renderer::SurfaceDrawText(
 					(Texture*)(m_texture->data), 
@@ -178,12 +178,12 @@ namespace mse
 				Renderer::SurfaceDrawRectFilled(
 					(Texture*)(m_texture->data),
 					{layerArea.z, 0, layerArea.z, layerArea.w}, 
-					{255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+					{(Uint8)(255 - m_backgroundColor.x), (Uint8)(255 - m_backgroundColor.y), (Uint8)(255 - m_backgroundColor.z), (Uint8)m_backgroundColor.w}
 					);
 				Renderer::SurfaceDrawRectFilled(
 					(Texture*)(m_texture->data),
 					{layerArea.z + 1, 1, layerArea.z - 2, layerArea.w - 2}, 
-					{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+					{(Uint8)m_backgroundColor.x, (Uint8)m_backgroundColor.y, (Uint8)m_backgroundColor.z, (Uint8)m_backgroundColor.w}
 					);
 				mse::Renderer::SurfaceDrawText(
 					(Texture*)(m_texture->data), 
@@ -198,7 +198,7 @@ namespace mse
 				Renderer::SurfaceDrawRectFilled(
 					(Texture*)(m_texture->data),
 					{layerArea.z * 2, 0, layerArea.z, layerArea.w}, 
-					{255 - m_backgroundColor.x, 255 - m_backgroundColor.y, 255 - m_backgroundColor.z, m_backgroundColor.w}
+					{(Uint8)(255 - m_backgroundColor.x), (Uint8)(255 - m_backgroundColor.y), (Uint8)(255 - m_backgroundColor.z), (Uint8)m_backgroundColor.w}
 					);
 				mse::Renderer::SurfaceDrawText(
 					(Texture*)(m_texture->data), 
@@ -213,7 +213,7 @@ namespace mse
 				Renderer::SurfaceDrawRectFilled(
 					(Texture*)(m_texture->data),
 					{layerArea.z * 3, 0, layerArea.z, layerArea.w}, 
-					{m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w / 2}
+					{(Uint8)m_backgroundColor.x, (Uint8)m_backgroundColor.y, (Uint8)m_backgroundColor.z, (Uint8)(m_backgroundColor.w / 2)}
 					);
 				mse::Renderer::SurfaceDrawText(
 					(Texture*)(m_texture->data), 
@@ -264,9 +264,9 @@ namespace mse
             m_rightSource = rightSource;
             
             layerMask.resize(area.z * area.w);
-            for (int x = 0; x < area.z; ++x)
+            for (size_t x = 0; x < area.z; ++x)
             {
-                for (int y = 0; y < area.w; ++y)
+                for (size_t y = 0; y < area.w; ++y)
                 {
                     layerMask[x + y*area.z] = id;
                 }
@@ -304,23 +304,23 @@ namespace mse
                 SDL_FRect destRect;
                 
                 // still button
-                destRect = {0, 0, leftSource.z, leftSource.w};
-                sourceRect = {leftSource.x, leftSource.y, leftSource.z, leftSource.w};
+                destRect = {0, 0, (float)leftSource.z, (float)leftSource.w};
+                sourceRect = {(int)leftSource.x, (int)leftSource.y, (int)leftSource.z, (int)leftSource.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
-                sourceRect = {midSource.x, midSource.y, 1, midSource.w};
+                sourceRect = {(int)midSource.x, (int)midSource.y, 1, (int)midSource.w};
                 for (int i = 0; i < middles; i++)
                 {
-                    destRect = {leftSource.z + i, 0, 1, midSource.w};
+                    destRect = {(float)leftSource.z + i, 0, 1, (float)midSource.w};
                     Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                                  (Texture*)(m_spriteList->data),
                                                  &destRect,
                                                  &sourceRect);
                 }
-                sourceRect = {rightSource.x, rightSource.y, rightSource.z, rightSource.w};
-                destRect = {leftSource.z + middles, 0, rightSource.z, rightSource.w};
+                sourceRect = {(int)rightSource.x, (int)rightSource.y, (int)rightSource.z, (int)rightSource.w};
+                destRect = {(float)leftSource.z + middles, 0, (float)rightSource.z, (float)rightSource.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -336,23 +336,23 @@ namespace mse
                                                0); 				// interval between rows
                 
                 // hover button
-                destRect = {layerArea.z, 0, leftSource.z, leftSource.w};
-                sourceRect = {leftSource.x + leftSource.z, leftSource.y, leftSource.z, leftSource.w};
+                destRect = {(float)layerArea.z, 0, (float)leftSource.z, (float)leftSource.w};
+                sourceRect = {(int)(leftSource.x + leftSource.z), (int)leftSource.y, (int)leftSource.z, (int)leftSource.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
-                sourceRect = {midSource.x + midSource.z, midSource.y, 1, midSource.w};
+                sourceRect = {(int)(midSource.x + midSource.z), (int)midSource.y, 1, (int)midSource.w};
                 for (int i = 0; i < middles; i++)
                 {
-                    destRect = {layerArea.z + leftSource.z + i, 0, 1, midSource.w};
+                    destRect = {(float)layerArea.z + leftSource.z + i, 0, 1, (float)midSource.w};
                     Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                                  (Texture*)(m_spriteList->data),
                                                  &destRect,
                                                  &sourceRect);
                 }
-                sourceRect = {rightSource.x + rightSource.z, rightSource.y, rightSource.z, rightSource.w};
-                destRect = {layerArea.z + leftSource.z + middles, 0, rightSource.z, rightSource.w};
+                sourceRect = {(int)(rightSource.x + rightSource.z), (int)rightSource.y, (int)rightSource.z, (int)rightSource.w};
+                destRect = {(float)layerArea.z + leftSource.z + middles, 0, (float)rightSource.z, (float)rightSource.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -368,13 +368,13 @@ namespace mse
                                           0); 				// interval between rows
                 
                 // pushed button
-                destRect = {layerArea.z * 2, 0, leftSource.z, leftSource.w};
-                sourceRect = {leftSource.x + leftSource.z * 2, leftSource.y, leftSource.z, leftSource.w};
+                destRect = {(float)layerArea.z * 2, 0, (float)leftSource.z, (float)leftSource.w};
+                sourceRect = {(int)(leftSource.x + leftSource.z * 2), (int)leftSource.y, (int)leftSource.z, (int)leftSource.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
-                sourceRect = {midSource.x + midSource.z * 2, midSource.y, 1, midSource.w};
+                sourceRect = {(int)(midSource.x + midSource.z * 2), (int)midSource.y, 1, (int)midSource.w};
                 for (int i = 0; i < middles; i++)
                 {
                     destRect.x = layerArea.z * 2 + leftSource.z + i;
@@ -386,8 +386,8 @@ namespace mse
                                                  &destRect,
                                                  &sourceRect);
                 }
-                sourceRect = {rightSource.x + rightSource.z * 2, rightSource.y, rightSource.z, rightSource.w};
-                destRect = {layerArea.z * 2 + leftSource.z + middles, 0, rightSource.z, rightSource.w};
+                sourceRect = {(int)(rightSource.x + rightSource.z * 2), (int)rightSource.y, (int)rightSource.z, (int)rightSource.w};
+                destRect = {(float)layerArea.z * 2 + leftSource.z + middles, 0, (float)rightSource.z, (float)rightSource.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -403,30 +403,30 @@ namespace mse
                                           0); 				// interval between rows
                 
                 // disabled button
-                destRect = {layerArea.z * 3, 0, leftSource.z, leftSource.w};
-                sourceRect = {leftSource.x + leftSource.z * 3, leftSource.y, leftSource.z, leftSource.w};
+                destRect = {(float)layerArea.z * 3, 0, (float)leftSource.z, (float)leftSource.w};
+                sourceRect = {(int)(leftSource.x + leftSource.z * 3), (int)leftSource.y, (int)leftSource.z, (int)leftSource.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
-                sourceRect = {midSource.x + midSource.z * 3, midSource.y, 1, midSource.w};
+                sourceRect = {(int)(midSource.x + midSource.z * 3), (int)midSource.y, 1, (int)midSource.w};
                 for (int i = 0; i < middles; i++)
                 {
-                    destRect = {layerArea.z * 3 + leftSource.z + i, 0, 1, midSource.w};
+                    destRect = {(float)layerArea.z * 3 + leftSource.z + i, 0, 1, (float)midSource.w};
                     Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                                  (Texture*)(m_spriteList->data),
                                                  &destRect,
                                                  &sourceRect);
                 }
-                sourceRect = {rightSource.x + rightSource.z * 3, rightSource.y, rightSource.z, rightSource.w};
-                destRect = {layerArea.z * 3 + leftSource.z + middles, 0, rightSource.z, rightSource.w};
+                sourceRect = {(int)(rightSource.x + rightSource.z * 3), (int)rightSource.y, (int)rightSource.z, (int)rightSource.w};
+                destRect = {(float)layerArea.z * 3 + leftSource.z + middles, 0, (float)rightSource.z, (float)rightSource.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                       (Texture*)(m_spriteList->data),
                                       &destRect,
                                       &sourceRect);
                 
                 Renderer::SurfaceDrawText(
-                                          (Texture*)(m_texture->data), 
+                                          (Texture*)(m_texture->data),
                                           {layerArea.z * 3 + leftSource.z + 2, 3, layerArea.z, layerArea.w}, 	// where to
                                           1, 					// pixel size
                                           m_text, 			// text content

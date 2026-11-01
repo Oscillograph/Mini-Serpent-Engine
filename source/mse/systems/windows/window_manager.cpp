@@ -20,7 +20,7 @@ namespace mse
 	{
 		MSE_CORE_LOG("Window manager shutdown routine");
 		
-		for (int i = 0; i < m_windows.size(); ++i)
+		for (size_t i = 0; i < m_windows.size(); ++i)
 		{
 			delete m_windows[i];
 			m_windows[i] = nullptr;
@@ -75,6 +75,8 @@ namespace mse
 				return window;
 			}
 		}
+
+		return nullptr;
 	}
 	
 	// current window - the one that got focus

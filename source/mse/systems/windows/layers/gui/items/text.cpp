@@ -44,9 +44,9 @@ namespace mse
             showBorder = border;
 			
 			layerMask.resize(area.z * area.w);
-			for (int x = 0; x < area.z; ++x)
+			for (size_t x = 0; x < area.z; ++x)
 			{
-				for (int y = 0; y < area.w; ++y)
+				for (size_t y = 0; y < area.w; ++y)
 				{
 					layerMask[x + y*area.z] = id;
 				}
@@ -140,13 +140,13 @@ namespace mse
                     Renderer::SurfaceDrawRectFilled(
                         (Texture*)(m_texture->data),
                         {1, 1, layerArea.z - 2, layerArea.w - 2},
-                        {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+                        {(Uint8)m_backgroundColor.x, (Uint8)m_backgroundColor.y, (Uint8)m_backgroundColor.z, (Uint8)m_backgroundColor.w}
                     );
                 } else {
                     Renderer::SurfaceDrawRectFilled(
                         (Texture*)(m_texture->data),
                         {0, 0, layerArea.z - 1, layerArea.w - 1},
-                        {m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w}
+                        {(Uint8)m_backgroundColor.x, (Uint8)m_backgroundColor.y, (Uint8)m_backgroundColor.z, (Uint8)m_backgroundColor.w}
                     );
                 }
             }
@@ -187,7 +187,7 @@ namespace mse
                                           (Texture*)(m_texture->data),
                                           {0, 0, layerArea.z-1, layerArea.w-1},
                                           m_pxSize,
-                                          {m_borderColor.x, m_borderColor.y, m_borderColor.z, m_borderColor.w}
+                                          {(Uint8)m_borderColor.x, (Uint8)m_borderColor.y, (Uint8)m_borderColor.z, (Uint8)m_borderColor.w}
                                           );
             }
             

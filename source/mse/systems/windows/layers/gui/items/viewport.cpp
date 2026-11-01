@@ -36,9 +36,9 @@ namespace mse
 			layerArea = area;
 			
 			layerMask.resize(area.z * area.w);
-			for (int x = 0; x < area.z; ++x)
+			for (size_t x = 0; x < area.z; ++x)
 			{
-				for (int y = 0; y < area.w; ++y)
+				for (size_t y = 0; y < area.w; ++y)
 				{
 					layerMask[x + y*area.z] = id;
 				}
@@ -98,7 +98,9 @@ namespace mse
 		{}
 		
 		bool Viewport::HandleEvent(EventTypes eventType, SDL_Event* event)
-		{}
+		{
+			return false;
+		}
 		
 		// unique Viewport interface
 	}

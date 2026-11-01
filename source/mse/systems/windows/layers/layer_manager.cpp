@@ -102,7 +102,7 @@ namespace mse
         
 //		MSE_CORE_LOG("Layer manager: handling an event for elemnetId=", elementId);
 		
-		for (int i = m_layers.size() - 1; (i >= 0) && !handled; --i)
+		for (int i = (int)(m_layers.size()) - 1; (i >= 0) && !handled; --i)
 		{
 			if (m_layers[i] != nullptr)
 			{
@@ -128,7 +128,7 @@ namespace mse
 	void LayerManager::UpdateScreen(TimeType t)
 	{
 //		MSE_CORE_LOG("Layer manager: updating screen");
-		for (int i = 0; i < m_screen.size(); ++i)
+		for (size_t i = 0; i < m_screen.size(); ++i)
 		{
 			m_screen[i] = -1;
 		}
@@ -171,7 +171,7 @@ namespace mse
 	
 	void LayerManager::Display()
 	{
-		for (int i = 0; i < m_layers.size(); ++i)
+		for (size_t i = 0; i < m_layers.size(); ++i)
 		{
 			if (m_layers[i] != nullptr)
 			{
@@ -182,7 +182,7 @@ namespace mse
 	
 	void LayerManager::Shutdown()
 	{
-		for (int i = 0; i < m_layers.size(); ++i)
+		for (size_t i = 0; i < m_layers.size(); ++i)
 		{
 			delete m_layers[i];
 			m_layers[i] = nullptr;

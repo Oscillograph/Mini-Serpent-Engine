@@ -44,9 +44,9 @@ namespace mse
 			m_backgroundColor = bgcolor;
 			
 			layerMask.resize(area.z * area.w);
-			for (int x = 0; x < area.z; ++x)
+			for (size_t x = 0; x < area.z; ++x)
 			{
-				for (int y = 0; y < area.w; ++y)
+				for (size_t y = 0; y < area.w; ++y)
 				{
 					layerMask[x + y*area.z] = id;
 				}
@@ -202,9 +202,9 @@ namespace mse
             m_sourceBottom = sourceBottom;
             
             layerMask.resize(area.z * area.w);
-            for (int x = 0; x < area.z; ++x)
+            for (size_t x = 0; x < area.z; ++x)
             {
-                for (int y = 0; y < area.w; ++y)
+                for (size_t y = 0; y < area.w; ++y)
                 {
                     layerMask[x + y*area.z] = id;
                 }
@@ -348,9 +348,9 @@ namespace mse
             
             layerMask.resize(area.z * area.w);
             MSE_CORE_LOG("2");
-            for (int x = 0; x < area.z; ++x)
+            for (size_t x = 0; x < area.z; ++x)
             {
-                for (int y = 0; y < area.w; ++y)
+                for (size_t y = 0; y < area.w; ++y)
                 {
                     layerMask[x + y*area.z] = id;
                 }

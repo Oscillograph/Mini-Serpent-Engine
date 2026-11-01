@@ -1,8 +1,20 @@
 cmake_minimum_required(VERSION 3.28)
+
+# SET(CMAKE_CXX_COMPILER "clang++")
+# SET(CMAKE_CXX_COMPILER "g++")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(GCC_GLOBAL_COMPILER_SETTINGS -Wall -Wextra -Wfatal-errors -O2)
+set(GCC_GLOBAL_COMPILER_SETTINGS
+        -Wall
+        -Wextra
+        -Wfatal-errors
+        -Wno-unused-parameter
+        -Wno-unused-variable
+        -Wno-unused-function
+        -Wno-unused-but-set-variable
+        -O0
+    )
 set(GCC_GLOBAL_LINKER_SETTINGS "-Wl,-rpath,./bin")
 
 # set the project name
@@ -38,8 +50,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${MSE_INCLUDES_DIR}
     ${MSE_BASE_SOURCE_DIR}/external)
 target_compile_options(${PROJECT_NAME} PRIVATE
-	-Wall 
-	-Wfatal-errors
+	${GCC_GLOBAL_COMPILER_SETTINGS}
 	)
 	
 

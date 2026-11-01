@@ -45,9 +45,9 @@ namespace mse
             if (layer != nullptr)
             {
                 layerMask.resize(area.z * area.w);
-                for (int x = 0; x < area.z; ++x)
+                for (size_t x = 0; x < area.z; ++x)
                 {
-                    for (int y = 0; y < area.w; ++y)
+                    for (size_t y = 0; y < area.w; ++y)
                     {
                         layerMask[x + y*area.z] = id;
                     }
@@ -71,29 +71,29 @@ namespace mse
                 MSE_CORE_LOG("Checkbox: texture obtained");
                 
                 // unchecked
-                SDL_FRect destRect = {0, 0, layerArea.z, layerArea.w};
-                SDL_Rect sourceRect = {sourceUnchecked.x, sourceUnchecked.y, sourceUnchecked.z, sourceUnchecked.w};
+                SDL_FRect destRect = {0, 0, (float)layerArea.z, (float)layerArea.w};
+                SDL_Rect sourceRect = {(int)sourceUnchecked.x, (int)sourceUnchecked.y, (int)sourceUnchecked.z, (int)sourceUnchecked.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 // checked
-                destRect = {layerArea.z, 0, layerArea.z, layerArea.w};
-                sourceRect = {sourceChecked.x, sourceChecked.y, sourceChecked.z, sourceChecked.w};
+                destRect = {(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+                sourceRect = {(int)sourceChecked.x, (int)sourceChecked.y, (int)sourceChecked.z, (int)sourceChecked.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 // disabled checked
-                destRect = {2*layerArea.z, 0, layerArea.z, layerArea.w};
-                sourceRect = {sourceDisabledUnchecked.x, sourceDisabledUnchecked.y, sourceDisabledUnchecked.z, sourceDisabledUnchecked.w};
+                destRect = {2*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+                sourceRect = {(int)sourceDisabledUnchecked.x, (int)sourceDisabledUnchecked.y, (int)sourceDisabledUnchecked.z, (int)sourceDisabledUnchecked.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
                                              &sourceRect);
                 
-                destRect = {3*layerArea.z, 0, layerArea.z, layerArea.w};
-                sourceRect = {sourceDisabledChecked.x, sourceDisabledChecked.y, sourceDisabledChecked.z, sourceDisabledChecked.w};
+                destRect = {3*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+                sourceRect = {(int)sourceDisabledChecked.x, (int)sourceDisabledChecked.y, (int)sourceDisabledChecked.z, (int)sourceDisabledChecked.w};
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,

@@ -36,9 +36,9 @@ namespace mse
 			backgroundColor = color;
 			
 			layerMask.resize(area.z * area.w);
-			for (int x = 0; x < area.z; ++x)
+			for (size_t x = 0; x < area.z; ++x)
 			{
-				for (int y = 0; y < area.w; ++y)
+				for (size_t y = 0; y < area.w; ++y)
 				{
 //				MSE_CORE_LOG("Canvas: mask filling at (", x, "; ", y, ")");
 					layerMask[x + y*area.z] = id;
@@ -76,7 +76,7 @@ namespace mse
 				
 				if (m_MouseLeftButtonIsHeld)
 				{
-					if ((m_lastMouseXY.x != mouseX) || (m_lastMouseXY.y != mouseY))
+					if (((int)m_lastMouseXY.x != mouseX) || ((int)m_lastMouseXY.y != mouseY))
 					{
 						DrawLine(
 							{
@@ -227,8 +227,13 @@ namespace mse
 				(Texture*)(m_texture->data),
 				{x, y},
 				1,
-				{color.x, color.y, color.z, color.w}
-				);
+				{
+					(Uint8)color.x,
+					(Uint8)color.y,
+					(Uint8)color.z,
+					(Uint8)color.w
+				}
+			);
 			((Texture*)(m_texture->data))->Update();
 			return true;
 		}
@@ -240,7 +245,12 @@ namespace mse
 				AB.x, AB.y,
 				AB.z, AB.w,
 				1,
-				{color.x, color.y, color.z, color.w}
+				{
+					(Uint8)color.x,
+					(Uint8)color.y,
+					(Uint8)color.z,
+					(Uint8)color.w
+				}
 				);
 			((Texture*)(m_texture->data))->Update();
 			return true;
@@ -251,7 +261,12 @@ namespace mse
 			Renderer::SurfaceDrawRectFilled(
 				(Texture*)(m_texture->data),
 				{x1, y1, (x2 - x1), (y2 - y1)}, 
-				{color.x, color.y, color.z, color.w}
+				{
+					(Uint8)color.x,
+					(Uint8)color.y,
+					(Uint8)color.z,
+					(Uint8)color.w
+				}
 				);
 			((Texture*)(m_texture->data))->Update();
 			return true;
@@ -269,7 +284,12 @@ namespace mse
 				{x, y},
 				radius,
 				3,
-				{color.x, color.y, color.z, color.w}
+				{
+					(Uint8)color.x,
+					(Uint8)color.y,
+					(Uint8)color.z,
+					(Uint8)color.w
+				}
 				);
 			((Texture*)(m_texture->data))->Update();
 			return true;

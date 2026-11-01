@@ -42,9 +42,9 @@ namespace mse
             varStep = step;
             
             layerMask.resize(area.z * area.w);
-            for (int x = 0; x < area.z; ++x)
+            for (size_t x = 0; x < area.z; ++x)
             {
-                for (int y = 0; y < area.w; ++y)
+                for (size_t y = 0; y < area.w; ++y)
                 {
                     layerMask[x + y*area.z] = id;
                 }
@@ -155,11 +155,11 @@ namespace mse
                             }
 
                             
-                            if (m_BtnBall->layerArea.x < (area.x + btnLeftWidth + 1))
+                            if (m_BtnBall->layerArea.x < (int)(area.x + btnLeftWidth + 1))
                             {
                                 m_BtnBall->layerArea.x = area.x + btnLeftWidth + 1;
                             }
-                            if (m_BtnBall->layerArea.x > (area.x + area.z - btnRightWidth - btnLeftWidth + 2))
+                            if (m_BtnBall->layerArea.x > (int)(area.x + area.z - btnRightWidth - btnLeftWidth + 2))
                             {
                                 m_BtnBall->layerArea.x = area.x + area.z - btnRightWidth - btnLeftWidth + 2;
                             }

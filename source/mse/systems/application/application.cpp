@@ -322,7 +322,7 @@ namespace mse
 					}
 					
 					Window* window = nullptr;
-					for (int i = 0; i < WindowManager::GetWindows().size(); ++i)
+					for (size_t i = 0; i < WindowManager::GetWindows().size(); ++i)
 					{
 						window = WindowManager::GetWindows()[i];
 						

@@ -12,7 +12,7 @@ namespace mse
 		bool empty = true;
 	};
 
-	template <typename S, size_t size>
+	template <typename S, std::size_t size>
 	struct SymbolsContainer
 	{
 		SymbolsContainer(std::initializer_list<S> list)
@@ -35,7 +35,7 @@ namespace mse
 
 		Symbol<S> container[size];
 
-		void input(S symbol, size_t position = 0)
+		void input(S symbol, std::size_t position = 0)
 		{
 			Symbol<S> temp = container[position];
 			container[position].symbol = symbol;

@@ -83,7 +83,7 @@ namespace mse
 	
 	World* PhysicsProcessor::AccessWorld(int id)
 	{
-		if (id < m_Worlds.size())
+		if (id < (int)m_Worlds.size())
 			return m_Worlds[id];
 		return nullptr;
 	}

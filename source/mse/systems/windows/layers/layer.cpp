@@ -103,7 +103,7 @@ namespace mse
 					if (!animationComponent.paused)
 					{
 						uint64_t timeNow = Platform::GetTimeMs();
-						if ((timeNow - animationComponent.timeBefore) >= frameset->timeBetweenFrames)
+						if ((int)(timeNow - animationComponent.timeBefore) >= frameset->timeBetweenFrames)
 						{
 							animationComponent.timeBefore = timeNow;
 							animationComponent.currentFrame++;

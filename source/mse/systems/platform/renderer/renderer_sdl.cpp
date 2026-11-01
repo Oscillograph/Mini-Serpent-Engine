@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <mse/systems/platform/platform.h>
 
 #include <mse/systems/platform/renderer/renderer.h>
@@ -407,9 +408,9 @@ namespace mse
 						newPlace->w = windowScale.x * currentTilePlace.z;
 						newPlace->h = windowScale.y * currentTilePlace.w;
 
-						//						MSE_CORE_LOG("Whole tile size: ( ", wholeTileSize.x, "; ", wholeTileSize.y, ") >> x = ", x, "; y = ", y);
-						//						MSE_CORE_LOG("Current tile size: ", currentTileSize.x, "; height: ", currentTileSize.y);\
-						//						MSE_CORE_LOG("New place (SDL_Rect): (", (*newPlace).x, "; ", (*newPlace).y, "; ", (*newPlace).w, "; ", (*newPlace).h, ")");
+						// MSE_CORE_LOG("Whole tile size: ( ", wholeTileSize.x, "; ", wholeTileSize.y, ") >> x = ", x, "; y = ", y);
+						// MSE_CORE_LOG("Current tile size: ", currentTileSize.x, "; height: ", currentTileSize.y);
+						// MSE_CORE_LOG("New place (SDL_Rect): (", (*newPlace).x, "; ", (*newPlace).y, "; ", (*newPlace).w, "; ", (*newPlace).h, ")");
 
 						SDL_RenderTextureRotated(
 								(SDL_Renderer*)GetActiveRenderer(),
@@ -817,11 +818,11 @@ namespace mse
 		// for each symbol in text
 		int j = 0; // index of a symbol inside a line being typed right now
 
-		for(int i = 0; i < text.size(); ++i)
+		for(std::size_t i = 0; i < text.size(); ++i)
 		{
 			// load font symbol
 			foundSymbol = false;
-			while ((!foundSymbol) && (alphabetId < font->alphabet.size()))
+			while ((!foundSymbol) && (alphabetId < (int)font->alphabet.size()))
 			{
 				symbolId = font->alphabet[alphabetId].find(text[i]);
 				// force a new line if '\n' found
@@ -837,7 +838,7 @@ namespace mse
 					if (symbolId != std::u32string::npos)
 					{
 						// Correct coordinates of the "cursor"
-						if (curX >= (tempRect.x + tempRect.w - 2*font->fontClip.w*pxSize)){
+						if (curX >= (tempRect.x + tempRect.w - 2*(int)font->fontClip.w*pxSize)){
 							currentRow++;
 							j = 0;
 							correctX = 0;
@@ -851,9 +852,9 @@ namespace mse
 						curY = tempRect.y + correctY;
 
 						// draw the symbol in its place
-						for(int l = 0; l < font->fontClip.z; ++l)
+						for(int l = 0; l < (int)font->fontClip.z; ++l)
 						{
-							for(int k = 0; k < font->fontClip.w; ++k)
+							for(int k = 0; k < (int)font->fontClip.w; ++k)
 							{
 								if (font->symbols8bitTable[alphabetId][symbolLeftEdge + k + l*font->fontClip.w] == 1)
 								{
@@ -866,9 +867,9 @@ namespace mse
 						uint32_t blackPixelsCount = 0;
 						uint32_t symbolRightEdge = (symbolId + 1)*(font->fontClip.w * font->fontClip.z);
 						bool blackPixelsFound = false;
-						for (int s = 1; (s < font->fontClip.w) && (s < 3) && (!blackPixelsFound); ++s)
+						for (int s = 1; (s < (int)font->fontClip.w) && (s < 3) && (!blackPixelsFound); ++s)
 						{
-							for (int k = 0; k < font->fontClip.z; ++k)
+							for (int k = 0; k < (int)font->fontClip.z; ++k)
 							{
 								blackPixelsCount += font->symbols8bitTable[alphabetId][symbolRightEdge - k * font->fontClip.w - s];
 							}
@@ -1087,9 +1088,9 @@ namespace mse
 					//							newPlace->w = windowScale.x * currentTilePlace.z;
 					//							newPlace->h = windowScale.y * currentTilePlace.w;
 					//
-					////						MSE_CORE_LOG("Whole tile size: ( ", wholeTileSize.x, "; ", wholeTileSize.y, ") >> x = ", x, "; y = ", y);
-					////						MSE_CORE_LOG("Current tile size: ", currentTileSize.x, "; height: ", currentTileSize.y);\
-					////						MSE_CORE_LOG("New place (SDL_Rect): (", (*newPlace).x, "; ", (*newPlace).y, "; ", (*newPlace).w, "; ", (*newPlace).h, ")");
+					// MSE_CORE_LOG("Whole tile size: ( ", wholeTileSize.x, "; ", wholeTileSize.y, ") >> x = ", x, "; y = ", y);
+					// MSE_CORE_LOG("Current tile size: ", currentTileSize.x, "; height: ", currentTileSize.y);
+					// MSE_CORE_LOG("New place (SDL_Rect): (", (*newPlace).x, "; ", (*newPlace).y, "; ", (*newPlace).w, "; ", (*newPlace).h, ")");
 					//
 					//							SDL_UpperBlit(
 					//								texture->GetSurface(),

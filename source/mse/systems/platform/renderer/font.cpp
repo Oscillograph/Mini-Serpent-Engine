@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <mse/systems/platform/renderer/font.h>
 #include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/platform/renderer/texture.h>
@@ -30,7 +31,7 @@ namespace mse
 			
 			symbols8bitTable.clear();
 			symbols8bitTable.resize(alphabet.size());
-			for (int i = 0; i < symbols8bitTable.size(); ++i)
+			for (std::size_t i = 0; i < symbols8bitTable.size(); ++i)
 			{
 				symbols8bitTable[i].resize(alphabetSize * fontClip.z * fontClip.w);
 				MSE_CORE_LOG("Font: ", i, " symbols table size is ", symbols8bitTable[i].size());
@@ -59,19 +60,19 @@ namespace mse
 	
 	void FontBitmap::LoadSymbols()
 	{
-		SDL_Color rgb = {0, 0, 0};
+		SDL_Color rgb = {0, 0, 0, 0};
 		
 		// for each alphabet
-		for(int i = 0; i < alphabet.size(); ++i)
+		for(std::size_t i = 0; i < alphabet.size(); ++i)
 		{
 			// and each font symbol
-			for(int j = 0; j < alphabet[i].size()-1; ++j)
+			for(std::size_t j = 0; j < alphabet[i].size()-1; ++j)
 			{
 				// and for each y coordinate
-				for(int l = 0; l < fontClip.w; ++l)
+				for(unsigned int l = 0; l < fontClip.w; ++l)
 				{
 					// for each x coordinate
-					for(int k = 0; k < fontClip.z; ++k)
+					for(unsigned int k = 0; k < fontClip.z; ++k)
 					{
 						// get the pixel color
 						SDL_GetRGB(

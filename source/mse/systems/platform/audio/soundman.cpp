@@ -205,7 +205,7 @@ namespace mse
             {
                 tracks_playlist_current = 0;
             }
-            if (tracks_playlist_current >= tracks_playlist.size())
+            if (tracks_playlist_current >= (int)tracks_playlist.size())
             {
                 tracks_playlist_current = 0;
             }

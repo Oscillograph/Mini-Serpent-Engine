@@ -99,6 +99,7 @@ namespace DTetris
 			case TetrisMoveDirection::Up:
 			{
 				block->y--;
+				break;
 			}
 			case TetrisMoveDirection::Down:
 			default:
@@ -395,6 +396,8 @@ namespace DTetris
 		// 		}
 		// 	}
 		// }
+
+		return 0;
 	}
 
 	int TetrisEngine_addScore(int scoreType)
@@ -404,6 +407,8 @@ namespace DTetris
 		// 	case SCORE_ADD_BLOCK:	GameData.playerScore+=  1; break;
 		// 	case SCORE_REMOVE_LINE:	GameData.playerScore+= 100; break;
 		// }
+
+		return 0;
 	}
 
 	int TetrisEngine_gameRestart(Tetrimino* block)
@@ -423,6 +428,8 @@ namespace DTetris
 		// GameData.gameOver = false;
 		// GameData.gameStart = true;
 		// GameData.gamePause = false;
+
+		return 0;
 	}
 
 	int TetrisEngine_processGamePlay(Tetrimino* TBlock)
@@ -464,6 +471,8 @@ namespace DTetris
 		// 		}
 		// 	}
 		// }
+
+		return 0;
 	}
 
 	int TetrisEngine_userInputManagement(char btn, Tetrimino* TBlock)
@@ -502,6 +511,8 @@ namespace DTetris
 		// 		tetriBlockControl(TBlock);
 		// 		break;
 		// }
+
+		return 0;
 	}
 
 	int TetrisEngine_pauseOn()

@@ -104,7 +104,7 @@ namespace mse
 	void* Platform::CreateWindow(const char* title, int x, int y, int width, int height, uint32_t winFlags, WindowContextType windowContextType)
 	{
 		SDL_Window* window = nullptr;
-		if (winFlags < 0)
+		if (winFlags != m_windowFlags)
 		{
 			window = SDL_CreateWindow(title, width, height, winFlags);
 		} else {
