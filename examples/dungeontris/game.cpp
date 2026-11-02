@@ -1,11 +1,7 @@
-#include "dungeontris/tetris.h"
-#include "mse/systems/application/application.h"
-#include "mse/systems/ecs/components.h"
-#include "mse/systems/platform/events/events.h"
-#include <algorithm>
+#include <mse/systems/application/application.h>
+#include <mse/systems/ecs/components.h>
+#include <mse/systems/platform/events/events.h>
 #include <dungeontris/game-fwd.h>
-#include <random> // rand
-#include <ctime> // clock
 #include <sstream> // stringstream
 #include <utf8.h> // utf8
 
@@ -17,6 +13,7 @@
 #include <mse/systems/windows/window.h>
 
 #include <dungeontris/game-fwd.h> // DTetris::TetrisEngineData
+#include <dungeontris/tetris.h>
 
 extern DTetris::Tetrimino tetrimino;
 extern DTetris::TetrisEngineData DTetris::tetrisEngineData;

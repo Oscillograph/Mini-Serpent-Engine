@@ -1,9 +1,8 @@
 #ifndef DUNGEONTRIS_TETRIS_H
 #define DUNGEONTRIS_TETRIS_H
 
-#include "mse/systems/platform/input/input.h"
+#include <mse/systems/platform/input/input.h>
 #include <dungeontris/game-fwd.h>
-#include <cstdint> // for size_t, uint32_t
 
 namespace DTetris
 {
