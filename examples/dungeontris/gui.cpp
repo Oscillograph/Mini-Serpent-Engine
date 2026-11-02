@@ -23,12 +23,12 @@ namespace mse
 		StoreItem::StoreItem()
 		{}
 
-		StoreItem::StoreItem(Layer* layer, const glm::uvec4& area, int cost)
+		StoreItem::StoreItem(Layer* layer, const glm::uvec4& area, const glm::uvec4& image, int cost)
 		{
-			Init(layer, area, cost);
+			Init(layer, area, image, cost);
 		}
 
-		void StoreItem::Init(Layer* layer, const glm::uvec4& area, int cost)
+		void StoreItem::Init(Layer* layer, const glm::uvec4& area, const glm::uvec4& image, int cost)
 		{
 			// model
 			parentLayer = layer;
@@ -51,6 +51,8 @@ namespace mse
 			if (layer != nullptr)
 			{
 				m_spriteList = ResourceManager::UseTexture("./data/img/screen-images.png", windowUser, {0, 0, 0});
+				m_imageSource = image;
+				SDL_Rect imageRect = {(int)m_imageSource.x, (int)m_imageSource.y, (int)m_imageSource.z, (int)m_imageSource.w};
                 int textureWidth = layerArea.z * 4;
                 int textureHeight = layerArea.w;
 
@@ -71,6 +73,10 @@ namespace mse
                 SDL_FRect destRect = {0, 0, (float)layerArea.z, (float)layerArea.w};
 				glm::uvec4 sourceStill = {600, 0, 40, 27};
                 SDL_Rect sourceRect = {(int)sourceStill.x, (int)sourceStill.y, (int)sourceStill.z, (int)sourceStill.w};
+				Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+											 (Texture*)(m_spriteList->data),
+											 &destRect,
+											 &imageRect);
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -79,6 +85,10 @@ namespace mse
 				glm::uvec4 sourceHover = {440, 0, 40, 27};
                 destRect = {(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
                 sourceRect = {(int)sourceHover.x, (int)sourceHover.y, (int)sourceHover.z, (int)sourceHover.w};
+				Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+											 (Texture*)(m_spriteList->data),
+											 &destRect,
+											 &imageRect);
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -87,6 +97,10 @@ namespace mse
 				glm::uvec4 sourcePressed = {480, 0, 40, 27};
                 destRect = {2*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
                 sourceRect = {(int)sourcePressed.x, (int)sourcePressed.y, (int)sourcePressed.z, (int)sourcePressed.w};
+				Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+											 (Texture*)(m_spriteList->data),
+											 &destRect,
+											 &imageRect);
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,
@@ -95,6 +109,10 @@ namespace mse
 				glm::uvec4 sourceDisabled = {600, 0, 40, 27};
                 destRect = {3*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
                 sourceRect = {(int)sourceDisabled.x, (int)sourceDisabled.y, (int)sourceDisabled.z, (int)sourceDisabled.w};
+				Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+											 (Texture*)(m_spriteList->data),
+											 &destRect,
+											 &imageRect);
                 Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
                                              (Texture*)(m_spriteList->data),
                                              &destRect,

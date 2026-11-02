@@ -30,9 +30,10 @@ namespace mse
 			StoreItem(
 				Layer* layer,
 				const glm::uvec4& area, // where to place the item on layer
+				const glm::uvec4& image,// what to place on layer (from screen-images.png)
 				int cost 				// item cost
 			);
-			void Init(Layer* layer, const glm::uvec4& area, int cost);
+			void Init(Layer* layer, const glm::uvec4& area, const glm::uvec4& image, int cost);
 			virtual ~StoreItem();
 
 			// general GUIItem interface
