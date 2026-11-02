@@ -145,6 +145,7 @@ namespace mse
 				(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
 			};
 
+			// item icon
 			SDL_Rect srcRect;
 			if (state & StoreItemStates::Disabled)
 			{
@@ -176,32 +177,35 @@ namespace mse
 
 			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
 
-			if ((state & StoreItemStates::Hover) ||
-				(state & StoreItemStates::Pressed))
+			// buy/equip button
+			if (state & StoreItemStates::Bought)
 			{
-				srcRect = {440, 29, 40, 11};
-
-				if (state & StoreItemStates::Bought)
+				// always show when equipped
+				if (state & StoreItemStates::Equipped)
 				{
-					if (state & StoreItemStates::Equipped)
-					{
-						srcRect = {520, 29, 40, 11};
-					} else {
-						srcRect = {480, 29, 40, 11};
-					}
+					srcRect = {520, 29, 40, 11};
 				} else {
-					srcRect = {440, 29, 40, 11};
+					// show only when hovered/pressed
+					if ((state & StoreItemStates::Hover) ||
+						(state & StoreItemStates::Pressed))
+					{
+						srcRect = {480, 29, 40, 11};
+					} else {
+						srcRect = {0, 0, 0, 0};
+					}
 				}
-
-				destRect = {
-					(float)layerArea.x 		  / WindowManager::GetCurrentWindow()->GetPrefs().width,
-					(float)(layerArea.y + 16) / WindowManager::GetCurrentWindow()->GetPrefs().height,
-					(float)layerArea.z 		  / WindowManager::GetCurrentWindow()->GetPrefs().width,
-					(float)(layerArea.w - 16) / WindowManager::GetCurrentWindow()->GetPrefs().height,
-				};
-
-				Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
+			} else {
+				srcRect = {440, 29, 40, 11};
 			}
+
+			destRect = {
+				(float)layerArea.x 		  / WindowManager::GetCurrentWindow()->GetPrefs().width,
+				(float)(layerArea.y + 16) / WindowManager::GetCurrentWindow()->GetPrefs().height,
+				(float)layerArea.z 		  / WindowManager::GetCurrentWindow()->GetPrefs().width,
+				(float)(layerArea.w - 16) / WindowManager::GetCurrentWindow()->GetPrefs().height,
+			};
+
+			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
 		}
 
 		bool StoreItem::HandleEvent(EventTypes eventType, SDL_Event* event)
