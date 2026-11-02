@@ -571,6 +571,50 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
     return true;
 }
 
+ShopPageState::ShopPageState()
+{
+    page = DTetris::GamePages::Shop;
+}
+
+ShopPageState::~ShopPageState()
+{}
+
+bool ShopPageState::OnEnter(mse::Layer* pass_layer)
+{
+    MSE_LOG("ShopPageState OnEnter...");
+
+    if (pass_layer != nullptr)
+    {
+        if (layer != pass_layer)
+        {
+            layer = pass_layer;
+        }
+    } else {
+        layer = new ShopUILayer();
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    }
+
+    MSE_LOG("ShopPageState OnEnter...done");
+    return true;
+}
+
+bool ShopPageState::OnExit(bool pass_layer)
+{
+    MSE_LOG("ShopPageState OnEnter...");
+
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+
+    MSE_LOG("ShopPageState OnExit...done");
+    return true;
+}
+
+bool ShopPageState::OnUpdate(mse::TimeType t)
+{}
+
 ArenaSetupPageState::ArenaSetupPageState()
 {
     page = DTetris::GamePages::ArenaSetup;
