@@ -51,6 +51,8 @@ namespace mse
 			Resource* m_spriteList = nullptr;
 			glm::uvec4 m_imageSource = {0, 0, 0, 0}; // icon set with SetImage
 			std::u32string m_text = U"";
+
+			void SetupTexture();
 		};
 	}
 }

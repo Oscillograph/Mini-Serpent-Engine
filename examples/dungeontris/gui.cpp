@@ -1,4 +1,4 @@
-#include "utf8/cpp17.h"
+#include <utf8/cpp17.h>
 #include <mse/systems/windows/window.h>
 #include <mse/systems/windows/window_manager.h>
 #include <mse/systems/windows/layers/layer.h>
@@ -52,75 +52,7 @@ namespace mse
 			{
 				m_spriteList = ResourceManager::UseTexture("./data/img/screen-images.png", windowUser, {0, 0, 0});
 				m_imageSource = image;
-				SDL_Rect imageRect = {(int)m_imageSource.x, (int)m_imageSource.y, (int)m_imageSource.z, (int)m_imageSource.w};
-                int textureWidth = layerArea.z * 4;
-                int textureHeight = layerArea.w;
-
-                // setup texture to draw on
-                MSE_CORE_LOG("Button: requesting to create a texture");
-                MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
-                m_texture = ResourceManager::CreateTexture(
-                   windowUser,
-                   windowUser->GetRenderer()->GetActiveRenderer(),
-                   textureWidth,
-                   textureHeight,
-                   0,
-                   32,
-                   {0, 0, 0, 0});
-                MSE_CORE_LOG("Button: texture obtained");
-
-                // still button
-                SDL_FRect destRect = {0, 0, (float)layerArea.z, (float)layerArea.w};
-				glm::uvec4 sourceStill = {600, 0, 40, 27};
-                SDL_Rect sourceRect = {(int)sourceStill.x, (int)sourceStill.y, (int)sourceStill.z, (int)sourceStill.w};
-				Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
-											 (Texture*)(m_spriteList->data),
-											 &destRect,
-											 &imageRect);
-                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
-                                             (Texture*)(m_spriteList->data),
-                                             &destRect,
-                                             &sourceRect);
-                // hover button
-				glm::uvec4 sourceHover = {440, 0, 40, 27};
-                destRect = {(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
-                sourceRect = {(int)sourceHover.x, (int)sourceHover.y, (int)sourceHover.z, (int)sourceHover.w};
-				Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
-											 (Texture*)(m_spriteList->data),
-											 &destRect,
-											 &imageRect);
-                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
-                                             (Texture*)(m_spriteList->data),
-                                             &destRect,
-                                             &sourceRect);
-                // pressed button
-				glm::uvec4 sourcePressed = {480, 0, 40, 27};
-                destRect = {2*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
-                sourceRect = {(int)sourcePressed.x, (int)sourcePressed.y, (int)sourcePressed.z, (int)sourcePressed.w};
-				Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
-											 (Texture*)(m_spriteList->data),
-											 &destRect,
-											 &imageRect);
-                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
-                                             (Texture*)(m_spriteList->data),
-                                             &destRect,
-                                             &sourceRect);
-                // disabled button
-				glm::uvec4 sourceDisabled = {600, 0, 40, 27};
-                destRect = {3*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
-                sourceRect = {(int)sourceDisabled.x, (int)sourceDisabled.y, (int)sourceDisabled.z, (int)sourceDisabled.w};
-				Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
-											 (Texture*)(m_spriteList->data),
-											 &destRect,
-											 &imageRect);
-                Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
-                                             (Texture*)(m_spriteList->data),
-                                             &destRect,
-                                             &sourceRect);
-
-                ((Texture*)(m_texture->data))->Update();
-
-				MSE_CORE_LOG("Button: texture edited");
+				SetupTexture();
 			}
 
 			// controller
@@ -292,6 +224,7 @@ namespace mse
 
 		void StoreItem::SetImage(const glm::uvec4& area) // set icon of what we buy
 		{
+			m_imageSource = area;
 		}
 
 		void StoreItem::ChangeCost(int cost)
@@ -301,6 +234,82 @@ namespace mse
 			m_text = utf8::utf8to32(stream.str().c_str());
 			stream.str("");
 			stream.clear();
+		}
+
+		void StoreItem::SetupTexture()
+		{
+			SDL_Rect imageRect = {(int)m_imageSource.x, (int)m_imageSource.y, (int)m_imageSource.z, (int)m_imageSource.w};
+			int textureWidth = layerArea.z * 4;
+			int textureHeight = layerArea.w;
+
+			// setup texture to draw on
+			MSE_CORE_LOG("Button: requesting to create a texture");
+			MSE_CORE_TRACE("Button_parentLayer = ", parentLayer);
+
+			delete m_texture;
+
+			m_texture = ResourceManager::CreateTexture(
+				windowUser,
+				windowUser->GetRenderer()->GetActiveRenderer(),
+				textureWidth,
+				textureHeight,
+				0,
+				32,
+				{0, 0, 0, 0});
+			MSE_CORE_LOG("Button: texture obtained");
+
+			// still button
+			SDL_FRect destRect = {0, 0, (float)layerArea.z, (float)layerArea.w};
+			glm::uvec4 sourceStill = {600, 0, 40, 27};
+			SDL_Rect sourceRect = {(int)sourceStill.x, (int)sourceStill.y, (int)sourceStill.z, (int)sourceStill.w};
+			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+										 (Texture*)(m_spriteList->data),
+										 &destRect,
+										 &imageRect);
+			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+										 (Texture*)(m_spriteList->data),
+										 &destRect,
+										 &sourceRect);
+			// hover button
+			glm::uvec4 sourceHover = {440, 0, 40, 27};
+			destRect = {(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+			sourceRect = {(int)sourceHover.x, (int)sourceHover.y, (int)sourceHover.z, (int)sourceHover.w};
+			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+										 (Texture*)(m_spriteList->data),
+										 &destRect,
+										 &imageRect);
+			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+										 (Texture*)(m_spriteList->data),
+										 &destRect,
+										 &sourceRect);
+			// pressed button
+			glm::uvec4 sourcePressed = {480, 0, 40, 27};
+			destRect = {2*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+			sourceRect = {(int)sourcePressed.x, (int)sourcePressed.y, (int)sourcePressed.z, (int)sourcePressed.w};
+			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+										 (Texture*)(m_spriteList->data),
+										 &destRect,
+										 &imageRect);
+			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+										 (Texture*)(m_spriteList->data),
+										 &destRect,
+										 &sourceRect);
+			// disabled button
+			glm::uvec4 sourceDisabled = {600, 0, 40, 27};
+			destRect = {3*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
+			sourceRect = {(int)sourceDisabled.x, (int)sourceDisabled.y, (int)sourceDisabled.z, (int)sourceDisabled.w};
+			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+										 (Texture*)(m_spriteList->data),
+										 &destRect,
+										 &imageRect);
+			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
+										 (Texture*)(m_spriteList->data),
+										 &destRect,
+										 &sourceRect);
+
+			((Texture*)(m_texture->data))->Update();
+
+			MSE_CORE_LOG("StoreItem: texture edited");
 		}
 	}
 }

@@ -613,7 +613,9 @@ bool ShopPageState::OnExit(bool pass_layer)
 }
 
 bool ShopPageState::OnUpdate(mse::TimeType t)
-{}
+{
+    return true;
+}
 
 ArenaSetupPageState::ArenaSetupPageState()
 {
