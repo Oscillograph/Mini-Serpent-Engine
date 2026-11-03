@@ -48,7 +48,7 @@ namespace mse
 	class Layer;
 	class GUIItem;
 	class ResourceManager; // static - a system that keeps track of all media resources loaded into memory and collects garbage occasionally
-	class Resource;
+	struct Resource;
 	class Font;
 	class FontBitmap;
 	class FontTrueType;
@@ -56,7 +56,7 @@ namespace mse
 	class Scene;
 	class PhysicsProcessor; // a system that manages physics worlds and corresponding entities
 	class PhysicsAPI; // virtual interface to physics processor implementations
-	class World;
+	struct World;
 	class Entity;
 	
 	// unused forward declarations

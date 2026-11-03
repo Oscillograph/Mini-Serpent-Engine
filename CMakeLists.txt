@@ -1,11 +1,20 @@
 cmake_minimum_required(VERSION 3.28)
 
-# SET(CMAKE_CXX_COMPILER "clang++")
-# SET(CMAKE_CXX_COMPILER "g++")
+# set(CMAKE_C_COMPILER "clang")
+# set(CMAKE_CXX_COMPILER "clang++")
+# set(CMAKE_C_COMPILER "gcc")
+# set(CMAKE_CXX_COMPILER "g++")
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(GCC_GLOBAL_COMPILER_SETTINGS
+        # -std=c++17
+        # -no-pie
+        # -static
+        # -static-libgcc
+        # -static-libstdc++
         -Wall
         -Wextra
         -Wfatal-errors
@@ -13,7 +22,7 @@ set(GCC_GLOBAL_COMPILER_SETTINGS
         -Wno-unused-variable
         -Wno-unused-function
         -Wno-unused-but-set-variable
-        -O0
+        -O3
     )
 set(GCC_GLOBAL_LINKER_SETTINGS "-Wl,-rpath,./bin")
 
@@ -76,7 +85,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     sdl3_ttf
     yaml-cpp
     )
-target_link_libraries(${PROJECT_NAME} PRIVATE -lpthread "-Wl,-rpath,./bin")
+target_link_libraries(${PROJECT_NAME} PRIVATE -lpthread ${GCC_GLOBAL_LINKER_SETTINGS})
 install(TARGETS ${PROJECT_NAME}
 	RUNTIME DESTINATION ${MSE_BASE_SOURCE_DIR}/out
 	LIBRARY DESTINATION ${MSE_BASE_SOURCE_DIR}/out

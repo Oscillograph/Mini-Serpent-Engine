@@ -18,7 +18,7 @@ namespace mse
 			virtual ~Image();
 
 			// general GUIItem interface
-			virtual void Display();
+			virtual void Display() override;
 
             // unique Image interface
             void ChangeSourceArea(const glm::uvec4& sourceArea);

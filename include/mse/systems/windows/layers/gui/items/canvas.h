@@ -19,7 +19,7 @@ namespace mse
 			virtual ~Canvas();
 
 			// general GUIItem interface
-			virtual void Display();
+			virtual void Display() override;
 			void LoadTexture(const std::string& path);
 			
 			// unique Canvas interface

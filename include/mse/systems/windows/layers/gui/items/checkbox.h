@@ -24,7 +24,7 @@ namespace mse
 			virtual ~Checkbox();
 			
 			// general GUIItem interface
-			virtual void Display();
+			virtual void Display() override;
             virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
 
             // unique Checkbox interface
