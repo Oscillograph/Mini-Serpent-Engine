@@ -17,6 +17,7 @@ set(GCC_GLOBAL_COMPILER_SETTINGS
         # -static-libstdc++
         -Wall
         -Wextra
+        -pedantic
         -Wfatal-errors
         -Wno-unused-parameter
         -Wno-unused-variable
