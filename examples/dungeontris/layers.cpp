@@ -700,6 +700,13 @@ void CharacterUpdateUILayer::OnInit()
     pickDroppedWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подобрать", {32, 32, 32, 255}, {220, 95, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
     pickDroppedWeaponBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
         DTetris::Weapon* weapon = &(game.npcCharacter.drop_list[0]);
+
+        if (weapon->sprite == DTetris::WeaponSpriteType::LegendarySword)
+        {
+            weapon->sourceArea.x = weapon->sourceArea.x + (weapon->sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+            weapon->sourceHandleArea.x = weapon->sourceHandleArea.x + (weapon->sourceHandleArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+        }
+
         game.inputWeapon.name = weapon->name;
         game.inputWeapon.type = weapon->type;
         game.inputWeapon.damage = weapon->damage;
