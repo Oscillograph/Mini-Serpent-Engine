@@ -66,11 +66,11 @@ namespace mse
 					0,
 					32,
 					{0, 0, 0, 0});
-                Renderer::SurfaceDrawRectFilled(
-                                                (Texture*)(m_texture->data),
-                                                {0, 0, layerArea.z, layerArea.w}, 
-                                                {0, 0, 0, 0}
-                                                );
+                // Renderer::SurfaceDrawRectFilled(
+                //                                 (Texture*)(m_texture->data),
+                //                                 {0, 0, layerArea.z, layerArea.w},
+                //                                 {0, 0, 0, 0}
+                //                                 );
                 
                 // from where and where to draw
                 SDL_Rect sourceRect;
