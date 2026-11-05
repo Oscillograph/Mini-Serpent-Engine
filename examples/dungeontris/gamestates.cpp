@@ -589,10 +589,10 @@ bool ShopPageState::OnEnter(mse::Layer* pass_layer)
         {
             layer = pass_layer;
         }
-    } else {
-        layer = new ShopUILayer();
-        mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     }
+
+    shop_layer = new ShopUILayer();
+    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(shop_layer, true);
 
     MSE_LOG("ShopPageState OnEnter...done");
     return true;
@@ -601,6 +601,9 @@ bool ShopPageState::OnEnter(mse::Layer* pass_layer)
 bool ShopPageState::OnExit(bool pass_layer)
 {
     MSE_LOG("ShopPageState OnEnter...");
+
+    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(shop_layer);
+    shop_layer = nullptr;
 
     if (!pass_layer)
     {

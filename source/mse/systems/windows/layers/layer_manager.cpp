@@ -101,24 +101,31 @@ namespace mse
         }
         
 //		MSE_CORE_LOG("Layer manager: handling an event for elemnetId=", elementId);
-		
+
+		// modal layers handle first if there are any
+		if (m_modal_layers.size() > 0)
+		{
+			for (auto it = m_modal_layers.rbegin(); it != m_modal_layers.rend(); ++it)
+			{
+				handled = (*it)->HandleEvent(eventType, event, (elementId == -1) ? (*it)->elementInFocus : elementId);
+			}
+
+			if (!handled)
+			{
+				MSE_CORE_LOG("LayerManager:: Modal layer requires action.");
+			}
+
+			// prevent other layers from handling if modal layers present
+			handled = true;
+			return handled;
+		}
+
+		// ordinary layers handle events
 		for (int i = (int)(m_layers.size()) - 1; (i >= 0) && !handled; --i)
 		{
 			if (m_layers[i] != nullptr)
 			{
-//                printf("%d -- event sent...", elementId);
 				handled = m_layers[i]->HandleEvent(eventType, event, (elementId == -1) ? m_layers[i]->elementInFocus : elementId);
-//                printf("... event handled.\n");
-
-				auto it = std::find(m_modal_layers.begin(), m_modal_layers.end(), m_layers[i]);
-				if (it != m_modal_layers.end())
-				{
-					if (!handled)
-					{
-						MSE_CORE_LOG("LayerManager:: Modal layer requires action.");
-					}
-					handled = true;
-				}
 			}
 		}
 		

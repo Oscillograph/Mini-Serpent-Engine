@@ -713,6 +713,9 @@ void CharacterUpdateUILayer::OnInit()
         pickDroppedWeaponBtn->Disable();
     };
 
+    // change to shop
+    // gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
+
     // defaults
     game.inputClass = game.playerCharacter.main_class.type;
     game.inputWeapon = game.playerCharacter.weapon;
@@ -844,6 +847,8 @@ void ShopUILayer::OnInit()
         "./data/img/background.png",
         {0, 0, 320, 240},
         {0, 0, 0, 255})));
+
+
 }
 
 void ShopUILayer::OnUpdate(mse::TimeType t)
