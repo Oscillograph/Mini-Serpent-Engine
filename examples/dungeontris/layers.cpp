@@ -2,6 +2,7 @@
 #define DUNGEONTRIS_LAYERS_CPP
 
 #include "dungeontris/gui.h"
+#include "mse/systems/windows/layers/gui/items/text.h"
 #include <mse/utils/logger.h>
 #include <mse/systems/platform/events/events.h>
 #include <mse/systems/platform/input/input.h>
@@ -705,7 +706,7 @@ void CharacterUpdateUILayer::OnInit()
         if (weapon->sprite == DTetris::WeaponSpriteType::LegendarySword)
         {
             weapon->sourceArea.x = weapon->sourceArea.x + (weapon->sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
-            weapon->sourceHandleArea.x = weapon->sourceHandleArea.x + (weapon->sourceHandleArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+            weapon->sourceHandleArea.x = weapon->sourceHandleArea.x + (weapon->sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
         }
 
         game.inputWeapon.name = weapon->name;
@@ -857,6 +858,14 @@ void ShopUILayer::OnInit()
         {0, 0, 0, 255})));
 
     // weapons
+    AddElement(new mse::gui::Text(
+        this,
+        U"Оружие",
+        {60, 20, 60, 10},
+        {0, 0, 0, 0},
+        {255, 255, 255, 255}
+    ));
+
     mse::gui::StoreItem* weapon01 = (mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
         this,
         {60, 30, 40, 27},
@@ -897,7 +906,16 @@ void ShopUILayer::OnInit()
         10
     ))); // legendary sword
 
+
     // traits
+    AddElement(new mse::gui::Text(
+        this,
+        U"Особенности",
+        {60, 80, 100, 10},
+        {0, 0, 0, 0},
+        {255, 255, 255, 255}
+    ));
+
     mse::gui::StoreItem* trait01 = (mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
         this,
         {60, 90, 40, 27},
@@ -1438,14 +1456,17 @@ void ArenaUILayer::OnInit()
         MSE_LOG("Weapon: ", utf8::utf32to8(game.playerCharacter.weapon.name.c_str()));
 
 
-        if (game.playerCharacter.weapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
-        {
-            if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
-            {
-                weapon_src.x = weapon_src.x + static_cast<int>(game.playerCharacter.main_class.type) * weapon_src.z;
-                weapon_handle_src.x = weapon_handle_src.x + static_cast<int>(game.playerCharacter.main_class.type) * weapon_handle_src.z;
-            }
-        }
+        // if (game.playerCharacter.weapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
+        // {
+        //     if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
+        //     {
+        //         weapon_src.x = weapon_src.x + static_cast<int>(game.playerCharacter.main_class.type) * weapon_src.z;
+        //         weapon_handle_src.x = weapon_handle_src.x + static_cast<int>(game.playerCharacter.main_class.type) * weapon_handle_src.z;
+        //     } else {
+        //         weapon_src.x = weapon_src.x + (weapon_src.z) * ((int)game.playerCharacter.main_class.type - 1);
+        //         weapon_handle_src.x = weapon_handle_src.x + (weapon_src.z) * ((int)game.playerCharacter.main_class.type - 1);
+        //     }
+        // }
         
         // weapon
         AddElement(new mse::gui::Image(
