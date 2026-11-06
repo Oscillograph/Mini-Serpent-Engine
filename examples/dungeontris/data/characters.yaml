@@ -87,7 +87,7 @@
   stats_max: [300, 6, 6, 6]
   traits: [12, 6, 1]
   drops: [7]
-  sprite_whole_area: [0, 0, 0, 0]
+  sprite_whole_area: [462, 170, 32, 52]
   sprite_handle_area: [0, 0, 0, 0]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]

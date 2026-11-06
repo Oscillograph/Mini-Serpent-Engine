@@ -1304,52 +1304,9 @@ void ArenaUILayer::OnInit()
     // npc character
     {
         glm::uvec4 src = {0, 0, 34, 64};
+
+        src = game.npcCharacter.sprite_whole_area;
     
-        switch (game.npcCharacter.race)
-        {
-            case DTetris::Races::Goblin:
-            {
-                src = {222, 95, 30, 64};
-                break;
-            }
-            case DTetris::Races::Skeleton:
-            {
-                src = {257, 27, 34, 64};
-                break;
-            }
-            case DTetris::Races::Slime:
-            {
-                src = {225, 43, 30, 48};
-                break;
-            }
-            case DTetris::Races::Ghost:
-            {
-                src = {252, 99, 32, 54};
-                break;
-            }
-            case DTetris::Races::Golem:
-            {
-                src = {200, 172, 30, 51};
-                break;
-            }
-            case DTetris::Races::Dragon:
-            {
-                src = {232, 164, 34, 59};
-                break;
-            }
-            case DTetris::Races::OldGod:
-            {
-                src = {0, 0, 34, 64};
-                break;
-            }
-            case DTetris::Races::Human:
-            {
-                break;
-            }
-            default:
-            {
-            }
-        }
         AddElement(new mse::gui::Image(this, {40, 90 - src.w, src.z, src.w}, "./data/img/screen-images.png", src, {0, 0, 0, 255}));
     }
 
@@ -1456,17 +1413,24 @@ void ArenaUILayer::OnInit()
         MSE_LOG("Weapon: ", utf8::utf32to8(game.playerCharacter.weapon.name.c_str()));
 
 
-        // if (game.playerCharacter.weapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
-        // {
-        //     if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
-        //     {
-        //         weapon_src.x = weapon_src.x + static_cast<int>(game.playerCharacter.main_class.type) * weapon_src.z;
-        //         weapon_handle_src.x = weapon_handle_src.x + static_cast<int>(game.playerCharacter.main_class.type) * weapon_handle_src.z;
-        //     } else {
-        //         weapon_src.x = weapon_src.x + (weapon_src.z) * ((int)game.playerCharacter.main_class.type - 1);
-        //         weapon_handle_src.x = weapon_handle_src.x + (weapon_src.z) * ((int)game.playerCharacter.main_class.type - 1);
-        //     }
-        // }
+        if (game.playerCharacter.weapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
+        {
+            if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
+            {
+                AddElement(new mse::gui::Image(
+                    this,
+                    {
+                        250 + head_src.x - character_src.x,
+                        90 + (head_src.y - character_src.y) - character_src.w,
+                        head_src.z,
+                        head_src.w
+                    },
+                    "./data/img/screen-images.png",
+                    head_special_src,
+                    {0, 0, 0, 255}
+                ));
+            }
+        }
         
         // weapon
         AddElement(new mse::gui::Image(
