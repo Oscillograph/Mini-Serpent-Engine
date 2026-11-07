@@ -132,24 +132,11 @@ void CharacterCreateUILayer::OnInit()
 		"./data/img/screen-images.png",
 		{326, 2, 14, 13},
 		{0, 0, 0, 255}));
-	hintText1->BindTo(classSelectorBtn);
 	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
-		classAvatarPreviewImage->ChangeSourceArea(
-			{100, 173, 33, 50}
-		);
-
-		game.inputClass = DTetris::Classes::Rogue;
-		game.inputStats = {
-			gameDB.classes[DTetris::Classes::Rogue].health,
-			gameDB.classes[DTetris::Classes::Rogue].strength,
-			gameDB.classes[DTetris::Classes::Rogue].agility,
-			gameDB.classes[DTetris::Classes::Rogue].endurance
-		};
-
-		UpdateClassStats();
-		UpdateClassTips();
+		ChooseClass(DTetris::Classes::Rogue);
 	};
+	hintText1->BindTo(classSelectorBtn);
 
 	// warrior selector
 	classSelectorBtn = (mse::gui::Image*)AddElement(new mse::gui::Image(
@@ -160,20 +147,7 @@ void CharacterCreateUILayer::OnInit()
 		{0, 0, 0, 255}));
 	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
-		classAvatarPreviewImage->ChangeSourceArea(
-			{133, 173, 33, 50}
-		);
-
-		game.inputClass = DTetris::Classes::Warrior;
-		game.inputStats = {
-			gameDB.classes[DTetris::Classes::Warrior].health,
-			gameDB.classes[DTetris::Classes::Warrior].strength,
-			gameDB.classes[DTetris::Classes::Warrior].agility,
-			gameDB.classes[DTetris::Classes::Warrior].endurance
-		};
-
-		UpdateClassStats();
-		UpdateClassTips();
+		ChooseClass(DTetris::Classes::Warrior);
 	};
 	hintText2->BindTo(classSelectorBtn);
 
@@ -186,20 +160,7 @@ void CharacterCreateUILayer::OnInit()
 		{0, 0, 0, 255}));
 	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
-		classAvatarPreviewImage->ChangeSourceArea(
-			{166, 171, 33, 52}
-		);
-
-		game.inputClass = DTetris::Classes::Barbarian;
-		game.inputStats = {
-			gameDB.classes[DTetris::Classes::Barbarian].health,
-			gameDB.classes[DTetris::Classes::Barbarian].strength,
-			gameDB.classes[DTetris::Classes::Barbarian].agility,
-			gameDB.classes[DTetris::Classes::Barbarian].endurance
-		};
-
-		UpdateClassStats();
-		UpdateClassTips();
+		ChooseClass(DTetris::Classes::Barbarian);
 	};
 	hintText3->BindTo(classSelectorBtn);
 
@@ -212,20 +173,7 @@ void CharacterCreateUILayer::OnInit()
 		{0, 0, 0, 255}));
 	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
-		classAvatarPreviewImage->ChangeSourceArea(
-			{368, 172, 22, 50}
-		);
-
-		game.inputClass = DTetris::Classes::Monk;
-		game.inputStats = {
-			gameDB.classes[DTetris::Classes::Monk].health,
-			gameDB.classes[DTetris::Classes::Monk].strength,
-			gameDB.classes[DTetris::Classes::Monk].agility,
-			gameDB.classes[DTetris::Classes::Monk].endurance
-		};
-
-		UpdateClassStats();
-		UpdateClassTips();
+		ChooseClass(DTetris::Classes::Monk);
 	};
 	hintText4->BindTo(classSelectorBtn);
 
@@ -238,20 +186,7 @@ void CharacterCreateUILayer::OnInit()
 		{0, 0, 0, 255}));
 	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
-		classAvatarPreviewImage->ChangeSourceArea(
-			{337, 172, 30, 50}
-		);
-
-		game.inputClass = DTetris::Classes::Cultist;
-		game.inputStats = {
-			gameDB.classes[DTetris::Classes::Cultist].health,
-			gameDB.classes[DTetris::Classes::Cultist].strength,
-			gameDB.classes[DTetris::Classes::Cultist].agility,
-			gameDB.classes[DTetris::Classes::Cultist].endurance
-		};
-
-		UpdateClassStats();
-		UpdateClassTips();
+		ChooseClass(DTetris::Classes::Cultist);
 	};
 	hintText5->BindTo(classSelectorBtn);
 
@@ -264,20 +199,7 @@ void CharacterCreateUILayer::OnInit()
 		{0, 0, 0, 255}));
 	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
-		classAvatarPreviewImage->ChangeSourceArea(
-			{390, 170, 26, 50}
-		);
-
-		game.inputClass = DTetris::Classes::Witcher;
-		game.inputStats = {
-			gameDB.classes[DTetris::Classes::Witcher].health,
-			gameDB.classes[DTetris::Classes::Witcher].strength,
-			gameDB.classes[DTetris::Classes::Witcher].agility,
-			gameDB.classes[DTetris::Classes::Witcher].endurance
-		};
-
-		UpdateClassStats();
-		UpdateClassTips();
+		ChooseClass(DTetris::Classes::Witcher);
 	};
 	hintText6->BindTo(classSelectorBtn);
 
@@ -289,7 +211,6 @@ void CharacterCreateUILayer::OnInit()
 		"./data/img/screen-images.png",
 		{0, 0, 0, 0},
 		{0, 0, 0, 255}));
-
 
 	// stats and starting trait preview
 	classNameTextBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(
@@ -373,21 +294,9 @@ void CharacterCreateUILayer::OnInit()
 		gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
 	};
 
+
 	// Set default character
-	classAvatarPreviewImage->ChangeSourceArea(
-		{100, 173, 33, 50}
-	);
-
-	game.inputClass = DTetris::Classes::Rogue;
-	game.inputStats = {
-		gameDB.classes[DTetris::Classes::Rogue].health,
-		gameDB.classes[DTetris::Classes::Rogue].strength,
-		gameDB.classes[DTetris::Classes::Rogue].agility,
-		gameDB.classes[DTetris::Classes::Rogue].endurance
-	};
-
-	UpdateClassStats();
-	UpdateClassTips();
+	ChooseClass(DTetris::Classes::Rogue);
 }
 
 void CharacterCreateUILayer::OnUpdate(mse::TimeType t)
@@ -416,23 +325,23 @@ void CharacterCreateUILayer::UpdateClassStats()
 	"\nВыносливость: " <<
 	"\nПерк:\n";
 
-		stats = utf8::utf8to32(strstream.str());
-		classStatsTextBox->ChangeText(stats);
+	stats = utf8::utf8to32(strstream.str());
+	classStatsTextBox->ChangeText(stats);
 
-		strstream.str("");
-		strstream.clear();
+	strstream.str("");
+	strstream.clear();
 
-		strstream <<
-		health << "\n" <<
-		str << "\n" <<
-		agi << "\n" <<
-		end;
+	strstream <<
+	health << "\n" <<
+	str << "\n" <<
+	agi << "\n" <<
+	end;
 
-		stats = utf8::utf8to32(strstream.str());
+	stats = utf8::utf8to32(strstream.str());
 
-		classStatsValuesBox->ChangeText(stats);
-		strstream.str("");
-		strstream.clear();
+	classStatsValuesBox->ChangeText(stats);
+	strstream.str("");
+	strstream.clear();
 }
 
 void CharacterCreateUILayer::UpdateClassTips()
@@ -444,14 +353,76 @@ void CharacterCreateUILayer::UpdateClassTips()
 	strstream <<
 	"Подсказки:  \n";
 
-		strstream << utf8::utf32to8(gameDB.classes[characterClass].tips);
+	strstream << utf8::utf32to8(gameDB.classes[characterClass].tips);
 
-		tips = utf8::utf8to32(strstream.str());
-		classTipsBox->ChangeText(tips);
-		strstream.str("");
-		strstream.clear();
+	tips = utf8::utf8to32(strstream.str());
+	classTipsBox->ChangeText(tips);
+	strstream.str("");
+	strstream.clear();
 
-		classTraitTextBox->ChangeText(gameDB.traits[gameDB.classes[characterClass].startingTrait].name);
+	classTraitTextBox->ChangeText(gameDB.traits[gameDB.classes[characterClass].startingTrait].name);
 
-		classTraitHint->ChangeText(gameDB.traits[gameDB.classes[characterClass].startingTrait].description);
+	classTraitHint->ChangeText(gameDB.traits[gameDB.classes[characterClass].startingTrait].description);
+}
+
+void CharacterCreateUILayer::ChooseClass(DTetris::Classes classChosen)
+{
+	switch (classChosen)
+	{
+		case DTetris::Classes::Warrior:
+		{
+			classAvatarPreviewImage->ChangeSourceArea(
+				{133, 173, 33, 50}
+			);
+			break;
+		}
+		case DTetris::Classes::Barbarian:
+		{
+			classAvatarPreviewImage->ChangeSourceArea(
+				{166, 171, 33, 52}
+			);
+			break;
+		}
+		case DTetris::Classes::Cultist:
+		{
+			classAvatarPreviewImage->ChangeSourceArea(
+				{337, 172, 30, 50}
+			);
+			break;
+		}
+		case DTetris::Classes::Monk:
+		{
+			classAvatarPreviewImage->ChangeSourceArea(
+				{368, 172, 22, 50}
+			);
+			break;
+		}
+		case DTetris::Classes::Witcher:
+		{
+			classAvatarPreviewImage->ChangeSourceArea(
+				{390, 170, 26, 50}
+			);
+			break;
+		}
+
+		case DTetris::Classes::Rogue:
+		default:
+		{
+			classChosen = DTetris::Classes::Rogue;
+			classAvatarPreviewImage->ChangeSourceArea(
+				{100, 173, 33, 50}
+			);
+		}
+	}
+
+	game.inputClass = classChosen;
+	game.inputStats = {
+		gameDB.classes[classChosen].health,
+		gameDB.classes[classChosen].strength,
+		gameDB.classes[classChosen].agility,
+		gameDB.classes[classChosen].endurance
+	};
+
+	UpdateClassStats();
+	UpdateClassTips();
 }

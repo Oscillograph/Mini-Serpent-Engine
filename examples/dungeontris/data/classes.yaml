@@ -26,8 +26,8 @@
   starting_trait: 3
   sprite_whole_area: [99, 173, 33, 50]
   sprite_handle_area: [100, 185, 3, 5]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
+  sprite_head_area: [110, 174, 8, 11]
+  sprite_head_special_area: [110, 159, 8, 11]
   tips: | 
     Точен и уворотлив.
     Уязвим перед противниками,
@@ -43,8 +43,8 @@
   starting_trait: 1
   sprite_whole_area: [133, 173, 33, 50]
   sprite_handle_area: [134, 185, 3, 5]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
+  sprite_head_area: [144, 174, 9, 10]
+  sprite_head_special_area: [144, 160, 9, 10]
   tips: | 
     Полагается на силу и щит.
     Уязвим перед ловкачами.
@@ -58,8 +58,8 @@
   starting_trait: 2
   sprite_whole_area: [167, 171, 33, 52]
   sprite_handle_area: [168, 185, 3, 5]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
+  sprite_head_area: [177, 172, 14, 14]
+  sprite_head_special_area: [177, 155, 14, 14]
   tips: | 
     Вынослив и безбашен.
     Лучше не затягивать бой.
@@ -90,8 +90,8 @@
   starting_trait: 14
   sprite_whole_area: [338, 172, 30, 50]
   sprite_handle_area: [339, 184, 3, 5]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
+  sprite_head_area: [349, 173, 8, 9]
+  sprite_head_special_area: [349, 159, 8, 9]
   tips: |
     Носит Печать Хаоса, которая
     придаёт сил с каждым боем.

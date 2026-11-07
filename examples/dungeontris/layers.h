@@ -62,6 +62,7 @@ public:
 
     mse::gui::Checkbox* hardcoreTetrisMod = nullptr;
 
+    void ChooseClass(DTetris::Classes classChosen);
     void UpdateClassStats();
     void UpdateClassTips();
 };

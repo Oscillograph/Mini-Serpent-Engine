@@ -1,10 +1,10 @@
-#include "dungeontris/game-fwd.h"
-#include "mse/core.h"
-#include "mse/utils/logger.h"
+#include <mse/core.h>
+#include <mse/utils/logger.h>
+
+#include <dungeontris/game-fwd.h>
 #include <dungeontris/gamestates.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/tetris.h>
-//#include <mse/mse.h>
 #include <mse/systems/platform/rendererAPI.h>
 #include <mse/systems/platform/audio/soundman.h>
 #include <mse/systems/application/application.h>
@@ -184,10 +184,6 @@ CharacterCreatePageState::~CharacterCreatePageState()
 bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
 {
     MSE_LOG("CharacterCreatePageState OnEnter...");
-    layer = new CharacterCreateUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
-    MSE_LOG("CharacterCreatePageState OnEnter...done");
-    
     // reset game
     game.battleCounter = 0;
     game.battleFinished = false;
@@ -197,6 +193,11 @@ bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
 
     game.shop_traits.clear();
     game.shop_weapons.clear();
+
+    // gui
+    layer = new CharacterCreateUILayer();
+    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
+    MSE_LOG("CharacterCreatePageState OnEnter...done");
     
     return true;
 }
@@ -204,39 +205,29 @@ bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
 bool CharacterCreatePageState::OnExit(bool pass_layer)
 {
     MSE_LOG("CharacterCreatePageState OnExit..");
-    if (!pass_layer)
-    {
-        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
-        layer = nullptr;
-    }
-    MSE_LOG("CharacterCreatePageState OnExit..done");
-    return true;
-}
 
-bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
-{
-    if (game.inputClass != DTetris::Classes::None)
+    MSE_LOG("CharacterCreatePageState: game.inputClass = ", (int)(game.inputClass));
+
+    switch (game.inputClass)
     {
-        switch (game.inputClass)
-        {
         case DTetris::Classes::Rogue:
-            {
-                game.inputTrait = DTetris::Traits::HiddenStrike;
-                game.inputWeapon = gameDB.weapons[2];
-                break;
-            }
+        {
+            game.inputTrait = DTetris::Traits::HiddenStrike;
+            game.inputWeapon = gameDB.weapons[2];
+            break;
+        }
         case DTetris::Classes::Warrior:
-            {
-                game.inputTrait = DTetris::Traits::Rush;
-                game.inputWeapon = gameDB.weapons[3];
-                break;
-            }
+        {
+            game.inputTrait = DTetris::Traits::Rush;
+            game.inputWeapon = gameDB.weapons[3];
+            break;
+        }
         case DTetris::Classes::Barbarian:
-            {
-                game.inputTrait = DTetris::Traits::Rage;
-                game.inputWeapon = gameDB.weapons[4];
-                break;
-            }
+        {
+            game.inputTrait = DTetris::Traits::Rage;
+            game.inputWeapon = gameDB.weapons[4];
+            break;
+        }
         case DTetris::Classes::Monk:
         {
             game.inputTrait = DTetris::Traits::Meditation;
@@ -256,48 +247,58 @@ bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
             break;
         }
         default:
-            {
-                printf("can't create player character: undefined class\n");
-            }
-        }
-        
-        game.playerCharacter = 
         {
-            1,                     // level
-            U"Игрок",              // name
-            game.inputRace,         // race
-            game.inputStats,          // stats_max
-            game.inputStats,          // stats
-            {game.inputClass, 1},    // main class
-            {DTetris::Classes::None, 0},    // sub class
-            {game.inputTrait},                    // traits
-            {},  // drop
-            gameDB.classes[game.inputClass].sprite_whole_area, // sprite_whole_area
-            gameDB.classes[game.inputClass].sprite_handle_area, // sprite_handle_area
-            gameDB.classes[game.inputClass].sprite_head_area, // sprite_head_area
-            gameDB.classes[game.inputClass].sprite_head_special_area, // sprite_head_special_area
-            game.inputWeapon   // weapon
-        };
-
-        printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n", 
-               (char*)(game.playerCharacter.name.c_str()),
-               game.playerCharacter.stats.health,
-               game.playerCharacter.stats.strength,
-               game.playerCharacter.stats.agility,
-               game.playerCharacter.stats.endurance);
-        printf("Attempted to create: (%.2f, %.2f, %.2f, %.2f)\n", 
-               game.inputStats.health,
-               game.inputStats.strength,
-               game.inputStats.agility,
-               game.inputStats.endurance);
-        
-        game.battleCounter = 0;
-        
-        game.inputClass = DTetris::Classes::None;
-        
-        // gsm.ChangeStateTo(DTetris::GamePages::ArenaSetup);
+            printf("can't create player character: undefined class\n");
+        }
     }
-    
+
+    game.playerCharacter =
+    {
+        1,                     // level
+        U"Игрок",              // name
+        game.inputRace,         // race
+        game.inputStats,          // stats_max
+        game.inputStats,          // stats
+        {game.inputClass, 1},    // main class
+        {DTetris::Classes::None, 0},    // sub class
+        {game.inputTrait},                    // traits
+        {},  // drop
+        gameDB.classes[game.inputClass].sprite_whole_area, // sprite_whole_area
+        gameDB.classes[game.inputClass].sprite_handle_area, // sprite_handle_area
+        gameDB.classes[game.inputClass].sprite_head_area, // sprite_head_area
+        gameDB.classes[game.inputClass].sprite_head_special_area, // sprite_head_special_area
+        game.inputWeapon   // weapon
+    };
+
+    printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n",
+            (char*)(game.playerCharacter.name.c_str()),
+            game.playerCharacter.stats.health,
+            game.playerCharacter.stats.strength,
+            game.playerCharacter.stats.agility,
+            game.playerCharacter.stats.endurance);
+    printf("Attempted to create: (%.2f, %.2f, %.2f, %.2f)\n",
+            game.inputStats.health,
+            game.inputStats.strength,
+            game.inputStats.agility,
+            game.inputStats.endurance);
+
+    game.battleCounter = 0;
+
+    game.inputClass = DTetris::Classes::None;
+
+    // gsm.ChangeStateTo(DTetris::GamePages::ArenaSetup);
+
+    if (!pass_layer)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(layer);
+        layer = nullptr;
+    }
+    MSE_LOG("CharacterCreatePageState OnExit..done");
+    return true;
+}
+
+bool CharacterCreatePageState::OnUpdate(mse::TimeType t)
+{
     return true;
 }
 
