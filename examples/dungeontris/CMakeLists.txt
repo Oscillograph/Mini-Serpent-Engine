@@ -9,9 +9,24 @@ add_executable(dungeontris
     data-loader.cpp
     game.cpp
     gamestates.cpp
+    gui.cpp
     layers.cpp
     tetris.cpp
-    gui.cpp)
+    layers/arena_ui.cpp
+    layers/character_create_ui.cpp
+    layers/character_load_ui.cpp
+    layers/character_save_ui.cpp
+    layers/character_update_ui.cpp
+    layers/credits_ui.cpp
+    layers/exit_ui.cpp
+    layers/gameover_ui.cpp
+    layers/highscores_ui.cpp
+    layers/intro_ui.cpp
+    layers/main_menu_ui.cpp
+    layers/settings_ui.cpp
+    layers/shop_ui.cpp
+    layers/winner_ui.cpp
+    )
 target_include_directories(dungeontris PUBLIC ${MSE_BASE_SOURCE_DIR}/examples)
 target_compile_options(dungeontris PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
 target_link_libraries(dungeontris PUBLIC

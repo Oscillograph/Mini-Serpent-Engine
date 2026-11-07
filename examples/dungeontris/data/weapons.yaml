@@ -56,7 +56,7 @@
   damage_type: 1
   sprite_type: 4
   sprite_whole_area: [292, 160, 12, 31]
-  sprite_handle_area: [293, 182, 3, 5]
+  sprite_handle_area: [298, 182, 3, 5]
   cost: 9
   
 # sprite_whole_area is actually 3x size: the sprite is taken by 288 + i*4 where i is the id of a class. Monk can't equip.
