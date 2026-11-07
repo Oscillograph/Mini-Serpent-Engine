@@ -28,6 +28,8 @@ namespace mse
             virtual bool HandleEvent(EventTypes eventType, SDL_Event* event) override;
 
             // unique Checkbox interface
+			void Set(bool value);
+			void Toggle();
             CheckboxStates state = CheckboxStates::Unchecked;
             bool isPushed = false;
 		protected:

@@ -1,3 +1,4 @@
+#include "mse/utils/logger.h"
 #include <mse/systems/windows/layers/gui/items/checkbox.h>
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/rendererAPI.h>
@@ -212,6 +213,33 @@ namespace mse
                 }
             }
             return false;
+        }
+
+        void Checkbox::Set(bool value)
+        {
+            if (m_var != nullptr)
+            {
+                *m_var = value;
+                state = (*m_var) ? CheckboxStates::Checked : CheckboxStates::Unchecked;
+            } else {
+                MSE_CORE_ERROR("Checkbox: m_var points to nullptr!");
+            }
+        }
+
+        void Checkbox::Toggle()
+        {
+            // MSE_CORE_TRACE("Checkbox: Toggle enter");
+            if (m_var != nullptr)
+            {
+                // MSE_CORE_TRACE("Checkbox: Toggle: m_var != nullptr");
+                *m_var = !(*m_var);
+                // MSE_CORE_TRACE("Checkbox: Toggle: *m_var = !(*m_var)");
+                state = (*m_var) ? CheckboxStates::Checked : CheckboxStates::Unchecked;
+                // MSE_CORE_TRACE("Checkbox: Toggle: state set");
+            } else {
+                MSE_CORE_ERROR("Checkbox: m_var points to nullptr!");
+            }
+            // MSE_CORE_TRACE("Checkbox: Toggle exit");
         }
 	}
 }

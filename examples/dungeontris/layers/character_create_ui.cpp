@@ -1,3 +1,5 @@
+#include "mse/systems/platform/events/events.h"
+#include "mse/systems/windows/layers/gui/items/checkbox.h"
 #include <dungeontris/layers.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/gamestates.h>
@@ -103,6 +105,19 @@ void CharacterCreateUILayer::OnInit()
 			nullptr,
 			gameDB.classes[DTetris::Classes::Witcher].name,
 			{0, 0, 110, 12},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+
+	mse::gui::Hint* hintText7 = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			U"Добавляет крестовину\nв набор выпадающих\nтетримино.",
+			{0, 0, 160, 36},
 			{64, 32, 32, 255},
 			{218, 218, 255, 255},
 			nullptr,
@@ -311,22 +326,26 @@ void CharacterCreateUILayer::OnInit()
 		{0, 0, 0, 255},
 		{128, 255, 128, 255})));
 
-	mse::gui::Checkbox* hardcoreTetrisMod = (mse::gui::Checkbox*)(AddElement(new mse::gui::Checkbox(
+	hardcoreTetrisMod = (mse::gui::Checkbox*)(AddElement(new mse::gui::Checkbox(
 		this,
 		{220, 140, 14, 13},
 		"data/img/screen-images.png",
 		{0, 0, 0},
 		&(game.hardcoreTetrisMod),
-																									{24, 88, 14, 13},
-																								 {38, 88, 14, 13},
-																								 {52, 88, 14, 13},
-																								 {66, 88, 14, 13})));
-	AddElement(new mse::gui::Text(
+		{24, 88, 14, 13},
+		{38, 88, 14, 13},
+		{52, 88, 14, 13},
+		{66, 88, 14, 13})));
+	mse::gui::Text* hardcoreTetrisModText = (mse::gui::Text*)AddElement(new mse::gui::Text(
 		this,
 		U"Хардкор",
 		{240, 140, 70, 10},
 		{0, 0, 0, 0},
 		{128, 255, 128, 255}));
+	hardcoreTetrisModText->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		hardcoreTetrisMod->Toggle();
+	};
+	hintText7->BindTo(hardcoreTetrisModText);
 
 	mse::gui::Button* proceedBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
 		this, U"На подвиги!",

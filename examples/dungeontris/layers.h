@@ -1,6 +1,7 @@
 #ifndef DUNGEONTRIS_AUTOBATTLER_LAYERS_H
 #define DUNGEONTRIS_AUTOBATTLER_LAYERS_H
 
+#include "mse/systems/windows/layers/gui/items/checkbox.h"
 #include <mse/systems/resources/resource_manager.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/gamestates.h>
@@ -58,6 +59,8 @@ public:
     mse::gui::Text* classStatsValuesBox = nullptr;
     mse::gui::Text* classTraitTextBox = nullptr;
     mse::gui::Text* classTipsBox = nullptr;
+
+    mse::gui::Checkbox* hardcoreTetrisMod = nullptr;
 
     void UpdateClassStats();
     void UpdateClassTips();

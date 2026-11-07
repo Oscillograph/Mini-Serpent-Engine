@@ -5,13 +5,12 @@ add_library(mse STATIC IMPORTED)
 set_target_properties(mse PROPERTIES IMPORTED_LOCATION ${MSE_BASE_SOURCE_DIR}/build/libMini_Serpent_Engine.a)
 
 add_executable(dungeontris
-    dungeontris.cpp
     data-loader.cpp
+    dungeontris.cpp
     game.cpp
     gamestates.cpp
     gui.cpp
     layers.cpp
-    tetris.cpp
     layers/arena_ui.cpp
     layers/character_create_ui.cpp
     layers/character_load_ui.cpp
@@ -26,6 +25,7 @@ add_executable(dungeontris
     layers/settings_ui.cpp
     layers/shop_ui.cpp
     layers/winner_ui.cpp
+    tetris.cpp
     )
 target_include_directories(dungeontris PUBLIC ${MSE_BASE_SOURCE_DIR}/examples)
 target_compile_options(dungeontris PRIVATE ${GCC_GLOBAL_COMPILER_SETTINGS})
