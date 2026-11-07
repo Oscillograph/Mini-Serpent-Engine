@@ -106,7 +106,11 @@ struct ShopPageState : GameState
     virtual bool OnExit(bool pass_layer = true) override;
     virtual bool OnUpdate(mse::TimeType t = 0) override;
 
+    mse::Layer* shop_weapons_layer = nullptr;
+    mse::Layer* shop_traits_layer = nullptr;
     mse::Layer* shop_layer = nullptr;
+
+    int traitSlot = 1; // up to 3 if there is a class capable of wielding three traits
 };
 
 struct ArenaSetupPageState : GameState

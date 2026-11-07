@@ -203,3 +203,32 @@ void ShopUILayer::OnInit()
 
 void ShopUILayer::OnUpdate(mse::TimeType t)
 {}
+
+
+ShopWeaponsUILayer::ShopWeaponsUILayer()
+{
+	MSE_LOG("Constructed a ShopWeaponsUI layer");
+}
+ShopWeaponsUILayer::~ShopWeaponsUILayer()
+{
+	MSE_LOG("Destroyed a ShopWeaponsUI layer");
+}
+
+void ShopWeaponsUILayer::OnInit()
+{}
+void ShopWeaponsUILayer::OnUpdate(mse::TimeType t)
+{}
+
+ShopTraitsUILayer::ShopTraitsUILayer()
+{
+	MSE_LOG("Constructed a ShopTraitsUI layer");
+}
+ShopTraitsUILayer::~ShopTraitsUILayer()
+{
+	MSE_LOG("Destroyed a ShopTraitsUI layer");
+}
+
+void ShopTraitsUILayer::OnInit()
+{}
+void ShopTraitsUILayer::OnUpdate(mse::TimeType t)
+{}

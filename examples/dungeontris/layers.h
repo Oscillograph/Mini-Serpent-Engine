@@ -120,6 +120,26 @@ public:
     virtual void OnUpdate(mse::TimeType t = 0) override;
 };
 
+class ShopWeaponsUILayer : public mse::Layer
+{
+public:
+    ShopWeaponsUILayer();
+    ~ShopWeaponsUILayer();
+
+    virtual void OnInit() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
+};
+
+class ShopTraitsUILayer : public mse::Layer
+{
+public:
+    ShopTraitsUILayer();
+    ~ShopTraitsUILayer();
+
+    virtual void OnInit() override;
+    virtual void OnUpdate(mse::TimeType t = 0) override;
+};
+
 class WinnerUILayer : public mse::Layer
 {
 public:

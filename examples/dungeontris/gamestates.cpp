@@ -593,6 +593,8 @@ bool ShopPageState::OnEnter(mse::Layer* pass_layer)
     }
 
     shop_layer = new ShopUILayer();
+    shop_weapons_layer = new ShopUILayer();
+    shop_traits_layer = new ShopUILayer();
     mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(shop_layer, true);
 
     MSE_LOG("ShopPageState OnEnter...done");
