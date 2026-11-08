@@ -592,10 +592,25 @@ bool ShopPageState::OnEnter(mse::Layer* pass_layer)
         }
     }
 
-    shop_layer = new ShopUILayer();
-    shop_weapons_layer = new ShopUILayer();
-    shop_traits_layer = new ShopUILayer();
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(shop_layer, true);
+    switch (game.shopType)
+    {
+        case DTetris::ShopTypes::Weapons:
+        {
+            shop_weapons_layer = new ShopWeaponsUILayer();
+            mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(shop_weapons_layer, true);
+            break;
+        }
+        case DTetris::ShopTypes::Traits:
+        {
+            shop_traits_layer = new ShopTraitsUILayer();
+            mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(shop_traits_layer, true);
+            break;
+        }
+        default:
+        {}
+    }
+
+    game.shopType = DTetris::ShopTypes::None;
 
     MSE_LOG("ShopPageState OnEnter...done");
     return true;
@@ -605,8 +620,16 @@ bool ShopPageState::OnExit(bool pass_layer)
 {
     MSE_LOG("ShopPageState OnEnter...");
 
-    mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(shop_layer);
-    shop_layer = nullptr;
+    if (shop_weapons_layer != nullptr)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(shop_weapons_layer);
+        shop_weapons_layer = nullptr;
+    }
+    if (shop_traits_layer != nullptr)
+    {
+        mse::Renderer::GetActiveWindow()->GetLayerManager()->Detach(shop_traits_layer);
+        shop_traits_layer = nullptr;
+    }
 
     if (!pass_layer)
     {

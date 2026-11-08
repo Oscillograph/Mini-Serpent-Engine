@@ -100,6 +100,21 @@ namespace DTetris
         Exit
     };
 
+    enum class ShopTypes
+    {
+        None        = 0,
+        Weapons     = 1,
+        Traits      = 2,
+    };
+
+    enum class TraitSlot
+    {
+        None    = 0,
+        A       = 1,
+        B       = 2,
+        C       = 3,
+    };
+
     enum class Races : int
     {
         None,
@@ -388,6 +403,8 @@ namespace DTetris
         Classes inputClass = Classes::None;
         CharacterStats inputStats;
         Traits inputTrait;
+        TraitSlot traitSlot = TraitSlot::None; // for shop
+        ShopTypes shopType = ShopTypes::None; // for shop
         Races inputRace = Races::Human;
         Weapon inputWeapon;
         bool playerCharacterUpdated = false;

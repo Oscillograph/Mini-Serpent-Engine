@@ -1,14 +1,15 @@
 #ifndef DUNGEONTRIS_AUTOBATTLER_LAYERS_H
 #define DUNGEONTRIS_AUTOBATTLER_LAYERS_H
 
-#include "mse/systems/windows/layers/gui/items/checkbox.h"
-#include <mse/systems/resources/resource_manager.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/gamestates.h>
+#include <dungeontris/gui.h>
 
 #include <mse/systems/windows/layers/layer.h>
 #include <mse/systems/windows/layers/layer_manager.h>
 #include <mse/systems/windows/layers/gui/gui.h>
+#include <mse/systems/windows/layers/gui/items/checkbox.h>
+#include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/canban.h>
 #include <mse/systems/application/application.h>
 
@@ -128,7 +129,12 @@ public:
 
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
+
+    std::vector<mse::gui::StoreItem*> weaponsGUIElements = {};
 };
+
+void PickTrait(DTetris::Traits trait);
+void PickWeapon(size_t weapon);
 
 class ShopTraitsUILayer : public mse::Layer
 {
@@ -138,6 +144,8 @@ public:
 
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
+
+    std::vector<mse::gui::StoreItem*> traitsGUIElements = {};
 };
 
 class WinnerUILayer : public mse::Layer

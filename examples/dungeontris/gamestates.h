@@ -108,7 +108,6 @@ struct ShopPageState : GameState
 
     mse::Layer* shop_weapons_layer = nullptr;
     mse::Layer* shop_traits_layer = nullptr;
-    mse::Layer* shop_layer = nullptr;
 
     int traitSlot = 1; // up to 3 if there is a class capable of wielding three traits
 };
