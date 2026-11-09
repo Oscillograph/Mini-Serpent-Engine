@@ -261,7 +261,7 @@ bool CharacterCreatePageState::OnExit(bool pass_layer)
         game.inputStats,          // stats
         {game.inputClass, 1},    // main class
         {DTetris::Classes::None, 0},    // sub class
-        {game.inputTrait},                    // traits
+        {game.inputTrait, DTetris::Traits::None, DTetris::Traits::None},   // traits
         {},  // drop
         gameDB.classes[game.inputClass].sprite_whole_area, // sprite_whole_area
         gameDB.classes[game.inputClass].sprite_handle_area, // sprite_handle_area
@@ -445,32 +445,17 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
         {
             case DTetris::TraitSlot::A:
             {
-                if (game.playerCharacter.traits.size() > 0)
-                {
-                    game.playerCharacter.traits[0] = game.inputTrait;
-                } else {
-                    game.playerCharacter.traits.push_back(game.inputTrait);
-                }
+                game.playerCharacter.traits[0] = game.inputTrait;
                 break;
             }
             case DTetris::TraitSlot::B:
             {
-                if (game.playerCharacter.traits.size() > 1)
-                {
-                    game.playerCharacter.traits[1] = game.inputTrait;
-                } else {
-                    game.playerCharacter.traits.push_back(game.inputTrait);
-                }
+                game.playerCharacter.traits[1] = game.inputTrait;
                 break;
             }
             case DTetris::TraitSlot::C:
             {
-                if (game.playerCharacter.traits.size() > 2)
-                {
-                    game.playerCharacter.traits[2] = game.inputTrait;
-                } else {
-                    game.playerCharacter.traits.push_back(game.inputTrait);
-                }
+                game.playerCharacter.traits[2] = game.inputTrait;
                 break;
             }
             default:
@@ -490,12 +475,12 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                 {
                     if (game.playerCharacter.main_class.level == 2)
                     {
-                        game.playerCharacter.traits.push_back(DTetris::Traits::Agile);
+                        game.playerCharacter.traits[1] = DTetris::Traits::Agile;
                         printf("+trait \"Agile\"\n");
                     }
                     if (game.playerCharacter.main_class.level == 3)
                     {
-                        game.playerCharacter.traits.push_back(DTetris::Traits::Poison);
+                        game.playerCharacter.traits[2] = DTetris::Traits::Poison;
                         printf("+trait \"Poison\"\n");
                     }
                     break;
@@ -504,12 +489,12 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                 {
                     if (game.playerCharacter.main_class.level == 2)
                     {
-                        game.playerCharacter.traits.push_back(DTetris::Traits::Shield);
+                        game.playerCharacter.traits[1] = DTetris::Traits::Shield;
                         printf("+trait \"Shield\"\n");
                     }
                     if (game.playerCharacter.main_class.level == 3)
                     {
-                        game.playerCharacter.traits.push_back(DTetris::Traits::Strong);
+                        game.playerCharacter.traits[2] = DTetris::Traits::Strong;
                         printf("+trait \"Strong\"\n");
                     }
                     break;
@@ -518,12 +503,12 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
                 {
                     if (game.playerCharacter.main_class.level == 2)
                     {
-                        game.playerCharacter.traits.push_back(DTetris::Traits::StoneSkin);
+                        game.playerCharacter.traits[1] = DTetris::Traits::StoneSkin;
                         printf("+trait \"Stone Skin\"\n");
                     }
                     if (game.playerCharacter.main_class.level == 3)
                     {
-                        game.playerCharacter.traits.push_back(DTetris::Traits::Survivor);
+                        game.playerCharacter.traits[2] = DTetris::Traits::Survivor;
                         printf("+trait \"Surviror\"\n");
                     }
                     break;

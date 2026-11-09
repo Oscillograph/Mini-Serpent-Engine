@@ -1,5 +1,3 @@
-#include <algorithm> // std::find()
-
 #include <mse/systems/platform/events/events.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/gui.h>
