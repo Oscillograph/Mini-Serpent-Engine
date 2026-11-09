@@ -97,9 +97,23 @@ public:
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
 
-    mse::gui::Button* classRogueBtn = nullptr;
-    mse::gui::Button* classWarriorBtn = nullptr;
-    mse::gui::Button* classBarbarianBtn = nullptr;
+    mse::gui::Text* classNameTextBox = nullptr;
+    mse::gui::Text* classStatsTextBox = nullptr;
+    mse::gui::Text* classStatsValuesBox = nullptr;
+    mse::gui::Text* treasuresValueTextBox = nullptr;
+
+    mse::gui::Button* slotABtn = nullptr;
+    mse::gui::Button* slotBBtn = nullptr;
+    mse::gui::Button* slotCBtn = nullptr;
+    mse::gui::Button* levelUpBtn = nullptr;
+
+    mse::gui::Image* characterImage = nullptr;
+    mse::gui::Image* weaponImage = nullptr;
+    mse::gui::Image* headSpecialImage = nullptr;
+
+    mse::gui::Button* backToMenuBtn = nullptr;
+    mse::gui::Button* nextBattleBtn = nullptr;
+
     mse::gui::Button* keepSameWeaponBtn = nullptr;
     mse::gui::Button* pickDroppedWeaponBtn = nullptr;
 
@@ -109,6 +123,8 @@ public:
 
     int shopSlot = 0; // 1 - weapon or trait; 2 - trait; 3 - trait
     mse::Layer* shopLayer = nullptr;
+
+    void RecalculateCharacter();
 };
 
 class ShopUILayer : public mse::Layer
