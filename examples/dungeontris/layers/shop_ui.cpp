@@ -49,6 +49,8 @@ void ShopWeaponsUILayer::OnInit()
 {
 	weaponsGUIElements.reserve(6);
 
+	// general UI layout
+
 	// weapons
 	AddElement(new mse::gui::Text(
 		this,
@@ -101,8 +103,13 @@ ShopTraitsUILayer::~ShopTraitsUILayer()
 	MSE_LOG("Destroyed a ShopTraitsUI layer");
 }
 
+
 void ShopTraitsUILayer::OnInit()
 {
+	traitsGUIElements.reserve(18);
+
+	// general UI layout
+
 	// traits
 	AddElement(new mse::gui::Text(
 		this,
@@ -113,14 +120,16 @@ void ShopTraitsUILayer::OnInit()
 	));
 
 	size_t offset = 1; // because 0 and 1 are not collectible
+	size_t offset_y = 0;
+	size_t offset_x = 0;
 
-	for (size_t i = offset; i < 5 + offset; ++i)
+	for (size_t i = offset; i < 6 + offset; ++i)
 	{
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
 				{ 60 + 40*(i - offset), 30, 40, 27},
-				{400 + 40*(i - offset), 41, 40, 27},
+				{400 + 40*(i - offset), 68, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
 		);
@@ -130,14 +139,14 @@ void ShopTraitsUILayer::OnInit()
 		};
 	}
 
-	for (size_t i = 5 + offset; i < 10 + offset; ++i)
+	for (size_t i = 5 + offset; i < 12 + offset; ++i)
 	{
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 60 + 40*(i - offset), 30, 40, 27},
-																	  {400 + 40*(i - offset), 41, 40, 27},
-																	  gameDB.traits[(DTetris::Traits)i].cost
+				{ 60 + 40*(i - offset), 60, 40, 27},
+				{400 + 40*(i - offset), 95, 40, 27},
+				gameDB.traits[(DTetris::Traits)i].cost
 			)))
 		);
 
@@ -146,14 +155,14 @@ void ShopTraitsUILayer::OnInit()
 		};
 	}
 
-	for (size_t i = 10 + offset; i < 15 + offset; ++i)
+	for (size_t i = 10 + offset; i < 18 + offset; ++i)
 	{
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 60 + 40*(i - offset), 30, 40, 27},
-																	  {400 + 40*(i - offset), 41, 40, 27},
-																	  gameDB.traits[(DTetris::Traits)i].cost
+				{ 60 + 40*(i - offset), 90, 40, 27},
+				{400 + 40*(i - offset), 122, 40, 27},
+				gameDB.traits[(DTetris::Traits)i].cost
 			)))
 		);
 
@@ -165,16 +174,37 @@ void ShopTraitsUILayer::OnInit()
 void ShopTraitsUILayer::OnUpdate(mse::TimeType t)
 {}
 
+
 void PickTrait(DTetris::Traits trait)
 {
-	game.playerCharacter.traits[(size_t)game.traitSlot] = trait;
-
-	gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	if (!game.shop_traits[trait])
+	{
+		// buy if not owned
+		if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost >= 0)
+		{
+			game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost;
+			game.shop_traits[trait] = true;
+		}
+	} else {
+		// pick if owned
+		game.playerCharacter.traits[(size_t)game.traitSlot] = trait;
+		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	}
 }
 
 void PickWeapon(size_t weapon)
 {
-	game.inputWeapon = gameDB.weapons[(size_t)weapon];
-
-	gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	if (!game.shop_weapons[(DTetris::WeaponSpriteType)weapon])
+	{
+		// buy if not owned
+		if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost >= 0)
+		{
+			game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost;
+			game.shop_weapons[(DTetris::WeaponSpriteType)weapon] = true;
+		}
+	} else {
+		// pick if owned
+		game.inputWeapon = gameDB.weapons[(size_t)weapon];
+		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	}
 }
