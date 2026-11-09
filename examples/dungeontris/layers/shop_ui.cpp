@@ -1,4 +1,6 @@
-#include "mse/systems/platform/events/events.h"
+#include <algorithm> // std::find()
+
+#include <mse/systems/platform/events/events.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/gui.h>
 #include <dungeontris/game-fwd.h>
@@ -179,16 +181,28 @@ void PickTrait(DTetris::Traits trait)
 {
 	if (!game.shop_traits[trait])
 	{
-		// buy if not owned
+		// not owned
 		if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost >= 0)
 		{
 			game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost;
 			game.shop_traits[trait] = true;
 		}
 	} else {
-		// pick if owned
-		game.playerCharacter.traits[(size_t)game.traitSlot] = trait;
-		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+		// owned
+		if (game.playerCharacter.traits[(size_t)game.traitSlot] == trait)
+		{
+			// unpick
+			game.playerCharacter.traits[(size_t)game.traitSlot] = DTetris::Traits::None;
+
+			game.playerCharacterUpdated = true;
+		} else {
+			// pick
+			game.playerCharacter.traits[(size_t)game.traitSlot] = trait;
+
+			game.playerCharacterUpdated = true;
+
+			gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+		}
 	}
 }
 
@@ -196,15 +210,33 @@ void PickWeapon(size_t weapon)
 {
 	if (!game.shop_weapons[(DTetris::WeaponSpriteType)weapon])
 	{
-		// buy if not owned
+		// not owned
 		if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost >= 0)
 		{
 			game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost;
 			game.shop_weapons[(DTetris::WeaponSpriteType)weapon] = true;
 		}
 	} else {
-		// pick if owned
-		game.inputWeapon = gameDB.weapons[(size_t)weapon];
-		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+		// owned
+		if (game.playerCharacter.weapon.sprite == (DTetris::WeaponSpriteType)weapon)
+		{
+			// unpick
+			game.inputWeapon = gameDB.weapons[0]; // fists
+
+			game.playerCharacterUpdated = true;
+		} else {
+			// pick
+			game.inputWeapon = gameDB.weapons[(size_t)weapon];
+
+			if (game.inputWeapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
+			{
+				game.inputWeapon.sourceArea.x = game.inputWeapon.sourceArea.x + (game.inputWeapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+				game.inputWeapon.sourceHandleArea.x = game.inputWeapon.sourceHandleArea.x + (game.inputWeapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+			}
+
+			game.playerCharacterUpdated = true;
+
+			gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+		}
 	}
 }

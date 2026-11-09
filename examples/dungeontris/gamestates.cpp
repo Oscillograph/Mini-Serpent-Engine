@@ -440,124 +440,96 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
     {
         // change weapon
         game.playerCharacter.weapon = game.inputWeapon;
+
+        switch (game.traitSlot)
+        {
+            case DTetris::TraitSlot::A:
+            {
+                if (game.playerCharacter.traits.size() > 0)
+                {
+                    game.playerCharacter.traits[0] = game.inputTrait;
+                } else {
+                    game.playerCharacter.traits.push_back(game.inputTrait);
+                }
+                break;
+            }
+            case DTetris::TraitSlot::B:
+            {
+                if (game.playerCharacter.traits.size() > 1)
+                {
+                    game.playerCharacter.traits[1] = game.inputTrait;
+                } else {
+                    game.playerCharacter.traits.push_back(game.inputTrait);
+                }
+                break;
+            }
+            case DTetris::TraitSlot::C:
+            {
+                if (game.playerCharacter.traits.size() > 2)
+                {
+                    game.playerCharacter.traits[2] = game.inputTrait;
+                } else {
+                    game.playerCharacter.traits.push_back(game.inputTrait);
+                }
+                break;
+            }
+            default:
+            {}
+        }
         
         // update traits
-        if ((game.playerCharacter.main_class.level + game.playerCharacter.sub_class.level) < gameDB.level_max)
+        if ((int)(game.playerCharacter.level) < gameDB.level_max)
         {
-            if ((game.inputClass != DTetris::Classes::None) &&
-                (game.inputClass != game.playerCharacter.main_class.type))
+            // update main class level
+
+
+            // update traits
+            switch (game.playerCharacter.main_class.type)
             {
-                // update subclass level
-                if (game.playerCharacter.sub_class.type == DTetris::Classes::None)
-                {
-                    game.playerCharacter.sub_class = {game.inputClass, 1};
-                } else {
-                    game.playerCharacter.sub_class.level++;
-                }
-                
-                // update traits
-                switch (game.inputClass)
-                {
                 case DTetris::Classes::Rogue:
-                    {
-                        printf("subclass: ROGUE, ");
-                        if (game.playerCharacter.sub_class.level == 1)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::HiddenStrike);
-                            printf("+trait \"Hidden Strike\"\n");
-                        }
-                        if (game.playerCharacter.sub_class.level == 2)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Agile);
-                            printf("+trait \"Agile\"\n");
-                        }
-                        break;
-                    }
-                case DTetris::Classes::Warrior:
-                    {
-                        printf("subclass: Warrior, ");
-                        if (game.playerCharacter.sub_class.level == 1)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Rush);
-                            printf("+trait \"Rush\"\n");
-                        }
-                        if (game.playerCharacter.sub_class.level == 2)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Shield);
-                            printf("+trait \"Shield\"\n");
-                        }
-                        break;
-                    }
-                case DTetris::Classes::Barbarian:
-                    {
-                        printf("subclass: Barbarian, ");
-                        if (game.playerCharacter.sub_class.level == 1)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Rage);
-                            printf("+trait \"Rage\"\n");
-                        }
-                        if (game.playerCharacter.sub_class.level == 2)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::StoneSkin);
-                            printf("+trait \"Stone Skin\"\n");
-                        }
-                        break;
-                    }
-                default:
-                    {}
-                }
-            } else {
-                // update main class level
-                game.playerCharacter.main_class.level++;
-                
-                // update traits
-                switch (game.playerCharacter.main_class.type)
                 {
-                case DTetris::Classes::Rogue:
+                    if (game.playerCharacter.main_class.level == 2)
                     {
-                        if (game.playerCharacter.main_class.level == 2)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Agile);
-                            printf("+trait \"Agile\"\n");
-                        }
-                        if (game.playerCharacter.main_class.level == 3)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Poison);
-                            printf("+trait \"Poison\"\n");
-                        }
-                        break;
+                        game.playerCharacter.traits.push_back(DTetris::Traits::Agile);
+                        printf("+trait \"Agile\"\n");
                     }
-                case DTetris::Classes::Warrior:
+                    if (game.playerCharacter.main_class.level == 3)
                     {
-                        if (game.playerCharacter.main_class.level == 2)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Shield);
-                            printf("+trait \"Shield\"\n");
-                        }
-                        if (game.playerCharacter.main_class.level == 3)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Strong);
-                            printf("+trait \"Strong\"\n");
-                        }
-                        break;
+                        game.playerCharacter.traits.push_back(DTetris::Traits::Poison);
+                        printf("+trait \"Poison\"\n");
                     }
-                case DTetris::Classes::Barbarian:
-                    {
-                        if (game.playerCharacter.main_class.level == 2)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::StoneSkin);
-                            printf("+trait \"Stone Skin\"\n");
-                        }
-                        if (game.playerCharacter.main_class.level == 3)
-                        {
-                            game.playerCharacter.traits.push_back(DTetris::Traits::Survivor);
-                            printf("+trait \"Surviror\"\n");
-                        }
-                        break;
-                    }
-                default:
-                    {}
+                    break;
                 }
+                case DTetris::Classes::Warrior:
+                {
+                    if (game.playerCharacter.main_class.level == 2)
+                    {
+                        game.playerCharacter.traits.push_back(DTetris::Traits::Shield);
+                        printf("+trait \"Shield\"\n");
+                    }
+                    if (game.playerCharacter.main_class.level == 3)
+                    {
+                        game.playerCharacter.traits.push_back(DTetris::Traits::Strong);
+                        printf("+trait \"Strong\"\n");
+                    }
+                    break;
+                }
+                case DTetris::Classes::Barbarian:
+                {
+                    if (game.playerCharacter.main_class.level == 2)
+                    {
+                        game.playerCharacter.traits.push_back(DTetris::Traits::StoneSkin);
+                        printf("+trait \"Stone Skin\"\n");
+                    }
+                    if (game.playerCharacter.main_class.level == 3)
+                    {
+                        game.playerCharacter.traits.push_back(DTetris::Traits::Survivor);
+                        printf("+trait \"Surviror\"\n");
+                    }
+                    break;
+                }
+                default:
+                {}
             }
         }
         

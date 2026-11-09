@@ -242,8 +242,8 @@ namespace DTetris
         CharacterStats stats; // during battle
         Class main_class = {Classes::None, 0};
         Class sub_class = {Classes::None, 0}; // TODO: remove subclasses mechanic
-        std::vector<Traits> traits;
-        std::vector<Weapon> drop_list;
+        std::vector<Traits> traits = {};
+        std::vector<Weapon> drop_list = {};
         glm::uvec4 sprite_whole_area = {0, 0, 0, 0};
         glm::uvec4 sprite_handle_area = {0, 0, 0, 0};
         glm::uvec4 sprite_head_area = {0, 0, 0, 0};
