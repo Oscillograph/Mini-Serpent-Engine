@@ -1,3 +1,4 @@
+#include "mse/systems/windows/layers/gui/items/image.h"
 #include <mse/systems/platform/events/events.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/gui.h>
@@ -50,6 +51,7 @@ void ShopWeaponsUILayer::OnInit()
 	weaponsGUIElements.reserve(6);
 
 	// general UI layout
+
 
 	// weapons
 	AddElement(new mse::gui::Text(

@@ -1,6 +1,7 @@
 #ifndef MSE_SYSTEMS_WINDOWS_LAYERS_GUI_ITEMS_GUITYPES_H
 #define MSE_SYSTEMS_WINDOWS_LAYERS_GUI_ITEMS_GUITYPES_H
 
+#include <cstddef>
 #include <initializer_list>
 
 namespace mse
@@ -35,7 +36,7 @@ namespace mse
 
 		Symbol<S> container[size];
 
-		void input(S symbol, std::size_t position = 0)
+		void input(S symbol, size_t position = 0)
 		{
 			Symbol<S> temp = container[position];
 			container[position].symbol = symbol;
