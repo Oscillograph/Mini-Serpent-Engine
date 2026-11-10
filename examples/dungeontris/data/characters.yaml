@@ -18,7 +18,7 @@
 - name: Гоблин
   level: 1
   race: 2
-  stats_max: [15, 1, 1, 1]
+  stats_max: [1, 1, 1, 1]
   traits: []
   drops: [2]
   sprite_whole_area: [222, 95, 28, 63]
@@ -26,69 +26,3 @@
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
   weapon: 10
-- name: Скелет
-  level: 1
-  race: 3
-  stats_max: [20, 2, 2, 1]
-  traits: [5]
-  drops: [4]
-  sprite_whole_area: [257, 27, 33, 64]
-  sprite_handle_area: [0, 0, 0, 0]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
-  weapon: 10
-- name: Слайм
-  level: 1
-  race: 4
-  stats_max: [18, 3, 1, 2]
-  traits: [10]
-  drops: [5]
-  sprite_whole_area: [223, 43, 33, 48]
-  sprite_handle_area: [0, 0, 0, 0]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
-  weapon: 9
-- name: Призрак
-  level: 1
-  race: 5
-  stats_max: [16, 1, 3, 1]
-  traits: [3]
-  drops: [3]
-  sprite_whole_area: [253, 99, 28, 54]
-  sprite_handle_area: [0, 0, 0, 0]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
-  weapon: 11
-- name: Голем
-  level: 2
-  race: 6
-  stats_max: [20, 3, 1, 3]
-  traits: [6]
-  drops: [6]
-  sprite_whole_area: [200, 171, 30, 52]
-  sprite_handle_area: [0, 0, 0, 0]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
-  weapon: 9
-- name: Дракон
-  level: 3
-  race: 7
-  stats_max: [30, 3, 3, 3]
-  traits: [12]
-  drops: [7]
-  sprite_whole_area: [231, 164, 36, 59]
-  sprite_handle_area: [0, 0, 0, 0]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
-  weapon: 12
-- name: Н'хикто
-  level: 3
-  race: 8
-  stats_max: [300, 6, 6, 6]
-  traits: [12, 6, 1]
-  drops: [7]
-  sprite_whole_area: [462, 170, 32, 52]
-  sprite_handle_area: [0, 0, 0, 0]
-  sprite_head_area: [0, 0, 0, 0]
-  sprite_head_special_area: [0, 0, 0, 0]
-  weapon: 12

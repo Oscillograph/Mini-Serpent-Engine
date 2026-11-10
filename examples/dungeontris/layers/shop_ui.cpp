@@ -1,4 +1,5 @@
-#include "mse/systems/windows/layers/gui/items/image.h"
+#include "mse/systems/windows/layers/gui/items/button.h"
+#include "mse/systems/windows/layers/gui/items/field.h"
 #include <mse/systems/platform/events/events.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/gui.h>
@@ -51,13 +52,33 @@ void ShopWeaponsUILayer::OnInit()
 	weaponsGUIElements.reserve(6);
 
 	// general UI layout
+	AddElement(new mse::gui::Field(
+		this,
+		{30, 60, 260, 140},
+		{128, 64, 128, 255},
+		true,
+		1,
+		{255, 255, 255, 255}
+	));
 
+	AddElement(new mse::gui::Button(
+		this,
+		{290, 60, 14, 13},
+		"./data/img/screen-images.png",
+		{0, 0, 0},
+		{24, 102, 14, 13},
+		{38, 102, 14, 13},
+		{52, 102, 14, 13},
+		{66, 102, 14, 13}
+	))->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	};
 
 	// weapons
 	AddElement(new mse::gui::Text(
 		this,
 		U"Оружие",
-		{60, 20, 60, 10},
+		{30, 20, 60, 10},
 		{0, 0, 0, 0},
 		{255, 255, 255, 255}
 	));
@@ -69,7 +90,7 @@ void ShopWeaponsUILayer::OnInit()
 		weaponsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 60 + 40*(i - offset), 30, 40, 27},
+				{ 30 + 40*(i - offset), 30, 40, 27},
 				{400 + 40*(i - offset), 41, 40, 27},
 				gameDB.weapons[i].cost
 			)))
@@ -85,7 +106,7 @@ void ShopWeaponsUILayer::OnInit()
 		weaponsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 60 + 40*(i - offset), 60, 40, 27},
+				{ 30 + 40*(i - offset), 60, 40, 27},
 				{400 + 40*(i - offset), 41, 40, 27},
 				gameDB.weapons[i].cost
 			)))
@@ -111,12 +132,33 @@ void ShopTraitsUILayer::OnInit()
 	traitsGUIElements.reserve(18);
 
 	// general UI layout
+	AddElement(new mse::gui::Field(
+		this,
+		{30, 60, 260, 140},
+		{128, 64, 128, 255},
+		true,
+		1,
+		{255, 255, 255, 255}
+	));
+
+	AddElement(new mse::gui::Button(
+		this,
+		{290, 60, 14, 13},
+		"./data/img/screen-images.png",
+		{0, 0, 0},
+		{24, 102, 14, 13},
+		{38, 102, 14, 13},
+		{52, 102, 14, 13},
+		{66, 102, 14, 13}
+	))->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	};
 
 	// traits
 	AddElement(new mse::gui::Text(
 		this,
 		U"Особенности",
-		{60, 80, 100, 10},
+		{30, 80, 100, 10},
 		{0, 0, 0, 0},
 		{255, 255, 255, 255}
 	));
@@ -130,7 +172,7 @@ void ShopTraitsUILayer::OnInit()
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 60 + 40*(i - offset), 30, 40, 27},
+				{ 30 + 40*(i - offset), 30, 40, 27},
 				{400 + 40*(i - offset), 68, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
@@ -146,7 +188,7 @@ void ShopTraitsUILayer::OnInit()
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 60 + 40*(i - offset), 60, 40, 27},
+				{ 30 + 40*(i - offset), 60, 40, 27},
 				{400 + 40*(i - offset), 95, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
@@ -162,7 +204,7 @@ void ShopTraitsUILayer::OnInit()
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 60 + 40*(i - offset), 90, 40, 27},
+				{ 30 + 40*(i - offset), 90, 40, 27},
 				{400 + 40*(i - offset), 122, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))

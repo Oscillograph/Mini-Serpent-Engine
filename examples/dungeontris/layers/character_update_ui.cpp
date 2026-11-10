@@ -34,14 +34,15 @@ void CharacterUpdateUILayer::OnInit()
 		{255, 255, 255, 255})));
 
 	// character avatar preview
+	glm::uvec4 character_src = game.playerCharacter.sprite_whole_area;
+
 	characterImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
-		{50, 60, 33, 52},
+		{50, 60, character_src.z, character_src.w},
 		"./data/img/screen-images.png",
-		{0, 0, 0, 0},
+		character_src,
 		{0, 0, 0, 255}));
 
-	glm::uvec4 character_src = game.playerCharacter.sprite_whole_area;
 	glm::uvec4 handle_src = game.playerCharacter.sprite_handle_area;
 	glm::uvec4 head_src = game.playerCharacter.sprite_head_area;
 	glm::uvec4 head_special_src = game.playerCharacter.sprite_head_special_area;
@@ -92,56 +93,11 @@ void CharacterUpdateUILayer::OnInit()
 			{0, 0, 0, 255}));
 	}
 
-
-	// pick a weapon
-	glm::uvec4 srcKeep = {0, 0, 34, 64};
-	glm::uvec4 srcNew = {0, 0, 34, 64};
-
-
-	mse::gui::Text* text3 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Выбрать оружие:", {155, 20, 120, 10}, {0, 0, 0, 255}, {255, 255, 255, 255})));
-	AddElement(new mse::gui::Image(this, {155, 95 - srcKeep.w, srcKeep.z, srcKeep.w}, "./data/img/heroes.png", srcKeep, {0, 0, 0, 255}));
-	keepSameWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Оставить", {32, 32, 32, 255}, {135, 95, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
-	keepSameWeaponBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-		game.inputWeapon = game.playerCharacter.weapon;
-		changeMade = true;
-
-		keepSameWeaponBtn->Disable();
-		pickDroppedWeaponBtn->Enable();
-	};
-	keepSameWeaponBtn->Disable();
-
-	AddElement(new mse::gui::Image(this, {240, 95 - srcNew.w, srcNew.z, srcNew.w}, "./data/img/heroes.png", srcNew, {0, 0, 0, 255}));
-	pickDroppedWeaponBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подобрать", {32, 32, 32, 255}, {220, 95, 80, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
-	pickDroppedWeaponBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-		DTetris::Weapon* weapon = &(game.npcCharacter.drop_list[0]);
-
-		if (weapon->sprite == DTetris::WeaponSpriteType::LegendarySword)
-		{
-			weapon->sourceArea.x = weapon->sourceArea.x + (weapon->sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
-			weapon->sourceHandleArea.x = weapon->sourceHandleArea.x + (weapon->sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
-		}
-
-		game.inputWeapon.name = weapon->name;
-		game.inputWeapon.type = weapon->type;
-		game.inputWeapon.damage = weapon->damage;
-		game.inputWeapon.sprite = weapon->sprite;
-		game.inputWeapon.cost = weapon->cost;
-		game.inputWeapon.sourceArea = weapon->sourceArea;
-		game.inputWeapon.sourceHandleArea = weapon->sourceHandleArea;
-		changeMade = true;
-
-		keepSameWeaponBtn->Enable();
-		pickDroppedWeaponBtn->Disable();
-	};
-
-	// change to shop
-	// gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
-
-	// defaults
-	game.inputClass = game.playerCharacter.main_class.type;
-	game.inputWeapon = game.playerCharacter.weapon;
-
 	// show stats
+
+	// treasures
+
+	// weapon and traits shops
 
 	// confirm changes
 	mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {32, 32, 32, 255}, {110, 215, 100, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
