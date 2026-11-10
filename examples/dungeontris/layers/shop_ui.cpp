@@ -56,7 +56,7 @@ void ShopWeaponsUILayer::OnInit()
 	AddElement(new mse::gui::Text(
 		this,
 		U"Оружие",
-		{30, 20, 60, 10},
+		{40, 70, 60, 10},
 		{0, 0, 0, 0},
 		{255, 255, 255, 255}
 	));
@@ -68,7 +68,7 @@ void ShopWeaponsUILayer::OnInit()
 		weaponsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - offset), 60, 40, 27},
+				{ 40 + 40*(i - offset), 90, 40, 27},
 				gameDB.weapons[i].sourceButtonArea,
 				gameDB.weapons[i].cost
 			)))
@@ -84,7 +84,7 @@ void ShopWeaponsUILayer::OnInit()
 		weaponsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - 3 - offset), 90, 40, 27},
+				{ 40 + 40*(i - 3 - offset), 120, 40, 27},
 				gameDB.weapons[i].sourceButtonArea,
 				gameDB.weapons[i].cost
 			)))
@@ -95,19 +95,9 @@ void ShopWeaponsUILayer::OnInit()
 		};
 	}
 
-	// general UI layout
-	AddElement(new mse::gui::Field(
-		this,
-		{30, 60, 260, 140},
-		{64, 32, 32, 255},
-		true,
-		1,
-		{255, 255, 255, 255}
-	));
-
 	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
-		{290, 60, 14, 13},
+		{176, 60, 14, 13},
 		"./data/img/screen-images.png",
 		{0, 0, 0},
 		{24, 102, 14, 13},
@@ -118,6 +108,16 @@ void ShopWeaponsUILayer::OnInit()
 	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
 		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
 	};
+
+	// general UI layout
+	AddElement(new mse::gui::Field(
+		this,
+		{30, 60, 160, 140},
+		{64, 32, 32, 255},
+		true,
+		1,
+		{255, 255, 255, 255}
+	));
 }
 
 void ShopWeaponsUILayer::OnUpdate(mse::TimeType t)
@@ -196,7 +196,7 @@ void ShopTraitsUILayer::OnInit()
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - offset), 60, 40, 27},
+				{ 30 + 40*(i - 6 - offset), 60, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].sprite_area,
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
@@ -212,7 +212,7 @@ void ShopTraitsUILayer::OnInit()
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - offset), 90, 40, 27},
+				{ 30 + 40*(i - 12 - offset), 90, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].sprite_area,
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
