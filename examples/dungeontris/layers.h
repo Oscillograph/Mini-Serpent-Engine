@@ -146,6 +146,8 @@ public:
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
 
+    mse::gui::Button* closeBtn = nullptr;
+
     std::vector<mse::gui::StoreItem*> weaponsGUIElements = {};
 };
 
@@ -160,6 +162,8 @@ public:
 
     virtual void OnInit() override;
     virtual void OnUpdate(mse::TimeType t = 0) override;
+
+    mse::gui::Button* closeBtn = nullptr;
 
     std::vector<mse::gui::StoreItem*> traitsGUIElements = {};
 };

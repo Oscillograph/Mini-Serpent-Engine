@@ -1,5 +1,6 @@
 #include "mse/systems/windows/layers/gui/items/button.h"
 #include "mse/systems/windows/layers/gui/items/field.h"
+#include "mse/utils/logger.h"
 #include <mse/systems/platform/events/events.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/gui.h>
@@ -61,7 +62,7 @@ void ShopWeaponsUILayer::OnInit()
 		{255, 255, 255, 255}
 	));
 
-	AddElement(new mse::gui::Button(
+	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
 		{290, 60, 14, 13},
 		"./data/img/screen-images.png",
@@ -70,7 +71,9 @@ void ShopWeaponsUILayer::OnInit()
 		{38, 102, 14, 13},
 		{52, 102, 14, 13},
 		{66, 102, 14, 13}
-	))->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+	));
+
+	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
 		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
 	};
 
@@ -96,7 +99,7 @@ void ShopWeaponsUILayer::OnInit()
 			)))
 		);
 
-		weaponsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		weaponsGUIElements[weaponsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 			PickWeapon(i);
 		};
 	}
@@ -111,6 +114,10 @@ void ShopWeaponsUILayer::OnInit()
 				gameDB.weapons[i].cost
 			)))
 		);
+
+		weaponsGUIElements[weaponsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+			PickWeapon(i);
+		};
 	}
 }
 
@@ -141,7 +148,7 @@ void ShopTraitsUILayer::OnInit()
 		{255, 255, 255, 255}
 	));
 
-	AddElement(new mse::gui::Button(
+	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
 		{290, 60, 14, 13},
 		"./data/img/screen-images.png",
@@ -150,7 +157,9 @@ void ShopTraitsUILayer::OnInit()
 		{38, 102, 14, 13},
 		{52, 102, 14, 13},
 		{66, 102, 14, 13}
-	))->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+	));
+
+	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
 		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
 	};
 
@@ -178,7 +187,7 @@ void ShopTraitsUILayer::OnInit()
 			)))
 		);
 
-		traitsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 			PickTrait((DTetris::Traits)i);
 		};
 	}
@@ -194,7 +203,7 @@ void ShopTraitsUILayer::OnInit()
 			)))
 		);
 
-		traitsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 			PickTrait((DTetris::Traits)i);
 		};
 	}
@@ -210,7 +219,7 @@ void ShopTraitsUILayer::OnInit()
 			)))
 		);
 
-		traitsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 			PickTrait((DTetris::Traits)i);
 		};
 	}
