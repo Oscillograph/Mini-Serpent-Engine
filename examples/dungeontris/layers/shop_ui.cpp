@@ -52,31 +52,6 @@ void ShopWeaponsUILayer::OnInit()
 {
 	weaponsGUIElements.reserve(6);
 
-	// general UI layout
-	AddElement(new mse::gui::Field(
-		this,
-		{30, 60, 260, 140},
-		{128, 64, 128, 255},
-		true,
-		1,
-		{255, 255, 255, 255}
-	));
-
-	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
-		this,
-		{290, 60, 14, 13},
-		"./data/img/screen-images.png",
-		{0, 0, 0},
-		{24, 102, 14, 13},
-		{38, 102, 14, 13},
-		{52, 102, 14, 13},
-		{66, 102, 14, 13}
-	));
-
-	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
-	};
-
 	// weapons
 	AddElement(new mse::gui::Text(
 		this,
@@ -93,8 +68,8 @@ void ShopWeaponsUILayer::OnInit()
 		weaponsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - offset), 30, 40, 27},
-				{400 + 40*(i - offset), 41, 40, 27},
+				{ 30 + 40*(i - offset), 60, 40, 27},
+				gameDB.weapons[i].sourceButtonArea,
 				gameDB.weapons[i].cost
 			)))
 		);
@@ -109,8 +84,8 @@ void ShopWeaponsUILayer::OnInit()
 		weaponsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - offset), 60, 40, 27},
-				{400 + 40*(i - offset), 41, 40, 27},
+				{ 30 + 40*(i - 3 - offset), 90, 40, 27},
+				gameDB.weapons[i].sourceButtonArea,
 				gameDB.weapons[i].cost
 			)))
 		);
@@ -119,6 +94,30 @@ void ShopWeaponsUILayer::OnInit()
 			PickWeapon(i);
 		};
 	}
+
+	// general UI layout
+	AddElement(new mse::gui::Field(
+		this,
+		{30, 60, 260, 140},
+		{64, 32, 32, 255},
+		true,
+		1,
+		{255, 255, 255, 255}
+	));
+
+	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
+		this,
+		{290, 60, 14, 13},
+		"./data/img/screen-images.png",
+		{0, 0, 0},
+		{24, 102, 14, 13},
+		{38, 102, 14, 13},
+		{52, 102, 14, 13},
+		{66, 102, 14, 13}
+	));
+	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	};
 }
 
 void ShopWeaponsUILayer::OnUpdate(mse::TimeType t)
@@ -182,7 +181,7 @@ void ShopTraitsUILayer::OnInit()
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
 				{ 30 + 40*(i - offset), 30, 40, 27},
-				{400 + 40*(i - offset), 68, 40, 27},
+				gameDB.traits[(DTetris::Traits)i].sprite_area,
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
 		);
@@ -198,7 +197,7 @@ void ShopTraitsUILayer::OnInit()
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
 				{ 30 + 40*(i - offset), 60, 40, 27},
-				{400 + 40*(i - offset), 95, 40, 27},
+				gameDB.traits[(DTetris::Traits)i].sprite_area,
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
 		);
@@ -214,7 +213,7 @@ void ShopTraitsUILayer::OnInit()
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
 				{ 30 + 40*(i - offset), 90, 40, 27},
-				{400 + 40*(i - offset), 122, 40, 27},
+				gameDB.traits[(DTetris::Traits)i].sprite_area,
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
 		);

@@ -182,6 +182,7 @@ namespace DTetris
                     !data[i]["sprite_type"] ||
                     !data[i]["sprite_whole_area"] ||
                     !data[i]["sprite_handle_area"] ||
+                    !data[i]["sprite_button_area"] ||
                     !data[i]["cost"])
                 {
                     return false;
@@ -194,6 +195,7 @@ namespace DTetris
                     data[i]["damage_type"].as<DamageType>(),
                     data[i]["sprite_type"].as<WeaponSpriteType>(),
                     data[i]["sprite_whole_area"].as<glm::uvec4>(),
+                    data[i]["sprite_handle_area"].as<glm::uvec4>(),
                     data[i]["sprite_handle_area"].as<glm::uvec4>(),
                     data[i]["cost"].as<int>()
                 };
@@ -257,6 +259,7 @@ namespace DTetris
                 if (!data[i]["name"] ||
                     !data[i]["type_hardcoded"] ||
                     !data[i]["description"] ||
+                    !data[i]["sprite"] ||
                     !data[i]["cost"])
                 {
                     return false;
@@ -266,6 +269,7 @@ namespace DTetris
                     data[i]["type_hardcoded"].as<Traits>(),
                     utf8::utf8to32(data[i]["name"].as<std::string>()),
                     utf8::utf8to32(data[i]["description"].as<std::string>()),
+                    data[i]["sprite"].as<glm::uvec4>(),
                     data[i]["cost"].as<int>()
                 };
             }

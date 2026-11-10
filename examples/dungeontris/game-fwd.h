@@ -187,6 +187,7 @@ namespace DTetris
         WeaponSpriteType sprite = WeaponSpriteType::None;
         glm::uvec4 sourceArea = {0, 0, 0, 0}; // the whole sprite area
         glm::uvec4 sourceHandleArea = {0, 0, 0, 0}; // where the handle is on that whole area
+        glm::uvec4 sourceButtonArea = {0, 0, 0, 0}; // button for shop
         int cost = 0;
     };
 
@@ -264,6 +265,7 @@ namespace DTetris
         Traits type;
         std::u32string name = U"";
         std::u32string description = U"";
+        glm::uvec4 sprite_area = {0, 0, 0, 0}; // button for shop
         int cost = 0;
     };
     

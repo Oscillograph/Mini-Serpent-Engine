@@ -94,7 +94,7 @@ namespace mse
 				{
 					Renderer::SurfaceDrawRect(
 						(Texture*)(m_texture->data),
-						{0, 0, layerArea.z, layerArea.w},
+						{0, 0, layerArea.z - borderSize, layerArea.w - borderSize},
 						borderSize,
 						{
 							(Uint8)m_borderColor.x,
