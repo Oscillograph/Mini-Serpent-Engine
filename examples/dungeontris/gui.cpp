@@ -161,7 +161,7 @@ namespace mse
 				(float)(layerArea.w - 16) / WindowManager::GetCurrentWindow()->GetPrefs().height,
 			};
 
-			Renderer::DrawTexture((Texture*)(m_texture->data), &destRect, &srcRect);
+			Renderer::DrawTexture((Texture*)(m_spriteList->data), &destRect, &srcRect);
 		}
 
 		bool StoreItem::HandleEvent(EventTypes eventType, SDL_Event* event)

@@ -201,7 +201,7 @@ void ShopTraitsUILayer::OnInit()
 	// general UI layout
 	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
-		{290, 60, 14, 13},
+		{276, 60, 14, 13},
 		"./data/img/screen-images.png",
 		{0, 0, 0},
 		{24, 102, 14, 13},
