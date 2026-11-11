@@ -259,7 +259,7 @@ namespace DTetris
                 if (!data[i]["name"] ||
                     !data[i]["type_hardcoded"] ||
                     !data[i]["description"] ||
-                    !data[i]["sprite"] ||
+                    !data[i]["sprite_area"] ||
                     !data[i]["cost"])
                 {
                     return false;
@@ -269,7 +269,7 @@ namespace DTetris
                     data[i]["type_hardcoded"].as<Traits>(),
                     utf8::utf8to32(data[i]["name"].as<std::string>()),
                     utf8::utf8to32(data[i]["description"].as<std::string>()),
-                    data[i]["sprite"].as<glm::uvec4>(),
+                    data[i]["sprite_area"].as<glm::uvec4>(),
                     data[i]["cost"].as<int>()
                 };
             }

@@ -11,25 +11,26 @@
   name: Рывок
   description: |
     удвоенный урон в первый ход
+  sprite_area: [600, 95, 40, 27]
   cost: 0
 - type_hardcoded: 2
   name: Ярость
   description: |
     +2 к урону первые три хода,
     -1 к урону во все остальные
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [560, 95, 40, 27]
   cost: 0
 - type_hardcoded: 3
   name: Скрытый удар
   description: |
     +1 к урону, если ловчее цели
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [520, 95, 40, 27]
   cost: 20
 - type_hardcoded: 4
   name: Щит
   description: |
     -3 к ущербу, если сильнее цели
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [600, 68, 40, 27]
   cost: 25
 - type_hardcoded: 5
   name: Страх дубин
@@ -43,25 +44,25 @@
   description: |
     ущерб снижается на значение 
     выносливости
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [520, 68, 40, 27]
   cost: 45
 - type_hardcoded: 7
   name: Ловкач
   description: |
     +1 к ловкости
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [480, 68, 40, 27]
   cost: 10
 - type_hardcoded: 8
   name: Силач
   description: |
     +1 к силе
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [400, 68, 40, 27]
   cost: 10
 - type_hardcoded: 9
   name: Выживальщик
   description: |
     +1 к выносливости
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [440, 68, 40, 27]
   cost: 10
 - type_hardcoded: 10
   name: Не режется
@@ -73,32 +74,32 @@
   name: Яд
   description: |
     +N к урону, где N - номер хода
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [440, 95, 40, 27]
   cost: 45
 - type_hardcoded: 12
   name: Огненный дых
   description: |
     +3 к урону каждый третий ход
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [440, 122, 40, 27]
   cost: 45
 - type_hardcoded: 13
   name: Медитация
   description: |
     лечит 1 здоровья каждые 10
     ходов
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [560, 68, 40, 27]
   cost: 20
 - type_hardcoded: 14
   name: Печать хаоса
   description: |
     +1 ко всем статам за каждую победу (максимум +5).
     Финальный босс - не дракон.
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [400, 95, 40, 27]
   cost: 90
 - type_hardcoded: 15
   name: Школа Бобра
   description: |
     удваивает запасы золота
     после каждого боя
-  sprite_area: [0, 0, 0, 0]
+  sprite_area: [520, 122, 40, 27]
   cost: 0
