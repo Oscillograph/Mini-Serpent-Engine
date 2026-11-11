@@ -196,7 +196,7 @@ namespace DTetris
                     data[i]["sprite_type"].as<WeaponSpriteType>(),
                     data[i]["sprite_whole_area"].as<glm::uvec4>(),
                     data[i]["sprite_handle_area"].as<glm::uvec4>(),
-                    data[i]["sprite_handle_area"].as<glm::uvec4>(),
+                    data[i]["sprite_button_area"].as<glm::uvec4>(),
                     data[i]["cost"].as<int>()
                 };
             }

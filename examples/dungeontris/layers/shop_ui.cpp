@@ -95,6 +95,7 @@ void ShopWeaponsUILayer::OnInit()
 		};
 	}
 
+	// general UI layout
 	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
 		{176, 60, 14, 13},
@@ -109,7 +110,6 @@ void ShopWeaponsUILayer::OnInit()
 		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
 	};
 
-	// general UI layout
 	AddElement(new mse::gui::Field(
 		this,
 		{30, 60, 160, 140},
@@ -137,31 +137,6 @@ void ShopTraitsUILayer::OnInit()
 {
 	traitsGUIElements.reserve(18);
 
-	// general UI layout
-	AddElement(new mse::gui::Field(
-		this,
-		{30, 60, 260, 140},
-		{128, 64, 128, 255},
-		true,
-		1,
-		{255, 255, 255, 255}
-	));
-
-	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
-		this,
-		{290, 60, 14, 13},
-		"./data/img/screen-images.png",
-		{0, 0, 0},
-		{24, 102, 14, 13},
-		{38, 102, 14, 13},
-		{52, 102, 14, 13},
-		{66, 102, 14, 13}
-	));
-
-	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
-	};
-
 	// traits
 	AddElement(new mse::gui::Text(
 		this,
@@ -180,7 +155,7 @@ void ShopTraitsUILayer::OnInit()
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - offset), 30, 40, 27},
+				{ 35 + 40*(i - offset), 100, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].sprite_area,
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
@@ -196,7 +171,7 @@ void ShopTraitsUILayer::OnInit()
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - 6 - offset), 60, 40, 27},
+				{ 35 + 40*(i - 6 - offset), 130, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].sprite_area,
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
@@ -212,7 +187,7 @@ void ShopTraitsUILayer::OnInit()
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 30 + 40*(i - 12 - offset), 90, 40, 27},
+				{ 35 + 40*(i - 12 - offset), 160, 40, 27},
 				gameDB.traits[(DTetris::Traits)i].sprite_area,
 				gameDB.traits[(DTetris::Traits)i].cost
 			)))
@@ -222,6 +197,31 @@ void ShopTraitsUILayer::OnInit()
 			PickTrait((DTetris::Traits)i);
 		};
 	}
+
+	// general UI layout
+	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
+		this,
+		{290, 60, 14, 13},
+		"./data/img/screen-images.png",
+		{0, 0, 0},
+		{24, 102, 14, 13},
+		{38, 102, 14, 13},
+		{52, 102, 14, 13},
+		{66, 102, 14, 13}
+	));
+
+	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	};
+
+	AddElement(new mse::gui::Field(
+		this,
+		{30, 60, 260, 140},
+		{64, 32, 32, 255},
+		true,
+		1,
+		{255, 255, 255, 255}
+	));
 }
 void ShopTraitsUILayer::OnUpdate(mse::TimeType t)
 {}

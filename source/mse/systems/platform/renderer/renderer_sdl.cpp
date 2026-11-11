@@ -1115,9 +1115,9 @@ namespace mse
 				} else {
 					SDL_BlitSurface(
 						texture->GetSurface(),
-									source,
-					 target->GetSurface(),
-									place
+						source,
+						target->GetSurface(),
+						place
 					);
 				}
 			}

@@ -51,7 +51,10 @@ namespace mse
 			h
 			);
 
-        SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
+        if (!SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND))
+		{
+			MSE_CORE_LOG("Unable to set texture blend mode for generic! SDL Error: ", SDL_GetError());
+		}
 		if(!SDL_SetTextureScaleMode(m_Texture, SDL_SCALEMODE_NEAREST))
 		{
 			MSE_CORE_LOG("Unable to set texture scale mode for generic! SDL Error: ", SDL_GetError());

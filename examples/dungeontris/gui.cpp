@@ -76,7 +76,13 @@ namespace mse
 		}
 
 		StoreItem::~StoreItem()
-		{}
+		{
+			if (m_texture != nullptr)
+			{
+				ResourceManager::DropResource(m_texture, windowUser);
+				MSE_CORE_LOG("StoreItem: texture dropped");
+			}
+		}
 
 		// general GUIItem interface
 		void StoreItem::Display()
@@ -97,7 +103,7 @@ namespace mse
 
 			// item icon
 			SDL_Rect srcRect;
-			if (state & StoreItemStates::Disabled)
+			if (!(state & StoreItemStates::Disabled))
 			{
 				if (!(state & StoreItemStates::Hover) && !(state & StoreItemStates::Pressed))
 				{
