@@ -277,7 +277,7 @@ namespace mse
 										 &destRect,
 										 &sourceRect);
 			// hover button
-			glm::uvec4 sourceHover = {440, 0, 40, 27};
+			glm::uvec4 sourceHover = {480, 0, 40, 27};
 			destRect = {(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
 			sourceRect = {(int)sourceHover.x, (int)sourceHover.y, (int)sourceHover.z, (int)sourceHover.w};
 			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),
@@ -289,7 +289,7 @@ namespace mse
 										 &destRect,
 										 &sourceRect);
 			// pressed button
-			glm::uvec4 sourcePressed = {480, 0, 40, 27};
+			glm::uvec4 sourcePressed = {520, 0, 40, 27};
 			destRect = {2*(float)layerArea.z, 0, (float)layerArea.z, (float)layerArea.w};
 			sourceRect = {(int)sourcePressed.x, (int)sourcePressed.y, (int)sourcePressed.z, (int)sourcePressed.w};
 			Renderer::SurfaceDrawTexture((Texture*)(m_texture->data),

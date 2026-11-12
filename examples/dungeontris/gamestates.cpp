@@ -524,7 +524,7 @@ bool CharacterUpdatePageState::OnUpdate(mse::TimeType t)
         game.playerCharacterUpdated = false;
         
         // proceed to the next battle
-        gsm.ChangeStateTo(DTetris::GamePages::ArenaSetup);
+        // gsm.ChangeStateTo(DTetris::GamePages::ArenaSetup);
     }
     return true;
 }
