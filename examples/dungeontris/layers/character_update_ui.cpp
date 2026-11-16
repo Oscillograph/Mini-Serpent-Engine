@@ -151,14 +151,17 @@ void CharacterUpdateUILayer::OnInit()
 		{560, 0, 40, 27},
 		{600, 0, 40, 27}
 	)); // weapon or trait if Monk
-	slotABtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-		if (game.playerCharacter.main_class.type == DTetris::Classes::Monk)
+	slotABtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		if (slotABtn->isPushed)
 		{
-			game.shopType = DTetris::ShopTypes::Traits;
-		} else {
-			game.shopType = DTetris::ShopTypes::Weapons;
+			if (game.playerCharacter.main_class.type == DTetris::Classes::Monk)
+			{
+				game.shopType = DTetris::ShopTypes::Traits;
+			} else {
+				game.shopType = DTetris::ShopTypes::Weapons;
+			}
+			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 		}
-		gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 	};
 
 	slotBBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
@@ -171,9 +174,12 @@ void CharacterUpdateUILayer::OnInit()
 		{560, 0, 40, 27},
 		{600, 0, 40, 27}
 	));
-	slotBBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-		game.shopType = DTetris::ShopTypes::Traits;
-		gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
+	slotBBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		if (slotBBtn->isPushed)
+		{
+			game.shopType = DTetris::ShopTypes::Traits;
+			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
+		}
 	};
 
 	slotCBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
@@ -186,15 +192,18 @@ void CharacterUpdateUILayer::OnInit()
 		{560, 0, 40, 27},
 		{600, 0, 40, 27}
 	));
-	slotCBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-		game.shopType = DTetris::ShopTypes::Traits;
-		gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
+	slotCBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		if (slotCBtn->isPushed)
+		{
+			game.shopType = DTetris::ShopTypes::Traits;
+			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
+		}
 	};
 
 
 	// confirm changes
 	mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {32, 32, 32, 255}, {110, 215, 100, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
-	PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+	PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 		game.playerCharacterUpdated = true;
 	};
 }

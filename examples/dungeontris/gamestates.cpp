@@ -192,7 +192,21 @@ bool CharacterCreatePageState::OnEnter(mse::Layer* pass_layer)
     game.inputClass = DTetris::Classes::None;
 
     game.shop_traits.clear();
+    for (size_t i = 0; i < gameDB.traits.size(); ++i)
+    {
+        if (gameDB.traits[(DTetris::Traits)i].type != DTetris::Traits::None)
+        {
+            game.shop_traits[(DTetris::Traits)i] = false;
+        }
+    }
     game.shop_weapons.clear();
+    for (size_t i = 0; i < gameDB.weapons.size(); ++i)
+    {
+        if (gameDB.weapons[i].sprite != DTetris::WeaponSpriteType::None)
+        {
+            game.shop_weapons[(DTetris::WeaponSpriteType)i] = false;
+        }
+    }
 
     // gui
     layer = new CharacterCreateUILayer();
@@ -414,7 +428,7 @@ bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
         }
     } else {
         layer = new CharacterUpdateUILayer();
-        ((CharacterUpdateUILayer*)layer)->shopLayer = new ShopUILayer();
+        // ((CharacterUpdateUILayer*)layer)->shopLayer = new ShopUILayer();
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     }
     MSE_LOG("CharacterUpdatePageState OnEnter...done");

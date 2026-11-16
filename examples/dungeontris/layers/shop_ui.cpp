@@ -75,7 +75,10 @@ void ShopWeaponsUILayer::OnInit()
 		);
 
 		weaponsGUIElements[weaponsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			PickWeapon(i);
+			if (weaponsGUIElements[weaponsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			{
+				PickWeapon(i);
+			}
 		};
 	}
 
@@ -91,7 +94,10 @@ void ShopWeaponsUILayer::OnInit()
 		);
 
 		weaponsGUIElements[weaponsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			PickWeapon(i);
+			if (weaponsGUIElements[weaponsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			{
+				PickWeapon(i);
+			}
 		};
 	}
 
@@ -147,8 +153,6 @@ void ShopTraitsUILayer::OnInit()
 	));
 
 	size_t offset = 1; // because 0 and 1 are not collectible
-	size_t offset_y = 0;
-	size_t offset_x = 0;
 
 	for (size_t i = offset; i < 6 + offset; ++i)
 	{
@@ -162,7 +166,10 @@ void ShopTraitsUILayer::OnInit()
 		);
 
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			PickTrait((DTetris::Traits)i);
+			if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			{
+				PickTrait((DTetris::Traits)i);
+			}
 		};
 	}
 
@@ -178,7 +185,10 @@ void ShopTraitsUILayer::OnInit()
 		);
 
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			PickTrait((DTetris::Traits)i);
+			if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			{
+				PickTrait((DTetris::Traits)i);
+			}
 		};
 	}
 
@@ -194,7 +204,10 @@ void ShopTraitsUILayer::OnInit()
 		);
 
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			PickTrait((DTetris::Traits)i);
+			if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			{
+				PickTrait((DTetris::Traits)i);
+			}
 		};
 	}
 
@@ -210,8 +223,11 @@ void ShopTraitsUILayer::OnInit()
 		{66, 102, 14, 13}
 	));
 
-	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
-		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		if (closeBtn->isPushed)
+		{
+			gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+		}
 	};
 
 	AddElement(new mse::gui::Field(
@@ -229,64 +245,78 @@ void ShopTraitsUILayer::OnUpdate(mse::TimeType t)
 
 void PickTrait(DTetris::Traits trait)
 {
-	if (!game.shop_traits[trait])
+	if (trait != DTetris::Traits::None)
 	{
-		// not owned
-		if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost >= 0)
+		if (!game.shop_traits[trait])
 		{
-			game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost;
-			game.shop_traits[trait] = true;
+			// not owned
+			if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost >= 0)
+			{
+				game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost;
+				game.shop_traits[trait] = true;
+			} else {
+				MSE_LOG("ShopUI: PickTrait: cannot buy - not enough treasures");
+			}
+		} else {
+			// owned
+			if (game.playerCharacter.traits[(size_t)game.traitSlot] == trait)
+			{
+				// unpick
+				game.playerCharacter.traits[(size_t)game.traitSlot] = DTetris::Traits::None;
+
+				game.playerCharacterUpdated = true;
+			} else {
+				// pick
+				game.playerCharacter.traits[(size_t)game.traitSlot] = trait;
+
+				game.playerCharacterUpdated = true;
+
+				gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+			}
 		}
 	} else {
-		// owned
-		if (game.playerCharacter.traits[(size_t)game.traitSlot] == trait)
-		{
-			// unpick
-			game.playerCharacter.traits[(size_t)game.traitSlot] = DTetris::Traits::None;
-
-			game.playerCharacterUpdated = true;
-		} else {
-			// pick
-			game.playerCharacter.traits[(size_t)game.traitSlot] = trait;
-
-			game.playerCharacterUpdated = true;
-
-			gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
-		}
+		MSE_LOG("ShopUI: PickTrait: trait is None");
 	}
 }
 
 void PickWeapon(size_t weapon)
 {
-	if (!game.shop_weapons[(DTetris::WeaponSpriteType)weapon])
+	if (weapon != (size_t)DTetris::WeaponSpriteType::None)
 	{
-		// not owned
-		if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost >= 0)
+		if (!game.shop_weapons[(DTetris::WeaponSpriteType)weapon])
 		{
-			game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost;
-			game.shop_weapons[(DTetris::WeaponSpriteType)weapon] = true;
+			// not owned
+			if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost >= 0)
+			{
+				game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost;
+				game.shop_weapons[(DTetris::WeaponSpriteType)weapon] = true;
+			} else {
+				MSE_LOG("ShopUI: PickWeapon: cannot buy - not enough treasures");
+			}
+		} else {
+			// owned
+			if (game.playerCharacter.weapon.sprite == (DTetris::WeaponSpriteType)weapon)
+			{
+				// unpick
+				game.inputWeapon = gameDB.weapons[0]; // fists
+
+				game.playerCharacterUpdated = true;
+			} else {
+				// pick
+				game.inputWeapon = gameDB.weapons[(size_t)weapon];
+
+				if (game.inputWeapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
+				{
+					game.inputWeapon.sourceArea.x = game.inputWeapon.sourceArea.x + (game.inputWeapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+					game.inputWeapon.sourceHandleArea.x = game.inputWeapon.sourceHandleArea.x + (game.inputWeapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+				}
+
+				game.playerCharacterUpdated = true;
+
+				gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+			}
 		}
 	} else {
-		// owned
-		if (game.playerCharacter.weapon.sprite == (DTetris::WeaponSpriteType)weapon)
-		{
-			// unpick
-			game.inputWeapon = gameDB.weapons[0]; // fists
-
-			game.playerCharacterUpdated = true;
-		} else {
-			// pick
-			game.inputWeapon = gameDB.weapons[(size_t)weapon];
-
-			if (game.inputWeapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
-			{
-				game.inputWeapon.sourceArea.x = game.inputWeapon.sourceArea.x + (game.inputWeapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
-				game.inputWeapon.sourceHandleArea.x = game.inputWeapon.sourceHandleArea.x + (game.inputWeapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
-			}
-
-			game.playerCharacterUpdated = true;
-
-			gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
-		}
+		MSE_LOG("ShopUI: PickWeapon: weapon is None");
 	}
 }
