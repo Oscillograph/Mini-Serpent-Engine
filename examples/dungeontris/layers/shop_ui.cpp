@@ -75,10 +75,11 @@ void ShopWeaponsUILayer::OnInit()
 		);
 
 		weaponsGUIElements[weaponsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			if (weaponsGUIElements[weaponsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			{
-				PickWeapon(i);
-			}
+			// if (weaponsGUIElements[weaponsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			// {
+			// 	PickWeapon(i);
+			// }
+			PickWeapon(i);
 		};
 	}
 
@@ -94,10 +95,11 @@ void ShopWeaponsUILayer::OnInit()
 		);
 
 		weaponsGUIElements[weaponsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			if (weaponsGUIElements[weaponsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			{
-				PickWeapon(i);
-			}
+			// if (weaponsGUIElements[weaponsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			// {
+			// 	PickWeapon(i);
+			// }
+			PickWeapon(i);
 		};
 	}
 
@@ -166,10 +168,11 @@ void ShopTraitsUILayer::OnInit()
 		);
 
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			{
-				PickTrait((DTetris::Traits)i);
-			}
+			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			// {
+			// 	PickTrait((DTetris::Traits)i);
+			// }
+			PickTrait((DTetris::Traits)i);
 		};
 	}
 
@@ -185,10 +188,11 @@ void ShopTraitsUILayer::OnInit()
 		);
 
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			{
-				PickTrait((DTetris::Traits)i);
-			}
+			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			// {
+			// 	PickTrait((DTetris::Traits)i);
+			// }
+			PickTrait((DTetris::Traits)i);
 		};
 	}
 
@@ -204,10 +208,11 @@ void ShopTraitsUILayer::OnInit()
 		);
 
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			{
-				PickTrait((DTetris::Traits)i);
-			}
+			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
+			// {
+			// 	PickTrait((DTetris::Traits)i);
+			// }
+			PickTrait((DTetris::Traits)i);
 		};
 	}
 
@@ -245,6 +250,7 @@ void ShopTraitsUILayer::OnUpdate(mse::TimeType t)
 
 void PickTrait(DTetris::Traits trait)
 {
+	MSE_TRACE("ShopUI: PickTrait");
 	if (trait != DTetris::Traits::None)
 	{
 		if (!game.shop_traits[trait])
@@ -281,6 +287,7 @@ void PickTrait(DTetris::Traits trait)
 
 void PickWeapon(size_t weapon)
 {
+	MSE_TRACE("ShopUI: PickWeapon");
 	if (weapon != (size_t)DTetris::WeaponSpriteType::None)
 	{
 		if (!game.shop_weapons[(DTetris::WeaponSpriteType)weapon])
