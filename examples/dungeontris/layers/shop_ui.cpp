@@ -285,24 +285,25 @@ void PickTrait(DTetris::Traits trait)
 	}
 }
 
-void PickWeapon(size_t weapon)
+// weapon is an index in gameDB.weapons
+void PickWeapon(size_t weaponID)
 {
 	MSE_TRACE("ShopUI: PickWeapon");
-	if (weapon != (size_t)DTetris::WeaponSpriteType::None)
+	if (gameDB.weapons[weaponID].sprite != DTetris::WeaponSpriteType::None)
 	{
-		if (!game.shop_weapons[(DTetris::WeaponSpriteType)weapon])
+		if (!game.shop_weapons[gameDB.weapons[weaponID].sprite])
 		{
 			// not owned
-			if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost >= 0)
+			if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weaponID].cost >= 0)
 			{
-				game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weapon].cost;
-				game.shop_weapons[(DTetris::WeaponSpriteType)weapon] = true;
+				game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weaponID].cost;
+				game.shop_weapons[gameDB.weapons[weaponID].sprite] = true;
 			} else {
 				MSE_LOG("ShopUI: PickWeapon: cannot buy - not enough treasures");
 			}
 		} else {
 			// owned
-			if (game.playerCharacter.weapon.sprite == (DTetris::WeaponSpriteType)weapon)
+			if (game.playerCharacter.weapon.sprite == gameDB.weapons[weaponID].sprite)
 			{
 				// unpick
 				game.inputWeapon = gameDB.weapons[0]; // fists
@@ -310,7 +311,7 @@ void PickWeapon(size_t weapon)
 				game.playerCharacterUpdated = true;
 			} else {
 				// pick
-				game.inputWeapon = gameDB.weapons[(size_t)weapon];
+				game.inputWeapon = gameDB.weapons[weaponID];
 
 				if (game.inputWeapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
 				{
@@ -324,6 +325,6 @@ void PickWeapon(size_t weapon)
 			}
 		}
 	} else {
-		MSE_LOG("ShopUI: PickWeapon: weapon is None");
+		MSE_LOG("ShopUI: PickWeapon: weapon corresponds to WeaponSpriteType::None");
 	}
 }

@@ -152,7 +152,7 @@ public:
 };
 
 void PickTrait(DTetris::Traits trait);
-void PickWeapon(size_t weapon);
+void PickWeapon(size_t weaponID);
 
 class ShopTraitsUILayer : public mse::Layer
 {
