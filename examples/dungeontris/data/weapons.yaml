@@ -4,12 +4,14 @@
 #            because the loader does gamedb.weapons[i] = entry i.
 #            characters.yaml refers to weapons by that position.
 #
+# id is for comparing a weapon to the corresponding one in gameDB.weapons
 # damage_type : 0=None 1=Cutting 2=Crushing 3=Piercing 4=Divine
 # sprite_type      : 0=None 1=Fist 2=Dagger 3=Sword 4=Axe 5=Club 6=Spear 7=LegendarySword 8=MaximGun
 # sprite_whole_area and sprite_handle_area refer to screen-images.png file
 
 # ids 0-7: player collectible
-- name: Кулак
+- id: 0
+  name: Кулак
   damage: 0
   damage_type: 0
   sprite_type: 1
@@ -17,7 +19,8 @@
   sprite_handle_area: [0, 0, 0, 0]
   sprite_button_area: [0, 0, 0, 0]
   cost: 1
-- name: Кастет
+- id: 1
+  name: Кастет
   damage: 1
   damage_type: 0
   sprite_type: 1
@@ -25,7 +28,8 @@
   sprite_handle_area: [0, 0, 0, 0]
   sprite_button_area: [0, 0, 0, 0]
   cost: 3
-- name: Кинжал
+- id: 2
+  name: Кинжал
   damage: 2
   damage_type: 3
   sprite_type: 2
@@ -33,7 +37,8 @@
   sprite_handle_area: [279, 223, 3, 5]
   sprite_button_area: [400, 41, 40, 27]
   cost: 5
-- name: Меч
+- id: 3
+  name: Меч
   damage: 3
   damage_type: 1
   sprite_type: 3
@@ -41,7 +46,8 @@
   sprite_handle_area: [293, 223, 3, 5]
   sprite_button_area: [440, 41, 40, 27]
   cost: 7
-- name: Дубина
+- id: 4
+  name: Дубина
   damage: 3
   damage_type: 2
   sprite_type: 5
@@ -49,7 +55,8 @@
   sprite_handle_area: [283, 182, 3, 5]
   sprite_button_area: [480, 41, 40, 27]
   cost: 8
-- name: Копьё
+- id: 5
+  name: Копьё
   damage: 3
   damage_type: 3
   sprite_type: 6
@@ -57,7 +64,8 @@
   sprite_handle_area: [270, 187, 3, 5]
   sprite_button_area: [520, 41, 40, 27]
   cost: 8
-- name: Топор
+- id: 6
+  name: Топор
   damage: 4
   damage_type: 1
   sprite_type: 4
@@ -67,7 +75,8 @@
   cost: 9
   
 # sprite_whole_area is actually 3x size: the sprite is taken by 288 + i*4 where i is the id of a class. Monk can't equip.
-- name: Легендарный Меч
+- id: 7
+  name: Легендарный Меч
   damage: 10
   damage_type: 1
   sprite_type: 7
@@ -77,7 +86,8 @@
   cost: 40
 
 # id 8: filler. 
-- name: Сломанный обломок
+- id: 8
+  name: Сломанный обломок
   damage: 0
   damage_type: 0
   sprite_type: 0
@@ -87,7 +97,8 @@
   cost: 0
 
 # ids 9-12: npc weapons
-- name: Шип
+- id: 9
+  name: Шип
   damage: 1
   damage_type: 0
   sprite_type: 0
@@ -95,7 +106,8 @@
   sprite_handle_area: [0, 0, 0, 0]
   sprite_button_area: [0, 0, 0, 0]
   cost: 1
-- name: Сгнивший меч
+- id: 10
+  name: Сгнивший меч
   damage: 2
   damage_type: 0
   sprite_type: 0
@@ -103,7 +115,8 @@
   sprite_handle_area: [0, 0, 0, 0]
   sprite_button_area: [0, 0, 0, 0]
   cost: 2
-- name: Кадило
+- id: 11
+  name: Кадило
   damage: 3
   damage_type: 0
   sprite_type: 0
@@ -111,7 +124,8 @@
   sprite_handle_area: [0, 0, 0, 0]
   sprite_button_area: [0, 0, 0, 0]
   cost: 7
-- name: Клык и коготь
+- id: 12
+  name: Клык и коготь
   damage: 4
   damage_type: 0
   sprite_type: 0
@@ -121,7 +135,8 @@
   cost: 9
 
 # id 13: easter egg
-- name: Пулемёт Максим
+- id: 13
+  name: Пулемёт Максим
   damage: 100
   damage_type: 4
   sprite_type: 8

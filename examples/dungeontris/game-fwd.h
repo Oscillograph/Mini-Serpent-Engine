@@ -182,6 +182,7 @@ namespace DTetris
 
     struct Weapon : Item
     {
+        size_t id = 0;
         int damage = 0;
         DamageType type = DamageType::None;
         WeaponSpriteType sprite = WeaponSpriteType::None;

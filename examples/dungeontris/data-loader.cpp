@@ -176,7 +176,8 @@ namespace DTetris
             // fill gamedb.weapons
             for (size_t i = 0; i < data.size(); ++i)
             {
-                if (!data[i]["name"] ||
+                if (!data[i]["id"] ||
+                    !data[i]["name"] ||
                     !data[i]["damage"] ||
                     !data[i]["damage_type"] ||
                     !data[i]["sprite_type"] ||
@@ -191,6 +192,7 @@ namespace DTetris
                 gamedb.weapons[i] =
                 {
                     {utf8::utf8to32(data[i]["name"].as<std::string>())},
+                    data[i]["id"].as<size_t>(),
                     data[i]["damage"].as<int>(),
                     data[i]["damage_type"].as<DamageType>(),
                     data[i]["sprite_type"].as<WeaponSpriteType>(),

@@ -164,6 +164,25 @@ void CharacterUpdateUILayer::OnInit()
 		}
 	};
 
+	if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
+	{
+		slotAImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
+			this,
+			slotABtn->layerArea,
+			"./data/img/screen-images.png",
+			gameDB.weapons[game.playerCharacter.weapon.id].sourceButtonArea,
+			{0, 0, 0, 255}
+		));
+	} else {
+		slotAImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
+			this,
+			slotABtn->layerArea,
+			"./data/img/screen-images.png",
+			gameDB.traits[game.playerCharacter.traits[0]].sprite_area,
+			{0, 0, 0, 255}
+		));
+	}
+
 	slotBBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
 		{90, 120, 40, 27},
@@ -181,6 +200,13 @@ void CharacterUpdateUILayer::OnInit()
 			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 		}
 	};
+	slotBImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
+		this,
+		slotBBtn->layerArea,
+		"./data/img/screen-images.png",
+		gameDB.traits[game.playerCharacter.traits[1]].sprite_area,
+		{0, 0, 0, 255}
+	));
 
 	slotCBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
@@ -199,6 +225,13 @@ void CharacterUpdateUILayer::OnInit()
 			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 		}
 	};
+	slotCImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
+		this,
+		slotCBtn->layerArea,
+		"./data/img/screen-images.png",
+		gameDB.traits[game.playerCharacter.traits[2]].sprite_area,
+		{0, 0, 0, 255}
+	));
 
 
 	// confirm changes
@@ -210,10 +243,10 @@ void CharacterUpdateUILayer::OnInit()
 
 void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
 {
-	if (changeMade)
+	if (game.playerCharacterUpdated)
 	{
 		RecalculateCharacter();
-		changeMade = false;
+		game.playerCharacterUpdated = false;
 	}
 }
 

@@ -102,6 +102,9 @@ public:
     mse::gui::Text* classStatsValuesBox = nullptr;
     mse::gui::Text* treasuresValueTextBox = nullptr;
 
+    mse::gui::Image* slotAImage = nullptr;
+    mse::gui::Image* slotBImage = nullptr;
+    mse::gui::Image* slotCImage = nullptr;
     mse::gui::Button* slotABtn = nullptr;
     mse::gui::Button* slotBBtn = nullptr;
     mse::gui::Button* slotCBtn = nullptr;

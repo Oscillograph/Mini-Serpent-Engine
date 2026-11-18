@@ -275,7 +275,7 @@ bool CharacterCreatePageState::OnExit(bool pass_layer)
         game.inputStats,          // stats
         {game.inputClass, 1},    // main class
         {DTetris::Classes::None, 0},    // sub class
-        {game.inputTrait, DTetris::Traits::None, DTetris::Traits::None},   // traits
+        {},   // traits
         {},  // drop
         gameDB.classes[game.inputClass].sprite_whole_area, // sprite_whole_area
         gameDB.classes[game.inputClass].sprite_handle_area, // sprite_handle_area
@@ -283,6 +283,13 @@ bool CharacterCreatePageState::OnExit(bool pass_layer)
         gameDB.classes[game.inputClass].sprite_head_special_area, // sprite_head_special_area
         game.inputWeapon   // weapon
     };
+
+    if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
+    {
+        game.playerCharacter.traits = {DTetris::Traits::None, game.inputTrait, DTetris::Traits::None};
+    } else {
+        game.playerCharacter.traits = {game.inputTrait, DTetris::Traits::None, DTetris::Traits::None};
+    }
 
     printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n",
             (char*)(game.playerCharacter.name.c_str()),
