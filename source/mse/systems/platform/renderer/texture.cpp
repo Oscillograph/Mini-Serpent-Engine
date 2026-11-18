@@ -1,3 +1,4 @@
+#include "mse/utils/logger.h"
 #include <mse/systems/platform/platform.h>
 #include <mse/systems/platform/renderer/texture.h>
 
@@ -51,13 +52,18 @@ namespace mse
 			h
 			);
 
+		if (!m_Texture)
+		{
+			MSE_CORE_ERROR("Unable to create texture! SDL Error: ", SDL_GetError());
+		}
+
         if (!SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND))
 		{
-			MSE_CORE_LOG("Unable to set texture blend mode for generic! SDL Error: ", SDL_GetError());
+			MSE_CORE_ERROR("Unable to set texture blend mode for generic! SDL Error: ", SDL_GetError());
 		}
 		if(!SDL_SetTextureScaleMode(m_Texture, SDL_SCALEMODE_NEAREST))
 		{
-			MSE_CORE_LOG("Unable to set texture scale mode for generic! SDL Error: ", SDL_GetError());
+			MSE_CORE_ERROR("Unable to set texture scale mode for generic! SDL Error: ", SDL_GetError());
 		}
 	}
 	

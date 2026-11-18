@@ -49,6 +49,9 @@ namespace mse
 		protected:
 			// sprite-based
 			Resource* m_spriteList = nullptr;
+			Resource* m_font = nullptr;
+			Resource* m_costTexture = nullptr;
+
 			glm::uvec4 m_imageSource = {0, 0, 0, 0}; // icon set with SetImage
 			std::u32string m_text = U"";
 

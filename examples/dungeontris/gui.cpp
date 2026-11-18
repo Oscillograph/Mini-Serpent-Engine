@@ -52,6 +52,21 @@ namespace mse
 			{
 				m_spriteList = ResourceManager::UseTexture("./data/img/screen-images.png", windowUser, {0, 0, 0});
 				m_imageSource = image;
+				m_font = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", layer->GetWindow());
+				m_costTexture = ResourceManager::CreateTexture(
+					layer->GetWindow(),
+					layer->GetWindow()->GetRenderer()->GetActiveRenderer(),
+					40,
+					11);
+				Renderer::SurfaceDrawText(
+					(Texture*)m_costTexture->data,
+					{15, 2, 25, 11},
+					1,
+					m_text,
+					m_font,
+					{0, 0, 0, 255});
+				((Texture*)(m_costTexture->data))->Update();
+
 				SetupTexture();
 			}
 
@@ -162,6 +177,13 @@ namespace mse
 			};
 
 			Renderer::DrawTexture((Texture*)(m_spriteList->data), &destRect, &srcRect);
+
+			// draw cost if not bought
+			srcRect = {0, 0, 40, 11};
+			if (!(state & StoreItemStates::Bought))
+			{
+				Renderer::DrawTexture((Texture*)m_costTexture->data, &destRect, &srcRect);
+			}
 		}
 
 		bool StoreItem::HandleEvent(EventTypes eventType, SDL_Event* event)
