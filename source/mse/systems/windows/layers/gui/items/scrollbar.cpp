@@ -1,4 +1,4 @@
-#include "mse/utils/logger.h"
+#include <mse/utils/logger.h>
 #include <mse/systems/windows/layers/gui/items/scrollbar.h>
 #include <mse/systems/windows/layers/gui/items/text.h>
 #include <mse/systems/windows/layers/gui/items/button.h>
@@ -39,11 +39,10 @@ namespace mse
 		{
 			// model
 			parentLayer = layer;
-            windowUser = layer->GetWindow();
 			m_elementName = "VScrollbar";
 			layerArea = area;
             m_textItem = textItem;
-			
+
 			layerMask.resize(area.z * area.w);
 			for (size_t x = 0; x < area.z; ++x)
 			{
@@ -52,10 +51,12 @@ namespace mse
 					layerMask[x + y*area.z] = id;
 				}
 			}
-			
+
 			// view
 			if (layer != nullptr)
 			{
+                windowUser = layer->GetWindow();
+
 				// setup texture to draw on
 				MSE_CORE_LOG("VScrollbar: requesting to create a texture");
 				MSE_CORE_TRACE("VScrollbar_parentLayer = ", parentLayer);

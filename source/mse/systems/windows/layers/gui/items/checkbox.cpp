@@ -36,15 +36,16 @@ namespace mse
 		void Checkbox::Init(Layer* layer, const glm::uvec4& area, const std::string& spritelist, const glm::uvec3& colorKey, bool* var, const glm::uvec4& sourceUnchecked, const glm::uvec4& sourceChecked, const glm::uvec4& sourceDisabledUnchecked, const glm::uvec4& sourceDisabledChecked)
         {
             parentLayer = layer;
-            windowUser = layer->GetWindow();
             layerArea = area;
             m_elementName = "Checkbox";
             m_var = var;
             state = (*m_var) ? CheckboxStates::Checked : CheckboxStates::Unchecked;
-            
+
             // view
             if (layer != nullptr)
             {
+                windowUser = layer->GetWindow();
+
                 layerMask.resize(area.z * area.w);
                 for (size_t x = 0; x < area.z; ++x)
                 {

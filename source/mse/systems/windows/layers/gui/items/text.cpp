@@ -42,7 +42,7 @@ namespace mse
             m_borderColor = borderColor;
 			m_textColor = color;
             showBorder = border;
-			
+
 			layerMask.resize(area.z * area.w);
 			for (size_t x = 0; x < area.z; ++x)
 			{
@@ -51,7 +51,7 @@ namespace mse
 					layerMask[x + y*area.z] = id;
 				}
 			}
-			
+
 			// view
 			if (layer != nullptr)
 			{

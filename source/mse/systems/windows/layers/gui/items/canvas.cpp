@@ -48,6 +48,8 @@ namespace mse
 			// view
 			if (layer != nullptr)
 			{
+				windowUser = layer->GetWindow();
+
 				// setup texture to draw on
 				MSE_CORE_LOG("Canvas: requesting to create a texture");
 				MSE_CORE_TRACE("Canvas_parentLayer = ", parentLayer);

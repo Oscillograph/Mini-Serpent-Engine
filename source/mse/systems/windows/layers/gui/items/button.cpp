@@ -41,7 +41,7 @@ namespace mse
             windowUser = layer->GetWindow();
             layerArea = area;
             m_elementName = "Button (image)";
-            
+
             // view
             if (layer != nullptr)
             {

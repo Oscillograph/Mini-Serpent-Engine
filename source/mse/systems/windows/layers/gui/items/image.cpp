@@ -36,13 +36,13 @@ namespace mse
 		{
 			// model
 			parentLayer = layer;
-            windowUser = layer->GetWindow();
 			m_elementName = "Image";
-			layerArea = area;
+            windowUser = layer->GetWindow();
             m_spriteList = ResourceManager::UseTexture(spritelist, windowUser, {0, 0, 0});
+			layerArea = area;
             m_sourceArea = sourceArea;
 			m_backgroundColor = bgcolor;
-			
+
 			layerMask.resize(area.z * area.w);
 			for (size_t x = 0; x < area.z; ++x)
 			{
@@ -51,10 +51,11 @@ namespace mse
 					layerMask[x + y*area.z] = id;
 				}
 			}
-			
+
 			// view
 			if ((layer != nullptr) && (m_spriteList != nullptr))
 			{
+
 				// setup texture to draw on
 				MSE_CORE_LOG("Image: requesting to create a texture");
 				MSE_CORE_TRACE("Image_parentLayer = ", parentLayer);

@@ -65,7 +65,6 @@ namespace mse
 		)
 		{
 			parentLayer = layer;
-			windowUser = layer->GetWindow();
 			m_elementName = "InputInt";
 			layerArea = area;
 			value = defaultValue;
@@ -98,6 +97,8 @@ namespace mse
 			// view
 			if (layer != nullptr)
 			{
+				windowUser = layer->GetWindow();
+
 				// setup texture to draw on
 				MSE_CORE_LOG("InputInt: requesting to create a texture");
 				MSE_CORE_TRACE("InputInt_parentLayer = ", parentLayer);

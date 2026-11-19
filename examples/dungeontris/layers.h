@@ -154,8 +154,8 @@ public:
     std::vector<mse::gui::StoreItem*> weaponsGUIElements = {};
 };
 
-void PickTrait(DTetris::Traits trait);
-void PickWeapon(size_t weaponID);
+void PickTrait(DTetris::Traits trait, mse::Layer* layer = nullptr);
+void PickWeapon(size_t weaponID, mse::Layer* layer = nullptr);
 
 class ShopTraitsUILayer : public mse::Layer
 {

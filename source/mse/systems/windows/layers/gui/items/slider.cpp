@@ -33,14 +33,13 @@ namespace mse
         {
             // model
             parentLayer = layer;
-            windowUser = layer->GetWindow();
             m_elementName = "HSlider";
             layerArea = area;
-            
+
             varMin = min;
             varMax = max;
             varStep = step;
-            
+
             layerMask.resize(area.z * area.w);
             for (size_t x = 0; x < area.z; ++x)
             {
@@ -49,10 +48,12 @@ namespace mse
                     layerMask[x + y*area.z] = id;
                 }
             }
-            
+
             // view
             if (layer != nullptr)
             {
+                windowUser = layer->GetWindow();
+
                 // setup texture to draw on
                 MSE_CORE_LOG("HSlider: requesting to create a texture");
                 MSE_CORE_TRACE("HSlider_parentLayer = ", parentLayer);

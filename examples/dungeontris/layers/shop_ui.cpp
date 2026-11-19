@@ -74,12 +74,13 @@ void ShopWeaponsUILayer::OnInit()
 			)))
 		);
 
-		weaponsGUIElements[weaponsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			// if (weaponsGUIElements[weaponsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			// {
-			// 	PickWeapon(i);
-			// }
-			PickWeapon(i);
+		if (game.shop_weapons[gameDB.weapons[i].sprite])
+		{
+			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Bought;
+		}
+
+		weaponsGUIElements[i - offset]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i, offset](SDL_Event* event){
+			PickWeapon(i - offset, this);
 		};
 	}
 
@@ -94,12 +95,13 @@ void ShopWeaponsUILayer::OnInit()
 			)))
 		);
 
-		weaponsGUIElements[weaponsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-			// if (weaponsGUIElements[weaponsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			// {
-			// 	PickWeapon(i);
-			// }
-			PickWeapon(i);
+		if (game.shop_weapons[gameDB.weapons[i].sprite])
+		{
+			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Bought;
+		}
+
+		weaponsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i, offset](SDL_Event* event){
+			PickWeapon(i, this);
 		};
 	}
 
@@ -154,7 +156,7 @@ void ShopTraitsUILayer::OnInit()
 		{255, 255, 255, 255}
 	));
 
-	size_t offset = 1; // because 0 and 1 are not collectible
+	size_t offset = 1; // because 0 is not collectible
 
 	for (size_t i = offset; i < 6 + offset; ++i)
 	{
@@ -167,12 +169,17 @@ void ShopTraitsUILayer::OnInit()
 			)))
 		);
 
-		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		if (game.shop_traits[(DTetris::Traits)i])
+		{
+			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
+		}
+
+		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
 			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
 			// {
 			// 	PickTrait((DTetris::Traits)i);
 			// }
-			PickTrait((DTetris::Traits)i);
+			PickTrait((DTetris::Traits)i, this);
 		};
 	}
 
@@ -187,12 +194,17 @@ void ShopTraitsUILayer::OnInit()
 			)))
 		);
 
-		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		if (game.shop_traits[(DTetris::Traits)i])
+		{
+			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
+		}
+
+		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
 			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
 			// {
 			// 	PickTrait((DTetris::Traits)i);
 			// }
-			PickTrait((DTetris::Traits)i);
+			PickTrait((DTetris::Traits)i, this);
 		};
 	}
 
@@ -207,12 +219,17 @@ void ShopTraitsUILayer::OnInit()
 			)))
 		);
 
-		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		if (game.shop_traits[(DTetris::Traits)i])
+		{
+			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
+		}
+
+		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
 			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
 			// {
 			// 	PickTrait((DTetris::Traits)i);
 			// }
-			PickTrait((DTetris::Traits)i);
+			PickTrait((DTetris::Traits)i, this);
 		};
 	}
 
@@ -248,7 +265,7 @@ void ShopTraitsUILayer::OnUpdate(mse::TimeType t)
 {}
 
 
-void PickTrait(DTetris::Traits trait)
+void PickTrait(DTetris::Traits trait, mse::Layer* layer)
 {
 	MSE_TRACE("ShopUI: PickTrait");
 	if (trait != DTetris::Traits::None)
@@ -259,9 +276,14 @@ void PickTrait(DTetris::Traits trait)
 			if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost >= 0)
 			{
 				game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.traits[trait].cost;
+				if (layer)
+				{
+					// 1 is an offset as 0 is none-trait
+					((ShopTraitsUILayer*)layer)->traitsGUIElements[(size_t)trait - 1]->state += mse::gui::StoreItemStates::Bought;
+				}
 				game.shop_traits[trait] = true;
 			} else {
-				MSE_LOG("ShopUI: PickTrait: cannot buy - not enough treasures");
+				MSE_LOG("ShopUI: PickTrait: cannot buy trait ", (int)trait, " - not enough treasures");
 			}
 		} else {
 			// owned
@@ -271,22 +293,24 @@ void PickTrait(DTetris::Traits trait)
 				game.playerCharacter.traits[(size_t)game.traitSlot] = DTetris::Traits::None;
 
 				game.playerCharacterUpdated = true;
+				MSE_LOG("ShopUI: PickTrait: unpicked trait ", (int)trait);
 			} else {
 				// pick
 				game.playerCharacter.traits[(size_t)game.traitSlot] = trait;
 
 				game.playerCharacterUpdated = true;
+				MSE_LOG("ShopUI: PickTrait: picked trait ", (int)trait);
 
 				gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
 			}
 		}
 	} else {
-		MSE_LOG("ShopUI: PickTrait: trait is None");
+		MSE_LOG("ShopUI: PickTrait: trait ", (int)trait, " is None");
 	}
 }
 
 // weapon is an index in gameDB.weapons
-void PickWeapon(size_t weaponID)
+void PickWeapon(size_t weaponID, mse::Layer* layer)
 {
 	MSE_TRACE("ShopUI: PickWeapon");
 	if (gameDB.weapons[weaponID].sprite != DTetris::WeaponSpriteType::None)
@@ -297,13 +321,18 @@ void PickWeapon(size_t weaponID)
 			if (game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weaponID].cost >= 0)
 			{
 				game.playerCharacter.blocks[DTetris::BlockType::Treasure] = game.playerCharacter.blocks[DTetris::BlockType::Treasure] - gameDB.weapons[weaponID].cost;
+				if (layer)
+				{
+					((ShopWeaponsUILayer*)layer)->weaponsGUIElements[weaponID]->state += mse::gui::StoreItemStates::Bought;
+				}
 				game.shop_weapons[gameDB.weapons[weaponID].sprite] = true;
+
 			} else {
-				MSE_LOG("ShopUI: PickWeapon: cannot buy - not enough treasures");
+				MSE_LOG("ShopUI: PickWeapon: cannot buy weapon ", (int)weaponID, " - not enough treasures");
 			}
 		} else {
 			// owned
-			if (game.playerCharacter.weapon.sprite == gameDB.weapons[weaponID].sprite)
+			if (game.playerCharacter.weapon.id == weaponID)
 			{
 				// unpick
 				game.inputWeapon = gameDB.weapons[0]; // fists
@@ -325,6 +354,6 @@ void PickWeapon(size_t weaponID)
 			}
 		}
 	} else {
-		MSE_LOG("ShopUI: PickWeapon: weapon corresponds to WeaponSpriteType::None");
+		MSE_LOG("ShopUI: PickWeapon: weapon ", (int)weaponID, " corresponds to WeaponSpriteType::None");
 	}
 }
