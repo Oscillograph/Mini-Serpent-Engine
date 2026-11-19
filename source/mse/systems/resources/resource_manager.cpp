@@ -10,6 +10,8 @@
 #include <mse/systems/platform/rendererAPI.h>
 #include <mse/systems/platform/renderer_base.h>
 
+// TODO: Rework caches to use unordered maps to count users and and their uses.
+
 namespace mse
 {
 	int Resource::dynamicResourceId = 0;
