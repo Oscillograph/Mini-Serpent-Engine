@@ -248,7 +248,7 @@ namespace mse
 					MSE_CORE_LOG("Flagged resource \"", path.c_str(), "\" for deletion.");
 				}
 			} else {
-				MSE_CORE_LOG("m_Cache[type][path] == nullptr");
+				MSE_CORE_LOG("m_Cache[\"", m_ResourceTypeNames[type], "\"][\"", path, "\"] == nullptr");
 			}
 		}
 		
@@ -460,7 +460,7 @@ namespace mse
 							((*cacheIterator).second->users.size() == 0) // when there are no users
 							)
 						{
-							// MSE_CORE_LOG("- - resource is flagged for deletion...");
+							MSE_CORE_LOG("- - resource \"", (*cacheIterator).second->path, "\" is flagged for deletion...");
 							// nullify all users
 							for (auto usersIterator = (*cacheIterator).second->users.begin(); usersIterator != (*cacheIterator).second->users.end(); usersIterator++)
 							{

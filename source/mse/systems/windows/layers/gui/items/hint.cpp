@@ -83,6 +83,12 @@ namespace mse
 
 			delete hintText;
 			hintText = nullptr;
+
+			if (m_texture)
+			{
+				ResourceManager::DropResource(m_texture, windowUser);
+				MSE_CORE_LOG("Hint: texture dropped");
+			}
 		}
 
 		// general GUIItem interface

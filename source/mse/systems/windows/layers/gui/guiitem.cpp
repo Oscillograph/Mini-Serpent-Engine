@@ -1,3 +1,4 @@
+#include <mse/systems/resources/resource_manager.h>
 #include <mse/systems/windows/layers/gui/guiitem.h>
 
 namespace mse

@@ -21,7 +21,10 @@ namespace mse
 	{
 		// general initialization
 		StoreItem::StoreItem()
-		{}
+		{
+			ResourceManager::DropResource(m_costTexture, windowUser);
+			ResourceManager::DropResource(m_font, windowUser);
+		}
 
 		StoreItem::StoreItem(Layer* layer, const glm::uvec4& area, const glm::uvec4& image, int cost)
 		{
@@ -52,10 +55,10 @@ namespace mse
 			{
 				m_spriteList = ResourceManager::UseTexture("./data/img/screen-images.png", windowUser, {0, 0, 0});
 				m_imageSource = image;
-				m_font = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", layer->GetWindow());
+				m_font = mse::ResourceManager::UseResource(mse::ResourceType::FontBitmap, "./data/fonts/my8bit2.bmp", parentLayer->GetWindow());
 				m_costTexture = ResourceManager::CreateTexture(
-					layer->GetWindow(),
-					layer->GetWindow()->GetRenderer()->GetActiveRenderer(),
+					parentLayer->GetWindow(),
+					parentLayer->GetWindow()->GetRenderer()->GetActiveRenderer(),
 					40,
 					11);
 				Renderer::SurfaceDrawText(

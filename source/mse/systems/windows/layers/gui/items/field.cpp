@@ -130,7 +130,7 @@ namespace mse
 			if (m_texture != nullptr)
 			{
 				ResourceManager::DropResource(m_texture, windowUser);
-				MSE_CORE_LOG("Image: texture dropped");
+				MSE_CORE_LOG("Field: texture dropped");
 			}
 		}
 

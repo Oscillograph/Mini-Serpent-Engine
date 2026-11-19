@@ -105,7 +105,7 @@ namespace mse
 		// modal layers handle first if there are any
 		if (m_modal_layers.size() > 0)
 		{
-			MSE_CORE_LOG("LayerManager:: Modal layer requires action.");
+			// MSE_CORE_LOG("LayerManager:: Modal layer requires action.");
 
 			for (auto it = m_modal_layers.rbegin(); it != m_modal_layers.rend(); ++it)
 			{
@@ -114,7 +114,7 @@ namespace mse
 
 			if (!handled)
 			{
-				MSE_CORE_LOG("LayerManager:: Didn't process event in modal layer.");
+				// MSE_CORE_LOG("LayerManager:: Didn't process event in modal layer.");
 			}
 
 			// prevent other layers from handling if modal layers present
