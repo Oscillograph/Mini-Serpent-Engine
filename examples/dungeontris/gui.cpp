@@ -22,8 +22,6 @@ namespace mse
 		// general initialization
 		StoreItem::StoreItem()
 		{
-			ResourceManager::DropResource(m_costTexture, windowUser);
-			ResourceManager::DropResource(m_font, windowUser);
 		}
 
 		StoreItem::StoreItem(Layer* layer, const glm::uvec4& area, const glm::uvec4& image, int cost)
@@ -95,6 +93,16 @@ namespace mse
 
 		StoreItem::~StoreItem()
 		{
+			if (m_costTexture != nullptr)
+			{
+				ResourceManager::DropResource(m_costTexture, windowUser);
+			}
+
+			if (m_font != nullptr)
+			{
+				ResourceManager::DropResource(m_font, windowUser);
+			}
+
 			if (m_texture != nullptr)
 			{
 				ResourceManager::DropResource(m_texture, windowUser);

@@ -36,7 +36,6 @@ namespace mse
 		{
 			// model
 			parentLayer = layer;
-			windowUser = layer->GetWindow();
 			m_elementName = "Image";
 			layerArea = area;
 
@@ -44,16 +43,6 @@ namespace mse
 			m_borderSize = borderSize;
 			m_borderColor = borderColor;
 			m_backgroundColor = bgcolor;
-
-			m_texture = ResourceManager::CreateTexture(
-				windowUser,
-				windowUser->GetRenderer()->GetActiveRenderer(),
-				layerArea.z,
-				layerArea.w,
-				0,
-				32,
-				{0, 0, 0, 0});
-
 
 			layerMask.resize(area.z * area.w);
 			for (size_t x = 0; x < area.z; ++x)
@@ -67,6 +56,8 @@ namespace mse
 			// view
 			if (layer != nullptr)
 			{
+				windowUser = layer->GetWindow();
+
 				// setup texture to draw on
 				MSE_CORE_LOG("Image: requesting to create a texture");
 				MSE_CORE_TRACE("Image_parentLayer = ", parentLayer);
