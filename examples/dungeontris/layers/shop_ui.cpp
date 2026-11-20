@@ -160,6 +160,7 @@ ShopTraitsUILayer::~ShopTraitsUILayer()
 void ShopTraitsUILayer::OnInit()
 {
 	traitsGUIElements.reserve(18);
+	traitsHintsGUIElements.reserve(18);
 
 	// traits
 	AddElement(new mse::gui::Text(
@@ -172,88 +173,57 @@ void ShopTraitsUILayer::OnInit()
 
 	size_t offset = 1; // because 0 is not collectible
 
-	for (size_t i = offset; i < 6 + offset; ++i)
+	// traits
+	for (size_t i = 0; i < 18; ++i)
 	{
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
 				this,
-				{ 35 + 40*(i - offset), 100, 40, 27},
-				gameDB.traits[(DTetris::Traits)i].sprite_area,
-				gameDB.traits[(DTetris::Traits)i].cost
+				{ 35 + 40*(i - 6*(i / 6)), 100 + 30*(i / 6), 40, 27},
+				gameDB.traits[(DTetris::Traits)(i + offset)].sprite_area,
+				gameDB.traits[(DTetris::Traits)(i + offset)].cost
 			)))
 		);
+		MSE_LOG("ShopItem id=", traitsGUIElements[i]->id);
 
-		if (game.shop_traits[(DTetris::Traits)i])
+		if (game.shop_traits[(DTetris::Traits)(i + offset)])
 		{
-			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
+			traitsGUIElements[i]->state += mse::gui::StoreItemStates::Bought;
 		}
 
-		if (((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]) ||
-			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]) ||
-			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]))
+		if (((DTetris::Traits)(i + offset) == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]) ||
+			((DTetris::Traits)(i + offset) == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]) ||
+			((DTetris::Traits)(i + offset) == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]))
 		{
-			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Equipped;
+			traitsGUIElements[i]->state += mse::gui::StoreItemStates::Equipped;
 		}
 
-		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
-			PickTrait((DTetris::Traits)i, this);
+		traitsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i, offset](SDL_Event* event){
+			PickTrait((DTetris::Traits)(i + offset), this);
 		};
 	}
 
-	for (size_t i = 6 + offset; i < 12 + offset; ++i)
+	// TODO: fix mse::gui::StoreItem inner hierarchy interaction with mse::gui::Hint
+	// hints
+	for (size_t i = 0; i < 18; ++i)
 	{
-		traitsGUIElements.push_back(
-			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
+		traitsHintsGUIElements.push_back(
+			(mse::gui::Hint*)(AddElement(new mse::gui::Hint(
 				this,
-				{ 35 + 40*(i - 6 - offset), 130, 40, 27},
-				gameDB.traits[(DTetris::Traits)i].sprite_area,
-				gameDB.traits[(DTetris::Traits)i].cost
+				nullptr,
+				gameDB.traits[(DTetris::Traits)(i + offset)].description,
+				{0, 0, 200, 30},
+				{32, 32, 32, 196},
+				{218, 218, 255, 255},
+				nullptr,
+				1,
+				true,
+				{255, 255, 255, 255}
 			)))
 		);
 
-		if (game.shop_traits[(DTetris::Traits)i])
-		{
-			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
-		}
-
-		if (((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]) ||
-			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]) ||
-			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]))
-		{
-			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Equipped;
-		}
-
-		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
-			PickTrait((DTetris::Traits)i, this);
-		};
-	}
-
-	for (size_t i = 12 + offset; i < 18 + offset; ++i)
-	{
-		traitsGUIElements.push_back(
-			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
-				this,
-				{ 35 + 40*(i - 12 - offset), 160, 40, 27},
-				gameDB.traits[(DTetris::Traits)i].sprite_area,
-				gameDB.traits[(DTetris::Traits)i].cost
-			)))
-		);
-
-		if (game.shop_traits[(DTetris::Traits)i])
-		{
-			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
-		}
-
-		if (((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]) ||
-			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]) ||
-			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]))
-		{
-			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Equipped;
-		}
-
-		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
-			PickTrait((DTetris::Traits)i, this);
-		};
+		traitsHintsGUIElements[i]->BindTo(traitsGUIElements[i]);
+		MSE_LOG("HintItem id=", traitsHintsGUIElements[i]->id);
 	}
 
 	// general UI layout

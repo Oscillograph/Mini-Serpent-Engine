@@ -90,8 +90,11 @@ namespace mse
 	{
 		OnDisplay();
 		
-		for(const std::pair<int, GUIItem*> element : m_elements)
+		// for(const std::pair<int, GUIItem*> element : m_elements)
+		for(auto it = m_elements.begin(); it != m_elements.end(); ++it)
 		{
+			const std::pair<int, GUIItem*> element = *it;
+
 			if (element.second != nullptr)
 			{
 				// update animation

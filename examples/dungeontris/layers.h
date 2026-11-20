@@ -169,6 +169,7 @@ public:
     mse::gui::Button* closeBtn = nullptr;
 
     std::vector<mse::gui::StoreItem*> traitsGUIElements = {};
+    std::vector<mse::gui::Hint*> traitsHintsGUIElements = {};
 };
 
 class WinnerUILayer : public mse::Layer
