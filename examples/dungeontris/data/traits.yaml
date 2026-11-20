@@ -103,3 +103,21 @@
     после каждого боя
   sprite_area: [520, 122, 40, 27]
   cost: 0
+- type_hardcoded: 16
+  name: Танцор Диско
+  description: |
+    
+  sprite_area: [560, 122, 40, 27]
+  cost: 0
+- type_hardcoded: 17
+  name: Цвет из космоса
+  description: |
+    
+  sprite_area: [600, 122, 40, 27]
+  cost: 0
+- type_hardcoded: 18
+  name: Знамение
+  description: |
+    
+  sprite_area: [400, 122, 40, 27]
+  cost: 0

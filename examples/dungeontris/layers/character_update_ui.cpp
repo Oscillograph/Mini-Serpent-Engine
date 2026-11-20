@@ -160,6 +160,8 @@ void CharacterUpdateUILayer::OnInit()
 			} else {
 				game.shopType = DTetris::ShopTypes::Weapons;
 			}
+
+			game.traitSlot = DTetris::TraitSlot::A;
 			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 		}
 	};
@@ -178,7 +180,7 @@ void CharacterUpdateUILayer::OnInit()
 			this,
 			slotABtn->layerArea,
 			"./data/img/screen-images.png",
-			gameDB.traits[game.playerCharacter.traits[0]].sprite_area,
+			gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]].sprite_area,
 			{0, 0, 0, 255}
 		));
 	}
@@ -197,6 +199,7 @@ void CharacterUpdateUILayer::OnInit()
 		if (slotBBtn->isPushed)
 		{
 			game.shopType = DTetris::ShopTypes::Traits;
+			game.traitSlot = DTetris::TraitSlot::B;
 			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 		}
 	};
@@ -204,7 +207,7 @@ void CharacterUpdateUILayer::OnInit()
 		this,
 		slotBBtn->layerArea,
 		"./data/img/screen-images.png",
-		gameDB.traits[game.playerCharacter.traits[1]].sprite_area,
+		gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]].sprite_area,
 		{0, 0, 0, 255}
 	));
 
@@ -222,6 +225,7 @@ void CharacterUpdateUILayer::OnInit()
 		if (slotCBtn->isPushed)
 		{
 			game.shopType = DTetris::ShopTypes::Traits;
+			game.traitSlot = DTetris::TraitSlot::C;
 			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 		}
 	};
@@ -229,7 +233,7 @@ void CharacterUpdateUILayer::OnInit()
 		this,
 		slotCBtn->layerArea,
 		"./data/img/screen-images.png",
-		gameDB.traits[game.playerCharacter.traits[2]].sprite_area,
+		gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]].sprite_area,
 		{0, 0, 0, 255}
 	));
 
@@ -246,6 +250,16 @@ void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
 	if (game.playerCharacterUpdated)
 	{
 		RecalculateCharacter();
+
+		if (game.playerCharacter.main_class.type == DTetris::Classes::Monk)
+		{
+			slotAImage->ChangeSourceArea(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]].sprite_area);
+		} else {
+			slotAImage->ChangeSourceArea(gameDB.weapons[game.playerCharacter.weapon.id].sourceButtonArea);
+		}
+		slotBImage->ChangeSourceArea(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]].sprite_area);
+		slotCImage->ChangeSourceArea(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]].sprite_area);
+
 		game.playerCharacterUpdated = false;
 	}
 }

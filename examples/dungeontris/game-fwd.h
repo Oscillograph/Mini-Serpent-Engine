@@ -109,10 +109,10 @@ namespace DTetris
 
     enum class TraitSlot
     {
-        None    = 0,
-        A       = 1,
-        B       = 2,
-        C       = 3,
+        None    = 3,
+        A       = 0,
+        B       = 1,
+        C       = 2,
     };
 
     enum class Races : int

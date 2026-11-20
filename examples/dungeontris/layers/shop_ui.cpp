@@ -80,6 +80,11 @@ void ShopWeaponsUILayer::OnInit()
 			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Bought;
 		}
 
+		if (gameDB.weapons[i].id == game.playerCharacter.weapon.id)
+		{
+			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Equipped;
+		}
+
 		// printf("weaponsGUIElements[%d - 2]->callback MBtDn.\n", (int)i);
 		weaponsGUIElements[i - offset]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
 			// printf("weaponsGUIElements[%d - 2]->callback MBtDn.\n", (int)i);
@@ -101,6 +106,11 @@ void ShopWeaponsUILayer::OnInit()
 		if (game.shop_weapons[gameDB.weapons[i].sprite])
 		{
 			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Bought;
+		}
+
+		if (gameDB.weapons[i].id == game.playerCharacter.weapon.id)
+		{
+			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Equipped;
 		}
 
 		// printf("weaponsGUIElements[%d - 2]->callback MBtDn.\n", (int)i);
@@ -178,16 +188,19 @@ void ShopTraitsUILayer::OnInit()
 			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
 		}
 
+		if (((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]) ||
+			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]) ||
+			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]))
+		{
+			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Equipped;
+		}
+
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
-			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			// {
-			// 	PickTrait((DTetris::Traits)i);
-			// }
 			PickTrait((DTetris::Traits)i, this);
 		};
 	}
 
-	for (size_t i = 5 + offset; i < 12 + offset; ++i)
+	for (size_t i = 6 + offset; i < 12 + offset; ++i)
 	{
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
@@ -203,16 +216,19 @@ void ShopTraitsUILayer::OnInit()
 			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
 		}
 
+		if (((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]) ||
+			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]) ||
+			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]))
+		{
+			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Equipped;
+		}
+
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
-			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			// {
-			// 	PickTrait((DTetris::Traits)i);
-			// }
 			PickTrait((DTetris::Traits)i, this);
 		};
 	}
 
-	for (size_t i = 10 + offset; i < 18 + offset; ++i)
+	for (size_t i = 12 + offset; i < 18 + offset; ++i)
 	{
 		traitsGUIElements.push_back(
 			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
@@ -228,11 +244,14 @@ void ShopTraitsUILayer::OnInit()
 			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Bought;
 		}
 
+		if (((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]) ||
+			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]) ||
+			((DTetris::Traits)i == game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]))
+		{
+			traitsGUIElements[traitsGUIElements.size()-1]->state += mse::gui::StoreItemStates::Equipped;
+		}
+
 		traitsGUIElements[traitsGUIElements.size()-1]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
-			// if (traitsGUIElements[traitsGUIElements.size()-1]->state & mse::gui::StoreItemStates::Pressed)
-			// {
-			// 	PickTrait((DTetris::Traits)i);
-			// }
 			PickTrait((DTetris::Traits)i, this);
 		};
 	}
@@ -316,6 +335,20 @@ void PickTrait(DTetris::Traits trait, mse::Layer* layer)
 					((ShopTraitsUILayer*)layer)->traitsGUIElements[(size_t)trait - offset]->state += mse::gui::StoreItemStates::Equipped;
 				}
 
+				// make sure we don't pick the same trait twice
+				for (size_t i = 0; i <= (size_t)DTetris::TraitSlot::C; ++i)
+				{
+					if ((size_t)game.traitSlot != i)
+					{
+						if (game.playerCharacter.traits[i] == trait)
+						{
+							game.playerCharacter.traits[i] = DTetris::Traits::None;
+							break;
+						}
+					}
+				}
+
+				game.traitSlot = DTetris::TraitSlot::None;
 				game.playerCharacterUpdated = true;
 				MSE_LOG("ShopUI: PickTrait: picked trait ", utf8::utf32to8(gameDB.traits[trait].name));
 
@@ -381,6 +414,7 @@ void PickWeapon(size_t weaponID, mse::Layer* layer)
 
 				game.playerCharacter.weapon = gameDB.weapons[weaponID];
 
+				game.traitSlot = DTetris::TraitSlot::None;
 				game.playerCharacterUpdated = true;
 				MSE_LOG("ShopUI: PickWeapon: picked weapon ", utf8::utf32to8(gameDB.weapons[weaponID].name));
 

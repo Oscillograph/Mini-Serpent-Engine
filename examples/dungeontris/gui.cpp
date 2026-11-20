@@ -171,7 +171,15 @@ namespace mse
 					if ((state & StoreItemStates::Hover) ||
 						(state & StoreItemStates::Pressed))
 					{
-						srcRect = {480, 29, 40, 11};
+						if (state & StoreItemStates::Hover)
+						{
+							srcRect = {480, 29, 40, 11};
+						}
+
+						if (state & StoreItemStates::Pressed)
+						{
+							srcRect = {560, 29, 40, 11};
+						}
 					} else {
 						srcRect = {0, 0, 0, 0};
 					}
