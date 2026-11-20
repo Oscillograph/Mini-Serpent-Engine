@@ -15,6 +15,7 @@
   sprite_handle_area: [0, 0, 0, 0]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
+  weapon: 0
   tips: Ничего
 
 - class_hardcoded: 1
@@ -28,6 +29,7 @@
   sprite_handle_area: [100, 185, 3, 5]
   sprite_head_area: [110, 174, 8, 11]
   sprite_head_special_area: [110, 159, 8, 11]
+  weapon: 2
   tips: | 
     Точен и уворотлив.
     Уязвим перед противниками,
@@ -45,6 +47,7 @@
   sprite_handle_area: [134, 185, 3, 5]
   sprite_head_area: [144, 174, 9, 10]
   sprite_head_special_area: [144, 160, 9, 10]
+  weapon: 3
   tips: | 
     Полагается на силу и щит.
     Уязвим перед ловкачами.
@@ -60,6 +63,7 @@
   sprite_handle_area: [168, 185, 3, 5]
   sprite_head_area: [177, 172, 14, 14]
   sprite_head_special_area: [177, 155, 14, 14]
+  weapon: 4
   tips: | 
     Вынослив и безбашен.
     Лучше не затягивать бой.
@@ -75,6 +79,7 @@
   sprite_handle_area: [0, 0, 0, 0]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
+  weapon: 0
   tips: | 
     Слаб телом, но силён духом.
     Не носит оружие, полагается
@@ -92,6 +97,7 @@
   sprite_handle_area: [339, 184, 3, 5]
   sprite_head_area: [349, 173, 8, 9]
   sprite_head_special_area: [349, 159, 8, 9]
+  weapon: 0
   tips: |
     Носит Печать Хаоса, которая
     придаёт сил с каждым боем.
@@ -108,6 +114,7 @@
   sprite_handle_area: [391, 185, 3, 5]
   sprite_head_area: [0, 0, 0, 0]
   sprite_head_special_area: [0, 0, 0, 0]
+  weapon: 3
   tips: |
     Физически проигрывает всем,
     но безумно ловок и

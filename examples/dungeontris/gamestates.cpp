@@ -220,51 +220,10 @@ bool CharacterCreatePageState::OnExit(bool pass_layer)
 {
     MSE_LOG("CharacterCreatePageState OnExit..");
 
-    MSE_LOG("CharacterCreatePageState: game.inputClass = ", (int)(game.inputClass));
+    MSE_LOG("CharacterCreatePageState: game.inputClass = ", utf8::utf32to8(gameDB.classes[game.inputClass].name));
 
-    switch (game.inputClass)
-    {
-        case DTetris::Classes::Rogue:
-        {
-            game.inputTrait = DTetris::Traits::HiddenStrike;
-            game.inputWeapon = gameDB.weapons[2];
-            break;
-        }
-        case DTetris::Classes::Warrior:
-        {
-            game.inputTrait = DTetris::Traits::Rush;
-            game.inputWeapon = gameDB.weapons[3];
-            break;
-        }
-        case DTetris::Classes::Barbarian:
-        {
-            game.inputTrait = DTetris::Traits::Rage;
-            game.inputWeapon = gameDB.weapons[4];
-            break;
-        }
-        case DTetris::Classes::Monk:
-        {
-            game.inputTrait = DTetris::Traits::Meditation;
-            game.inputWeapon = gameDB.weapons[0];
-            break;
-        }
-        case DTetris::Classes::Cultist:
-        {
-            game.inputTrait = DTetris::Traits::MarkOfChaos;
-            game.inputWeapon = gameDB.weapons[0];
-            break;
-        }
-        case DTetris::Classes::Witcher:
-        {
-            game.inputTrait = DTetris::Traits::SchoolOfBeaver;
-            game.inputWeapon = gameDB.weapons[3];
-            break;
-        }
-        default:
-        {
-            printf("can't create player character: undefined class\n");
-        }
-    }
+    game.inputTrait = gameDB.classes[game.inputClass].startingTrait;
+    game.inputWeapon = gameDB.weapons[gameDB.classes[game.inputClass].weapon];
 
     game.playerCharacter =
     {
@@ -290,6 +249,9 @@ bool CharacterCreatePageState::OnExit(bool pass_layer)
     } else {
         game.playerCharacter.traits = {game.inputTrait, DTetris::Traits::None, DTetris::Traits::None};
     }
+
+    game.shop_weapons[game.inputWeapon.sprite] = true;
+    game.shop_traits[game.inputTrait] = true;
 
     printf("Character %s created! (%.2f, %.2f, %.2f, %.2f)\n",
             (char*)(game.playerCharacter.name.c_str()),

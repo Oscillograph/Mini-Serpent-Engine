@@ -331,7 +331,8 @@ namespace DTetris
                     !data[i]["sprite_whole_area"] ||
                     !data[i]["sprite_handle_area"] ||
                     !data[i]["sprite_head_area"] ||
-                    !data[i]["sprite_head_special_area"])
+                    !data[i]["sprite_head_special_area"] ||
+                    !data[i]["weapon"])
                 {
                     return false;
                 }
@@ -349,6 +350,7 @@ namespace DTetris
                     data[i]["sprite_handle_area"].as<glm::uvec4>(), // handle area on the whole sprite
                     data[i]["sprite_head_area"].as<glm::uvec4>(), // head area on the whole sprite
                     data[i]["sprite_head_special_area"].as<glm::uvec4>(), // special head
+                    data[i]["weapon"].as<size_t>(), // weapon
                 };
             }
 

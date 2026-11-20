@@ -272,7 +272,7 @@ namespace DTetris
     
     struct CharacterClass
     {
-        Classes type;
+        Classes type = Classes::None;
         std::u32string name = U"";
         float health = 0.0f;
         float strength = 0.0f;
@@ -284,6 +284,7 @@ namespace DTetris
         glm::uvec4 sprite_handle_area = {0, 0, 0, 0};
         glm::uvec4 sprite_head_area = {0, 0, 0, 0};
         glm::uvec4 sprite_head_special_area = {0, 0, 0, 0};
+        size_t weapon = 0;
     };
     
     struct DamageTypeName
