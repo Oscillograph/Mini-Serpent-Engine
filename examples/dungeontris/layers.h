@@ -108,6 +108,9 @@ public:
     mse::gui::Button* slotABtn = nullptr;
     mse::gui::Button* slotBBtn = nullptr;
     mse::gui::Button* slotCBtn = nullptr;
+    mse::gui::Hint* slotAHint = nullptr;
+    mse::gui::Hint* slotBHint = nullptr;
+    mse::gui::Hint* slotCHint = nullptr;
     mse::gui::Button* levelUpBtn = nullptr;
 
     mse::gui::Image* characterImage = nullptr;

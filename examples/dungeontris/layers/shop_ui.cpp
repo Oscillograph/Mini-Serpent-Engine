@@ -52,74 +52,16 @@ void ShopWeaponsUILayer::OnInit()
 {
 	weaponsGUIElements.reserve(6);
 
-	// weapons
-	AddElement(new mse::gui::Text(
+	// general UI layout
+	AddElement(new mse::gui::Field(
 		this,
-		U"Оружие",
-		{40, 70, 60, 10},
-		{0, 0, 0, 0},
+		{30, 60, 160, 140},
+		{64, 32, 32, 255},
+		true,
+		1,
 		{255, 255, 255, 255}
 	));
 
-	size_t offset = 2; // because 0 and 1 are not collectible
-
-	// printf("gameDB.weapons.size: %d\n", (int)gameDB.weapons.size());
-	for (size_t i = offset; i < 3 + offset; ++i)
-	{
-		weaponsGUIElements.push_back(
-			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
-				this,
-				{ 40 + 40*(i - offset), 90, 40, 27},
-				gameDB.weapons[i].sourceButtonArea,
-				gameDB.weapons[i].cost
-			)))
-		);
-
-		if (game.shop_weapons[gameDB.weapons[i].sprite])
-		{
-			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Bought;
-		}
-
-		if (gameDB.weapons[i].id == game.playerCharacter.weapon.id)
-		{
-			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Equipped;
-		}
-
-		// printf("weaponsGUIElements[%d - 2]->callback MBtDn.\n", (int)i);
-		weaponsGUIElements[i - offset]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
-			// printf("weaponsGUIElements[%d - 2]->callback MBtDn.\n", (int)i);
-			PickWeapon(i, this);
-		};
-	}
-
-	for (size_t i = 3 + offset; i < 6 + offset; ++i)
-	{
-		weaponsGUIElements.push_back(
-			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
-				this,
-				{ 40 + 40*(i - 3 - offset), 120, 40, 27},
-				gameDB.weapons[i].sourceButtonArea,
-				gameDB.weapons[i].cost
-			)))
-		);
-
-		if (game.shop_weapons[gameDB.weapons[i].sprite])
-		{
-			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Bought;
-		}
-
-		if (gameDB.weapons[i].id == game.playerCharacter.weapon.id)
-		{
-			weaponsGUIElements[i - offset]->state += mse::gui::StoreItemStates::Equipped;
-		}
-
-		// printf("weaponsGUIElements[%d - 2]->callback MBtDn.\n", (int)i);
-		weaponsGUIElements[i - offset]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i](SDL_Event* event){
-			PickWeapon(i, this);
-		};
-	}
-
-	// general UI layout
 	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
 		{176, 60, 14, 13},
@@ -134,14 +76,45 @@ void ShopWeaponsUILayer::OnInit()
 		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
 	};
 
-	AddElement(new mse::gui::Field(
+	// weapons
+	AddElement(new mse::gui::Text(
 		this,
-		{30, 60, 160, 140},
-		{64, 32, 32, 255},
-		true,
-		1,
+		U"Оружие",
+		{40, 70, 60, 10},
+		{0, 0, 0, 0},
 		{255, 255, 255, 255}
 	));
+
+	size_t offset = 2; // because 0 and 1 are not collectible
+
+	// printf("gameDB.weapons.size: %d\n", (int)gameDB.weapons.size());
+	for (size_t i = 0; i < 6; ++i)
+	{
+		weaponsGUIElements.push_back(
+			(mse::gui::StoreItem*)(AddElement(new mse::gui::StoreItem(
+				this,
+				{ 40 + 40*(i - 3*(i / 3)), 90 + 30*(i / 3), 40, 27},
+				gameDB.weapons[i + offset].sourceButtonArea,
+				gameDB.weapons[i + offset].cost
+			)))
+		);
+
+		if (game.shop_weapons[gameDB.weapons[i + offset].sprite])
+		{
+			weaponsGUIElements[i]->state += mse::gui::StoreItemStates::Bought;
+		}
+
+		if (gameDB.weapons[i + offset].id == game.playerCharacter.weapon.id)
+		{
+			weaponsGUIElements[i]->state += mse::gui::StoreItemStates::Equipped;
+		}
+
+		// printf("weaponsGUIElements[%d - 2]->callback MBtDn.\n", (int)i);
+		weaponsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&, i, offset](SDL_Event* event){
+			// printf("weaponsGUIElements[%d - 2]->callback MBtDn.\n", (int)i);
+			PickWeapon(i + offset, this);
+		};
+	}
 }
 
 void ShopWeaponsUILayer::OnUpdate(mse::TimeType t)
@@ -163,6 +136,15 @@ void ShopTraitsUILayer::OnInit()
 	traitsHintsGUIElements.reserve(18);
 
 	// general UI layout
+	AddElement(new mse::gui::Field(
+		this,
+		{30, 60, 260, 140},
+		{64, 32, 32, 255},
+		true,
+		1,
+		{255, 255, 255, 255}
+	));
+
 	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
 		{276, 60, 14, 13},
@@ -174,21 +156,9 @@ void ShopTraitsUILayer::OnInit()
 		{66, 102, 14, 13}
 	));
 
-	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-		if (closeBtn->isPushed)
-		{
-			gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
-		}
+	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event){
+		gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
 	};
-
-	AddElement(new mse::gui::Field(
-		this,
-		{30, 60, 260, 140},
-		{64, 32, 32, 255},
-		true,
-		1,
-		{255, 255, 255, 255}
-	));
 
 	// traits
 	AddElement(new mse::gui::Text(
@@ -226,7 +196,7 @@ void ShopTraitsUILayer::OnInit()
 			traitsGUIElements[i]->state += mse::gui::StoreItemStates::Equipped;
 		}
 
-		traitsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&, i, offset](SDL_Event* event){
+		traitsGUIElements[i]->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&, i, offset](SDL_Event* event){
 			PickTrait((DTetris::Traits)(i + offset), this);
 		};
 	}

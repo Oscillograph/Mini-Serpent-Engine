@@ -250,6 +250,21 @@ void CharacterUpdateUILayer::OnInit()
 	PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 		game.playerCharacterUpdated = true;
 	};
+
+	// hints
+	slotAHint = (mse::gui::Hint*)AddElement(
+		new mse::gui::Hint(
+			this,
+			slotABtn,
+			U"",
+			{0, 0, 200, 30},
+			{32, 32, 32, 196},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255}
+		));
 }
 
 void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)

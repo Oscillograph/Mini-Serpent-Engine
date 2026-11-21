@@ -165,7 +165,12 @@ namespace mse
 				// always show when equipped
 				if (state & StoreItemStates::Equipped)
 				{
-					srcRect = {520, 29, 40, 11};
+					if (state & StoreItemStates::Pressed)
+					{
+						srcRect = {560, 29, 40, 11};
+					} else {
+						srcRect = {520, 29, 40, 11};
+					}
 				} else {
 					// show only when hovered/pressed
 					if ((state & StoreItemStates::Hover) ||
