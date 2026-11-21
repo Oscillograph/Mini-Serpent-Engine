@@ -1,5 +1,5 @@
-#include "mse/systems/platform/events/events.h"
-#include "mse/systems/windows/layers/gui/items/checkbox.h"
+#include <mse/systems/platform/events/events.h>
+#include <mse/systems/windows/layers/gui/items/checkbox.h>
 #include <dungeontris/layers.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/gamestates.h>
@@ -25,184 +25,74 @@ void CharacterCreateUILayer::OnInit()
 {
 	GameLogo(this);
 
-	mse::gui::Image* classSelectorBtn = nullptr;
-
-	classTraitHint = (mse::gui::Hint*)(AddElement(
-		new mse::gui::Hint(
-			this,
-			nullptr,
-			U"",
-			{0, 0, 200, 48},
-			{64, 32, 32, 255},
-			{218, 218, 255, 255},
-			nullptr,
-			1,
-			true,
-			{255, 255, 255, 255})));
-	mse::gui::Hint* hintText1 = (mse::gui::Hint*)(AddElement(
-		new mse::gui::Hint(
-			this,
-			nullptr,
-			gameDB.classes[DTetris::Classes::Rogue].name,
-			{0, 0, 110, 12},
-			{64, 32, 32, 255},
-			{218, 218, 255, 255},
-			nullptr,
-			1,
-			true,
-			{255, 255, 255, 255})));
-	mse::gui::Hint* hintText2 = (mse::gui::Hint*)(AddElement(
-		new mse::gui::Hint(
-			this,
-			nullptr,
-			gameDB.classes[DTetris::Classes::Warrior].name,
-			{0, 0, 110, 12},
-			{64, 32, 32, 255},
-			{218, 218, 255, 255},
-			nullptr,
-			1,
-			true,
-			{255, 255, 255, 255})));
-	mse::gui::Hint* hintText3 = (mse::gui::Hint*)(AddElement(
-		new mse::gui::Hint(
-			this,
-			nullptr,
-			gameDB.classes[DTetris::Classes::Barbarian].name,
-			{0, 0, 110, 12},
-			{64, 32, 32, 255},
-			{218, 218, 255, 255},
-			nullptr,
-			1,
-			true,
-			{255, 255, 255, 255})));
-	mse::gui::Hint* hintText4 = (mse::gui::Hint*)(AddElement(
-		new mse::gui::Hint(
-			this,
-			nullptr,
-			gameDB.classes[DTetris::Classes::Monk].name,
-			{0, 0, 110, 12},
-			{64, 32, 32, 255},
-			{218, 218, 255, 255},
-			nullptr,
-			1,
-			true,
-			{255, 255, 255, 255})));
-	mse::gui::Hint* hintText5 = (mse::gui::Hint*)(AddElement(
-		new mse::gui::Hint(
-			this,
-			nullptr,
-			gameDB.classes[DTetris::Classes::Cultist].name,
-			{0, 0, 110, 12},
-			{64, 32, 32, 255},
-			{218, 218, 255, 255},
-			nullptr,
-			1,
-			true,
-			{255, 255, 255, 255})));
-	mse::gui::Hint* hintText6 = (mse::gui::Hint*)(AddElement(
-		new mse::gui::Hint(
-			this,
-			nullptr,
-			gameDB.classes[DTetris::Classes::Witcher].name,
-			{0, 0, 110, 12},
-			{64, 32, 32, 255},
-			{218, 218, 255, 255},
-			nullptr,
-			1,
-			true,
-			{255, 255, 255, 255})));
-
-	mse::gui::Hint* hintText7 = (mse::gui::Hint*)(AddElement(
-		new mse::gui::Hint(
-			this,
-			nullptr,
-			U"Добавляет крестовину\nв набор выпадающих\nтетримино.",
-			{0, 0, 160, 36},
-			{64, 32, 32, 255},
-			{218, 218, 255, 255},
-			nullptr,
-			1,
-			true,
-			{255, 255, 255, 255})));
+	std::vector<mse::gui::Image*> classSelectorBtn = {};
 
 	// rogue selector
-	classSelectorBtn = (mse::gui::Image*)AddElement(new mse::gui::Image(
+	classSelectorBtn.push_back((mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
 		{10, 70, 14, 13},
 		"./data/img/screen-images.png",
 		{326, 2, 14, 13},
-		{0, 0, 0, 255}));
-	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
+		{0, 0, 0, 255})));
+	classSelectorBtn[0]->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
 		ChooseClass(DTetris::Classes::Rogue);
 	};
-	hintText1->BindTo(classSelectorBtn);
-
 	// warrior selector
-	classSelectorBtn = (mse::gui::Image*)AddElement(new mse::gui::Image(
+	classSelectorBtn.push_back((mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
 		{25, 70, 14, 13},
 		"./data/img/screen-images.png",
 		{341, 2, 14, 13},
-		{0, 0, 0, 255}));
-	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
+		{0, 0, 0, 255})));
+	classSelectorBtn[1]->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
 		ChooseClass(DTetris::Classes::Warrior);
 	};
-	hintText2->BindTo(classSelectorBtn);
-
 	// barbarian selector
-	classSelectorBtn = (mse::gui::Image*)AddElement(new mse::gui::Image(
+	classSelectorBtn.push_back((mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
 		{10, 85, 14, 13},
 		"./data/img/screen-images.png",
 		{356, 2, 14, 13},
-		{0, 0, 0, 255}));
-	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
+		{0, 0, 0, 255})));
+	classSelectorBtn[2]->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
 		ChooseClass(DTetris::Classes::Barbarian);
 	};
-	hintText3->BindTo(classSelectorBtn);
-
 	// monk selector
-	classSelectorBtn = (mse::gui::Image*)AddElement(new mse::gui::Image(
+	classSelectorBtn.push_back((mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
 		{25, 85, 14, 13},
 		"./data/img/screen-images.png",
 		{371, 2, 14, 13},
-		{0, 0, 0, 255}));
-	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
+		{0, 0, 0, 255})));
+	classSelectorBtn[3]->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
 		ChooseClass(DTetris::Classes::Monk);
 	};
-	hintText4->BindTo(classSelectorBtn);
-
 	// cultist selector
-	classSelectorBtn = (mse::gui::Image*)AddElement(new mse::gui::Image(
+	classSelectorBtn.push_back((mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
 		{10, 100, 14, 13},
 		"./data/img/screen-images.png",
 		{386, 2, 14, 13},
-		{0, 0, 0, 255}));
-	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
+		{0, 0, 0, 255})));
+	classSelectorBtn[4]->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
 		ChooseClass(DTetris::Classes::Cultist);
 	};
-	hintText5->BindTo(classSelectorBtn);
-
 	// witcher selector
-	classSelectorBtn = (mse::gui::Image*)AddElement(new mse::gui::Image(
+	classSelectorBtn.push_back((mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
 		{25, 100, 14, 13},
 		"./data/img/screen-images.png",
 		{401, 2, 14, 13},
-		{0, 0, 0, 255}));
-	classSelectorBtn->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
+		{0, 0, 0, 255})));
+	classSelectorBtn[5]->callbacks[mse::EventTypes::GUIItemMouseButtonUp] = [&](SDL_Event* event)
 	{
 		ChooseClass(DTetris::Classes::Witcher);
 	};
-	hintText6->BindTo(classSelectorBtn);
-
 
 	// character avatar preview
 	classAvatarPreviewImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
@@ -237,7 +127,6 @@ void CharacterCreateUILayer::OnInit()
 		{110, 120, 100, 12},
 		{0, 0, 0, 255},
 		{255, 128, 255, 255})));
-	classTraitHint->BindTo(classTraitTextBox);
 
 	// class tips
 	classTipsBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(
@@ -266,7 +155,6 @@ void CharacterCreateUILayer::OnInit()
 	hardcoreTetrisModText->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
 		hardcoreTetrisMod->Toggle();
 	};
-	hintText7->BindTo(hardcoreTetrisModText);
 
 	mse::gui::Button* proceedBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(
 		this, U"На подвиги!",
@@ -294,6 +182,118 @@ void CharacterCreateUILayer::OnInit()
 		gsm.ChangeStateTo(DTetris::GamePages::MainMenu);
 	};
 
+	// hints
+	mse::gui::Hint* hintText1 = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			gameDB.classes[DTetris::Classes::Rogue].name,
+			{0, 0, 110, 12},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+	hintText1->BindTo(classSelectorBtn[0]);
+
+	mse::gui::Hint* hintText2 = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			gameDB.classes[DTetris::Classes::Warrior].name,
+			{0, 0, 110, 12},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+	hintText2->BindTo(classSelectorBtn[1]);
+
+	mse::gui::Hint* hintText3 = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			gameDB.classes[DTetris::Classes::Barbarian].name,
+			{0, 0, 110, 12},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+	hintText3->BindTo(classSelectorBtn[2]);
+
+	mse::gui::Hint* hintText4 = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			gameDB.classes[DTetris::Classes::Monk].name,
+			{0, 0, 110, 12},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+	hintText4->BindTo(classSelectorBtn[3]);
+
+	mse::gui::Hint* hintText5 = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			gameDB.classes[DTetris::Classes::Cultist].name,
+			{0, 0, 110, 12},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+	hintText5->BindTo(classSelectorBtn[4]);
+
+	mse::gui::Hint* hintText6 = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			gameDB.classes[DTetris::Classes::Witcher].name,
+			{0, 0, 110, 12},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+	hintText6->BindTo(classSelectorBtn[5]);
+
+	mse::gui::Hint* hintText7 = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			U"Добавляет крестовину\nв набор выпадающих\nтетримино.",
+			{0, 0, 160, 36},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+	hintText7->BindTo(hardcoreTetrisModText);
+
+	classTraitHint = (mse::gui::Hint*)(AddElement(
+		new mse::gui::Hint(
+			this,
+			nullptr,
+			U"",
+			{0, 0, 200, 48},
+			{64, 32, 32, 255},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255})));
+	classTraitHint->BindTo(classTraitTextBox);
 
 	// Set default character
 	ChooseClass(DTetris::Classes::Rogue);

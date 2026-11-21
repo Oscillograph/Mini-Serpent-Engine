@@ -28,7 +28,7 @@ namespace mse
 		Window* GetWindow();
 		GUIItem* AddElement(GUIItem* element);
 		
-		inline std::unordered_map<int, GUIItem*>& GetElements() { return m_elements; }
+		inline std::map<int, GUIItem*>& GetElements() { return m_elements; }
 		inline int GetElementId(GUIItem* pointer) {
 			for (auto element : m_elements)
 			{
@@ -53,7 +53,7 @@ namespace mse
 		
 	protected:
 		Window* m_window = nullptr;
-		std::unordered_map<int, GUIItem*> m_elements = {}; // this int should be a hash or a unique id
+		std::map<int, GUIItem*> m_elements = {}; // this int should be a hash or a unique id
 		int m_screenWidth, m_screenHeight;
 	};
 }

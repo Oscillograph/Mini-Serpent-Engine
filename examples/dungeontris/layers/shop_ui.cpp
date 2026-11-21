@@ -162,6 +162,34 @@ void ShopTraitsUILayer::OnInit()
 	traitsGUIElements.reserve(18);
 	traitsHintsGUIElements.reserve(18);
 
+	// general UI layout
+	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
+		this,
+		{276, 60, 14, 13},
+		"./data/img/screen-images.png",
+		{0, 0, 0},
+		{24, 102, 14, 13},
+		{38, 102, 14, 13},
+		{52, 102, 14, 13},
+		{66, 102, 14, 13}
+	));
+
+	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		if (closeBtn->isPushed)
+		{
+			gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
+		}
+	};
+
+	AddElement(new mse::gui::Field(
+		this,
+		{30, 60, 260, 140},
+		{64, 32, 32, 255},
+		true,
+		1,
+		{255, 255, 255, 255}
+	));
+
 	// traits
 	AddElement(new mse::gui::Text(
 		this,
@@ -212,7 +240,7 @@ void ShopTraitsUILayer::OnInit()
 				this,
 				nullptr,
 				gameDB.traits[(DTetris::Traits)(i + offset)].description,
-				{0, 0, 200, 30},
+				{(int)i, 0, 200, 30},
 				{32, 32, 32, 196},
 				{218, 218, 255, 255},
 				nullptr,
@@ -225,34 +253,6 @@ void ShopTraitsUILayer::OnInit()
 		traitsHintsGUIElements[i]->BindTo(traitsGUIElements[i]);
 		MSE_LOG("HintItem id=", traitsHintsGUIElements[i]->id);
 	}
-
-	// general UI layout
-	closeBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
-		this,
-		{276, 60, 14, 13},
-		"./data/img/screen-images.png",
-		{0, 0, 0},
-		{24, 102, 14, 13},
-		{38, 102, 14, 13},
-		{52, 102, 14, 13},
-		{66, 102, 14, 13}
-	));
-
-	closeBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-		if (closeBtn->isPushed)
-		{
-			gsm.ChangeStateTo(DTetris::GamePages::CharacterUpdate);
-		}
-	};
-
-	AddElement(new mse::gui::Field(
-		this,
-		{30, 60, 260, 140},
-		{64, 32, 32, 255},
-		true,
-		1,
-		{255, 255, 255, 255}
-	));
 }
 void ShopTraitsUILayer::OnUpdate(mse::TimeType t)
 {}

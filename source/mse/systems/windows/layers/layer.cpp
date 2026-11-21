@@ -11,7 +11,7 @@ namespace mse
 {
 	Layer::Layer()
 	{
-		m_elements.reserve(32);
+		// m_elements.reserve(32); // if std::unordered_map
 	}
 
 	Layer::~Layer()

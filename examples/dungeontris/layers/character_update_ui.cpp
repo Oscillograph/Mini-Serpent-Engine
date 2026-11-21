@@ -13,7 +13,13 @@ extern DTetris::TetrisEngineData DTetris::tetrisEngineData;
 
 void CharacterUpdateUILayer::OnInit()
 {
-	mse::gui::Text* text2 = (mse::gui::Text*)(AddElement(new mse::gui::Text(this, U"Развить класс:", {20, 35, 100, 10}, {0, 0, 0, 255}, {255, 255, 255, 255})));
+	mse::gui::Text* text2 = (mse::gui::Text*)(AddElement(
+		new mse::gui::Text(
+			this,
+			U"Развить класс:",
+			{20, 35, 100, 10},
+			{0, 0, 0, 255},
+			{255, 255, 255, 255})));
 
 	// new interface
 	classStatsTextBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(
@@ -141,9 +147,28 @@ void CharacterUpdateUILayer::OnInit()
 	strstream.clear();
 
 	// weapon and traits shops
+	if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
+	{
+		slotAImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
+			this,
+			{50, 120, 40, 27},
+			"./data/img/screen-images.png",
+			gameDB.weapons[game.playerCharacter.weapon.id].sourceButtonArea,
+			{0, 0, 0, 255}
+		));
+	} else {
+		slotAImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
+			this,
+			{50, 120, 40, 27},
+			"./data/img/screen-images.png",
+			gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]].sprite_area,
+			{0, 0, 0, 255}
+		));
+	}
+
 	slotABtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
 		this,
-		{50, 120, 40, 27},
+		slotAImage->layerArea,
 		"./data/img/screen-images.png",
 		{0, 0, 0},
 		{600, 0, 40, 27},
@@ -166,28 +191,17 @@ void CharacterUpdateUILayer::OnInit()
 		}
 	};
 
-	if (game.playerCharacter.main_class.type != DTetris::Classes::Monk)
-	{
-		slotAImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
-			this,
-			slotABtn->layerArea,
-			"./data/img/screen-images.png",
-			gameDB.weapons[game.playerCharacter.weapon.id].sourceButtonArea,
-			{0, 0, 0, 255}
-		));
-	} else {
-		slotAImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
-			this,
-			slotABtn->layerArea,
-			"./data/img/screen-images.png",
-			gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]].sprite_area,
-			{0, 0, 0, 255}
-		));
-	}
 
-	slotBBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
+	slotBImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
 		{90, 120, 40, 27},
+		"./data/img/screen-images.png",
+		gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]].sprite_area,
+		{0, 0, 0, 255}
+	));
+	slotBBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
+		this,
+		slotBImage->layerArea,
 		"./data/img/screen-images.png",
 		{0, 0, 0},
 		{600, 0, 40, 27},
@@ -203,17 +217,17 @@ void CharacterUpdateUILayer::OnInit()
 			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 		}
 	};
-	slotBImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
-		this,
-		slotBBtn->layerArea,
-		"./data/img/screen-images.png",
-		gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]].sprite_area,
-		{0, 0, 0, 255}
-	));
 
-	slotCBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
+	slotCImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
 		this,
 		{130, 120, 40, 27},
+		"./data/img/screen-images.png",
+		gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]].sprite_area,
+		{0, 0, 0, 255}
+	));
+	slotCBtn = (mse::gui::Button*)AddElement(new mse::gui::Button(
+		this,
+		slotCImage->layerArea,
 		"./data/img/screen-images.png",
 		{0, 0, 0},
 		{600, 0, 40, 27},
@@ -229,13 +243,6 @@ void CharacterUpdateUILayer::OnInit()
 			gsm.ChangeStateTo(DTetris::GamePages::Shop, this);
 		}
 	};
-	slotCImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
-		this,
-		slotCBtn->layerArea,
-		"./data/img/screen-images.png",
-		gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]].sprite_area,
-		{0, 0, 0, 255}
-	));
 
 
 	// confirm changes

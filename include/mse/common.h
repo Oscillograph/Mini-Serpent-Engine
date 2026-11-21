@@ -10,6 +10,7 @@
 #include <vector> // WindowManager
 #include <list> // LayerManager
 #include <algorithm> // std::find()
+#include <map> // layer, resource manager
 #include <unordered_map> // resource manager
 #include <fstream> // resource manager
 #include <initializer_list> // to initialize structs like vec2, etc.
