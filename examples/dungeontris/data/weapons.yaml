@@ -83,7 +83,7 @@
   sprite_whole_area: [288, 127, 4, 26]
   sprite_handle_area: [288, 153, 3, 5]
   sprite_button_area: [600, 41, 40, 27]
-  cost: 40
+  cost: 0
 
 # id 8: filler. 
 - id: 8

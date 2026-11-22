@@ -922,6 +922,16 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
         // end of the battle
         if (game.playerCharacter.stats.health > 0.0 && DTetris::tetrisEngineData.state != DTetris::TetrisStates::GameOver)
         {
+            // after battle effects
+            for (DTetris::Traits trait : game.playerCharacter.traits)
+            {
+                if (trait == DTetris::Traits::SchoolOfBeaver)
+                {
+                    game.playerCharacter.blocks[DTetris::BlockType::Treasure] = 2 * game.playerCharacter.blocks[DTetris::BlockType::Treasure];
+                    break;
+                }
+            }
+
             DTetris::tetrisEngineData.state = DTetris::TetrisStates::Win;
         } else {
             DTetris::tetrisEngineData.state = DTetris::TetrisStates::GameOver;
@@ -957,21 +967,6 @@ bool ArenaAftermathPageState::OnEnter(mse::Layer* pass_layer)
     } else {
         layer = new ArenaUILayer();
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
-    }
-
-    // after battle effects
-    for (size_t i = 0; i < (size_t)DTetris::TraitSlot::C; ++i)
-    {
-        switch (game.playerCharacter.traits[i])
-        {
-            case DTetris::Traits::SchoolOfBeaver:
-            {
-                game.playerCharacter.blocks[DTetris::BlockType::Treasure] = 2 * game.playerCharacter.blocks[DTetris::BlockType::Treasure];
-                break;
-            }
-            default:
-            {}
-        }
     }
 
     if (game.playerCharacter.stats.health > 0.0)

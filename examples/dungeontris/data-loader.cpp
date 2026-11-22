@@ -120,16 +120,18 @@ namespace DTetris
                     utf8::utf8to32(data[i]["name"].as<std::string>()),
                     data[i]["race"].as<Races>(),
                     {
-                        data[i]["stats_max"][0].as<float>(),  // health
-                        data[i]["stats_max"][1].as<float>(),  // strength
-                        data[i]["stats_max"][2].as<float>(),  // agility
-                        data[i]["stats_max"][3].as<float>()   // endurance
+                        data[i]["stats_max"][0].as<float>(),  // health_max
+                        data[i]["stats_max"][1].as<float>(),  // health
+                        data[i]["stats_max"][2].as<float>(),  // strength
+                        data[i]["stats_max"][3].as<float>(),  // agility
+                        data[i]["stats_max"][4].as<float>()   // endurance
                     },
                     {
-                        data[i]["stats_max"][0].as<float>(),  // health
-                        data[i]["stats_max"][1].as<float>(),  // strength
-                        data[i]["stats_max"][2].as<float>(),  // agility
-                        data[i]["stats_max"][3].as<float>()   // endurance
+                        data[i]["stats_max"][0].as<float>(),  // health_max
+                        data[i]["stats_max"][1].as<float>(),  // health
+                        data[i]["stats_max"][2].as<float>(),  // strength
+                        data[i]["stats_max"][3].as<float>(),  // agility
+                        data[i]["stats_max"][4].as<float>()   // endurance
                     },
                     {Classes::None, 0},
                     {Classes::None, 0},

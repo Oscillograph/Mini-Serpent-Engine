@@ -108,8 +108,8 @@ void CharacterUpdateUILayer::OnInit()
 		headSpecialImage = (mse::gui::Image*)AddElement(new mse::gui::Image(
 			this,
 			{
-				characterImage->layerArea.x + (head_special_src.x - character_src.x),
-				characterImage->layerArea.y + (head_special_src.y - character_src.y),
+				characterImage->layerArea.x + (head_src.x - character_src.x),
+				characterImage->layerArea.y + (head_src.y - character_src.y),
 				head_special_src.z,
 				head_special_src.w
 			},
@@ -427,4 +427,9 @@ void CharacterUpdateUILayer::UpdateCharacterStatsBox()
 	game.playerCharacter.stats.endurance << "\n";
 
 	classStatsValuesBox->ChangeText(utf8::utf8to32(strstream.str()));
+
+	strstream.str("");
+	strstream.clear();
+	strstream << game.playerCharacter.blocks[DTetris::BlockType::Treasure];
+	treasuresValueTextBox->ChangeText(utf8::utf8to32(strstream.str()));
 }
