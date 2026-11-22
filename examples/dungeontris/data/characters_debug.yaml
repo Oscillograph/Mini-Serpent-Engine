@@ -1,0 +1,28 @@
+# data/characters.yaml  ->  DTetris::LoadCharacters()  (data-loader.cpp:91)
+#
+# IMPORTANT: a character's ID is its POSITION in this list (0-based),
+#            because the loader does gamedb.characters[i] = entry i.
+#
+# race       : 0=None 1=Human 2=Goblin 3=Skeleton 4=Slime 5=Ghost 6=Golem 7=Dragon 8=OldGod
+# stats_max  : [health, strength, agility, endurance]  (exactly 4 values;
+#              the loader also copies them into the battle stats)
+# traits     : list of Traits ids (see traits.yaml)
+# drops      : list of weapon ids (positions in weapons.yaml)
+# sprites    : refer to screen-images.png
+# weapon     : weapon id (position in weapons.yaml) this character fights with
+#
+# NOTE: main_class / sub_class are NOT read from this file -
+#       the loader hardcodes {None, 0} for both (class assignment happens
+#       during character creation in the game).
+
+- name: Гоблин
+  level: 1
+  race: 2
+  stats_max: [1, 1, 1, 1]
+  traits: []
+  drops: [2]
+  sprite_whole_area: [222, 95, 28, 63]
+  sprite_handle_area: [0, 0, 0, 0]
+  sprite_head_area: [0, 0, 0, 0]
+  sprite_head_special_area: [0, 0, 0, 0]
+  weapon: 10

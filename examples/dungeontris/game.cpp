@@ -115,10 +115,15 @@ namespace DTetris
         //                        printf("Rolled %d of %d\n", dice, agi_sum);
         if (dice > defender.stats.agility)
         {
+            if (playerAttacks)
+            {
+                playerAttacksCount++;
+            }
+
             // apply attacker's effects
             for (DTetris::Traits trait : attacker.traits)
             {
-                if (turn == 1)
+                if (playerAttacksCount == 1)
                 {
                     if (trait == DTetris::Traits::Rush)
                     {
@@ -135,12 +140,12 @@ namespace DTetris
 
                 if (trait == DTetris::Traits::Poison)
                 {
-                    skillDamage += turn;
+                    skillDamage += battleCounter;
                 }
 
                 if (trait == DTetris::Traits::Rage)
                 {
-                    skillDamage = (turn < 4) ? (skillDamage + 2) : (skillDamage - 1);
+                    skillDamage = (playerAttacksCount < 4) ? (skillDamage + 2) : (skillDamage - 1);
                 }
 
                 if (trait == DTetris::Traits::FireBreather)
@@ -157,12 +162,6 @@ namespace DTetris
                 {
                     weaponDamage = 0.0;
                 }
-
-                if ((trait == Traits::CrushingWeakness) &&
-                    (attacker.weapon.type == DamageType::Crushing))
-                {
-                    weaponDamage = weaponDamage * 2;
-                }
             }
 
             // apply removed blocks damage
@@ -170,6 +169,7 @@ namespace DTetris
             attacker.blocks[BlockType::Attack] = 0;
 
             // pre-calculate total damage
+            skillDamage = (skillDamage < 0.0) ? 0.0 : skillDamage; // skillDamage can't be < 0'
             totalDamage = weaponDamage + skillDamage;
 
             // apply defender's effects that affect total damage
@@ -184,6 +184,13 @@ namespace DTetris
                     (defender.stats.strength > attacker.stats.strength))
                 {
                     totalDamage -= 3;
+                }
+
+                if ((trait == Traits::DiscoDancer) &&
+                    (turn <= 30))
+                {
+                    totalDamage = 0.0;
+                    break; // so we won't affect collected blocks amount
                 }
 
                 // apply removed blocks defence

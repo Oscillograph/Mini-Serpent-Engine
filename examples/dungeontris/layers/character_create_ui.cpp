@@ -418,6 +418,7 @@ void CharacterCreateUILayer::ChooseClass(DTetris::Classes classChosen)
 	game.inputClass = classChosen;
 	game.inputStats = {
 		gameDB.classes[classChosen].health,
+		gameDB.classes[classChosen].health,
 		gameDB.classes[classChosen].strength,
 		gameDB.classes[classChosen].agility,
 		gameDB.classes[classChosen].endurance

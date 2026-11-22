@@ -10,13 +10,13 @@
 - type_hardcoded: 1
   name: Рывок
   description: |
-    удвоенный урон в первый ход
+    удвоенный урон первую атаку
   sprite_area: [600, 95, 40, 27]
   cost: 0
 - type_hardcoded: 2
   name: Ярость
   description: |
-    +2 к урону первые три хода,
+    +2 к урону первые три атаки,
     -1 к урону во все остальные
   sprite_area: [560, 95, 40, 27]
   cost: 0
@@ -29,14 +29,13 @@
 - type_hardcoded: 4
   name: Щит
   description: |
-    -3 к ущербу, если сильнее цели
+    защита 3, если сильнее цели
   sprite_area: [600, 68, 40, 27]
   cost: 25
 - type_hardcoded: 5
-  name: Страх дубин
+  name: Видал такое
   description: |
-    получает двойной урон
-    от дробящего оружия
+    +50 к здоровью
   sprite_area: [0, 0, 0, 0]
   cost: 1
 - type_hardcoded: 6
@@ -73,7 +72,7 @@
 - type_hardcoded: 11
   name: Яд
   description: |
-    +N к урону, где N - номер хода
+    +N к урону, где N - номер боя
   sprite_area: [440, 95, 40, 27]
   cost: 45
 - type_hardcoded: 12
@@ -92,7 +91,8 @@
 - type_hardcoded: 14
   name: Печать хаоса
   description: |
-    +1 ко всем статам за каждую победу (максимум +5).
+    +1 к статам за каждую победу 
+    (максимум +5/+5/+5).
     Финальный босс - не дракон.
   sprite_area: [400, 95, 40, 27]
   cost: 90
@@ -106,18 +106,18 @@
 - type_hardcoded: 16
   name: Танцор Диско
   description: |
-    
+    первые 30 ходов неуязвим
   sprite_area: [560, 122, 40, 27]
   cost: 0
 - type_hardcoded: 17
-  name: Цвет из космоса
+  name: Цвет космоса
   description: |
-    
+    необычные блоки появляются чаще
   sprite_area: [600, 122, 40, 27]
   cost: 0
 - type_hardcoded: 18
-  name: Знамение
+  name: Затмение
   description: |
-    
+    возрождается один раз за бой
   sprite_area: [400, 122, 40, 27]
   cost: 0

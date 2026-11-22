@@ -268,23 +268,51 @@ namespace DTetris
 				{
 					int blockType = rand() % 100;
 
-					if (blockType > 95)
+					for (DTetris::Traits trait : game.playerCharacter.traits)
 					{
-						tetrimino.blocks[i].type = DTetris::BlockType::Treasure;
-					} else {
-						if (blockType > 90)
+						if (trait == DTetris::Traits::ColourFromSpace)
 						{
-							tetrimino.blocks[i].type = DTetris::BlockType::Healing;
-						} else {
-							if (blockType > 80)
+							if (blockType > 90)
 							{
-								tetrimino.blocks[i].type = DTetris::BlockType::Defense;
+								tetrimino.blocks[i].type = DTetris::BlockType::Treasure;
 							} else {
-								if (blockType > 70)
+								if (blockType > 80)
 								{
-									tetrimino.blocks[i].type = DTetris::BlockType::Attack;
+									tetrimino.blocks[i].type = DTetris::BlockType::Healing;
 								} else {
-									tetrimino.blocks[i].type = DTetris::BlockType::Block;
+									if (blockType > 60)
+									{
+										tetrimino.blocks[i].type = DTetris::BlockType::Defense;
+									} else {
+										if (blockType > 40)
+										{
+											tetrimino.blocks[i].type = DTetris::BlockType::Attack;
+										} else {
+											tetrimino.blocks[i].type = DTetris::BlockType::Block;
+										}
+									}
+								}
+							}
+						} else {
+							if (blockType > 95)
+							{
+								tetrimino.blocks[i].type = DTetris::BlockType::Treasure;
+							} else {
+								if (blockType > 90)
+								{
+									tetrimino.blocks[i].type = DTetris::BlockType::Healing;
+								} else {
+									if (blockType > 80)
+									{
+										tetrimino.blocks[i].type = DTetris::BlockType::Defense;
+									} else {
+										if (blockType > 70)
+										{
+											tetrimino.blocks[i].type = DTetris::BlockType::Attack;
+										} else {
+											tetrimino.blocks[i].type = DTetris::BlockType::Block;
+										}
+									}
 								}
 							}
 						}

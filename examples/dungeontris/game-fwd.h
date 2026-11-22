@@ -169,6 +169,7 @@ namespace DTetris
 
     struct CharacterStats
     {
+        float health_max_this_battle = 0.0;
         float health = 0.0;
         float strength = 0.0;
         float agility = 0.0;
@@ -209,23 +210,28 @@ namespace DTetris
         None                = 0,
 
         // start of the battle
-        Rush                = 1, // x2 weapon damage at the first turn
-        Rage                = 2, // +2 to damage dealt during first 3 turns; -1 to damage dealt during the rest of the battle
+        Rush                = 1, // x2 weapon damage at the first attack
+        Rage                = 2, // +2 to damage dealt during first 3 attacks; -1 to damage dealt for the rest of the battle
 
         // conditional buffs
         HiddenStrike        = 3, // +1 to damage dealt if attacker's agility is bigger than defender's
         Shield              = 4, // -3 to damage received if strength of the defender is bigger than of the attacker
+        Twilight            = 18, // returns back to life one time in a battle if health < 0
 
         // conditional debuffs
-        CrushingWeakness    = 5, // x2 to damage received if the attacker's weapon is crushing
 
         // Passive
         StoneSkin           = 6, // damage received is reduced by the endurance value
         Agile               = 7, // +1 to agility
         Strong              = 8, // +1 to strength
         Survivor            = 9, // +1 to endurance
+        HaveSeenSomething   = 5, // +50 to health
         CuttingImmune       = 10, // immune to cutting weapon damage
-        MarkOfChaos         = 14, // +1 to every stat for each battle won (up to 6/6/6)
+        MarkOfChaos         = 14, // +1 to every stat for each battle won (up to +5/+5/+5)
+        DiscoDancer         = 16, // cannot be hit first 30 turns
+        ColourFromSpace     = 17, // doubles the chances of uncommon blocks
+
+        // end of the battle
         SchoolOfBeaver      = 15, // multiply treasures in bank by 2 after each battle
 
         // turn-dependent
@@ -412,6 +418,7 @@ namespace DTetris
         Races inputRace = Races::Human;
         Weapon inputWeapon;
         bool playerCharacterUpdated = false;
+        bool playerHasBeenResurrected = false;
         bool battleJustStarted = false;
         bool battleJustFinished = false;
         bool battleFinished = false;
@@ -426,6 +433,7 @@ namespace DTetris
         int turn = 0;
         bool turnNext = false;
         bool playerAttacks = false;
+        int playerAttacksCount = 0;
         bool paused = false;
         std::unordered_map<BlockType, int> clearedBlocks = {
             {BlockType::Attack,     0},

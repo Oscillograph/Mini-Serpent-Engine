@@ -383,12 +383,6 @@ bool CharacterUpdatePageState::OnEnter(mse::Layer* pass_layer)
     
     game.battleJustFinished = false; // important for layer management
     
-    if (game.playerCharacter.level < 3)
-    {
-        game.playerCharacter.level++;
-        printf("Player lvl: %d, ", (int)game.playerCharacter.level);
-    }
-    
     if (pass_layer != nullptr)
     {
         if (layer != pass_layer)
@@ -509,7 +503,26 @@ bool ArenaSetupPageState::OnEnter(mse::Layer* pass_layer)
     
     // pick npc adversary
     int npcCount = gameDB.characters.size();
-    int pickedCharacter = std::rand() % npcCount;
+    int npcSkipCount = 1; // we don't count The Unspoken One
+
+    for (int i = (gameDB.characters.size() - 2); i >= 0; --i)
+    {
+        if (gameDB.characters[i].level <= game.playerCharacter.level)
+        {
+            break;
+        } else {
+            npcSkipCount++;
+        }
+    }
+
+    int pickedCharacter = 0;
+    if ((game.battleCounter == 4) && (game.playerCharacter.main_class.type == DTetris::Classes::Cultist))
+    {
+        pickedCharacter = (int)(gameDB.characters.size()-1);
+    } else {
+        pickedCharacter = std::rand() % (npcCount - npcSkipCount);
+    }
+
     game.npcCharacter = gameDB.characters[pickedCharacter];
     
     printf("Next opponent (of %d) is %s! (%.2f, %.2f, %.2f, %.2f)\n",
@@ -564,6 +577,7 @@ bool ArenaSetupPageState::OnUpdate(mse::TimeType t)
     game.playerCharacter.stats = 
     {
         game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats_max.endurance),
+        game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats_max.endurance),
         game.playerCharacter.stats_max.strength,
         game.playerCharacter.stats_max.agility,
         game.playerCharacter.stats_max.endurance,
@@ -584,6 +598,22 @@ bool ArenaSetupPageState::OnUpdate(mse::TimeType t)
         {
             game.playerCharacter.stats.endurance++;
             game.playerCharacter.stats.health = game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats.endurance);
+            game.playerCharacter.stats.health_max_this_battle = game.playerCharacter.stats.health;
+        }
+
+        if (trait == DTetris::Traits::MarkOfChaos)
+        {
+            game.playerCharacter.stats.strength += game.battleCounter - 1;
+            game.playerCharacter.stats.agility += game.battleCounter - 1;
+            game.playerCharacter.stats.endurance += game.battleCounter - 1;
+            game.playerCharacter.stats.health = game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats.endurance);
+            game.playerCharacter.stats.health_max_this_battle = game.playerCharacter.stats.health;
+        }
+
+        if (trait == DTetris::Traits::HaveSeenSomething)
+        {
+            game.playerCharacter.stats.health += 50;
+            game.playerCharacter.stats.health_max_this_battle = game.playerCharacter.stats.health;
         }
     }
     
@@ -613,7 +643,10 @@ bool ArenaSetupPageState::OnUpdate(mse::TimeType t)
     game.clearedBlocks[DTetris::BlockType::Healing] = 0;
     game.clearedBlocks[DTetris::BlockType::Treasure] = 0;
     game.playerAttacks = false;
+    game.playerAttacksCount = 0;
     game.turnNext = false;
+
+    game.playerHasBeenResurrected = false;
 
     gsm.ChangeStateTo(DTetris::GamePages::ArenaBattle, layer);
     
@@ -841,6 +874,32 @@ bool ArenaBattlePageState::OnUpdate(mse::TimeType t)
                                 game.Attack(game.npcCharacter, game.playerCharacter, strForLogger);
                             }
 
+                            if (game.turn % 10)
+                            {
+                                for (DTetris::Traits trait : game.playerCharacter.traits)
+                                {
+                                    if (trait == DTetris::Traits::Meditation)
+                                    {
+                                        if (game.playerCharacter.stats.health < game.playerCharacter.stats.health_max_this_battle)
+                                        {
+                                            game.playerCharacter.stats.health += 1;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (game.playerCharacter.stats.health < 0.0 && !game.playerHasBeenResurrected)
+                            {
+                                for (DTetris::Traits trait : game.playerCharacter.traits)
+                                {
+                                    if (trait == DTetris::Traits::Twilight)
+                                    {
+                                        game.playerCharacter.stats.health = game.playerCharacter.stats.health_max_this_battle;
+                                        game.playerHasBeenResurrected = true;
+                                    }
+                                }
+                            }
+
                             DTetris::tetrisEngineData.state = DTetris::TetrisStates::Processing;
 
                             break;
@@ -899,7 +958,22 @@ bool ArenaAftermathPageState::OnEnter(mse::Layer* pass_layer)
         layer = new ArenaUILayer();
         mse::Renderer::GetActiveWindow()->GetLayerManager()->Attach(layer);
     }
-    
+
+    // after battle effects
+    for (size_t i = 0; i < (size_t)DTetris::TraitSlot::C; ++i)
+    {
+        switch (game.playerCharacter.traits[i])
+        {
+            case DTetris::Traits::SchoolOfBeaver:
+            {
+                game.playerCharacter.blocks[DTetris::BlockType::Treasure] = 2 * game.playerCharacter.blocks[DTetris::BlockType::Treasure];
+                break;
+            }
+            default:
+            {}
+        }
+    }
+
     if (game.playerCharacter.stats.health > 0.0)
     {
         game.UILogger.Push(U"Победа!");

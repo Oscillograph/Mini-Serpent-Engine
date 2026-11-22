@@ -36,8 +36,12 @@ void CharacterUpdateUILayer::OnInit()
 		)));
 
 	levelUpBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-		game.playerCharacter.level += 1;
-		game.playerCharacterUpdated = true;
+		if ((game.playerCharacter.blocks[DTetris::BlockType::Treasure] - 10) >= 0)
+		{
+			game.playerCharacter.level += 1;
+			game.playerCharacter.blocks[DTetris::BlockType::Treasure] -= 10;
+			game.playerCharacterUpdated = true;
+		}
 	};
 
 	classStatsTextBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(
@@ -370,6 +374,7 @@ void CharacterUpdateUILayer::RecalculateCharacter()
 	game.playerCharacter.stats =
 	{
 		game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats_max.endurance),
+		game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats_max.endurance),
 		game.playerCharacter.stats_max.strength,
 		game.playerCharacter.stats_max.agility,
 		game.playerCharacter.stats_max.endurance,
@@ -389,6 +394,23 @@ void CharacterUpdateUILayer::RecalculateCharacter()
 		{
 			game.playerCharacter.stats.endurance++;
 			game.playerCharacter.stats.health = game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats.endurance);
+			game.playerCharacter.stats.health_max_this_battle = game.playerCharacter.stats.health;
+		}
+		if (trait == DTetris::Traits::MarkOfChaos)
+		{
+			if (game.battleCounter > 0)
+			{
+				game.playerCharacter.stats.strength += game.battleCounter;
+				game.playerCharacter.stats.agility += game.battleCounter;
+				game.playerCharacter.stats.endurance += game.battleCounter;
+				game.playerCharacter.stats.health = game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats.endurance);
+				game.playerCharacter.stats.health_max_this_battle = game.playerCharacter.stats.health;
+			}
+		}
+
+		if (trait == DTetris::Traits::HaveSeenSomething)
+		{
+			game.playerCharacter.stats.health += 50;
 		}
 	}
 }
@@ -399,10 +421,10 @@ void CharacterUpdateUILayer::UpdateCharacterStatsBox()
 
 	strstream <<
 	game.playerCharacter.level << "\n" <<
-	game.playerCharacter.stats_max.health << "\n" <<
-	game.playerCharacter.stats_max.strength << "\n" <<
-	game.playerCharacter.stats_max.agility << "\n" <<
-	game.playerCharacter.stats_max.endurance << "\n";
+	game.playerCharacter.stats.health << "\n" <<
+	game.playerCharacter.stats.strength << "\n" <<
+	game.playerCharacter.stats.agility << "\n" <<
+	game.playerCharacter.stats.endurance << "\n";
 
 	classStatsValuesBox->ChangeText(utf8::utf8to32(strstream.str()));
 }
