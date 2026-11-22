@@ -94,18 +94,21 @@ namespace mse
 		// general GUIItem interface
 		void Hint::Display()
 		{
-			if (hintText->isVisible)
+			if (isEnabled && isVisible)
 			{
-				SDL_FRect destRect = {
-					(float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
-					(float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
-					(float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
-					(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
-				};
+				if (hintText->isVisible)
+				{
+					SDL_FRect destRect = {
+						(float)layerArea.x / WindowManager::GetCurrentWindow()->GetPrefs().width,
+						(float)layerArea.y / WindowManager::GetCurrentWindow()->GetPrefs().height,
+						(float)layerArea.z / WindowManager::GetCurrentWindow()->GetPrefs().width,
+						(float)layerArea.w / WindowManager::GetCurrentWindow()->GetPrefs().height,
+					};
 
-				SDL_Rect srcRect = {0, 0, layerArea.z, layerArea.w};
+					SDL_Rect srcRect = {0, 0, layerArea.z, layerArea.w};
 
-				Renderer::DrawTexture((Texture*)(hintText->GetTexture()->data), &destRect, &srcRect);
+					Renderer::DrawTexture((Texture*)(hintText->GetTexture()->data), &destRect, &srcRect);
+				}
 			}
 		}
 

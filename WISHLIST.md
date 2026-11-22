@@ -13,6 +13,8 @@
 - support visual fx
 - Buttons support icons along with text labels
 - ButtonImages - like <button><img /></button> in HTML
+- Fade In / Fade Out between game states
+- Put game states into the engine
 
 ### Low priority
 ## Layers System

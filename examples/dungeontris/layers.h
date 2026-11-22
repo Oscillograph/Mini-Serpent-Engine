@@ -131,6 +131,7 @@ public:
     mse::Layer* shopLayer = nullptr;
 
     void RecalculateCharacter();
+    void UpdateCharacterStatsBox();
 };
 
 class ShopUILayer : public mse::Layer

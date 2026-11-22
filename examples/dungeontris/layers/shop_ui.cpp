@@ -341,18 +341,18 @@ void PickWeapon(size_t weaponID, mse::Layer* layer)
 				MSE_LOG("ShopUI: PickWeapon: unpicked weapon ", utf8::utf32to8(gameDB.weapons[weaponID].name));
 			} else {
 				// pick
-				if (game.inputWeapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
+				game.playerCharacter.weapon = gameDB.weapons[weaponID];
+
+				if (game.playerCharacter.weapon.sprite == DTetris::WeaponSpriteType::LegendarySword)
 				{
-					game.inputWeapon.sourceArea.x = game.inputWeapon.sourceArea.x + (game.inputWeapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
-					game.inputWeapon.sourceHandleArea.x = game.inputWeapon.sourceHandleArea.x + (game.inputWeapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+					game.playerCharacter.weapon.sourceArea.x = game.playerCharacter.weapon.sourceArea.x + (game.playerCharacter.weapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
+					game.playerCharacter.weapon.sourceHandleArea.x = game.playerCharacter.weapon.sourceHandleArea.x + (game.playerCharacter.weapon.sourceArea.z) * ((int)game.playerCharacter.main_class.type - 1);
 				}
 
 				if (!(((ShopWeaponsUILayer*)layer)->weaponsGUIElements[weaponID - offset]->state & mse::gui::StoreItemStates::Equipped))
 				{
 					((ShopWeaponsUILayer*)layer)->weaponsGUIElements[weaponID - offset]->state += mse::gui::StoreItemStates::Equipped;
 				}
-
-				game.playerCharacter.weapon = gameDB.weapons[weaponID];
 
 				game.traitSlot = DTetris::TraitSlot::None;
 				game.playerCharacterUpdated = true;

@@ -1,5 +1,7 @@
 #include "mse/systems/platform/events/events.h"
+#include "mse/systems/windows/layers/gui/items/button.h"
 #include "mse/systems/windows/layers/gui/items/image.h"
+#include "utf8/cpp17.h"
 #include <dungeontris/layers.h>
 #include <dungeontris/game-fwd.h>
 #include <dungeontris/gamestates.h>
@@ -21,7 +23,23 @@ void CharacterUpdateUILayer::OnInit()
 			{0, 0, 0, 255},
 			{255, 255, 255, 255})));
 
-	// new interface
+	levelUpBtn = (mse::gui::Button*)(AddElement(
+		new mse::gui::Button(
+			this,
+			U"10",
+			{32, 32, 32, 255},
+			{130, 35, 35, 12},
+			"./data/img/screen-images.png",
+			{327, 19, 11, 12},
+			{327, 33, 4, 12},
+			{343, 33, 4, 12}
+		)));
+
+	levelUpBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
+		game.playerCharacter.level += 1;
+		game.playerCharacterUpdated = true;
+	};
+
 	classStatsTextBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(
 		this,
 		U"",
@@ -31,7 +49,7 @@ void CharacterUpdateUILayer::OnInit()
 	classStatsValuesBox = (mse::gui::Text*)(AddElement(new mse::gui::Text(
 		this,
 		U"",
-		{210, 60, 30, 40},
+		{210, 60, 30, 50},
 		{0, 0, 0, 255},
 		{255, 255, 255, 255})));
 	AddElement(new mse::gui::Image(
@@ -109,11 +127,13 @@ void CharacterUpdateUILayer::OnInit()
 	}
 
 	// show stats
+	int level = 0;
 	float str, agi, end, health = 0.0f; // stats for characters
 	std::u32string stats; // stats text gui content
 	std::stringstream strstream; // buffer to add numbers
 	strstream <<
-	"Здоровье:  " <<
+	"Уровень:" <<
+	"\nЗдоровье:  " <<
 	"\nСила:      " <<
 	"\nЛовкость:  " <<
 	"\nВыносливость: ";
@@ -123,11 +143,13 @@ void CharacterUpdateUILayer::OnInit()
 	strstream.str("");
 	strstream.clear();
 
+	level = game.playerCharacter.level;
 	health = game.playerCharacter.stats.health;
 	str = game.playerCharacter.stats.strength;
 	agi = game.playerCharacter.stats.agility;
 	end = game.playerCharacter.stats.endurance;
 	strstream <<
+	level << "\n" <<
 	health << "\n" <<
 	str << "\n" <<
 	agi << "\n" <<
@@ -244,12 +266,24 @@ void CharacterUpdateUILayer::OnInit()
 		}
 	};
 
-
 	// confirm changes
-	mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(new mse::gui::Button(this, U"Подтвердить", {32, 32, 32, 255}, {110, 215, 100, 13}, "./data/img/screen-images.png", {122, 101, 4, 13}, {138, 101, 4, 13}, {154, 101, 4, 13})));
+	mse::gui::Button* PlayerCharacterUpdateBtn = (mse::gui::Button*)(AddElement(
+		new mse::gui::Button(
+			this,
+			U"Подтвердить",
+			{32, 32, 32, 255},
+			{110, 215, 100, 13},
+			"./data/img/screen-images.png",
+			{122, 101, 4, 13},
+			{138, 101, 4, 13},
+			{154, 101, 4, 13}
+		)));
 	PlayerCharacterUpdateBtn->callbacks[mse::EventTypes::GUIItemMouseButtonDown] = [&](SDL_Event* event){
-		game.playerCharacterUpdated = true;
+		// RecalculateCharacter();
+		gsm.ChangeStateTo(DTetris::GamePages::ArenaSetup);
+		// game.playerCharacterUpdated = true;
 	};
+
 
 	// hints
 	slotAHint = (mse::gui::Hint*)AddElement(
@@ -265,6 +299,40 @@ void CharacterUpdateUILayer::OnInit()
 			true,
 			{255, 255, 255, 255}
 		));
+	if (game.playerCharacter.main_class.type == DTetris::Classes::Monk)
+	{
+		slotAHint->isVisible = true;
+	} else {
+		slotAHint->isVisible = false;
+	}
+	slotBHint = (mse::gui::Hint*)AddElement(
+		new mse::gui::Hint(
+			this,
+			slotBBtn,
+			U"",
+			{0, 0, 200, 30},
+			{32, 32, 32, 196},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255}
+		));
+	slotCHint = (mse::gui::Hint*)AddElement(
+		new mse::gui::Hint(
+			this,
+			slotCBtn,
+			U"",
+			{0, 0, 200, 30},
+			{32, 32, 32, 196},
+			{218, 218, 255, 255},
+			nullptr,
+			1,
+			true,
+			{255, 255, 255, 255}
+		));
+
+	game.playerCharacterUpdated = true;
 }
 
 void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
@@ -276,11 +344,21 @@ void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
 		if (game.playerCharacter.main_class.type == DTetris::Classes::Monk)
 		{
 			slotAImage->ChangeSourceArea(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]].sprite_area);
+			slotAHint->ChangeText(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::A]].description);
+			slotAHint->isVisible = true;
 		} else {
 			slotAImage->ChangeSourceArea(gameDB.weapons[game.playerCharacter.weapon.id].sourceButtonArea);
+			slotAHint->ChangeText(game.playerCharacter.weapon.name);
+			slotAHint->isVisible = false;
 		}
+
 		slotBImage->ChangeSourceArea(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]].sprite_area);
+		slotBHint->ChangeText(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::B]].description);
+
 		slotCImage->ChangeSourceArea(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]].sprite_area);
+		slotCHint->ChangeText(gameDB.traits[game.playerCharacter.traits[(size_t)DTetris::TraitSlot::C]].description);
+
+		UpdateCharacterStatsBox();
 
 		game.playerCharacterUpdated = false;
 	}
@@ -288,22 +366,6 @@ void CharacterUpdateUILayer::OnUpdate(mse::TimeType t)
 
 void CharacterUpdateUILayer::RecalculateCharacter()
 {
-	std::u32string stats = U"";
-	std::u32string main_class = U"";
-	std::u32string sub_class = U"";
-
-	main_class = gameDB.classes[game.playerCharacter.main_class.type].name;
-
-	if (game.playerCharacter.sub_class.type != DTetris::Classes::None)
-	{
-		sub_class = gameDB.classes[game.playerCharacter.sub_class.type].name;
-	} else {
-		if (game.inputClass != game.playerCharacter.main_class.type)
-		{
-			sub_class = gameDB.classes[game.inputClass].name;
-		}
-	}
-
 	// calculate stats for display
 	game.playerCharacter.stats =
 	{
@@ -329,4 +391,18 @@ void CharacterUpdateUILayer::RecalculateCharacter()
 			game.playerCharacter.stats.health = game.playerCharacter.level * (game.playerCharacter.stats_max.health + game.playerCharacter.stats.endurance);
 		}
 	}
+}
+
+void CharacterUpdateUILayer::UpdateCharacterStatsBox()
+{
+	std::stringstream strstream; // buffer to add numbers
+
+	strstream <<
+	game.playerCharacter.level << "\n" <<
+	game.playerCharacter.stats_max.health << "\n" <<
+	game.playerCharacter.stats_max.strength << "\n" <<
+	game.playerCharacter.stats_max.agility << "\n" <<
+	game.playerCharacter.stats_max.endurance << "\n";
+
+	classStatsValuesBox->ChangeText(utf8::utf8to32(strstream.str()));
 }
